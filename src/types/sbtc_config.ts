@@ -1,6 +1,7 @@
 import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate, AuthorisationDataType, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib' 
 
 export type SbtcConfig = {
+  proposals?: Array<ProposalEvent>;
   exchangeRates?: Array<ExchangeRate>;
   pegInMongoId?: string;
   pegOutMongoId?: string;
@@ -30,3 +31,5 @@ export type SbtcUserSettingI = {
     denomination: string;
   }
 }
+
+export type ProposalEvent = {event:string, proposer:string,  proposal:string}

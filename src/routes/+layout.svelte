@@ -15,6 +15,7 @@
 	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
 	import { setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
+	import { getProposals, getProposalsForActiveVotingExt } from '$lib/sbtc_admin';
 
 	let componentKey = 0;
 	let componentKey1 = 0;
@@ -111,7 +112,7 @@
 		<Header on:login_event={loginEvent} />
 	</div>
 	{:else}
-	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
+	<div class="bg-transparent bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
 			{#if inited}
 			<Header on:login_event={loginEvent} />
 			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">

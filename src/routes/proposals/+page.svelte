@@ -12,6 +12,7 @@
 	import Event from '$lib/components/transactions/Event.svelte';
 	import Paging from '$lib/components/transactions/Paging.svelte';
 	import EventHeader from '$lib/components/transactions/EventHeader.svelte';
+	import { getProposalsForActiveVotingExt } from '$lib/sbtc_admin';
 
   // fetch/hydrate data from local storage
   let inited = false;
@@ -48,6 +49,7 @@
         mypage = Number($page.url.searchParams.get('page')) - 1
       }
       await fetchPageCheck(mypage)
+			getProposalsForActiveVotingExt(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_VOTING_EXTENSION)
       inited = true;
     } catch (err) {
       errorReason = COMMS_ERROR;
@@ -63,15 +65,17 @@
 <div class="py-6 mx-auto max-w-7xl md:px-6">
   <div class="flex flex-col w-full my-8">
     <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden bg-gray-1000">
-      <div class="text-4xl font-medium">Transaction History</div>
+      <div class="text-4xl font-medium">Proposal History</div>
       {#if inited}
         <Tabs style="underline" contentClass="py-4">
-          <TabItem on:click={() => fetchPage({detail: {page:0}})} open={showAll} title="All transactions">
+          <TabItem on:click={() => fetchPage({detail: {page:0}})} open={showAll} title="All proposals">
             <div class="bg-white/5 rounded-md p-4 border border-gray-900">
               <EventHeader/>
-              {#each sbtcEvents.results as event}
+              {#if $sbtcConfig.proposals}
+              {#each $sbtcConfig.proposals as event}
               <Event {event} />
               {/each}
+              {/if}
             </div>
             <div class="mt-5 flex justify-end">
               <div class="flex gap-x-5">
@@ -79,21 +83,10 @@
               </div>
             </div>
           </TabItem>
-          <TabItem on:click={() => fetchMine()} open={!showAll} title="Your transactions">
-            <div class="bg-white/5 rounded-md p-4 border border-gray-900">
-              <EventHeader/>
-              {#each sbtcEvents.results as event}
-              <Event {event} />
-              {/each}
-            </div>
-        </TabItem>
         </Tabs>
       {:else}
         <Tabs style="underline" contentClass="mt-8">
-          <TabItem open={true} title="All transactions">
-            <Skeleton size="md" />
-          </TabItem>
-          <TabItem title="Your transactions">
+          <TabItem open={true} title="All proposals">
             <Skeleton size="md" />
           </TabItem>
         </Tabs>

@@ -1,13 +1,14 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { CONFIG } from '$lib/config';
 import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, type ListCV, contractPrincipalCV } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
 import { openContractCall } from '@stacks/connect';
 import { getStacksNetwork } from './stacks_connect.js'
 import { hex } from '@scure/base';
+import { CONFIG } from '$lib/config';
+import { sbtcConfig } from '$stores/stores.js';
 
 export const coordinators = [
   { stxAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
@@ -123,6 +124,64 @@ export async function burnFrom(contractId:string, amount:number, stxAddress: str
       console.log('popup closed!');
     }
   });
+}
+
+const trait = "{\"maps\":[],\"functions\":[{\"args\":[{\"name\":\"sender\",\"type\":\"principal\"}],\"name\":\"execute\",\"access\":\"public\",\"outputs\":{\"type\":{\"response\":{\"ok\":\"bool\",\"error\":\"uint128\"}}}}],\"variables\":[],\"fungible_tokens\":[],\"non_fungible_tokens\":[]}";
+export async function getProposals() {
+  const url = CONFIG.VITE_STACKS_API_HIRO + '/extended/v1/contract/by_trait?trait_abi=' + trait;
+  let edaoProposals: string|any[] = [];
+  let val;
+  let response;
+  let count = 0;
+  try {
+    do {
+      response = await fetch(url + '&offset=' + (count * 20));
+      val = await response.json();
+      const ourProps = val.results.filter((o:any) => o.contract_id.indexOf(CONFIG.VITE_DOA_DEPLOYER) > -1);
+      if (ourProps && ourProps.length > 0) edaoProposals = edaoProposals.concat(ourProps)
+      count++;
+    }
+    while (val.results.length > 0)
+  }
+  catch (err) {
+      console.log('callContractReadOnly4: ', err);
+  }
+  return edaoProposals;
+}
+
+export async function getProposalsForActiveVotingExt(contractId:string) {
+
+  const url = CONFIG.VITE_STACKS_API_HIRO + '/extended/v1/contract/' + contractId + '/events?limit=' + 20;
+  const proposals: Array<{event:string, proposer:string,  proposal:string}> = [];
+  let val;
+  let response;
+  let count = 0;
+  try {
+    do {
+      response = await fetch(url + '&offset=' + (count * 20));
+      val = await response.json();
+      for (const event of val.results) {
+        const result = cvToJSON(deserializeCV(event.contract_log.value.hex));
+        if (result.value.event.value === 'propose') {
+          proposals.push({
+            event: 'propose',
+            proposer: result.value.proposer.value,
+            proposal: result.value.proposal.value,
+          })
+        }
+      }
+      sbtcConfig.update((conf) => {
+        conf.proposals = proposals
+        return conf;
+      })
+      count++;
+    }
+    while (val.results.length > 0)
+  }
+  catch (err) {
+      console.log('callContractReadOnly4: ', err);
+  }
+  return proposals;
 }
 
 export async function callContractReadOnly(data:any) {
