@@ -8,7 +8,7 @@
   let connected = false;
 
 	const getContractAddress = () => {
-		const contract = $sbtcConfig.sbtcContractData.contractId
+		const contract = CONFIG.VITE_SBTC_CONTRACT_ID
 		return truncate(contract.split('.')[0], 8) + '.' + contract.split('.')[1]
 	}
 	const getCoordinator = (full:boolean) => {
@@ -35,7 +35,7 @@
 
 
   onMount(async () => {
-    connected = typeof $sbtcConfig.sbtcContractData.contractId === 'string'
+    connected = typeof CONFIG.VITE_SBTC_CONTRACT_ID === 'string'
   })
 </script>
 
@@ -58,7 +58,7 @@
   </p>
   <div class="flex bg-black rounded-xl text-white px-4 py-1 font-normal">{getContractAddress()}</div>
   <div class="ml-auto flex items-start">
-    <a title="Show in Explorer" href={explorerAddressUrl($sbtcConfig.sbtcContractData.contractId)} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+    <a title="Show in Explorer" href={explorerAddressUrl(CONFIG.VITE_SBTC_CONTRACT_ID)} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
       <Icon src="{ArrowUpRight}" mini class="h-5 w-5 text-white" aria-hidden="true" />
     </a>
   </div>

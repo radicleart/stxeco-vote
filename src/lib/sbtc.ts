@@ -18,7 +18,7 @@ function finaliseTransaction(psbtHex:string) {
     return tx;
   } catch (err:any) {
     console.log('finalize error: ', err)
-    let errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
+    let errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the back button, switching account in the wallet and trying again?';
     errorReason += '<br/>' + err.message;
     throw new Error(errorReason);
   }
@@ -66,7 +66,6 @@ export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
   loggedIn: false,
   sigData: undefined,
-  sbtcContractData: {} as SbtcContractDataType,
   userSettings: {
     useOpDrop: false,
     debugMode: false,
@@ -84,26 +83,8 @@ export const defaultSbtcConfig:SbtcConfig = {
       },
       denomination: 'bitcoin'
     },
-    peggingIn: false
+    executiveTeamMember: false
   },
   keySets: {},
-  revealFeeWithGas: 0,
-  payloadDepositData: {
-    principal: '',
-    bitcoinAddress: '',
-    amountSats: 0,
-    sbtcWalletPublicKey: '',
-    reclaimPublicKey: '',
-    paymentPublicKey: ''
-  },
-  payloadWithdrawData: {
-    principal: '',
-    bitcoinAddress: '',
-    signature: undefined,
-    amountSats: 0,
-    sbtcWalletPublicKey: '',
-    reclaimPublicKey: '',
-    paymentPublicKey: ''
-  }
 }
 

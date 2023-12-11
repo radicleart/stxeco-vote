@@ -13,7 +13,7 @@ const mint = async () => {
     return;
   }
   error = undefined;
-  const res = await mintTo($sbtcConfig.sbtcContractData.contractId, pegInAmount||0, stxAddress, btcTxid);
+  const res = await mintTo(CONFIG.VITE_SBTC_CONTRACT_ID, pegInAmount||0, stxAddress, btcTxid);
 }
 </script>
 

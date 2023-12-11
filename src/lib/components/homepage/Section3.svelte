@@ -1,7 +1,9 @@
 <script>
-  import { CaretRightFill } from "svelte-bootstrap-icons";
   import CallButtons1 from '$lib/shared/CallButtons1.svelte'
   import Sidebar from './Sidebar.svelte'
+  import arr from '$lib/assets/png-assets/stx_eco_directional_arrow.png'
+	import { Icon } from "svelte-hero-icons";
+	import { CaretRightOutline } from "flowbite-svelte-icons";
 
   const img1 = "https://images.prismic.io/edao/86ff5a4f-62f6-4961-b872-b22ab3dc2a67_stx_eco_hands_%23image.png?auto=compress,format";
   const img2 = "https://images.prismic.io/edao/5e216471-9b0e-4376-ba06-d36aa651ec11_stx_eco_snapshot_%23image.png?auto=compress,format";
@@ -24,13 +26,13 @@
             </p>
             <div class="row">
               <div class="col-1">
-                <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
+                <img src={arr} alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
                 <h2>Stacks 2.1 Voting</h2>
                 <p class="text3">Polls open soon - show your support for the Stacks Upgrade by voting!
                 </p>
-                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-2-1-activation"><CaretRightFill width={10} height={10}/> vote now</a></h3>
+                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-2-1-activation"><Icon src={CaretRightOutline} width={10} height={10}/> vote now</a></h3>
               </div>
             </div>
           </div>
@@ -40,7 +42,7 @@
             </p>
             <div class="row">
               <div class="col-1">
-                <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
+                <img src={arr} alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
                 <h2>Stacks 2.1 Upgrade</h2>
@@ -56,7 +58,7 @@
             </p>
             <div class="row">
               <div class="col-1">
-                <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
+                <img src={arr} alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
                 <h2>Crowd Fund Proposals</h2>
@@ -72,7 +74,7 @@
             </p>
             <div class="row">
               <div class="col-1">
-                <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
+                <img src={arr} alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
                 <h2>Learn Clarity</h2>
@@ -135,7 +137,6 @@ h3 {
 }
 
 .text3 {
-  font-family: Gilroy-Light;
   font-size: 1.2rem;
   color: #ededed;
   line-height: 1.4rem;

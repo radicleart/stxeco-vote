@@ -21,7 +21,7 @@
   }
   
   const wallet = async () => {
-    const res:any = await setsBTCPublicKey($sbtcConfig.sbtcContractData.contractId, romeoPublicKey);
+    const res:any = await setsBTCPublicKey(CONFIG.VITE_SBTC_CONTRACT_ID, romeoPublicKey);
     if (res && res.error) errorReason = res.reason
     console.log(res)
   }

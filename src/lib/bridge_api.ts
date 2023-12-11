@@ -1,7 +1,6 @@
 import { CONFIG } from '$lib/config';
-import type { BridgeTransactionType, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
+import type { WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 import { checkAddressForNetwork } from 'sbtc-bridge-lib';
-import type { SbtcClarityEvent } from 'sbtc-bridge-lib/dist/types/sbtc_types';
 
 let authHeader:any;
 
@@ -66,6 +65,34 @@ export async function fetchUiInit() {
     return undefined;
   }
 }
+
+export async function fetchStacksInfo() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/stacks-info');
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function getBalanceAtHeight(stxAddress:string, height: number):Promise<any> {
+  if (!stxAddress) return {
+    stx: {
+      balance: 0,
+      locked: 0,
+    }
+  }
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/balance/' + stxAddress + '/' + height);
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
 
 export async function sendRawTransaction(tx: { hex: string; maxFeeRate: number|undefined; }) {
   if (!tx.maxFeeRate) tx.maxFeeRate = 0
@@ -139,166 +166,6 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
   }
   const signedPsbt = await extractResponse(response);
   return signedPsbt;
-}
-
-export async function saveBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
-  const response = await fetch(path, {
-    method: 'POST',
-    headers: headers(),
-    body: JSON.stringify(peginRequest)
-  });
-  if (response.status !== 200) {
-    console.log('Bitcoin address not known - is the network correct?');
-  }
-  const res = await extractResponse(response);
-  return res;
-}
-export async function updateBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
-  const response = await fetch(path, {
-    method: 'PUT',
-    headers: headers(),
-    body: JSON.stringify(peginRequest)
-  });
-  if (response.status !== 200) {
-    console.log('Bitcoin address not known - is the network correct?');
-  }
-  const signedPsbt = await extractResponse(response);
-  return signedPsbt;
-}
-
-export async function fetchPeginById(_id:string):Promise<BridgeTransactionType> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx/' + _id);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Commit not found.');
-  }
-  const pegin = await extractResponse(response);
-  return pegin;
-}
-
-export async function doPeginScan():Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegin-scan');
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Unable to scan.');
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventByBitcoinTxId(bitcoinTxid:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/bitcoin-txid/' + bitcoinTxid);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventById(id:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-one/' + id);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventByStacksAddress(stacksAddress:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/stacks/' + stacksAddress);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventByBitcoinAddress(bitcoinAddress:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/bitcoin/' + bitcoinAddress);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventsByPage(page:number, limit:number):Promise<{ results: Array<SbtcClarityEvent>, events:number}> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/page/' + page + '/' + limit);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return { results: [], events:0};
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function fetchCommitments(btcAddress:string, stxAddress:string, sbtcWalletAddress:string, revealFee:number):Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/commit-scan/' + btcAddress + '/' + stxAddress + '/' + sbtcWalletAddress + '/' + revealFee);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function findSbtcEventsByFilter(name:string, value:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/filter/' + name + '/' + value);
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    console.log('Request failed to url: ' + path);
-    return [];
-  }
-  const pegins = await extractResponse(response);
-  return pegins;
-}
-
-export async function fetchCurrentFeeRates() {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/fee-estimate');
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    return {
-        feeInfo: {
-          low_fee_per_kb: 19226,
-          medium_fee_per_kb: 29679,
-          high_fee_per_kb: 44424
-        }
-    }
-  }
-  const txs = await response.json();
-  return txs;
-}
-
-export async function fetchExchangeRates() {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/rates');
-  const response = await fetchCatchErrors(path);
-  if (response.status !== 200) {
-    return [{
-      currency: "USD",
-      fifteen:0,
-      last:0,
-      buy:0,
-      sell:0,
-      symbol:"$",
-      name:"US Dollor",
-      _id:"64c236634b5e0bdea234cb0e"
-    },
-  ]
-  }
-  const txs = await response.json();
-  return txs;
 }
 
 export async function fetchTransaction(txid:string) {
@@ -411,6 +278,45 @@ export async function sign(wrappedPsbt:WrappedPSBT) {
       console.log(err1)
     }
   }
+  return res;
+}
+
+export async function getDaoProposals() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/proposals');
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getNftAssetClasses(stxAddress:string) {
+  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets-classes/' + stxAddress;
+  const path = addNetSelector(url);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getNfts(stxAddress:string) {
+  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets/' + stxAddress;
+  const path = addNetSelector(url);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getNftsbyPage(stxAddress:string, limit:number, offset:number) {
+  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets/' + stxAddress + '/' + limit + '/' + offset;
+  const path = addNetSelector(url);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getVotes(proposal:string, stxAddress:string) {
+  const url = CONFIG.VITE_BRIDGE_API + '/dao/voter/events/' + proposal + '/' + stxAddress;
+  const path = addNetSelector(url);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
   return res;
 }
 

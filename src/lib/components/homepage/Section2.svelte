@@ -39,17 +39,6 @@ function scrollTo() {
           <div class="col-lg-6 col-md-6 col-sm-12 hideme"  style="height: 100%;">
             <div class="">
               <img src={rowers} alt="Rowing together" width="100%" height="auto" />
-              <!--
-              <div class="square-thing">
-                <div class="mb-2 text-left"><img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" /></div>
-                <h1>HERO DAO</h1>
-                <p>Be part of the future.<br/>
-                Become a member of the<br/>
-                Stacks Ecosystem DAO.</p>
-                <button>› VOTE NOW</button>
-                <div class="w-100 d-flex justify-content-end"><img src="/img/png-assets/stx_eco_expand_window.png" alt="Scroll down" width="30" height="auto" /></div>
-              </div>
-              -->
             </div>
           </div>
         </div>
@@ -69,66 +58,20 @@ section {
   overflow: hidden;
 }
 .text1 {
-  font-family: Gilroy-ExtraBold;
   font-size: 3.0rem;
   line-height: 3.5rem;
   color: #e71d73;
   text-transform: uppercase;
 }
 .text2 {
-  font-family: Gilroy-Light;
   font-size: 3.0rem;
   line-height: 3.5rem;
   color: #ededed;
 }
 .text3 {
-  font-family: Gilroy-Light;
   font-size: 1.5rem;
   color: #ededed;
   line-height: 2.2rem;
 }
-/**
-.square-thing {
-  width: 230px;
-  padding: 10px;
-  position: relative;
-  top: -400px;
-  right: -350px;
-  font-family: Gilroy-ExtraBold;
-  max-height: 30%;
-  background-color: #E71D73;
-}
-.square-thing h1 {
-  font-size: 1.5rem;
-  color: #ededed;
-  text-transform: uppercase;
-}
-.square-thing p {
-  font-family: Gilroy-Light;
-  font-size: 1.0rem;
-  color: #ededed;
-  text-transform: none;
-}
-.square-thing button {
-  font-family: Gilroy-ExtraBold;
-  font-size: 1.0rem;
-  color: #ededed;
-  text-transform: uppercase;
-  background-color: transparent;
-  border: none;
-}
-*/
-
-.section-footer {
-  position: relative;
-  height: auto;
-  bottom: 0;
-  background: rgb(118, 112, 112, 0);
-  color: #f1f1f1;
-  width: 100%;
-  text-align: right;
-  padding: 5px 20px;
-  border: 0pt solid rgb(85, 12, 12);
-} 
 
 </style>

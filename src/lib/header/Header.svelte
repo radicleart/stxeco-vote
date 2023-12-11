@@ -10,8 +10,9 @@
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
-	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
+	import { fmtNumber, type AddressObject, type DepositPayloadUIType, type WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 	import { setAuthorisation } from '$lib/bridge_api';
+	import { stacksStore } from '$stores/stacksStore';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
@@ -26,6 +27,12 @@
 	afterNavigate((nav) => {
 		componentKey++;
 	})
+
+	$: getBlockHeigths = () => {
+		let msg = 'Height: '
+		msg += ($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' n/a ';
+		return msg
+	}
 
 	const loginCallback = async () => {
 		await initApplication($sbtcConfig, true)
@@ -42,8 +49,6 @@
 	const doLogout = async () => {
 		logUserOut();
 		$sbtcConfig.authHeader = undefined
-		$sbtcConfig.payloadDepositData = {} as DepositPayloadUIType
-		$sbtcConfig.payloadWithdrawData = {} as WithdrawPayloadUIType
 		$sbtcConfig.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 		await sbtcConfig.update(() => $sbtcConfig)
 		dispatch('login_event');
@@ -71,9 +76,8 @@
 		<Brand />
   </NavBrand>
 
-  {#key componentKey}
-  <div class="hidden md:flex md:gap-2 md:order-3">
-		<SettingsDropdown />
+  	{#key componentKey}
+  	<div class="hidden md:flex md:gap-2 md:order-3">
 
 		{#if loggedIn()}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
@@ -99,22 +103,27 @@
 		class="order-1 md:flex-1"
 		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:font-medium !md:space-x-4"
 	>
-	<!--
-	<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
-	<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
-	-->
-		<NavLi nonActiveClass={getNavActiveClass('/')} href="/">Dashboard</NavLi>
-		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
-		<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How it works</NavLi>
-		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
-		{#if coordinator}
-			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/admin">Admin</NavLi>
-		{/if}
-		{#if $sbtcConfig.userSettings.debugMode}
-			<NavLi nonActiveClass={getNavActiveClass('/proofs')} href="/proofs">Tx Check</NavLi>
-		{/if}
+		<!--
+		<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
+		<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
+		-->
+		<div class="w-full flex flex-row justify-between">
+			<div class="flex">
+				<!--
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How to vote</NavLi>
+				-->
+				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/voting')} href="/dao/voting?method=1">Vote</NavLi>
+			</div>
+			<div class="">
+				<NavLi class="self-end" nonActiveClass={getNavActiveClass('/height')} href="/" on:click={() => {}}>
+					{getBlockHeigths()}
+				</NavLi>
+			</div>
+		</div>
 
-		<NavLi nonActiveClass="md:hidden"><SettingsDropdown /></NavLi>
 		<NavLi nonActiveClass="md:hidden ml-0 md:ml-2">
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>

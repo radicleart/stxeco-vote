@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
-	import { Icon, ClipboardDocument } from "svelte-hero-icons"
+	import { Icon, ClipboardDocument, ArrowRight } from "svelte-hero-icons"
 	import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
 	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
 	import StacksIcon from '$lib/components/shared/StacksIcon.svelte';
 	import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
-	import { makeFlash } from "$lib/stacks_connect";
+	import { loggedIn, makeFlash } from "$lib/stacks_connect";
 	import { CONFIG } from '$lib/config';
 	import { createEventDispatcher } from "svelte";
 	import { truncate } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores'
 	import { fmtSatoshiToBitcoin, fmtMicroToStx, bitcoinBalanceFromMempool } from '$lib/utils'
+	import { isCoordinator } from '$lib/sbtc_admin';
+	import { goto } from '$app/navigation';
 	const dispatch = createEventDispatcher();
+	
+	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	let copied = false;
 
@@ -138,5 +142,22 @@
 			</div>
 		</div>
 	</div>
+	{#if coordinator}
+	<DropdownItem defaultClass="px-4 py-2 text-white hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/dao/extensions')}>
+		<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+		extensions</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-white hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/dao/proposals')}>
+		<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+		proposals</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-white hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/dao/proposals/propose')}>
+		<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+		propose</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-white hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/dao/proposals/propose')}>
+		<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+		settings</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-white hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/admin')}>
+		<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+		admin</DropdownItem>
+	{/if}
 	<DropdownItem defaultClass="px-4 py-2 text-error-500 hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => doLogout()}>Log out</DropdownItem>
 </Dropdown>

@@ -10,35 +10,35 @@ const toggleAnswer = (index:number) => {
 let questions = [
 	{
 		hidden: true,
-		question: 'What is the purpose of the sBTC bridge?',
-		answer: 'The sBTB bridge supports a trustless two-way peg between BTC and sBTC. sBTC is a SIP-010 fungible token on the Stacks Blockchain that can be used in DeFi protocols, NFT marketplaces, governance and many more applications.'
+		question: 'Question?',
+		answer: 'Answer.'
 	},
 	{
 		hidden: true,
-		question: 'What is sBTC?',
-		answer: 'sBTC is Bitcoin wrapped in a token on the Stacks Blockchain.'
+		question: 'Question?',
+		answer: 'Answer.'
 	},
 	{
 		hidden: true,
-		question: 'Why convert my Bitcoin to sBTC?',
-		answer: 'sBTC is more flexible and cheaper to move around. It can be used in many different ways on the Stacks Blockchain such as DeFi protocols and NFT marketplaces.'
+		question: 'Question?',
+		answer: 'Answer.'
 	},
 	{
 		hidden: true,
-		question: 'Can I get Bitcoin back from my sBTC?',
-		answer: 'Yes - this is a decentralised two way bridge between the Bitcoin and Stacks Blockchains.'
+		question: 'Question?',
+		answer: 'Answer.'
 	},
 	{
 		hidden: true,
-		question: 'Where can I find out more about the sBTC bridge?',
-		answer: 'For more info about the sBTC Bridge, check <a class="text-faq-link" href="/faq">the FAQ page</a>.'
+		question: 'Question?',
+		answer: 'Answer.'
 	}
 ]
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - FAQ</title>
-  <meta name="description" content="Frequently asked questions about the sBTC Bridge." />
+	<title>Ecosystem DAO - Frequently Asked Questions</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <div class="mx-auto flex flex-col justify-center px-6 lg:px-8 py-12 w-full max-w-5xl">

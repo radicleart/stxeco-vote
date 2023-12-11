@@ -10,12 +10,12 @@ import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContract
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { hex } from '@scure/base';
-import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
+import type { ExchangeRate } from 'sbtc-bridge-lib';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
 import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
-import { myHashP2WPKH } from './utils';
+import { isExecutiveTeamMember } from './sbtc_admin';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -64,15 +64,14 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 
 export async function fetchSbtcBalance (conf:SbtcConfig, fromLogin:boolean|undefined) {
 	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
-	//const sessionStacks = getStacksAddress(); // check not switching accounts
 	if (!fromLogin && localKs	&& localKs.stxAddress && localKs.cardinal) { // && sessionStacks === localKs.stxAddress) {
-		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(conf.sbtcContractData.contractId, localKs)
+		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, localKs)
 		sbtcConfig.update(() => conf);
 		return conf;
 	} else {
 		await addresses(async function(addr:AddressObject) {
 			if (addr) {
-				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(conf.sbtcContractData.contractId, addr)
+				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, addr)
 				sbtcConfig.update(() => conf);
 			}
 			return conf;
@@ -264,7 +263,7 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0, network: CONFIG.VITE_NETWORK }
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
 		setAuthorisation($sbtcConfig.authHeader)
 		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
@@ -413,6 +412,8 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			await fetchSbtcBalance(conf, fromLogin);
+			const emTeamMam = await isExecutiveTeamMember(conf.keySets[CONFIG.VITE_NETWORK].stxAddress);
+			conf.userSettings.executiveTeamMember = emTeamMam.executiveTeamMember
 			conf.loggedIn = true;
 		}
 	} catch (err) {
@@ -438,64 +439,12 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		conf.exchangeRates = []
 		conf.userSettings.currency.myFiatCurrency = {} as ExchangeRate
 	}
-	conf.revealFeeWithGas = revealPayment;
 	conf.sbtcContractData = data.sbtcContractData;
 	conf.btcFeeRates = data.btcFeeRates;
 	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
-	if (!conf.payloadDepositData) conf.payloadDepositData = {} as WithdrawPayloadUIType
-	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawPayloadUIType
-	if (loggedIn()) {
-		try { doPayloadData(conf) }
-		catch (err) {
-			//
-		} 
-	}
-	conf.payloadDepositData.sbtcWalletPublicKey = conf.sbtcContractData.sbtcWalletPublicKey
-	conf.payloadWithdrawData.sbtcWalletPublicKey = conf.sbtcContractData.sbtcWalletPublicKey
 	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
 		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 	}
 	sbtcConfig.update(() => conf);
 
-}
-
-function doPayloadData(conf:SbtcConfig) {
-	if (!conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0) throw new Error('Public Key missing from logged in user')
-	console.log(myHashP2WPKH(conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 as string))
-	let prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
-	let amountSats = 0
-	if (conf.payloadDepositData && conf.payloadDepositData.amountSats > 0) {
-		amountSats = conf.payloadDepositData.amountSats
-	}
-	if (conf.payloadDepositData && conf.payloadDepositData.principal) {
-		prn = conf.payloadDepositData.principal
-	}
-	const payloadDepositData:DepositPayloadUIType = {
-			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
-			reclaimPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1 || '',
-			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
-			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
-			principal: prn,
-			amountSats
-	}
-	conf.payloadDepositData = payloadDepositData;
-
-	prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
-	amountSats = 0
-	if (conf.payloadWithdrawData && conf.payloadWithdrawData.principal) {
-		prn = conf.payloadWithdrawData.principal
-	}
-	if (conf.payloadWithdrawData && conf.payloadWithdrawData.amountSats > 0) {
-		amountSats = conf.payloadWithdrawData.amountSats
-	}
-	const payloadWithdrawData:WithdrawPayloadUIType = {
-			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
-			reclaimPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1 || '',
-			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
-			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
-			principal: prn,
-			amountSats
-	}
-	conf.payloadWithdrawData = payloadWithdrawData;
-	return conf;
 }

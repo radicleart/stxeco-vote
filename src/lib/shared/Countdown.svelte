@@ -16,7 +16,7 @@ $: display = Duration.fromObject(end.diff(now).toObject()); //.toFormat('dd hh:m
 </script>
 
 {#if endBlock > 0}
-<div class="countdown text-white">
+<div class="">
     {#if moreThanDay}
     ~ {display.toFormat("d ' days' h ' hrs' m ' mins' ss ' secs'")}
     {:else}
@@ -26,12 +26,4 @@ $: display = Duration.fromObject(end.diff(now).toObject()); //.toFormat('dd hh:m
  {/if}
 
 <style>
-.countdown {
-    border: 1pt solid #fff;
-    padding: 1px 20px;
-    text-align: center;
-    margin: 20px auto;
-    padding: 20px;
-    min-width: 200px;
-}
 </style>

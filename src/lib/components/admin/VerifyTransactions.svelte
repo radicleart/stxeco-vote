@@ -184,7 +184,7 @@ const mintTo = async () => {
     'tx-index': parameters.txIndex,
   }
 
-  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, prin!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
+  const res = await romeoMintTo(CONFIG.VITE_SBTC_CONTRACT_ID, amount, prin!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
   console.log(res)
 }
 

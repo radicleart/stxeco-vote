@@ -6,8 +6,8 @@ let language = 'clarity';
 const par = '(\\()';
 // End the pattern with look-ahead space
 const space = '(?=\\s)';
-const primitive = (pattern:string) => {
-	return RegExp('([\\s([])' + pattern + '(?=[\\s)])');
+const lookup = () => {
+	return RegExp('([\\s([])' + '[-]?u?\\d+' + '(?=[\\s)])');
 }
 
 prism.languages.clarity = {
@@ -82,7 +82,7 @@ buff|hash160|sha256|sha512|sha512/256|keccak256|true|false|none)' +
 		],
 		boolean: /(?:false|true|none)/,
 		number: {
-			pattern: primitive('[-]?u?\\d+'),
+			pattern: lookup(),
 			lookbehind: true,
 		},
 		address: {

@@ -3,7 +3,7 @@
 	import Section1 from '$lib/components/homepage/Section1.svelte'
 	import Section2 from '$lib/components/homepage/Section2.svelte'
 
-	goto('/proposals')
+	goto('/how-it-works')
 </script>
 	  
 	<svelte:head>
@@ -11,8 +11,8 @@
 		<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 	</svelte:head>
 	
-	<Section1 homepage={true}/>
-	<!-- <div class="container">
+	<!-- <Section1 homepage={true}/>
+	<div class="container">
 	  <Section2/>
 	</div> -->
 	

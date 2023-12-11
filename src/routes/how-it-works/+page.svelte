@@ -1,42 +1,43 @@
 <script lang="ts">
 	import { Icon, ShieldCheck } from "svelte-hero-icons";
-	import SwitchGraphic from '$lib/components/dashboard/shared/SwitchGraphic.svelte';
+	import SwitchGraphic from '$lib/components/shared/SwitchGraphic.svelte';
+	import Banner from "$lib/components/shared/Banner.svelte";
+	import { Button } from "flowbite-svelte";
+	import { goto } from "$app/navigation";
+	import { CONFIG } from "$lib/config";
 
+	const gotoVotePage = (method:number) => {
+		goto('/dao/voting/' + CONFIG.VITE_DOA_PROPOSAL + '?method=' + method)
+	}
 
 	let stepsDeposit = [
 		{
-			title: 'Deposit BTC',
-			description: 'Enter the amount you want to deposit (within your Bitcoin balance in your Leather/Xverse wallet).',
-			explanation: 'The bridge generates a custom transaction using your Stacks address and Bitcoin address. This transaction moves Bitcoin from your wallet to the sBTC wallet.'
+			title: 'Voting for Solo Stackers',
+			method: 1,
+			description: 'Send a dust BTC transaction',
+			explanation: 'Voters who are Stacking on their own must send a dust amount of BTC (~6,000 sats) from their PoX reward address to an address representing a ‘Yes on 2.1’ vote or an address representing a ‘No on 2.1’ vote.'
 		},
 		{
-			title: 'Sign & Send',
-			description: 'Sign and send the transaction.',
-			explanation: 'A Stacks node processes the transaction, instructing a Clarity contract to mint your sBTC. This step is fully decentralized and cannot be stopped in the final Nakamoto release.After processing, your sBTC will appear in your wallet and can be used across various services on the Stacks network.'
+			title: 'Voting for Community Pool Stackers',
+			method: 2,
+			description: 'Send a minimal STX transaction.',
+			explanation: 'Voters who are Stacking in a community pool must send a minimal amount of STX (~1 uSTX) from their Stacking address to an address representing a ‘Yes on 2.1’ vote or an address representing a ‘No on 2.1’ vote.'
+		},
+		{
+			title: 'Voting for Exchange Stackers and Non-Stackers',
+			method: 3,
+			description: 'Send a vote transaction.',
+			explanation: 'Voters who are Stacking via an exchange or not Stacking at all (and have a STX balance below the Stacking minimum) can connect their wallets to EcosystemDAO and use the amount of STX in their wallet to represent a ‘Yes on 2.1’ vote or a ‘No on 2.1’ vote.'
 		},
 	]
 
-	let stepsWithdraw = [
-		{
-			title: 'Withdrawal Amount',
-			description: 'Specify the amount of sBTC you want to withdraw (must not exceed your sBTC balance).'
-		},
-		{
-			title: 'Return Address',
-			description: 'Provide a signature to indicate where your Bitcoin should be returned (by default, your wallet\'s Bitcoin address).',
-			explanation: 'The bridge generates a custom transaction that sends your withdrawal request to the Stacks network.'
-		},
-		{
-			title: 'Sign & Broadcast',
-			description: 'If you are satisfied with the transaction, sign and broadcast it.',
-			explanation: 'Your transaction triggers a fulfilment process. Stacks signers approve the withdrawal from the sBTC wallet they control. Upon approval, your Bitcoin is returned to your wallet.'
-		},
-	]
+	let startBlockHeight = 0;
+	let balanceAtHeight = 0;
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - How it works</title>
-  <meta name="description" content="The bridge provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain. Let's dive into the specifics of its functioning." />
+	<title>Ecosystem DAO - Nakamoto SIP Voting</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
@@ -44,13 +45,47 @@
     <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden bg-gray-1000">
 
 			<div class="space-y-8">
-				<h1 class="text-3xl sm:text-4xl font-bold">How it works</h1>
+				<h1 class="text-3xl sm:text-4xl font-bold">Stacks Nakamoto Upgrade Vote</h1>
+				<div class="md:grid md:grid-cols-1 md:gap-6 space-y-4 md:space-y-0">
+					<div class="space-y-6 px-6 sm:px-10 divide-y divide-gray-400/30 py-6 bg-white/5 rounded-lg border border-primary-500/20 shadow-[0px_1px_6px_0px_rgba(254,219,99,0.20)]">
+						<h3 class="text-2xl font-bold mt-10 lg:mt-0">3 Ways to Vote</h3>
+						<!--
+						<div>
+							<div class="lg:flex lg:items-start lg:justify-start  lg:space-y-0">
+								<SwitchGraphic reverse={true} />
+							</div>
+						</div>
+						-->
+						<div>
+							<div class="pt-8 space-y-8">
+								{#each stepsDeposit as step, i}
+									<div class="flex gap-4">
+										<div class="w-2 rounded-md bg-primary-02 shrink-0"></div>
+										<div class="flex-1">
+											<div class="flex items-center justify-between flex-1 mb-4">
+												<span class="font-medium text-transparent bg-clip-text bg-primary-02">Method {i+1}</span>
+												<span class="inline-flex px-3 py-1 text-xs font-medium bg-gray-400 rounded-3xl text-gray-1000">{step.title}</span>
+											</div>
+											<p>{step.description}</p>
+											<p class="my-3 text-sm text-gray-300">{step.explanation}</p>
+											<Button on:click={() => gotoVotePage(step.method)} class="bg-primary-600 text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !border-[0.5px] !border-gray-700">
+												Vote now
+											</Button>
+										</div>
+									</div>
+								{/each}
+								<Banner bannerType={'info'} message={'No stacks are transferred when voting through Ecosystem DAO.'}/>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="p-[1.2px] bg-[linear-gradient(126.12deg,rgba(237,105,60,0.5)11.8%,rgba(254,219,99,0.2)72.43%)] rounded-lg">
 					<div
 						class="relative flex items-center p-6 bg-[linear-gradient(126.12deg,rgba(0,0,0,0.95)21.1%,rgba(18,18,18,0.5)53.58%);] rounded-lg"
 					>
 						<div class="sm:flex sm:items-center gap-x-10">
+							<!--
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-auto w-32 sm:w-44 shrink-0" viewBox="0 0 208 204">
 								<g filter="url(#filter0_d_5215_9232)">
 									<circle cx="108" cy="100" r="90" fill="url(#paint0_linear_5215_9232)"/>
@@ -225,14 +260,30 @@
 									</filter>
 								</defs>
 							</svg>
+							-->
+							
 
-							<div class="w-full sm:w-3/5">
-								<h2 class="text-2xl sm:text-3xl font-bold">sBTC Bridge</h2>
-								<p class="mt-4 text-lg">The bridge provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain.</p>
-								<p class="mt-2 text-lg">Let's dive into the specifics of its functioning.</p>
+							<div class="w-full ">
+								<div class="text-white flex flex-col gap-y-6">
+									<div class="flex flex-col gap-y-6"> 
+										<h2 class="text-primary-500">
+										<span class="text-2xl font-bold mt-10 lg:mt-0">What is SIP XXX ?</span></h2> 
+										<p class="sub-text">Stacks 2.1 is a network-wide upgrade that will strengthen the connection between Stacks and Bitcoin. The upgrade is slated to bring improvements to stacking and proof-of-transfer, Clarity functionality, bridges, decentralised mining pools, and more. Should this upgrade pass, the Stacks community can expect:</p> 
+										<ul> 
+											<li>More efficient Bitcoin yield via Stacking</li> 
+											<li>More robust bridges to other networks</li> 
+											<li>Improvements to developers' ability to trigger interactions between Stacks and Bitcoin</li> 
+											<li>Fundamental groundwork laid for Subnets, which will increase speed and scalability</li> 
+										</ul> 
+										<p>In addition, SIP-020 adds 6 new native functions to perform bitwise operations in Clarity code, and will be activated if the SIP-015 vote passes.</p> <p><a class="text-info" href="https://stacks.org/stacks-21-what-to-expect?ref=stacksroadmap" target="_blank">→ Learn more about Stacks 2.1</a></p> <p><a class="text-info" href="https://github.com/stacksgov/sips/blob/feat/sip-015/sips/sip-015/sip-015-network-upgrade.md#for-non-stackers" target="_blank">→ Read the full SIP for Stacks 2.1</a></p> <p><a class="text-info" href="https://www.hiro.so/blog/a-developers-guide-to-stacks-2-1" target="_blank">→ Learn more about Clarity language improvements in Stacks 2.1</a></p> <p><a class="text-info" href="https://github.com/obycode/sips/blob/bitwise-ops/sips/sip-020/sip-020-bitwise-ops.md" target="_blank">→ Learn more about SIP-020 Bitwise Operations in Clarity</a></p> 
+									</div>
+									<p>After voting you'll be able to claim your "I Voted" badge for your profile picture to display on social media. So be sure to have your favorite profile picture NFTs in your voting wallet!</p>
+									<p class="text-warning-500">Your snapshot balance at block {startBlockHeight} was {balanceAtHeight} STX.</p>
+								</div>
 							</div>
 						</div>
 					</div>
+					<Banner bannerType={'info'} message={'Voting will take place during reward cycles x and y. This window is estimated to begin starting November 10, 2022 and ending December 8, 2022.'}/>
 				</div>
 
 				<div class="bg-[linear-gradient(180deg,#A9E6D2_0%,rgba(169,230,210,0.00)100%)] p-[1.2px] rounded-lg">
@@ -269,63 +320,6 @@
 					</div>
 				</div>
 
-				<div class="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
-					<div class="space-y-6 px-6 sm:px-10 space-y-8 divide-y divide-gray-400/30 py-6 bg-white/5 rounded-lg border border-primary-500/20 shadow-[0px_1px_6px_0px_rgba(254,219,99,0.20)]">
-						<div>
-							<div class="lg:flex lg:items-start lg:justify-between lg:gap-4 space-y-4 lg:space-y-0">
-								<span class="inline-flex px-3 py-1 text-sm font-medium rounded-3xl bg-primary-01 text-gray-1000">Deposit timeline</span>
-								<SwitchGraphic reverse={true} />
-							</div>
-							<h3 class="text-2xl font-bold mt-4 lg:mt-0">Deposit BTC, mint sBTC</h3>
-						</div>
-						<div>
-							<div class="pt-8 space-y-8">
-								{#each stepsDeposit as step, i}
-									<div class="flex gap-4">
-										<div class="w-2 rounded-md bg-primary-02 shrink-0"></div>
-										<div class="flex-1">
-											<div class="flex items-center justify-between flex-1 mb-4">
-												<span class="font-medium text-transparent bg-clip-text bg-primary-02">Step {i+1}</span>
-												<span class="inline-flex px-3 py-1 text-xs font-medium bg-gray-400 rounded-3xl text-gray-1000">{step.title}</span>
-											</div>
-											<p>{step.description}</p>
-											<p class="mt-3 text-sm text-gray-300">{step.explanation}</p>
-										</div>
-									</div>
-								{/each}
-							</div>
-						</div>
-					</div>
-
-					<div class="space-y-6 px-6 sm:px-10 space-y-8 divide-y divide-gray-400/30 py-6 bg-white/5 rounded-lg border border-blue-500/20 shadow-[0px_1px_6px_0px_rgba(173,188,246,0.20)]">
-						<div>
-							<div class="lg:flex lg:items-start lg:justify-between lg:gap-4 space-y-4 lg:space-y-0">
-								<span class="inline-flex px-3 py-1 text-sm font-medium rounded-3xl bg-primary-03 text-gray-1000">Withdraw timeline</span>
-								<SwitchGraphic reverse={false} />
-							</div>
-							<h3 class="text-2xl font-bold mt-4 sm:mt-0">Withdraw BTC, burn sBTC</h3>
-						</div>
-						<div>
-							<div class="pt-8 space-y-6">
-								{#each stepsWithdraw as step, i}
-									<div class="flex gap-4">
-										<div class="w-2 rounded-md bg-primary-03 shrink-0"></div>
-										<div class="flex-1">
-											<div class="flex items-center justify-between flex-1 mb-4">
-												<span class="font-medium text-transparent bg-clip-text bg-primary-03">Step {i+1}</span>
-												<span class="inline-flex px-3 py-1 text-xs font-medium bg-gray-400 rounded-3xl text-gray-1000">{step.title}</span>
-											</div>
-											<p>{step.description}</p>
-											{#if step.explanation}
-												<p class="mt-3 text-sm text-gray-300">{step.explanation}</p>
-											{/if}
-										</div>
-									</div>
-								{/each}
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
   </div>

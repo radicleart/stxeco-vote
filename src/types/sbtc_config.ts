@@ -1,27 +1,28 @@
-import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate, AuthorisationDataType, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib' 
+import type { SbtcContractDataType, AddressObject, ExchangeRate, AuthorisationDataType } from 'sbtc-bridge-lib' 
+import type { DaoData, GovernanceData, ProposalEvent } from './stxeco.type';
 
 export type SbtcConfig = {
+  daoData?: DaoData;
   proposals?: Array<ProposalEvent>;
   exchangeRates?: Array<ExchangeRate>;
-  pegInMongoId?: string;
-  pegOutMongoId?: string;
   btcFeeRates?: any;
   loggedIn: boolean;
   authHeader?:AuthorisationDataType|undefined;
   keySets: { [key: string]: AddressObject; };
   stxAddress?: string;
-  sigData:any;
-  pegIn:boolean;
-  peginRequest?:BridgeTransactionType;
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataType;
-  revealFeeWithGas: number;
-  payloadDepositData: DepositPayloadUIType;
-  payloadWithdrawData: WithdrawPayloadUIType;
+  stacksInfo: {
+    burn_block_height: number;
+    server_version: string;
+    network_id: number;
+    stacks_tip_height: number;
+  };
 };
 
 export type SbtcUserSettingI = {
-  peggingIn: boolean;
+  executiveTeamMember: boolean;
+  govTokens?: GovernanceData;
   useOpDrop: boolean;
   debugMode: boolean;
   testAddress?: string;
@@ -32,4 +33,3 @@ export type SbtcUserSettingI = {
   }
 }
 
-export type ProposalEvent = {event:string, proposer:string,  proposal:string}

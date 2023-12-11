@@ -25,6 +25,18 @@ export default {
         "1000": "#121212"
       },
       "primary": {
+        "100": "#fafbfe",
+        "200": "#ebeefd",
+        "300": "#d1dafa",
+        "400": "#adbcf6",
+        "500": "#7f97f1",
+        "600": "#758bde",
+        "700": "#6b7fca",
+        "800": "#5b6dae",
+        "900": "#475587",
+        "1000": "#333c60"
+      },
+      "orange": {
         "100": "#fef9f7",
         "200": "#fce7e0",
         "300": "#f9c9b9",
@@ -84,6 +96,18 @@ export default {
         "900": "#8b400c",
         "1000": "#642e09"
       },
+      "danger": {
+        "100": "#fef8f8",
+        "200": "#fce1e1",
+        "300": "#f9bcbc",
+        "400": "#f58787",
+        "500": "#ef4444",
+        "600": "#dc3f3f",
+        "700": "#c93939",
+        "800": "#ac3131",
+        "900": "#862626",
+        "1000": "#601b1b"
+      },
       "error": {
         "100": "#fef8f8",
         "200": "#fce1e1",
@@ -110,8 +134,10 @@ export default {
       "6xl": "3.75rem"
     },
     backgroundImage: {
-      "primary-01": "linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%)",
-      "primary-02": "linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%)",
+      "success-01": "linear-gradient(306.12deg, #66d2ae 21.1%, #096848 84.08%)",
+      "danger-01": "linear-gradient(306.12deg, #f58787 21.1%, #862626 84.08%)",
+      "primary-01": "linear-gradient(306.12deg, #adbcf6 21.1%, #475587 84.08%)",
+      "primary-02": "linear-gradient(126.12deg, #7f97f1 11.8%, #ebeefd 72.43%)",
       "primary-03": "linear-gradient(126.12deg, #D1DAFA 11.8%, #7F97F1 72.43%)",
       "primary-04": "linear-gradient(126.12deg, #333C60 11.8%, #7F97F1 72.43%)",
       "gray-01": "linear-gradient(126.12deg, #121212 44.07%, #404040 89.82%)",

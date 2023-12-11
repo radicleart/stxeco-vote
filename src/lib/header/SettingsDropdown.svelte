@@ -8,7 +8,7 @@
 			$sbtcConfig.userSettings = {
 				useOpDrop: false,
 				debugMode: false,
-				peggingIn: true,
+				executiveTeamMember: true,
 				currency: {
 					cryptoFirst: false,
 					myFiatCurrency: { currency: 'USD' } as ExchangeRate,

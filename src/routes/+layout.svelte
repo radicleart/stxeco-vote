@@ -9,17 +9,24 @@
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
 	import { sbtcConfig } from '$stores/stores'
-    import { authConfig } from '$stores/authConfig'
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
-	import { setAuthorisation } from '$lib/bridge_api';
+	import { fetchStacksInfo, getDaoProposals, setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
-	import { getProposals, getProposalsForActiveVotingExt } from '$lib/sbtc_admin';
+	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
+	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
+	import Notifications from 'svelte-notifications';
+
+	const unsubscribe1 = sbtcConfig.subscribe(() => {});
+	const unsubscribe2 = stacksStore.subscribe(() => {});
+	onMount(async () => {
+		unsubscribe1()
+		unsubscribe2()
+	})
 
 	let componentKey = 0;
 	let componentKey1 = 0;
-	console.log('process.env: ', import.meta.env);
 	setConfig($page.url.search);
 	const search = $page.url.search;
 	if (!isLegal(location.href)) {
@@ -46,8 +53,6 @@
 		//componentKey++;
 		console.debug('afterNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
-	const unsubscribe = sbtcConfig.subscribe((conf) => {});
-	onDestroy(unsubscribe);
 	let inited = false;
 	let errorReason:string|undefined;
 
@@ -79,7 +84,6 @@
 			clearTimeout(timer);
 		}, 250);
 	};
-	//const debouncedSetWindowWidth = debounce(300);
 
 	onMount(async () => {
 		try {
@@ -95,10 +99,29 @@
 				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 				sbtcConfig.update(() => conf);
 			}
+			// Note - only way to get all emergency proposals is to 
+			// fetch all proposal contracts by trait and then call ede004
+			// to see if any signals exist - see getProposalsByTrait()
+			//if (!$sbtcConfig.proposals) {
+				// fetch all proposal for given voting contract (look for propose event)
+				//getProposalsForActiveVotingExt(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_SNAPSHOT_VOTING_EXTENSION)
+			//}
+
+			const daoProposals = await getDaoProposals()
+			const stacksInfo = await fetchStacksInfo();
+			sbtcConfig.update((conf) => {
+				conf.stacksInfo = stacksInfo
+				conf.proposals = daoProposals
+				return conf;
+			});
+
+			await initApp();
 			inited = true;
 
-			//openWebSocket()
-			initApp();
+
+			await connectToStacks();
+			subscribeBlockUpdates();
+			
 			window.addEventListener('resize', debounce);
 		
 		} catch (err) {
@@ -107,6 +130,7 @@
 		}
 	})
 </script>
+<Notifications>
 	{#if resizing}
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
 		<Header on:login_event={loginEvent} />
@@ -116,6 +140,7 @@
 			{#if inited}
 			<Header on:login_event={loginEvent} />
 			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">
+				<InFlightTransaction />
 				{#key componentKey1}
 					<slot></slot>
 				{/key}
@@ -124,3 +149,4 @@
 			{/if}
 	</div>
 	{/if}
+</Notifications>

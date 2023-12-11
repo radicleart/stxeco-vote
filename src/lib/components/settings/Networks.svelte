@@ -47,7 +47,7 @@
 			return conf;
 		});
 		const url = new URL(location.href);
-		if (import.meta.env.MODE === 'simnet') {
+		if (mode === 'simnet') {
 			url.searchParams.set('chain', 'testnet');
 		} else {
 			url.searchParams.set('chain', net);

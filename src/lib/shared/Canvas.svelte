@@ -1,22 +1,25 @@
 <script lang="ts">
     import { onMount, onDestroy, tick } from "svelte";
     import { fabric } from "fabric";
-    import { Download } from "svelte-bootstrap-icons";
     import { createEventDispatcher } from "svelte";
+	import { Icon } from "svelte-hero-icons";
+	import { DownloadOutline } from "flowbite-svelte-icons";
+	import bannerBlue from '$lib/assets/banner-blue.png'
+	import bannerWhite from '$lib/assets/banner-white.png'
 
     const dispatch = createEventDispatcher();
     let downloaded = false;
 
-    $: bannerImageSrc = '/img/banner-blue.png';
+    $: bannerImageSrc = bannerBlue;
     export let imageSrc:string;
     export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;
-    let canv;
-    let img1; 
-    let img2;
+    let canv:any;
+    let img1:any; 
+    let img2:any;
     let componentKey = 0;
 
-    const saveImage = (e) => {
+    const saveImage = (e:any) => {
       let rawDataUrl = canv.toDataURL({
           format: 'png',
           quality: 0.8
@@ -55,16 +58,16 @@
 
     const switchImage = function (img:number) {
       if (img === 1) {
-        bannerImageSrc = '/img/banner-white.png';
+        bannerImageSrc = bannerWhite;
       } else {
-        bannerImageSrc = '/img/banner-blue.png';
+        bannerImageSrc = bannerBlue;
       }
       //componentKey++;
       canv.dispose();
       mountCanvas();
     };
 
-    const modifiedHandler = function (evt) {
+    const modifiedHandler = function (evt:any) {
       const modifiedObject = evt.target;
       canv.sendToBack(img1);
       console.log(modifiedObject.get('left'), modifiedObject.get('top'));
@@ -80,7 +83,6 @@
           strokeWidth: 0,
           stroke:"#ffffff",
           paintFirst: "stroke",
-          fontFamily: 'Gilroy-Light',
           fill: '#ffffff',
           fontSize: 24,
           charSpacing:1
@@ -93,7 +95,7 @@
           fill: "blue"
         });
         fabric.Image.fromURL(imageSrc, function(img) {
-          img1 = img.set({scaleX: (400 / img.width), scaleY: (400 / img.height), left: 0, top: 0, angle: 0});
+          img1 = img.set({scaleX: (400 / (img.width || 100)), scaleY: (400 / (img.height||100)), left: 0, top: 0, angle: 0});
           //img1.scaleToWidth(50);
           //img1.scaleToHeight(50);
           //canv.setBackgroundImage(img, canv.renderAll.bind(canv), {
@@ -110,9 +112,9 @@
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
               if (bannerImageSrc.indexOf('white') > -1) {
-                img2 = img.set({scaleX: (canv.width / (img.width * 1.1)), scaleY: ((canv.height * 0.27) / img.height), left: 10, top: 280, angle: 0});
+                img2 = img.set({scaleX: (canv.width / ((img.width || 100) * 1.1)), scaleY: ((canv.height * 0.27) / (img.height || 100)), left: 10, top: 280, angle: 0});
               } else {
-                img2 = img.set({scaleX: (canv.width / img.width), scaleY: ((canv.height * 0.22) / img.height), left: 10, top: 280, angle: 0});
+                img2 = img.set({scaleX: (canv.width / (img.width || 100)), scaleY: ((canv.height * 0.22) / (img.height || 100)), left: 10, top: 280, angle: 0});
               }
               //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();
@@ -149,8 +151,8 @@
 <div class="my-4 d-flex justify-content-between">
   <div>
     <div class="">Choose:
-      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src="/img/banner-blue.png" alt="blue banner"/></a>
-      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src="/img/banner-white.png" alt="white banner"/></a>
+      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src={bannerBlue} alt="blue banner"/></a>
+      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src={bannerWhite} alt="white banner"/></a>
     </div>
   </div>
 </div>
@@ -160,7 +162,7 @@
     <span class="mx-2"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>Twitter Preview</a></span>
   </div>
   <div class="col-6">
-    <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Download width={40} height={40}/></a></span>
+    <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Icon src={DownloadOutline} width={40} height={40}/></a></span>
   </div>
 </div>
 {/if}
