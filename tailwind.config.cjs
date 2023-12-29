@@ -13,65 +13,50 @@ export default {
       "white": "#ffffff",
       "black": "#000000",
       "gray": {
-        "100": "#f9f9f9",
-        "200": "#e9e9e9",
-        "300": "#cdcdcd",
-        "400": "#a5a5a5",
-        "500": "#737373",
-        "600": "#6a6a6a",
-        "700": "#616161",
-        "800": "#535353",
-        "900": "#404040",
-        "1000": "#121212"
+        "100": "#eaeaed",
+        "200": "#d5d5db",
+        "300": "#c1c0ca",
+        "400": "#acabb8",
+        "500": "#9796a6",
+        "600": "#797885",
+        "700": "#5b5a64",
+        "800": "#3c3c42",
+        "900": "#1F2123",
       },
-      "primary": {
-        "100": "#fafbfe",
-        "200": "#ebeefd",
-        "300": "#d1dafa",
-        "400": "#adbcf6",
-        "500": "#7f97f1",
-        "600": "#758bde",
-        "700": "#6b7fca",
-        "800": "#5b6dae",
-        "900": "#475587",
-        "1000": "#333c60"
+      "navy": {
+        "100": "#cecce0",
+        "200": "#9c99c2",
+        "300": "#6b66a3",
+        "400": "#393385",
+        "500": "#080066",
+        "600": "#060052",
+        "700": "#05003d",
+        "800": "#030029",
+        "900": "#020014",
       },
-      "orange": {
-        "100": "#fef9f7",
-        "200": "#fce7e0",
-        "300": "#f9c9b9",
-        "400": "#f39f82",
-        "500": "#ed693c",
-        "600": "#da6137",
-        "700": "#c75832",
-        "800": "#ab4c2b",
-        "900": "#853b22",
-        "1000": "#5f2a18"
+      "stacks": {
+        "100": "#dddaff",
+        "200": "#bbb5ff",
+        "300": "#9990ff",
+        "400": "#776bff",
+        "500": "#5546ff",
+        "600": "#4438cc",
+        "700": "#332a99",
+        "800": "#221c66",
+        "900": "#110e33",
       },
-      "yellow": {
-        "100": "#fffdf5",
-        "200": "#fff6d8",
-        "300": "#feeaa7",
-        "400": "#fedb63",
-        "500": "#fdc60b",
-        "600": "#e9b60a",
-        "700": "#d5a609",
-        "800": "#b68f08",
-        "900": "#8e6f06",
-        "1000": "#654f04"
+      "purple": {
+        "100": "#e4d9fc",
+        "200": "#cab3f8",
+        "300": "#af8cf5",
+        "400": "#9566f1",
+        "500": "#7a40ee",
+        "600": "#6233be",
+        "700": "#49268f",
+        "800": "#311a5f",
+        "900": "#180d30",
       },
-      "blue": {
-        "100": "#fafbfe",
-        "200": "#ebeefd",
-        "300": "#d1dafa",
-        "400": "#adbcf6",
-        "500": "#7f97f1",
-        "600": "#758bde",
-        "700": "#6b7fca",
-        "800": "#5b6dae",
-        "900": "#475587",
-        "1000": "#333c60"
-      },
+      // Status
       "success": {
         "100": "#f5fcfa",
         "200": "#d9f4eb",
@@ -121,45 +106,14 @@ export default {
         "1000": "#601b1b"
       }
     },
-    fontSize: {
-      "xs": "0.75rem",
-      "sm": "0.875rem",
-      "base": "1rem",
-      "lg": "1.125rem",
-      "xl": "1.25rem",
-      "2xl": "1.5rem",
-      "3xl": "1.875rem",
-      "4xl": "2.25rem",
-      "5xl": "3rem",
-      "6xl": "3.75rem"
-    },
     backgroundImage: {
-      "success-01": "linear-gradient(306.12deg, #66d2ae 21.1%, #096848 84.08%)",
-      "danger-01": "linear-gradient(306.12deg, #f58787 21.1%, #862626 84.08%)",
-      "primary-01": "linear-gradient(306.12deg, #adbcf6 21.1%, #475587 84.08%)",
-      "primary-02": "linear-gradient(126.12deg, #7f97f1 11.8%, #ebeefd 72.43%)",
-      "primary-03": "linear-gradient(126.12deg, #D1DAFA 11.8%, #7F97F1 72.43%)",
-      "primary-04": "linear-gradient(126.12deg, #333C60 11.8%, #7F97F1 72.43%)",
-      "gray-01": "linear-gradient(126.12deg, #121212 44.07%, #404040 89.82%)",
-      "black-01": "linear-gradient(126.12deg, #000000 21.1%, #121212 53.58%)"
+      "primary-01": "linear-gradient(80deg, #080066 0%, #7A40EE 100%)", // navy to purple
+      "purple-fade": "linear-gradient(180deg, rgba(122, 64, 238, 0.60) 0%, rgba(122, 64, 238, 0.10) 100%)" // purple fade
     },
     extend: {
       fontFamily: {
-        'sans': ['Circular Std', ...defaultTheme.fontFamily.sans],
+        'sans': ['OpenSauceTwo', ...defaultTheme.fontFamily.sans],
       },
-      "boxShadow": {
-        "01": "-4px -4px 12px -2px rgba(249,115,22,0.6), 4px 4px 12px -2px rgba(253,198,11,0.6)",
-        "02": "4px 4px 12px -2px rgba(117,139,222,0.6), -4px -4px 12px -2px rgba(91,109,174,0.6)"
-      },
-      keyframes: {
-        slideinout: {
-          '0%, 100%': { transform: 'translate(0px)' },
-          '50%': { transform: 'translate(40px)' },
-        }
-      },
-      animation: {
-        slideinout: 'slideinout 3s ease-in-out infinite',
-      }
     },
   }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import "../sbtc.css";
+	import "../index.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
@@ -73,18 +73,6 @@
 		setAuthorisation($sbtcConfig.authHeader)
 	}
 
-	let resizing = false;
-	let windowWidth:string|undefined;
-	const debounce = () => {
-		let timer:any;
-		resizing = true
-		windowWidth = `${window.innerWidth}px`;
-		timer = setTimeout(() => {
-			resizing = false;
-			clearTimeout(timer);
-		}, 250);
-	};
-
 	onMount(async () => {
 		try {
 			const conf = $sbtcConfig;
@@ -99,7 +87,7 @@
 				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 				sbtcConfig.update(() => conf);
 			}
-			// Note - only way to get all emergency proposals is to 
+			// Note - only way to get all emergency proposals is to
 			// fetch all proposal contracts by trait and then call ede004
 			// to see if any signals exist - see getProposalsByTrait()
 			//if (!$sbtcConfig.proposals) {
@@ -118,12 +106,9 @@
 			await initApp();
 			inited = true;
 
-
 			await connectToStacks();
 			subscribeBlockUpdates();
-			
-			window.addEventListener('resize', debounce);
-		
+
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
@@ -131,22 +116,17 @@
 	})
 </script>
 <Notifications>
-	{#if resizing}
-	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
-		<Header on:login_event={loginEvent} />
-	</div>
-	{:else}
-	<div class="bg-transparent bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
-			{#if inited}
+	<div class="bg-transparent text-white font-extralight min-h-screen relative">
+		<div class="absolute top-0 left-0 w-full h-[1153px] bg-[url('$lib/assets/bg.png')] bg-cover"></div>
+		{#if inited}
 			<Header on:login_event={loginEvent} />
-			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">
+			<div class="mx-auto px-6 relative">
 				<InFlightTransaction />
 				{#key componentKey1}
 					<slot></slot>
 				{/key}
 			</div>
 			<Footer />
-			{/if}
+		{/if}
 	</div>
-	{/if}
 </Notifications>
