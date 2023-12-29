@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import "../sbtc.css";
+	import "../index.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
@@ -102,14 +102,11 @@
 				sbtcConfig.update(() => conf);
 			}
 
-
 			initApp();
 			inited = true;
 
-
 			await connectToStacks();
 			subscribeBlockUpdates();
-		
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
@@ -117,16 +114,17 @@
 	})
 </script>
 <Notifications>
-	<div class="bg-transparent bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
-			{#if inited}
-			<Header on:login_event={loginEvent} />
-			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">
+	<div class="bg-transparent text-white font-extralight min-h-screen relative">
+		<div class="absolute top-0 left-0 w-full h-[1153px] bg-[url('$lib/assets/bg.png')] bg-cover"></div>
+		{#if inited}
+		<Header on:login_event={loginEvent} />
+			<div class="mx-auto px-6 relative">
 				<InFlightTransaction />
 				{#key componentKey1}
 					<slot></slot>
 				{/key}
 			</div>
-			<Footer />
-			{/if}
+		<Footer />
+		{/if}
 	</div>
 </Notifications>
