@@ -46,10 +46,24 @@ export type ProposalEvent = {
   executedAt: number;
   stage: ProposalStage;
 }
+export type VoteEvent = {
+  event: string;
+  proposal: string;
+  voter: string;
+  for: boolean;
+  amount: number;
+  votingContractId:string;
+  proposalContractId: string;
+  submitTxId: string;
+}
+
 export enum ProposalStage {
   UNFUNDED,
   PARTIAL_FUNDING,
-  PROPOSED
+  PROPOSED,
+  ACTIVE,
+  INACTIVE,
+  CONCLUDED
 }
 
 export type FundingData = {

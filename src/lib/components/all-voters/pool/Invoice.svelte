@@ -2,7 +2,7 @@
   import { onMount, tick } from "svelte";
   import QrCode from "svelte-qrcode"
   import { Icon, ClipboardDocument } from "svelte-hero-icons"
-  import { fmtSatoshiToBitcoin } from '$lib/utils'
+  import { explorerAddressUrl, fmtSatoshiToBitcoin } from '$lib/utils'
   import LinkToExplorer from '$lib/components/shared/LinkToExplorer.svelte';
   import { makeFlash } from "$lib/stacks_connect";
   import { explorerBtcAddressUrl } from '$lib/utils'
@@ -11,7 +11,7 @@
   export let address:string;
   export let voteFor = false;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
-  let amount = 546;
+  let amount = 1;
   let copied = false;
   let valueCopy:string|undefined;
   let areaDom:any;
@@ -74,10 +74,7 @@
   }
 
   const paymentUri = () => {
-    let uri = 'bitcoin:' + address;
-    uri += '?amount=' + fmtSatoshiToBitcoin(amount)
-    uri += '&label=' + encodeURI('Deposit BTC to mint sBTC on Stacks')
-    return uri
+    return address
   }
 
   onMount(async () => {
@@ -102,7 +99,7 @@
     </div>
     <div class="flex justify-end gap-1 gap-x-1 mt-1">
       <div class={(showCopy) ? 'block font-bold visible me-4' : 'block font-bold invisible me-4'}>copied bitcoin {(voteFor) ? 'vote yes' : 'vote no'} address</div>
-      <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
+      <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerAddressUrl(getAddress(true))} />
       <button id="copy-address" type="button" on:click={() => copy()} class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
         <Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
       </button>

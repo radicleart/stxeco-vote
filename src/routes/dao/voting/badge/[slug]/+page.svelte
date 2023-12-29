@@ -7,17 +7,12 @@ import DaoUtils from '$lib/service/DaoUtils';
 import { sbtcConfig } from "$stores/stores";
 import { CONFIG } from "$lib/config";
 import bns from '$lib/assets/bns.jpg'
-	import { getNftAssetClasses, getNfts, getNftsbyPage, getVotes } from "$lib/bridge_api";
-	import { loggedIn } from "$lib/stacks_connect";
-	import { goto } from "$app/navigation";
+import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
+import { loggedIn } from "$lib/stacks_connect";
+import { goto } from "$app/navigation";
 
-// const json = localStorage.getItem('VOTED_FLAG');
 const voted = true;
-// if (json) voted = JSON.parse(json);
-
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-const network = CONFIG.VITE_NETWORK;
-let currentNetork = network; 
 let votes: any[] = [];
 let assetIdList: any[] = [];
 let assetId:any;
@@ -27,7 +22,7 @@ $: holdings = {
   results: []
 };;
 $: currentPage = 0;
-let pageSize = 20;
+let pageSize = 10;
 let loading = true;
 const gateway = "https://hashone.mypinata.cloud/";
 const gatewayAr = "https://arweave.net/";
@@ -62,6 +57,10 @@ const nextPage = async (init:boolean) => {
   loading = false;
 }
 
+const selectAssetId = () => {
+  nextPage(true)
+}
+
   let imageSrc:string = bns;
   let canvasMode = false;
   const selectItem = (event: any) => {
@@ -90,10 +89,10 @@ const nextPage = async (init:boolean) => {
       })
     })
     sortedAssets = sortedAssets.sort(DaoUtils.dynamicSort('assetName'));
-    assetId = sortedAssets[0];
-    nextPage(true);
+    //assetId = sortedAssets[0];
+    //nextPage(true);
 
-    votes = await getVotes(contractId, account.stxAddress)
+    votes = await getDaoVotesByProposalAndVoter(contractId, account.stxAddress)
   })
 </script>
 
@@ -107,25 +106,18 @@ const nextPage = async (init:boolean) => {
   <div class="flex flex-col w-full my-8">
     <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden bg-gray-1000">
       <h1 class="text-4xl text-info"><span class="strokeme-info">Badge</span> Pickup</h1>
-      {#if voted || votes.length > 0}<h2 class="text-center text-info my-4 mb-5">Thank you so much on voting on Stacks 2.1 Upgrade. <br/>You are now part of Stacks' history! 🎉</h2>{/if}
-      {#if assetIdList.length === 0}
-      <div>
-        <p>No NFTs for address: {account.stxAddress} on {currentNetork}</p>
-        <p>You can transfer an NFT to this address to claim a badge. Or vote with an address
-          with NFTs already in the wallet.
-        </p>
-      </div>
-      {/if}
+      {#if voted || votes.length > 0}<h2 class="text-center text-info my-4 mb-5">Thank you so much on voting on this Stacks Upgrade. <br/>You are now part of Stacks' history! 🎉</h2>{/if}
       {#if !canvasMode}
       <div class="mb-5">
-        <h4>Choose NFT Collection</h4>
-        <select class="text-black" bind:value={assetId} on:change="{() => { nextPage(true) }}">
+        <select class="text-black h-10 w-1/2 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
+          <option class="" value={''}>Choose an NFT collection for your badge</option>
           {#each sortedAssets as asset}
-          <option value={asset}>{asset.assetName + ' from ' + asset.contractName}</option>
+          <option class="" value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
           {/each}
         </select>
       </div>
       {/if}
+      <!--
       {#if voted || votes.length > 0}
       <div class="border rounded-lg border-gray-300 my-5 p-4">
         <p class="text-2xl">Make a badge</p>
@@ -137,6 +129,7 @@ const nextPage = async (init:boolean) => {
         </ol>
       </div>
       {/if}
+      -->
           {#if holdings.total > 0}
             {#if canvasMode}
             <div class="row">
@@ -153,13 +146,15 @@ const nextPage = async (init:boolean) => {
               {/each}
             </div>
             {/if}
-          {:else}
-          <div>
-            <p>No NFTs for address: {account.stxAddress} on {currentNetork}</p>
-            <p>Transfer an NFT to this address to claim a badge. Or vote with an address
-              with NFTs already in the wallet.
-            </p>
-          </div>
+            <!--
+            {:else}
+            <div>
+              <p>No NFTs for address: {account.stxAddress} on {currentNetork}</p>
+              <p>Transfer an NFT to this address to claim a badge. Or vote with an address
+                with NFTs already in the wallet.
+              </p>
+            </div>
+            -->
           {/if}
     </div>
   </div>

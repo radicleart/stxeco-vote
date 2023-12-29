@@ -9,7 +9,6 @@
 	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
 	import { explorerAddressUrl } from '$lib/utils';
 	import type { SbtcConfig } from '$types/sbtc_config';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
         
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     

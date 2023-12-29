@@ -136,7 +136,7 @@ const ChainUtils = {
     return '0x' + arr.join('')
   },
   callContractReadOnly: async (data:any) => {
-      const url = CONFIG.VITE_STACKS_API + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
+      const url = CONFIG.VITE_STACKS_API_HIRO + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

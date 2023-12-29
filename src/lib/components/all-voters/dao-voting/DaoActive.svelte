@@ -7,16 +7,18 @@
 	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
 	import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
+	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import { sbtcConfig } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
 	import { page } from '$app/stores';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import { loggedIn } from '$lib/stacks_connect';
+	import DaoResults from './DaoResults.svelte';
 
 	export let proposalEvent: ProposalEvent;
 	export let balanceAtHeight:number
+	export let daoVotes:Array<VoteEvent>;
+
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 	let showSourceModal: boolean;
 	let showRulesModal: boolean;
@@ -25,10 +27,7 @@
 		showRulesModal = false;
 	};
 	let propStatus = proposalEvent.status?.name;
-	let fundedProposalsValid:boolean;
 	let executiveProposalsValid:boolean;
-	let emergencyProposalsValid:boolean;
-	let thresholdProposalsValid:boolean;
 	let color:string;
 	let endBlock:number;
 	let sourceCode: string | undefined;
@@ -42,13 +41,7 @@
 		const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height || 0;
 		endBlock = (proposalEvent.proposalData.endBlockHeight || 0) - stacksTipHeight;
 		sourceCode = proposalEvent.contract.source;
-
-		const executiveTeamMember = isExecutiveTeamMember($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
-		const thresholdProposalExt = proposalEvent.submissionData.contractId.indexOf( 'ede002-threshold-proposal-submission') > -1
-		thresholdProposalsValid = thresholdProposalExt; // && thresholdProposalExt.valid;
-		fundedProposalsValid = true //&& fundedProposalExt.valid;
 		executiveProposalsValid = false;
-		emergencyProposalsValid = true;
 		color = proposalEvent.status?.color || 'blue';
 	}
 
@@ -103,24 +96,14 @@
 	/>
 </svelte:head>
 
-<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<h2 class="text-4xl ">Voting through Ecosystem DAO</h2>
-	<p class="text-warning-500">Vote with your liquid STX balance using your <span class="font-bold">Leather / Xverse wallet</span> 
-		<br/>no STX is spent by voting but you will pay a gas fee.
-	</p>
-	{#if loggedIn()}
-	<!--
-	<div class="flex flex-col gap-y-4">
-		<p>Use your STX balance to represent your vote - we use snapshot voting which allows you to vote with the 
-			balance you had when the proposal started
-			{#if $sbtcConfig.stacksInfo.stacks_tip_height < proposalEvent.proposalData.startBlockHeight}
-			your STX balance is <span class="text-warning-500">{balanceAtHeight}.</span>
-			{:else}
-			your STX balance at block height <span class="text-warning-500">{fmtNumber(proposalEvent.proposalData.startBlockHeight)}</span> was <span class="text-warning-500">{balanceAtHeight}.</span>
-			{/if}
-			</p>
+<div class=" rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
+	<div class="flex justify-between">
+		<h2 class="text-2xl ">Voting through Ecosystem DAO</h2>
+		<a href="/" on:click|preventDefault={() => showSourceModal = !showSourceModal}>show results</a>
 	</div>
-	-->
+	<p class="">Vote with your liquid STX balance using your <span class="font-bold">Leather / Xverse wallet</span> </p>
+	<p class="text-warning-500">No STX is spent by voting but you will pay a gas fee.</p>
+	{#if loggedIn()}
 	{#if propStatus === 'voting'}
 		{#if proposalEvent.proposalData && proposalEvent.votingContract === CONFIG.VITE_DOA_PROPOSAL_VOTING_EXTENSION}
 		<PropBallotBox {proposalEvent} />
@@ -133,14 +116,20 @@
 		Voting starts in {proposalEvent.proposalData.startBlockHeight - stacksTipHeight} blocks
 		{/if}
 	{:else if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
-		<a href={'/dao/proposals/funding/' + proposalEvent.contractId} >Fund this proposal</a>
+		<a href={'/dao/proposals/' + proposalEvent.contractId} >Fund this proposal</a>
 	{:else}
-		<a href={'/dao/results/' + proposalEvent.contractId} >Goto result page</a>
+		<a href={'/dao/proposals/' + proposalEvent.contractId} >Goto result page</a>
 	{/if}
 
 	{:else}
 	<div class="flex flex-col gap-y-4">
 		<p class="text-warning-500">Connect your wallet to vote</p>
+	</div>
+	{/if}
+
+	{#if daoVotes && showSourceModal}
+	<div>
+		<DaoResults proposal={proposalEvent} {daoVotes} />
 	</div>
 	{/if}
 </div>

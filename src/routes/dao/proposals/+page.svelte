@@ -3,27 +3,32 @@
   import { Skeleton, Tabs, TabItem } from 'flowbite-svelte';
   import { COMMS_ERROR } from '$lib/utils.js'
   import { sbtcConfig } from '$stores/stores';
-	import ProposalRow from '$lib/components/dao/proposals/rows/ProposalRow.svelte';
+	import ProposalRow from '$lib/components/dao/proposals/rows/ProposalActiveRow.svelte';
 	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import ProposalFundingHeader from '$lib/components/dao/proposals/rows/ProposalFundingHeader.svelte';
 	import ProposalVotingHeader from '$lib/components/dao/proposals/rows/ProposalVotingHeader.svelte';
 	import ProposalFundingRow from '$lib/components/dao/proposals/rows/ProposalFundingRow.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import ProposalClosedRow from '$lib/components/dao/proposals/rows/ProposalClosedRow.svelte';
+	import ProposalActiveRow from '$lib/components/dao/proposals/rows/ProposalActiveRow.svelte';
+	import DaoUtils from '$lib/service/DaoUtils';
 
   // fetch/hydrate data from local storage
   let inited = false;
   let errorReason:string|undefined;
-  let showAll:boolean = true;
   let funding:Array<ProposalEvent>|undefined;
   let open:Array<ProposalEvent>|undefined;
   let closed:Array<ProposalEvent>|undefined;
   let tabStatus = 'funding'
   onMount(async () => {
     try {
-      funding = $sbtcConfig.proposals?.filter((o) => o.stage !== ProposalStage.PROPOSED)
-      open = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED && !o.proposalData.concluded)
-      closed = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED && o.proposalData.concluded)
+      for (const prop of $sbtcConfig.proposals!) {
+        DaoUtils.setStatus($sbtcConfig.stacksInfo.stacks_tip_height, prop)
+      }
+      funding = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PARTIAL_FUNDING || o.stage === ProposalStage.UNFUNDED)
+      open = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED || o.stage === ProposalStage.ACTIVE)
+      closed = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.INACTIVE || o.stage === ProposalStage.CONCLUDED)
       if ($page.url.searchParams.has('status')) tabStatus = $page.url.searchParams.get('status') || 'funding'
       inited = true;
     } catch (err) {
@@ -64,7 +69,7 @@
               {#if open && open.length > 0}
               <ProposalVotingHeader/>
               {#each open as event}
-              <ProposalRow {event} />
+              <ProposalActiveRow {event} />
               {/each}
               {:else}
               None
@@ -80,7 +85,7 @@
               {#if closed && closed.length > 0}
               <ProposalVotingHeader/>
               {#each closed as event}
-              <ProposalRow {event} />
+              <ProposalClosedRow {event} />
               {/each}
               {:else}
               None

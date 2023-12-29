@@ -20,11 +20,11 @@ const vFr = (proposal.proposalData) ? FormatUtils.fmtNumber(Math.floor(ChainUtil
 {#if proposal && proposal.proposalData}
   <div class={'mt-5 row text-' + proposal.status?.color}>
     <div class="col-md-6 col-sm-12 text-center mb-5">
-      <h4 class="text-big text-center text-success">{vFr} <span class="text-white" style="font-size: 2.2rem;">YES ON 2.1</span></h4>
+      <h4 class="text-big text-center text-success">{vFr} <span class="text-white" style="font-size: 2.2rem;">YES ON NAK</span></h4>
       <h6 class="text-center text-success">from {totalAccountsFor} accounts</h6>
     </div>
     <div class="col-md-6 col-sm-12 text-center mb-5">
-      <h4 class="text-big text-center text-danger">{vAg} <span class="text-white" style="font-size: 2.2rem;">NO ON 2.1</span></h4>
+      <h4 class="text-big text-center text-danger">{vAg} <span class="text-white" style="font-size: 2.2rem;">NO ON NAK</span></h4>
       <h6 class="text-center text-danger">from {totalAccountsAgainst} accounts</h6>
     </div>
   </div>

@@ -67,7 +67,6 @@
 
 <Navbar
 	class="mx-auto flex max-w-7xl items-center !px-6 lg:px-8 !bg-transparent"
-	navDivClass="mx-auto flex flex-wrap justify-between items-center"
 	let:hidden
 	let:toggle
 	fluid={true}
@@ -113,9 +112,9 @@
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How to vote</NavLi>
-				-->
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/voting')} href="/dao/voting?method=1">Vote</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + CONFIG.VITE_DOA_PROPOSAL + '?method=1'}>Vote</NavLi>
+				-->
 			</div>
 			<div class="">
 				<NavLi class="self-end" nonActiveClass={getNavActiveClass('/height')} href="/" on:click={() => {}}>
