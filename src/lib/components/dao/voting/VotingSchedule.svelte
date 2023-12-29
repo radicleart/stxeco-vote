@@ -46,7 +46,7 @@ const concludeVote = async () => {
 }
 </script>
 
-    {#if stacksTipHeight > proposalData.endBlockHeight}
+    {#if stacksTipHeight >= proposalData.endBlockHeight}
       {#if proposalData.concluded && proposalData.passed}
         <h4 class={'text-2xl mb-5 text-' + proposalEvent.status?.color}>Vote Passed</h4>
         <div class={'mb-4 flex justify-around text-' + winning}>
@@ -54,7 +54,7 @@ const concludeVote = async () => {
             <span class="text-center">{inFavour}%</span> <span class="text-white"> in favour of this proposal</span>
           </div>
         </div>
-        {:else if proposalData.concluded && !proposalData.passed}
+      {:else if proposalData.concluded && !proposalData.passed}
         <h4 class={'text-' + proposalEvent.status?.color}>Vote Failed to Pass</h4>
         <div class={'mb-4 flex justify-around text-' + winning}>
           <div>
@@ -62,7 +62,6 @@ const concludeVote = async () => {
           </div>
         </div>
       {:else}
-        <h4 class={'text-2xl mb-5 text-' + proposalEvent.status?.colorCode}>Voting Closed</h4>
         {#if txId}
         <div class="">Votes are being counted.</div>
         <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
@@ -92,21 +91,4 @@ const concludeVote = async () => {
         <div>{ FormatUtils.fmtNumber(proposalData.endBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height) } blocks</div>
         <div><Countdown endBlock={proposalData.endBlockHeight - stacksTipHeight} /></div>
       </div>
-      <!--
-      <div class="progress">
-        <div class="progress-bar progress-bar-striped" role="progressbar" style={'width:' + (currentBHN) + '%'}
-              aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin={0} aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
-              &nbsp;
-        </div>
-      </div>
-      -->
     {/if}
-
-<style>
-  .progress {
-    border-radius: none !important;
-  }
-  .progress-bar {
-    border-radius: none !important;
-  }
-</style>

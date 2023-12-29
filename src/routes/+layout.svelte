@@ -12,15 +12,17 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
-	import { fetchStacksInfo, getDaoProposals, setAuthorisation } from '$lib/bridge_api';
+	import { fetchStacksInfo, setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
 	import Notifications from 'svelte-notifications';
+	import { getDaoProposals, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
+	import type { ProposalEvent } from '$types/stxeco.type';
 
 	const unsubscribe1 = sbtcConfig.subscribe(() => {});
 	const unsubscribe2 = stacksStore.subscribe(() => {});
-	onMount(async () => {
+	onDestroy(async () => {
 		unsubscribe1()
 		unsubscribe2()
 	})
@@ -66,6 +68,18 @@
 	}
 
 	const initApp = async () => {
+		const daoProposals = await getDaoProposals()
+		sbtcConfig.update((conf) => {
+			conf.proposals = daoProposals
+			return conf;
+		});
+		const soloPoolData = await getPoolAndSoloVotesByProposal(CONFIG.VITE_DOA_PROPOSAL)
+		const stacksInfo = await fetchStacksInfo();
+		sbtcConfig.update((conf) => {
+			conf.stacksInfo = stacksInfo
+			conf.soloPoolData = soloPoolData
+			return conf;
+		});
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
 		if (loggedIn() && !$sbtcConfig.authHeader) {
 			await authenticate($sbtcConfig)
@@ -87,28 +101,12 @@
 				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 				sbtcConfig.update(() => conf);
 			}
-			// Note - only way to get all emergency proposals is to
-			// fetch all proposal contracts by trait and then call ede004
-			// to see if any signals exist - see getProposalsByTrait()
-			//if (!$sbtcConfig.proposals) {
-				// fetch all proposal for given voting contract (look for propose event)
-				//getProposalsForActiveVotingExt(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_SNAPSHOT_VOTING_EXTENSION)
-			//}
 
-			const daoProposals = await getDaoProposals()
-			const stacksInfo = await fetchStacksInfo();
-			sbtcConfig.update((conf) => {
-				conf.stacksInfo = stacksInfo
-				conf.proposals = daoProposals
-				return conf;
-			});
-
-			await initApp();
+			initApp();
 			inited = true;
 
 			await connectToStacks();
 			subscribeBlockUpdates();
-
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
@@ -119,14 +117,14 @@
 	<div class="bg-transparent text-white font-extralight min-h-screen relative">
 		<div class="absolute top-0 left-0 w-full h-[1153px] bg-[url('$lib/assets/bg.png')] bg-cover"></div>
 		{#if inited}
-			<Header on:login_event={loginEvent} />
+		<Header on:login_event={loginEvent} />
 			<div class="mx-auto px-6 relative">
 				<InFlightTransaction />
 				{#key componentKey1}
 					<slot></slot>
 				{/key}
 			</div>
-			<Footer />
+		<Footer />
 		{/if}
 	</div>
 </Notifications>

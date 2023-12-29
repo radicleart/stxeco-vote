@@ -14,7 +14,7 @@
 	import ThresholdSubmissionVoting from '$lib/components/dao/submission/ThresholdSubmissionVoting.svelte';
 	import EmergencyExecuteSubmission from '$lib/components/dao/submission/EmergencyExecuteSubmission.svelte';
 	import ExecutiveProposalSubmission from '$lib/components/dao/submission/ExecutiveProposalSubmission.svelte';
-	import Preamble from '$lib/components/dao/proposals/Preamble.svelte';
+	import Preamble from '$lib/components/all-voters/Preamble.svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Countdown from '$lib/shared/Countdown.svelte';
 	import FormatUtils from '$lib/service/FormatUtils';
@@ -25,7 +25,6 @@
 	import { stacksStore } from '$stores/stacksStore';
 	import { explorerAddressUrl } from '$lib/utils';
 	import VotingRules from './VotingRules.svelte';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import { loggedIn } from '$lib/stacks_connect';
@@ -58,7 +57,6 @@
 		endBlock = (proposalEvent.proposalData.endBlockHeight || 0) - stacksTipHeight;
 		sourceCode = proposalEvent.contract.source;
 
-		const executiveTeamMember = isExecutiveTeamMember($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
 		const thresholdProposalExt = proposalEvent.submissionData.contractId.indexOf( 'ede002-threshold-proposal-submission') > -1
 		thresholdProposalsValid = thresholdProposalExt; // && thresholdProposalExt.valid;
 		fundedProposalsValid = true //&& fundedProposalExt.valid;
@@ -122,7 +120,7 @@
 	{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
 		<div class="">
 			<h1 class={''}>
-				<a href={'/dao/proposals/funding/' + proposalEvent.contractId} >Fund this proposal</a>
+				<a href={'/dao/proposals/' + proposalEvent.contractId} >Fund this proposal</a>
 			</h1>
 		</div>
 	{:else}
@@ -154,12 +152,6 @@
 		on:click|preventDefault={() => {
 			goto(`/dao/voting/badge/${proposalEvent.contractId}`);
 		}}>badge</button
-	>
-	<button
-		class={'text-primary-700'}
-		on:click|preventDefault={() => {
-			goto(`/dao/results/${proposalEvent.contractId}`);
-		}}>results</button
 	>
 	<a class={'text-primary-700'} href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_SNAPSHOT_VOTING_EXTENSION)} target="_blank">explorer</a>
 	<a class={'text-primary-700'} href="/" on:click|preventDefault={() => showDetails = !showDetails}>show details</a>

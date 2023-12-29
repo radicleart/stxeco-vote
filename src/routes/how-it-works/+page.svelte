@@ -119,7 +119,7 @@
 				</div>
 				<div class="py-10 px-12 bg-white/10 rounded-2xl backdrop-blur-lg border border-white/10 grid gap-8 grid-cols-3">
 					{#each votingOptions as opt}
-						<a href={`/dao/voting/${CONFIG.VITE_DOA_PROPOSAL}?method=${opt.method}`} class="overflow-hidden border border-white/10 hover:border-purple-500 rounded-lg relative bg-gray-900 px-6 py-8 pb-0">
+						<a href={`/dao/proposals/${CONFIG.VITE_DOA_PROPOSAL}?method=${opt.method}`} class="overflow-hidden border border-white/10 hover:border-purple-500 rounded-lg relative bg-gray-900 px-6 py-8 pb-0">
 							<svg class="absolute w-full h-auto text-white/[0.02]" viewBox="0 0 45 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M13.4681 7.57152C15.324 7.57152 16.8285 6.10055 16.8285 4.28601C16.8285 2.47146 15.324 1.00049 13.4681 1.00049C11.6122 1.00049 10.1077 2.47146 10.1077 4.28601C10.1077 6.10055 11.6122 7.57152 13.4681 7.57152Z" fill="currentColor"/>
 								<path d="M31.5376 7.57151C33.3935 7.56824 34.8954 6.09462 34.8923 4.28008C34.8892 2.46554 33.3821 0.997218 31.5262 1.00049C29.6703 1.00376 28.1683 2.47738 28.1715 4.29192C28.1746 6.10646 29.6816 7.57478 31.5376 7.57151Z" fill="currentColor"/>

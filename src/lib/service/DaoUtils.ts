@@ -32,12 +32,13 @@ const DaoUtils = {
   setStatus: (stacksTipHeight:number, proposal:ProposalEvent) => {    
     proposal.status = { name: 'unkown', color: 'primary-500', colorCode: 'primary-500' };
     if (proposal && typeof proposal.executedAt === 'number' && proposal.executedAt > 0 && typeof proposal.signals?.signals === 'number' && proposal.signals?.signals > 0) {
+      proposal.stage = ProposalStage.CONCLUDED
       return { name: 'emergexec', color: 'success-500', colorCode: 'success-500' }
     }
     if (!proposal.proposalData) {
-      proposal.stage === ProposalStage.UNFUNDED
+      proposal.stage = ProposalStage.UNFUNDED
       if (proposal.funding && proposal.funding.funding > 0) {
-        proposal.stage === ProposalStage.PARTIAL_FUNDING
+        proposal.stage = ProposalStage.PARTIAL_FUNDING
         proposal.status = { name: 'funding', color: 'info-500', colorCode: 'warning-500' };
       } else if (proposal.submitTxId) {
         proposal.status = { name: 'submitting', color: 'primary-500', colorCode: 'primary-500' };
@@ -47,7 +48,16 @@ const DaoUtils = {
         proposal.status = { name: 'draft', color: 'primary-500', colorCode: 'primary-500' };
       }
     } else {
-      proposal.stage === ProposalStage.PROPOSED
+      proposal.stage = ProposalStage.PROPOSED
+      if (stacksTipHeight >= proposal.proposalData.startBlockHeight) {
+        proposal.stage = ProposalStage.ACTIVE
+      }
+      if (stacksTipHeight >= proposal.proposalData.endBlockHeight) {
+        proposal.stage = ProposalStage.INACTIVE
+        if (proposal.proposalData.concluded) {
+          proposal.stage = ProposalStage.CONCLUDED
+        }
+      }
       if (proposal.votingContract.indexOf(CONFIG.VITE_DOA_PROPOSAL_VOTING_EXTENSION) > -1) {
         proposal.status = { name: 'submitted', color: 'primary-500', colorCode: 'primary-500' };
         if (stacksTipHeight < proposal.proposalData.startBlockHeight) {

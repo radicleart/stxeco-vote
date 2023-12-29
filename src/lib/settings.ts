@@ -1,7 +1,6 @@
 import { writable, get } from 'svelte/store';
 import ChainUtils from '$lib/service/ChainUtils';
-import type { ProposalEvent, SettingsType } from "$types/stxeco.type";
-import type { ProposalType } from "$types/stxeco.type";
+import type { ProposalEvent } from "$types/stxeco.type";
 import DaoUtils from '$lib/service/DaoUtils';
 import { EXTENSIONS } from './sbtc_admin';
 import { CONFIG } from './config';
@@ -52,7 +51,7 @@ function createStore() {
       if (!key) return;
       let storeValue: SettingsType = get(this);
       storeValue = value;
-      update((_) => storeValue);
+      update(() => storeValue);
     }
   };
 }

@@ -1,9 +1,11 @@
 import type { SbtcContractDataType, AddressObject, ExchangeRate, AuthorisationDataType } from 'sbtc-bridge-lib' 
 import type { DaoData, GovernanceData, ProposalEvent } from './stxeco.type';
+import type { SoloPoolData } from './stxeco_stacker_type';
 
 export type SbtcConfig = {
   daoData?: DaoData;
   proposals?: Array<ProposalEvent>;
+  soloPoolData?: SoloPoolData;
   exchangeRates?: Array<ExchangeRate>;
   btcFeeRates?: any;
   loggedIn: boolean;

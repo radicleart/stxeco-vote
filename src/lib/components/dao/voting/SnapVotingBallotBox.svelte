@@ -53,7 +53,7 @@ const castVote = async (vfor:boolean) => {
         onFinish: data => {
           txId = data.txId
           console.log('finished contract call!', data);
-          ChainUtils.updateVoters();
+          //ChainUtils.updateVoters();
           localStorage.setItem('VOTED_FLAG', JSON.stringify(proposalEvent.contractId));
           goto(`/dao/voting/badge/${proposalEvent.contractId}`);
         },
@@ -89,17 +89,19 @@ onMount(async () => {
     </div>
     -->
     {#if !txId}
-    <div class="flex flex-col gap-y-5 w-1/2">
+    <div class="flex flex-col gap-y-5 w-full md:w-1/2">
         <div class="flex flex-col gap-y-1">
-          <p class="text-sm mt-5">
-            Your snapshot balance at block <span class="text-bold">{FormatUtils.fmtNumber(proposalEvent.proposalData?.startBlockHeight)}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.
-          </p>
-          <input class="w-full rounded-lg p-2 text-black border-gray-800" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/>
+          <div class="w-full flex justify-center">
+            <input class="w-1/2 rounded-lg p-2 text-black border-gray-800" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/>
+          </div>
           {#if amount < balanceAtHeight}
           <div class="d-flex justify-content-end form-text text-small">
             <a class="text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}><u>maximum voting power</u></a>
           </div>
           {/if}
+          <p class="text-sm mt-5">
+            Your snapshot balance at block <span class="text-bold">{FormatUtils.fmtNumber(proposalEvent.proposalData?.startBlockHeight)}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.
+          </p>
         </div>
       {#if balanceAtHeight >= 1}
       <div class="flex justify-around">

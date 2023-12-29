@@ -96,8 +96,13 @@
 	>
 		<div class="w-full flex flex-row justify-between">
 			<div class="flex">
+				<!--
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How to vote</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/voting')} href="/dao/voting?method=1">Vote</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + CONFIG.VITE_DOA_PROPOSAL + '?method=1'}>Vote</NavLi>
+				-->
 			</div>
 			<div>
 				<span class="self-end inline-block text-purple-900 py-2.5">

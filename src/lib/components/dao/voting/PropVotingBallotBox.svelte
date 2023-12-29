@@ -70,8 +70,8 @@
   <section>
     {#if canVote}
     <div class="row">
-      <div class="my-5 text-center">
-        <div class="d-flex justify-content-around">
+      <div class="my-5">
+        <div class="flex justify-around">
           <div>
             <button class="btn btn-outline-info" on:click={() => toggleModal(true)}>FOR</button>
           </div>
