@@ -105,7 +105,7 @@
 				-->
 			</div>
 			<div>
-				<span class="self-end inline-block text-purple-900 py-2.5">
+				<span class="inline-block text-white md:text-purple-900 py-2.5">
 					{getBlockHeigths()}
 				</span>
 			</div>
@@ -115,7 +115,7 @@
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}

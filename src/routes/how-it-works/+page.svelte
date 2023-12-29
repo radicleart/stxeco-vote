@@ -34,7 +34,7 @@
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-<div class="px-6 sm:px-0 -mx-6 my-10 py-12 bg-white/[0.1] shadow-[0px_1px_1px_0px_rgba(255,255,255,0.25)_inset,_0px_-1px_1px_0px_rgba(255,255,255,0.25)_inset] backdrop-blur-xl">
+<div class="px-6 md:px-0 -mx-6 my-10 py-12 bg-white/[0.1] shadow-[0px_1px_1px_0px_rgba(255,255,255,0.25)_inset,_0px_-1px_1px_0px_rgba(255,255,255,0.25)_inset] backdrop-blur-xl">
 	<div class="py-6 mx-auto max-w-7xl md:px-6">
 		<p class="text-4xl font-medium leading-[46px] sm:max-w-4xl" style="text-shadow: 1px 1px 20px rgba(8, 0, 102, 0.50)">STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes</p>
 	</div>
