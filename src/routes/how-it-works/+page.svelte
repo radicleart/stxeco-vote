@@ -34,7 +34,7 @@
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-<div class="-mx-6 my-10 py-12 bg-white/[0.1] shadow-[0px_1px_1px_0px_rgba(255,255,255,0.25)_inset,_0px_-1px_1px_0px_rgba(255,255,255,0.25)_inset] backdrop-blur-xl">
+<div class="px-6 md:px-0 -mx-6 my-10 py-12 bg-white/[0.1] shadow-[0px_1px_1px_0px_rgba(255,255,255,0.25)_inset,_0px_-1px_1px_0px_rgba(255,255,255,0.25)_inset] backdrop-blur-xl">
 	<div class="py-6 mx-auto max-w-7xl md:px-6">
 		<p class="text-4xl font-medium leading-[46px] sm:max-w-4xl" style="text-shadow: 1px 1px 20px rgba(8, 0, 102, 0.50)">STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes</p>
 	</div>
@@ -46,15 +46,15 @@
 			<div class="space-y-6">
 				<div>
 					<span class="inline-block py-1 text-sm px-5 rounded-full bg-purple-fade border border-purple-500">Current proposal</span>
-					<h1 class="text-3xl sm:text-4xl font-bold -mx-4 mt-6"><a href="#" class="hover:bg-white/10 py-2 px-4 rounded-md">SIP-021 - Nakamoto Release <svg class="inline" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<h1 class="text-2xl sm:text-4xl font-bold -mx-4 mt-6"><a href="#" class="hover:bg-white/10 py-2 px-4 rounded-md">SIP-021 - Nakamoto Release <svg class="inline" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 						<path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 						<path d="M29.6875 20.3125L20.3125 29.6875" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 						</svg>
 						</a></h1>
 				</div>
-				<div class="py-10 px-12 bg-white/10 rounded-2xl backdrop-blur-lg border border-white/10 grid gap-12 grid-flow-col auto-cols-auto ">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" class="w-[300px] height-[300px]" fill="none">
+				<div class="py-10 px-10 md:px-12 bg-white/10 rounded-2xl backdrop-blur-lg border border-white/10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto ">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" class="w-auto h-auto md:w-[200px] md:h-[200px] lg:w-[300px] lg:h-[300px]" fill="none">
 						<g clip-path="url(#clip0_8_165)">
 							<rect width="300" height="300" fill="#1F2123" rx="12"/>
 							<path stroke="url(#paint0_linear_8_165)" d="M0 59.5h299"/>
@@ -97,7 +97,7 @@
 						</defs>
 					</svg>
 
-					<div class="divide-y divide-white/10">
+					<div class="divide-y divide-white/10 mt-6 md:mt-0">
 						<div class="mb-4">
 							<h2 class="font-semibold text-xl mb-3">Summary</h2>
 							<p class="text-lg">The proposal suggests a significant change to the Stacks blockchain for faster and more reliable blocks by separating block production from cryptographic sortitions. Goals include faster blocks, Bitcoin finality, resistance to Bitcoin forks, and preventing advantages for Bitcoin miners.</p>
@@ -117,9 +117,9 @@
 				<div>
 					<h2 class="text-3xl sm:text-4xl font-bold mt-6">Cast your vote</h2>
 				</div>
-				<div class="py-10 px-12 bg-white/10 rounded-2xl backdrop-blur-lg border border-white/10 grid gap-8 grid-cols-3">
+				<div class="py-10 px-10 lg:px-12 bg-white/10 rounded-2xl backdrop-blur-lg border border-white/10 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
 					{#each votingOptions as opt}
-						<a href={`/dao/proposals/${CONFIG.VITE_DOA_PROPOSAL}?method=${opt.method}`} class="overflow-hidden border border-white/10 hover:border-purple-500 rounded-lg relative bg-gray-900 px-6 py-8 pb-0">
+						<a href={`/dao/proposals/${CONFIG.VITE_DOA_PROPOSAL}?method=${opt.method}`} class="flex flex-col overflow-hidden border border-white/10 hover:border-purple-500 rounded-lg relative bg-gray-900 px-6 py-8 pb-0">
 							<svg class="absolute w-full h-auto text-white/[0.02]" viewBox="0 0 45 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M13.4681 7.57152C15.324 7.57152 16.8285 6.10055 16.8285 4.28601C16.8285 2.47146 15.324 1.00049 13.4681 1.00049C11.6122 1.00049 10.1077 2.47146 10.1077 4.28601C10.1077 6.10055 11.6122 7.57152 13.4681 7.57152Z" fill="currentColor"/>
 								<path d="M31.5376 7.57151C33.3935 7.56824 34.8954 6.09462 34.8923 4.28008C34.8892 2.46554 33.3821 0.997218 31.5262 1.00049C29.6703 1.00376 28.1683 2.47738 28.1715 4.29192C28.1746 6.10646 29.6816 7.57478 31.5376 7.57151Z" fill="currentColor"/>
@@ -147,7 +147,7 @@
 								</div>
 								<p class="mt-auto text-sm text-gray-400">{opt.explanation}</p>
 								<div class="mt-4 flex items-center gap-3 -mx-6 bg-purple-500/5 px-6 py-3 border-t border-white/10">
-									<span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+									<span class="shrink-0 w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
 									{opt.description}
 								</div>
 							</div>
