@@ -9,12 +9,21 @@
 	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
 	import { explorerAddressUrl } from '$lib/utils';
 	import type { SbtcConfig } from '$types/sbtc_config';
+	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
         
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-    
+    let contractId:string|undefined;
+    let processResult:any;
+
     let showRulesModal:boolean;
     const closeModal = () => {
       showRulesModal = false;
+    }
+    
+    const processProposal = async () => {
+      if (!contractId) return;
+      processResult = await processProposalContracts(contractId)
+      processResult = await setCurrentProposal(contractId)
     }
     
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
@@ -120,22 +129,30 @@
   <div class="flex flex-col w-full my-8 max-w-4xl">
     <div class="flex flex-col gap-y-4 w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden bg-gray-1000">
       <h1 class="text-4xl font-semibold"><span class="strokeme-white">Make</span> a Proposal</h1>
-      <p class="strapline">Choose the type of proposal</p>
-      <div>
-        <p class="strapline">1) <span class="text-warning-500">Simple proposals</span> 
-          are advisory - the proposal text is in the Clarity contract.</p>
-        <p class="strapline">2) <span class="text-warning-500">Actionable proposals</span>  are contractual - they are expressed by the code
-          undertake some action automatically if the vote carries. For example,
-          actionable proposals can upgrade the protocol, make payments or trigger 
-          other workflows.
-        </p>
-      </div>
+      <p class="strapline">Two types of proposal:
+        <span class="text-warning-500">simple / noop</span> proposals are advisory - the proposal text is in the Clarity contract.
+        <span class="text-warning-500">actionable</span> are contractual - they are expressed by the code
+        undertake some action automatically if the vote carries. For example,
+        actionable proposals can upgrade the protocol, make payments or trigger 
+        other workflows.
+      </p>
+
+      <div class="flex flex-col gap-y-12">
+        <div class="flex flex-col gap-y-2">
+          <h4 class="text-2xl mb-3">Process Proposal</h4>
+          <p>Enter deployed contract id</p>
+          <input type="text" id="propose-contract" class="p-3 rounded-md border text-black" bind:value={contractId}/>
+          <button on:click={() => {processProposal()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+            Process proposal
+          </button>
+        </div>
+
         {#if showNoop}
-          <div class="row mx-0">
-            <div class="col-md-6 col-sm-12">
+          <div class="flex flex-col">
+            <div class="">
                 <pre class="source-code">{newSource}</pre>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="">
               {#if !showDeployButton}
                 <ProposalDeploymentForm on:addNewPoll={addNewPoll} />
               {:else if txId}
@@ -146,7 +163,7 @@
               <div class="text-center mt-5">
                 {#if newSourceValid}
                   <p>Contract ready to be deployed - once its fully deployed crowd fund support for this proposal</p>
-                  <button class="btn rounded btn-warning" on:click|preventDefault={() => { deployContract() }}>Deploy Proposal</button>
+                  <button class="btn rounded btn-warning" on:click|preventDefault={() => { deployContract() }}>Deploy proposal</button>
                 {:else}
                   <p class="bg-danger p-3">Contract is not ready to be deployed - please check the contract implements the trait correctly - using the full address given above.</p>
                   <button disabled class="btn rounded text-danger">Proposal Trait Invalid</button>
@@ -156,9 +173,10 @@
             </div>
           </div>
           {/if}
+
         {#if showFromFile}
-        <div class="row mx-0">
-          <div class="col-12">
+        <div class="">
+          <div class="">
             <h4 class="text-2xl mb-3">Upload Contract</h4>
             <p>Please ensure the clarity is unit tested and implements the 
               <a class="text-primary-500" href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait')} target="_blank">correct trait</a>
@@ -175,22 +193,14 @@
           </div>
         {/if}
       </div>
+
+      </div>
     </div>
   </div>
   <div class="">
     {#if txId}
       <div>
         <a href={explorerUrl} target="_blank">View on explorer</a>
-      </div>
-    {:else}
-      <div class="text-center mt-5">
-        {#if newSourceValid}
-        <p>Contract ready to be deployed - once its fully deployed crowd fund support for this proposal</p>
-        <button class="btn rounded btn-warning" on:click|preventDefault={() => { deployContract() }}>Deploy Proposal</button>
-        {:else}
-        <p class="bg-danger p-3">Contract is not ready to be deployed - please check the contract implements the trait correctly - using the full address given above.</p>
-        <button disabled class="btn rounded text-danger">Proposal Trait Invalid</button>
-        {/if}
       </div>
     {/if}
   </div>

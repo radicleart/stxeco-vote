@@ -19,6 +19,7 @@
 	import Notifications from 'svelte-notifications';
 	import { getDaoProposals, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
 	import type { ProposalEvent } from '$types/stxeco.type';
+	import { getCurrentProposal } from '$lib/sbtc_admin';
 
 	const unsubscribe1 = sbtcConfig.subscribe(() => {});
 	const unsubscribe2 = stacksStore.subscribe(() => {});
@@ -73,7 +74,12 @@
 			conf.proposals = daoProposals
 			return conf;
 		});
-		const soloPoolData = await getPoolAndSoloVotesByProposal(CONFIG.VITE_DOA_PROPOSAL)
+		const currentProposal = await getCurrentProposal()
+		sbtcConfig.update((conf) => {
+			conf.currentProposal = currentProposal
+			return conf;
+		});
+		const soloPoolData = await getPoolAndSoloVotesByProposal(currentProposal.contractId)
 		const stacksInfo = await fetchStacksInfo();
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo

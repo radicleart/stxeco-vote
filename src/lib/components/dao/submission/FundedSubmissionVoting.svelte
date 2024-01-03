@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Button } from 'flowbite-svelte'
-	import ChainUtils from '$lib/service/ChainUtils';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { CONFIG } from '$lib/config';
 	import { sbtcConfig } from '$stores/stores';
@@ -9,7 +7,6 @@
 	import type { FundingData, ProposalEvent } from '$types/stxeco.type';
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 	
 	export let proposal:ProposalEvent;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
@@ -114,9 +111,9 @@
 					<input bind:value={amount} type="number" id="Contribution" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 				</div>
 				<div class="">
-					<Button on:click={() => submit()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-						Fund
-					</Button>
+					<button on:click={() => {submit()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+						Fund proposal
+					  </button>
 				</div>
 			</div>
 		</form>

@@ -164,6 +164,27 @@ export async function getGovernanceData(principle:string):Promise<GovernanceData
   return res;
 }
 
+export async function setCurrentProposal(contractId:string):Promise<any> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/set-current-proposal/' + contractId);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getCurrentProposal():Promise<any> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/get-current-proposal');
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function processProposalContracts(contractIds:string):Promise<any> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/sync/proposal/' + contractIds);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
 export async function getFundingParams(extensionCid:string):Promise<any> {
   const functionArgs = [`0x${hex.encode(serializeCV(stringAsciiCV('funding-cost')))}`];
   const data = {

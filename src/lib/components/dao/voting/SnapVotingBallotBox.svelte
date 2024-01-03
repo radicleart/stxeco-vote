@@ -106,14 +106,14 @@ onMount(async () => {
       {#if balanceAtHeight >= 1}
       <div class="flex justify-around">
         <div>
-          <Button on:click={() => {errorMessage = undefined; castVote(true)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal text-black rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+          <button on:click={() => {errorMessage = undefined; castVote(true)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             Yes to Nakamoto
-          </Button>
+          </button>
         </div>
         <div>
-          <Button on:click={() => {errorMessage = undefined; castVote(false)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 font-normal text-black rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+          <button on:click={() => {errorMessage = undefined; castVote(false)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 font-normal rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             No to Nakamoto
-          </Button>
+          </button>
         </div>
       </div>
       {:else}
