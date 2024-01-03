@@ -17,11 +17,15 @@ const DaoUtils = {
       if (!event) {
         const submissionContractId = CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION
         event = await getProposalFromContractId(submissionContractId, proposalContractId)
-        sbtcConfig.update((conf) => {
-          if (!conf.proposals) conf.proposals = []
-          if (event) conf.proposals.push(event)
-          return conf;
-        })
+        if (event && event.contractId && event.proposalMeta) {
+          sbtcConfig.update((conf) => {
+            if (!conf.proposals) conf.proposals = []
+            if (event) conf.proposals.push(event)
+            return conf;
+          })
+        } else {
+          return
+        }
       }
     } catch (err:any) {
       console.log('DaoUtils:getProposal ', err);

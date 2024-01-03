@@ -10,13 +10,18 @@ import bns from '$lib/assets/bns.jpg'
 import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
 import { loggedIn } from "$lib/stacks_connect";
 import { goto } from "$app/navigation";
+	import BannerWithSpinner from "$lib/shared/BannerWithSpinner.svelte";
+	import Banner from "$lib/components/shared/Banner.svelte";
 
 const voted = true;
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 let votes: any[] = [];
 let assetIdList: any[] = [];
 let assetId:any;
+let componentKey = 0
+let searching = true;
 $: offset = 0;
+let assets: any[] = []
 $: holdings = {
   total: 0,
   results: []
@@ -28,17 +33,19 @@ const gateway = "https://hashone.mypinata.cloud/";
 const gatewayAr = "https://arweave.net/";
 
 const nextPage = async (init:boolean) => {
+  searching = true;
   if (init) {
     offset = 0;
     currentPage = 0;
   }
   loading = true;
+  assets = []
   //const assetIdentifier = assetId?.contractAddress + '.' + assetId?.contractName + '::' + assetId?.assetName;
   //const url = CONFIG.VITE_BRIDGE_API + '/daoapi/v2/nft/' + account.stxAddress + '/' + assetIdentifier + '/' + offset + '/' + pageSize;
   //const res = await fetch(url).catch(error => {
   //  console.error('error was: ' + error);
   //});
-  holdings = await getNftsbyPage(account.stxAddress, pageSize, offset)
+  holdings = await getNftsbyPage(account.stxAddress, assetId, pageSize, offset)
   holdings.results = holdings.results.filter((o:any) => typeof o.metaData !== 'undefined')
   if (!init && holdings.total <= (currentPage * pageSize)) return;
   holdings.results.forEach((item:any) => {
@@ -50,11 +57,16 @@ const nextPage = async (init:boolean) => {
     } else if (image.startsWith('ar://')) {
       image = item.metaData.image.replace('ar://', gatewayAr)
     }
-    if (item && item.metaData) item.metaData.image = image;
+    if (item && item.metaData) {
+      item.metaData.image = image;
+      assets.push(item)
+    }
   })
   offset += pageSize;
+  componentKey++;
   currentPage++;
   loading = false;
+  searching = false;
 }
 
 const selectAssetId = () => {
@@ -108,7 +120,8 @@ const selectAssetId = () => {
       <h1 class="text-4xl text-info"><span class="strokeme-info">Badge</span> Pickup</h1>
       {#if voted || votes.length > 0}<h2 class="text-center text-info my-4 mb-5">Thank you so much on voting on this Stacks Upgrade. <br/>You are now part of Stacks' history! 🎉</h2>{/if}
       {#if !canvasMode}
-      <div class="mb-5">
+      <div class="my-5">
+        <p class="text-2xl mb-2">Select collection</p>
         <select class="text-black h-10 w-1/2 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
           <option class="" value={''}>Choose an NFT collection for your badge</option>
           {#each sortedAssets as asset}
@@ -130,21 +143,22 @@ const selectAssetId = () => {
       </div>
       {/if}
       -->
-          {#if holdings.total > 0}
+      {#key componentKey}
+          {#if assets.length > 0}
             {#if canvasMode}
-            <div class="row">
-              <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
-            </div>
+              <div class="row">
+                <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
+              </div>
             {:else}
-            <div class="flex justify-between">
-              <p class="text-2xl">Step 1: Choose an NFT</p>
-              <p class="text-primary-500"><a href="/" on:click|preventDefault={() => nextPage(false)}>page {currentPage} / {(Math.floor(holdings.total / pageSize)) + 1} ({holdings.total} NFTs)</a></p>
-            </div>
-            <div class="grid grid-cols-4">
-              {#each holdings.results as item}
-                <MetaData {item} on:select_item={selectItem}/>
-              {/each}
-            </div>
+              <div class="flex justify-between">
+                <p class="text-2xl">Select NFT</p>
+                <!-- <p class="text-primary-500"><a href="/" on:click|preventDefault={() => nextPage(false)}>page {currentPage} / {(Math.floor(holdings.total / pageSize)) + 1} ({holdings.total} NFTs)</a></p>-->
+              </div>
+              <div class="grid grid-cols-4">
+                {#each assets as item}
+                  <MetaData {item} on:select_item={selectItem}/>
+                {/each}
+              </div>
             {/if}
             <!--
             {:else}
@@ -155,7 +169,16 @@ const selectAssetId = () => {
               </p>
             </div>
             -->
+          {:else if assetId}
+          <div class="w-1/2">
+            {#if searching}
+            <BannerWithSpinner bannerType={'warning'} message={'Searching your NFTs'}/>
+            {:else}
+            <Banner bannerType={'warning'} message={'No nfts found'}/>
+            {/if}
+          </div>
           {/if}
+    {/key}
     </div>
   </div>
 </div>

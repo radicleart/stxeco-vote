@@ -174,7 +174,14 @@ export async function setCurrentProposal(contractId:string):Promise<any> {
 export async function getCurrentProposal():Promise<any> {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/get-current-proposal');
   const response = await fetch(path);
-  const res = await extractResponse(response);
+  let res = await extractResponse(response);
+  if (!res) {
+    res = {
+      configId: 1,
+      contractId: CONFIG.VITE_DOA_PROPOSAL
+    }
+  }
+
   return res;
 }
 
