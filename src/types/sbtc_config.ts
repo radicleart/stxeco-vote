@@ -5,6 +5,7 @@ import type { SoloPoolData } from './stxeco_stacker_type';
 export type SbtcConfig = {
   daoData?: DaoData;
   proposals?: Array<ProposalEvent>;
+  currentProposal?:any;
   soloPoolData?: SoloPoolData;
   exchangeRates?: Array<ExchangeRate>;
   btcFeeRates?: any;
