@@ -74,7 +74,7 @@
 			conf.proposals = daoProposals
 			return conf;
 		});
-		const currentProposal = await getCurrentProposal()
+		let currentProposal = await getCurrentProposal()
 		sbtcConfig.update((conf) => {
 			conf.currentProposal = currentProposal
 			return conf;

@@ -12,9 +12,13 @@
 	let fallback: string;
 	let bnsName: string;
 	let bnsNamespace: string;
+	let src:string;
 
 	const imageSrc = () => {
 		return (item?.metaData?.image) ? item?.metaData.image : fallback;
+	}
+	const handleError = () => {
+		src = questionmark;
 	}
 	const contractName = () => {
 		return (item?.asset_identifier) ? item?.asset_identifier.split('::')[0].split('.')[1] : '';
@@ -35,6 +39,7 @@
 			item.bnsName = bnsName + '.' + bnsNamespace;
 			//bnsName = Buffer.from(bnsName, 'hex');
 		}
+		if (item.metaData && item.metaData.image) src = item.metaData.image
 
 	})
 
@@ -44,14 +49,14 @@
 <div class="col-4">
 	<div class="text-white">
 		{#if item.metaData}
-		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} </h6>
-		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img width="100%" src={imageSrc()} alt={'Image for ' + item?.token?.id}/></a>
+		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} n/f </h6>
+		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img class="w-60" {src} on:error={handleError} alt={'Image for ' + item?.token?.id}/></a>
 		{:else if item.asset_identifier.indexOf('bns::names') > -1}
 		<h6 class="text-info" title={owner}>{contractName()}: {bnsName + '.' + bnsNamespace} </h6>
-		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img width="100%" src={'/img/bns.jpg'} alt={bnsName}/></a>
+		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img class="w-60" src={'/img/bns.jpg'} alt={bnsName}/></a>
 		{:else}
-		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} </h6>
-		<img width="100%" src={questionmark} alt={'Missing Image for ' + item?.token?.id}/>
+		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} n/f </h6>
+		<img class="w-60" src={questionmark} alt={'Missing Image for ' + item?.token?.id}/>
 		{/if}
 	</div>
 </div>

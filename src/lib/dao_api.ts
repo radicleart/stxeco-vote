@@ -44,16 +44,9 @@ export async function getNftAssetClasses(stxAddress:string) {
   return res;
 }
 
-export async function getNfts(stxAddress:string) {
-  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets/' + stxAddress;
-  const path = addNetSelector(url);
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
-export async function getNftsbyPage(stxAddress:string, limit:number, offset:number) {
-  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets/' + stxAddress + '/' + limit + '/' + offset;
+export async function getNftsbyPage(stxAddress:string, assetId:any, limit:number, offset:number) {
+  const assetIdentifier = assetId?.contractAddress + '.' + assetId?.contractName + '::' + assetId?.assetName
+  const url = CONFIG.VITE_BRIDGE_API + '/dao/nft/assets/' + stxAddress + '/' + assetIdentifier + '/' + limit + '/' + offset;
   const path = addNetSelector(url);
   const response = await fetch(path);
   const res = await extractResponse(response);

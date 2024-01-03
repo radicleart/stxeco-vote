@@ -38,7 +38,7 @@ const concludeVote = async () => {
 
 <div class="flex flex-col gap-y-1">
   <h1 class={'text-primary-500 text-4xl'}>
-    {proposalEvent.proposalMeta.title}
+    {proposalEvent.proposalMeta?.title || 'Unknown'}
   </h1>
   <div class="mb-5">
     <p class="flex justify-between gap-x-5 text-sm text-gray-600">      

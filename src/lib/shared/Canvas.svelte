@@ -2,8 +2,8 @@
     import { onMount, onDestroy, tick } from "svelte";
     import { fabric } from "fabric";
     import { createEventDispatcher } from "svelte";
-	import { Icon } from "svelte-hero-icons";
-	import { DownloadOutline } from "flowbite-svelte-icons";
+	import { ArrowDownCircle, Icon } from "svelte-hero-icons";
+	import { DownloadOutline, DownloadSolid } from "flowbite-svelte-icons";
 	import bannerBlue from '$lib/assets/banner-blue.png'
 	import bannerWhite from '$lib/assets/banner-white.png'
 
@@ -137,40 +137,35 @@
     });
 </script>
 
-<div class="d-flex justify-content-between">
-  <div class="">Step 2: Download Badge</div>
+<div class="flex justify-between mt-5">
+  <div class="text-2xl">Download Your Badge</div>
   <div class="">
-    <button class={'btn btn-outline-info'} on:click|preventDefault={toggleCanvas}>back</button>
+    <button class={'text-black md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal  rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0'} on:click|preventDefault={toggleCanvas}>back</button>
   </div>
 </div>
 {#if !hasVotes}
-<div class="d-flex justify-content-center text-warning">
+<div class="flex justify-center text-warning-500">
   <p>Please register a vote on the proposal to see the I Voted Banner </p>
 </div>
 {:else}
-<div class="my-4 d-flex justify-content-between">
-  <div>
-    <div class="">Choose:
+<div class="my-8 flex justify-between">
+  <div>Choose banner, position and download:
+    <div class="ms-5">
       <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src={bannerBlue} alt="blue banner"/></a>
       <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src={bannerWhite} alt="white banner"/></a>
     </div>
   </div>
 </div>
-<div><p class="">Hint: click the image to rotate, stretch, position the banner!</p></div>
-<div class="row text-center">
-  <div class="col-6">
-    <span class="mx-2"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>Twitter Preview</a></span>
-  </div>
-  <div class="col-6">
-    <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Icon src={DownloadOutline} width={40} height={40}/></a></span>
-  </div>
-</div>
 {/if}
 {#if !downloaded}
 {#key componentKey}
-<div class="d-flex justify-content-around">
+<div class="flex flex-col">
   <div>
     <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
+  </div>
+  <div class="flex justify-between w-[400px]">
+      <a href="/" on:click|preventDefault={saveImage}><Icon class="" src={ArrowDownCircle} width={30} height={30}/></a>
+      <span class="text-sm"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>twitter preview</a></span>
   </div>
 </div>
 {/key}
