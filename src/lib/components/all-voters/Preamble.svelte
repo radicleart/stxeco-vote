@@ -26,5 +26,7 @@ const proposalMeta = proposal.proposalMeta;
 		{/if}
 		<div class={'col-span-1'}><p class={'text-primary-500'}>Funding Contract</p></div>
 		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION)} target="_blank">{CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION}</a></p></div>
+		<div class={'col-span-1'}><p class={'text-primary-500'}>Proposal Contract</p></div>
+		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(proposal.contractId)} target="_blank">{proposal.contractId.split('.')[1]}</a></p></div>
 	</div>
 </div>

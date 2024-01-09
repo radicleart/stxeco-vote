@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte'
-	import { createEventDispatcher, onMount } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import { afterNavigate, goto } from "$app/navigation";
-	import { authenticate, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
+	import { authenticate, fetchSbtcBalance, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
-	import { isCoordinator } from '$lib/sbtc_admin.js'
+	import { getCurrentProposal, isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
-	import SettingsDropdown from './SettingsDropdown.svelte';
-	import { CONFIG } from '$lib/config';
+	import { CONFIG, setConfig } from '$lib/config';
 	import { fmtNumber, type AddressObject, type DepositPayloadUIType, type WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 	import { setAuthorisation } from '$lib/bridge_api';
-	import { stacksStore } from '$stores/stacksStore';
+	import type { SbtcConfig } from '$types/sbtc_config';
+	import { getDaoProposals } from '$lib/dao_api';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
@@ -23,6 +23,23 @@
 			await loginStacks(loginCallback);
 		}
 	}
+	
+	const switchNetwork = async () => {
+		let net = CONFIG.VITE_NETWORK;
+		if (net === 'mainnet') net = 'testnet';
+		else net = 'mainnet'
+		setConfig(net);
+		await fetchSbtcBalance($sbtcConfig, true);
+		const url = new URL(location.href);
+		if (import.meta.env.MODE === 'simnet') {
+			url.searchParams.set('chain', 'testnet');
+		} else {
+			url.searchParams.set('chain', net);
+		}
+		//await dispatch('network_switch_event')
+		location.assign(url.search);
+	}
+
 	let componentKey = 0;
 	afterNavigate((nav) => {
 		componentKey++;
@@ -103,9 +120,10 @@
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
 				-->
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
 			</div>
 			<div>
-				<span class="inline-block text-white md:text-purple-900 py-2.5">
+				<span class="inline-block md:text-purple-900 py-2.5 px-2">
 					{getBlockHeigths()}
 				</span>
 			</div>
@@ -115,7 +133,7 @@
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button id="connect-wallet" class="opacity-10 block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}

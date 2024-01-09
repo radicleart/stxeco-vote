@@ -7,7 +7,6 @@ import adown from '$lib/assets/png-assets/stx_eco_arrow_down.png'
 
 // medium 
 const bgvideo = 'https://prismic-io.s3.amazonaws.com/edao/ea5c92b8-d910-479c-813b-a3ef19292578_stx_eco_colour_balls_animation_medium.mp4';
-export let homepage;
 
 let playing = true;
 // Get the button
@@ -34,7 +33,6 @@ const scrollTo = () => {
 </script>
   
 <section id="section1" class="h-full">
-  <!-- <Header {homepage}/> -->
   <video autoplay muted loop id="myVideo">
     <source src={bgvideo} type="video/mp4">
   </video>
@@ -104,45 +102,6 @@ section {
   padding: 40px;
 } 
 */
-.content {
-  position: absolute;
-  top: 30%;
-  padding-left: 5vw;
-  color: #fff;
-  width: 100%;
-  height: auto;
-}
-
-.content h1 {
-  color: #fff;
-  font-size: 4.5rem;
-  letter-spacing: 0.1rem;
-  line-height: 4.0rem;
-  text-shadow: 5px 5px 30px rgb(40, 39, 36);
-}
-.content p {
-  font-size: 1.6rem;
-  letter-spacing: 0.1rem;
-  font-weight: 700;
-  line-height: auto;
-  color: #ededed;
-  text-shadow: 5px 5px 30px rgb(40, 39, 36);
-}
-@media screen and (min-width: 0px) and (max-width: 940px) {
-  .content { 
-    top: 20%;
-  }
-  .content h1 { 
-    font-size: 4.0rem; 
-    line-height: 4.0rem;
-    text-shadow: 5px 5px 30px rgb(40, 39, 36);
-  }
-  .content p { 
-    font-size: 1.8rem; 
-    line-height: 2.4rem;
-    text-shadow: 5px 5px 30px rgb(40, 39, 36);
-  }  /* show it on small screens */
-}
 .btn {
   border: none;
   border-radius: 50px!important;

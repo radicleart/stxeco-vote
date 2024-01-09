@@ -1,5 +1,6 @@
 <script lang="ts">
 import Coordinator from '$lib/components/admin/Coordinator.svelte';
+	import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores'
 
 </script>

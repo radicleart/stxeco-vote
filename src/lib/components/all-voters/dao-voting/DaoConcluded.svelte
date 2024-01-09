@@ -33,7 +33,8 @@
 
 
 <div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<p>Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
+	<p class="text-xs text-gray-400">Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
+	<!--
 	{#if proposalData}
 		{#if proposalData.passed}
 		<h4 class={'text-2xl mb-5 text-' + proposalEvent.status?.color}>Vote Passed</h4>
@@ -60,6 +61,7 @@
 		</div>
 	
 	{/if}
+	-->
 	<div>
 		<DaoResults proposal={proposalEvent} {daoVotes} />
 	</div>

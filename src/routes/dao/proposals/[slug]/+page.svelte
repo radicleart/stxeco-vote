@@ -49,7 +49,7 @@
 			DaoUtils.setStatus($sbtcConfig.stacksInfo.stacks_tip_height, proposalEvent);
 			console.log(event)
 		} else {
-			goto('/dao/proposals/propose')
+			goto('/dao/proposals/holding')
 		}
 
 		try {

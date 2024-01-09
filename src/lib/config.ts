@@ -97,8 +97,8 @@ const TESTNET_CONFIG = {
     VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'ede004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
     VITE_SBTC_CONTRACT_ID: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.asset-3',
-    VITE_BRIDGE_API: 'https://bridge.sbtc.tech/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'https://bridge.sbtc.tech/bridge-api/v1',
+    VITE_BRIDGE_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
+    VITE_CLARITYLAB_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
     VITE_STACKS_API_HIRO: 'https://api.testnet.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
     VITE_STACKS_API: 'http://45.79.131.55:3999',
@@ -124,8 +124,8 @@ const MAINNET_CONFIG = {
     VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'ede004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
     VITE_SBTC_CONTRACT_ID: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN.asset',
-    VITE_BRIDGE_API: 'https://bridge.sbtc.tech/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'https://bridge.sbtc.tech/bridge-api/v1',
+    VITE_BRIDGE_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
+    VITE_CLARITYLAB_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
     VITE_STACKS_API_HIRO: 'https://api.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.hiro.so',
     VITE_STACKS_API: 'http://45.79.131.55:3999',
@@ -137,6 +137,30 @@ const MAINNET_CONFIG = {
 
 export let CONFIG = MAINNET_CONFIG;
 
+export function setConfig(network:string) {
+    const mode = import.meta.env.MODE
+    console.log('mode: ' + mode)
+    if (mode === 'local-testnet') {
+        CONFIG = TESTNET_CONFIG;
+        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
+        CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
+        return;
+    }
+
+    if (network === 'testnet') {
+        CONFIG = TESTNET_CONFIG;
+    } else {
+        CONFIG = MAINNET_CONFIG;
+    }
+}
+export function setConfigByUrl(search:URLSearchParams) {
+    let network = 'testnet'
+    if (search.has('chain')) {
+        network = search.get('chain') || 'testnet'
+    }
+    setConfig(network)
+}
+/**
 export function setConfig(network:string) {
     const mode = import.meta.env.MODE
     console.log('mode: ' + mode)
@@ -167,3 +191,4 @@ export function setConfig(network:string) {
         CONFIG = TESTNET_CONFIG;
     }
 }
+ */

@@ -57,29 +57,28 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 {#if soloVotes}
-  <div class="row">
-    <h1 class={'text-' + color}><span>Method 3: Liquid STX Balance</span></h1>
-    <h4 class="text-white">Total voting power is <span class="text-warning">{totalVotePower}</span> with votes cast from <span class="text-warning">{soloVotes.length}</span> accounts.</h4>
-    <div class="cols-12 text-white">Voting now closed.</div>
+  <div class="">
+    <h1 class={'mb-5 text-2xl text-' + color}><span>Method 1: Voting for Solo Stackers</span></h1>
+    <h4 class="text-white">Total number participating wallets: <span class="text-warning">{totalAccountsFor + totalAccountsAgainst}</span></h4>
   </div>
-  <div class="bg-card py-4 px-5 mb-3">
-    <VotingResults {proposal} totalAccountsAgainst={totalAccountsAgainst} totalAccountsFor={totalAccountsFor}/>
+  <div class="flex flex-col gap-y-4 my-10 mx-auto items-center justify-center">
+    <div class="w-1/4 flex justify-between"><div>Votes for: </div><div>{totalAccountsFor}</div> </div>
+    <div class="w-1/4 flex justify-between"><div>Votes against: </div><div>{totalAccountsAgainst}</div> </div>
   </div>
-  <div class="flex justify-end text-sm">
-      <a href="/" class={'text-white'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if showVotes}<ChevronUp class="inline w-[15px]" />{:else}<ChevronDown class="inline w-[15px]" />{/if} transactions</a>
+
+  <div class="flex justify-start text-sm">
+      <a href="/" class={'text-xs text-gray-400'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if !showVotes}show{:else}hide{/if} transactions</a>
   </div>
   
   {#if showVotes}
-    <div class="grid grid-cols-4 w-full justify-evenly">
-      <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>{#if sortDir}<ChevronUp class={'inline w-[10px]'} />{:else}<ChevronDown class={'inline w-[10px]'} />{/if} Voter</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>{#if sortDir}<ChevronUp class={'inline w-[10px]'} />{:else}<ChevronDown class={'inline w-[10px]'} />{/if} Power</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>{#if sortDir}<ChevronUp class={'inline w-[10px]'} />{:else}<ChevronDown class={'inline w-[10px]'} />{/if} For/Against</a></div>
+    <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
+      <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
+      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
     </div>
     {#key componentKey}
     {#each sortedEvents as item}
     <div class="grid grid-cols-4 w-full justify-evenly">
       <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-1/2 break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>{item.voter}</div>
-      <div class="break-words">{@html ChainUtils.fromOnChainAmount(item.amount)}</div>
       <div class="break-words">{@html (item.for) ? '<span class="text-warning">for</span>' : 'against'}</div>
     </div>
     {/each}

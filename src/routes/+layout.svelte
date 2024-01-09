@@ -4,7 +4,7 @@
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
-	import { CONFIG, setConfig } from '$lib/config';
+	import { CONFIG, setConfig, setConfigByUrl } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
@@ -30,8 +30,8 @@
 
 	let componentKey = 0;
 	let componentKey1 = 0;
-	setConfig($page.url.search);
-	const search = $page.url.search;
+	setConfigByUrl($page.url.searchParams);
+	const search = $page.url.searchParams;
 	if (!isLegal(location.href)) {
 		//componentKey++;
 		goto('/' + '?chain=testnet')
@@ -43,12 +43,9 @@
 			return;
 		}
 		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-		if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('chain=testnet') > -1) {
-			nav.cancel();
-			goto(next + '?chain=testnet')
-		} else if (nav.to?.url.search.indexOf('devnet') === -1 && search.indexOf('chain=devnet') > -1) {
-			nav.cancel();
-			goto(next + '?chain=devnet')
+		if (search.has('chain')) {
+			//nav.cancel();
+			//goto(next + '?chain=' + search.get('chain'))
 		}
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
@@ -68,17 +65,25 @@
 		componentKey1++;
 	}
 
+	const networkSwitchEvent = async () => {
+		await initApp()
+		componentKey++;
+		componentKey1++;
+	}
+
 	const initApp = async () => {
 		const daoProposals = await getDaoProposals()
 		sbtcConfig.update((conf) => {
 			conf.proposals = daoProposals
 			return conf;
 		});
+		componentKey1++
 		let currentProposal = await getCurrentProposal()
 		sbtcConfig.update((conf) => {
 			conf.currentProposal = currentProposal
 			return conf;
 		});
+		componentKey1++
 		const soloPoolData = await getPoolAndSoloVotesByProposal(currentProposal.contractId)
 		const stacksInfo = await fetchStacksInfo();
 		sbtcConfig.update((conf) => {
@@ -91,6 +96,7 @@
 			await authenticate($sbtcConfig)
 		}
 		setAuthorisation($sbtcConfig.authHeader)
+		componentKey1++
 	}
 
 	onMount(async () => {
@@ -123,7 +129,7 @@
 	<div class="bg-transparent text-white font-extralight min-h-screen relative">
 		<div class="absolute top-0 left-0 w-full h-[1153px] bg-[url('$lib/assets/bg.png')] bg-cover"></div>
 		{#if inited}
-		<Header on:login_event={loginEvent} />
+		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
 			<div class="mx-auto px-6 relative">
 				<InFlightTransaction />
 				{#key componentKey1}

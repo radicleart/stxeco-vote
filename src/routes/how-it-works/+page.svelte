@@ -48,7 +48,7 @@
 			<div class="space-y-6">
 				<div>
 					<span class="inline-block py-1 text-sm px-5 rounded-full bg-purple-fade border border-purple-500">Current proposal</span>
-					<h1 class="text-2xl sm:text-4xl font-bold -mx-4 mt-6"><a href="#" class="hover:bg-white/10 py-2 px-4 rounded-md">SIP-021 - Nakamoto Release <svg class="inline" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<h1 class="text-2xl sm:text-4xl font-bold -mx-4 mt-6"><a href="/" on:click|preventDefault={() => {}} class="hover:bg-white/10 py-2 px-4 rounded-md">SIP-021 - Nakamoto Release <svg class="inline" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 						<path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 						<path d="M29.6875 20.3125L20.3125 29.6875" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
@@ -108,8 +108,8 @@
 							<h2 class="font-semibold text-xl mb-3">Learn more</h2>
 							<ul class="list-disc pl-4">
 								<li><a class="underline hover:text-purple-200" href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
-								<li><a class="underline hover:text-purple-200" href="#">Another relevant link</a></li>
-								<li><a class="underline hover:text-purple-200" href="#">Feel free to add more</a></li>
+								<li><a class="underline hover:text-purple-200" href="/" on:click|preventDefault={() => {}}>Another relevant link</a></li>
+								<li><a class="underline hover:text-purple-200" href="/" on:click|preventDefault={() => {}}>Feel free to add more</a></li>
 							</ul>
 						</div>
 					</div>
