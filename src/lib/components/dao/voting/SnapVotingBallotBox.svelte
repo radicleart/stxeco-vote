@@ -11,6 +11,7 @@ import { openContractCall } from '@stacks/connect';
 import type { ProposalEvent } from '$types/stxeco.type';
 import { sbtcConfig } from '$stores/stores';
 import { Button } from 'flowbite-svelte'
+	import { getStacksNetwork } from '$lib/stacks_connect';
 
 export let proposalEvent: ProposalEvent;
 export let balanceAtHeight:number = 0;
@@ -44,6 +45,7 @@ const castVote = async (vfor:boolean) => {
     const amountCV = uintCV(amountUSTX)
     const proposalCV = contractPrincipalCV(proposalEvent.contractId.split('.')[0], proposalEvent.contractId.split('.')[1])
     await openContractCall({
+        network: getStacksNetwork(),
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,

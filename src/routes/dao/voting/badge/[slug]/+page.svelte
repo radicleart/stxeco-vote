@@ -51,7 +51,7 @@ const nextPage = async (init:boolean) => {
   holdings.results.forEach((item:any) => {
     let image = item?.metaData?.image || '';
     if (image.startsWith('ipfs://')) {
-      image = item.metaData.image.replace('ipfs://', gateway)
+      image = item.metaData.image.replace('ipfs://', gateway + 'ipfs/')
     } else if (image.startsWith('ipfs/')) {
       image = gateway + image;
     } else if (image.startsWith('ar://')) {

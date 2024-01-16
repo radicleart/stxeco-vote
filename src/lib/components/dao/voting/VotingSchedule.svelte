@@ -8,6 +8,7 @@ import { CONFIG } from '$lib/config';
 import type { ProposalEvent } from '$types/stxeco.type';
 import { sbtcConfig } from '$stores/stores';
 import { Button } from 'flowbite-svelte'
+	import { getStacksNetwork } from '$lib/stacks_connect';
 
 export let proposalEvent: ProposalEvent;
 let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
@@ -29,6 +30,7 @@ const concludeVote = async () => {
     const deployer = CONFIG.VITE_DOA_DEPLOYER;
     const proposalCV = contractPrincipalCV(proposalEvent.contractId.split('.')[0], proposalEvent.contractId.split('.')[1])
     await openContractCall({
+        network: getStacksNetwork(),
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,

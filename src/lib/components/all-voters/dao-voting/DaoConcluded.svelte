@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import type { ProposalData, ProposalEvent, VoteEvent } from '$types/stxeco.type';
-	import { fmtMicroToStx } from 'sbtc-bridge-lib';
 	import DaoResults from './DaoResults.svelte';
 
 	export let proposalEvent: ProposalEvent;

@@ -13,8 +13,7 @@
 
 (define-public (execute (sender principal))
 	(begin
-		(try! (contract-call? .executor-dao set-extension .ede007-snapshot-proposal-voting-v5 true))
-		(try! (contract-call? .executor-dao set-extension .ede008-flexible-funded-submission true))
+		(try! (contract-call? .ecosystem-dao set-extension .ede008-flexible-funded-submission true))
 		(ok true)
 	)
 )

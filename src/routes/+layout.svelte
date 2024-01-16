@@ -4,7 +4,7 @@
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
-	import { CONFIG, setConfig, setConfigByUrl } from '$lib/config';
+	import { CONFIG, setConfigByUrl } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
@@ -31,7 +31,6 @@
 	let componentKey = 0;
 	let componentKey1 = 0;
 	setConfigByUrl($page.url.searchParams);
-	const search = $page.url.searchParams;
 	if (!isLegal(location.href)) {
 		//componentKey++;
 		goto('/' + '?chain=testnet')
@@ -42,10 +41,13 @@
 			login()
 			return;
 		}
-		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-		if (search.has('chain')) {
-			//nav.cancel();
-			//goto(next + '?chain=' + search.get('chain'))
+		//const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
+		const search = nav.to?.url.searchParams;
+		if (nav.to?.url.searchParams?.has('chain')) {
+			nav.to?.url.searchParams.append('chain', 'mainnet')
+		} else {
+			nav.to?.url.searchParams.delete('chain')
+			nav.to?.url.searchParams.append('chain', CONFIG.VITE_NETWORK)
 		}
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})

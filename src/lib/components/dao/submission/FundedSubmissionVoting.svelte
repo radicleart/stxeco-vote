@@ -7,6 +7,7 @@
 	import type { FundingData, ProposalEvent } from '$types/stxeco.type';
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
+	import { getStacksNetwork } from '$lib/stacks_connect';
 	
 	export let proposal:ProposalEvent;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
@@ -38,7 +39,41 @@
 		return postConds
 	}
 		
-	const submit = async () => {
+	const submitOriginal = async () => {
+		if (amount < 500000) {
+			addNotification({
+				position: 'bottom-right',
+				heading: 'Please fix',
+				type: 'error',
+				description: 'Minimum contribution is 0.5 STX',
+			});
+			return
+		}
+		//const amountUSTX = ChainUtils.toOnChainAmount(amount);
+		const amountCV = uintCV(amount);
+		const customMajorityCV = someCV(uintCV(6600));
+		const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
+		let functionArgs = [proposalCV, amountCV, customMajorityCV];
+		await openContractCall({
+			network: getStacksNetwork(),
+			postConditions: getSTXMintPostConds(amount),
+			postConditionMode: PostConditionMode.Deny,
+			contractAddress: 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z',
+			contractName: 'ede008-funded-proposal-submission-v5',
+			functionName: 'fund',
+			functionArgs: functionArgs,
+			onFinish: async (data) => {
+				proposal.status = { name: 'submitting', color: '', colorCode: '' },
+				txId = data.txId
+				proposal.submitTxId = data.txId
+			},
+			onCancel: () => {
+				console.log('popup closed!');
+			}
+		});
+	}
+
+	const submitFlexible = async () => {
 		if (amount < 500000) {
 			addNotification({
 				position: 'bottom-right',
@@ -56,6 +91,7 @@
 		const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
 		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, amountCV, customMajorityCV];
 		await openContractCall({
+			network: getStacksNetwork(),
 			postConditions: getSTXMintPostConds(amount),
 			postConditionMode: PostConditionMode.Deny,
 			contractAddress: CONFIG.VITE_DOA_DEPLOYER,
@@ -111,7 +147,7 @@
 					<input bind:value={amount} type="number" id="Contribution" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 				</div>
 				<div class="">
-					<button on:click={() => {submit()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+					<button on:click={() => {submitOriginal()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 						Fund proposal
 					  </button>
 				</div>

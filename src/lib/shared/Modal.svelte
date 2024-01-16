@@ -5,7 +5,7 @@
 </script>
 
 {#if showModal}
-<div class="backdrop" on:click|self>
+<div class="backdrop" on:keyup tabindex="0" role="button" aria-pressed="false">
     <div class="sv-modal">
         <slot name="title"></slot>
         <slot></slot>
@@ -20,7 +20,7 @@
         height: 100%;
         position: absolute;
         background: rgba(0,0,0,0.8);
-        top: 0;
+        top: -100px;
         left: 0;
         right: 0;
     }

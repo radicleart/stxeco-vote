@@ -12,7 +12,7 @@
 	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
         
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-    let contractId:string|undefined;
+    let contractId = $sbtcConfig.currentProposal.contractId || undefined;
     let processResult:any;
 
     let showRulesModal:boolean;
@@ -24,6 +24,7 @@
       if (!contractId) return;
       processResult = await processProposalContracts(contractId)
       processResult = await setCurrentProposal(contractId)
+      showRulesModal = true
     }
     
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
@@ -120,9 +121,11 @@
     </svelte:head>
     
     <Modal showModal={showRulesModal} on:click={closeModal}>
-        <div class="source-modal"><DaoRules /></div>
+        <div class="bg-white opacity-10"></div>
         <div slot="title">
-            <h3>DAO Rules</h3>
+          <div class="bg-white text-gray-800 mx-20 p-20 rounded-lg">
+            <p>Processing contract<br/><br/> {contractId}</p>
+          </div>
         </div>
     </Modal>
 <div class="py-6 mx-auto max-w-4xl md:px-6 ">

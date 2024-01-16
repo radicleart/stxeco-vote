@@ -10,7 +10,7 @@
 	import AccountDropdown from './AccountDropdown.svelte'
 	import { CONFIG, setConfig } from '$lib/config';
 	import { fmtNumber, type AddressObject, type DepositPayloadUIType, type WithdrawPayloadUIType } from 'sbtc-bridge-lib';
-	import { setAuthorisation } from '$lib/bridge_api';
+	import { fetchUserBalances, setAuthorisation } from '$lib/bridge_api';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { getDaoProposals } from '$lib/dao_api';
 
