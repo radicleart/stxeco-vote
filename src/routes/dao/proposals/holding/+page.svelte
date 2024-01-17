@@ -1,37 +1,16 @@
 <script lang="ts">
-  import ProposalDeploymentForm from '$lib/components/dao/deployment/ProposalDeploymentForm.svelte';
-  import LoadFile from '$lib/components/dao/deployment/LoadFile.svelte';
-  import Modal from '$lib/shared/Modal.svelte';
-  import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
 	import { openContractDeploy } from '@stacks/connect';
 	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
-	import { explorerAddressUrl } from '$lib/utils';
 	import type { SbtcConfig } from '$types/sbtc_config';
-	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
         
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-    let contractId:string|undefined;
-    let processResult:any;
-
-    let showRulesModal:boolean;
-    const closeModal = () => {
-      showRulesModal = false;
-    }
-    
-    const processProposal = async () => {
-      if (!contractId) return;
-      processResult = await processProposalContracts(contractId)
-      processResult = await setCurrentProposal(contractId)
-    }
     
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
     if (!canSubmit) {
       canSubmit = account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
     }
-    let showNoop = false;
-    let showFromFile = true;
     const contractSource = `
     ;; DAO: Ecosystem DAO
     ;; Title: <title>

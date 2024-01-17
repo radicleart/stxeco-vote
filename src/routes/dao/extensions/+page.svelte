@@ -35,8 +35,7 @@
         componentKey++;
     }
     const extensions:Array<ExtensionType> = [];
-    const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
-    keys.forEach((key) => {
+    CONFIG.VITE_EXTENSIONS.forEach((key) => {
         extensions.push({contractId: CONFIG.VITE_DOA_DEPLOYER + '.' + key, valid: true})
     })
 

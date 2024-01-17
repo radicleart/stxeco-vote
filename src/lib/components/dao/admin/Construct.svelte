@@ -10,7 +10,7 @@
     
     const constructDao = async () => {
       const deployer = CONFIG.VITE_DOA_DEPLOYER;
-      const bootstrap = contractPrincipalCV(deployer, 'bdp000-bootstrap')
+      const bootstrap = contractPrincipalCV(deployer, 'bdp001-bootstrap')
       // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
       await openContractCall({
         network: getStacksNetwork(),

@@ -28,8 +28,8 @@ function createStore() {
         // console.log(proposal.contractId + ' -> ' + proposal.status.name)
       })
       daoData.extensions = [];
-      const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
-      keys.forEach((key) => {
+      //const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
+      CONFIG.VITE_EXTENSIONS.forEach((key) => {
         daoData.extensions.push(key)
       })
       

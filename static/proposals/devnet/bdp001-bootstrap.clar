@@ -16,13 +16,13 @@
 		;; Enable genesis extensions.
 		(try! (contract-call? .bitcoin-dao-1 set-extensions
 			(list
-				{extension: .bde000-governance-token, enabled: false}
-				{extension: .bde003-emergency-proposals, enabled: false}
-				{extension: .bde004-emergency-execute, enabled: false}
-				{extension: .bde006-treasury, enabled: true}
+				{extension: .bde006-treasury-1, enabled: true}
+				{extension: .bde007-snapshot-proposal-voting-1, enabled: true}
+				{extension: .bde008-flexible-funded-submission-1, enabled: true}
 			)
 		))
 
+		(print "Bitcoin DAO-1 has risen.")
 		(ok true)
 	)
 )
