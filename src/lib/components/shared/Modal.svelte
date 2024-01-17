@@ -6,8 +6,7 @@ scroll(0,0);
 </script>
 
 {#if showModal}
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="backdrop" on:click|self>
+<div class="backdrop" >
     <div class="sv-modal">
         <slot name="title"></slot>
         <slot></slot>

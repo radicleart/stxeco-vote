@@ -14,6 +14,9 @@ if (!extension.valid) {
 const openSesame = () => {
 	dispatch('openSourceModal', extension)
 }
+const openExtensionChecker = () => {
+	dispatch('openExtensionChecker', extension)
+}
 const explorerUrl = () => {
 	return CONFIG.VITE_STACKS_EXPLORER + '/txid/' + extension.contractId + '?chain=' + CONFIG.VITE_NETWORK;
 }
@@ -41,7 +44,7 @@ const headerStyle = () => {
 <div class="col-11">
 	<div class="row">
 		<div class="cols-12">
-			<h2 class={headerStyle()}>{extension.contractId.split('.')[1]}</h2>
+			<h2 class={headerStyle()}><a href="/" on:click|preventDefault={() => openExtensionChecker()}>{extension.contractId.split('.')[1]}</a></h2>
 		</div>
 	</div>
 	<div class="row">

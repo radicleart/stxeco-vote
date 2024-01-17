@@ -5,11 +5,12 @@
     import DaoUtils from '$lib/service/DaoUtils';
     import { ArrowDownCircle, ArrowUpCircle, Icon } from 'svelte-hero-icons';
     import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
-	import { EXTENSIONS } from '$lib/sbtc_admin';
-	import { CONFIG } from '$lib/config';
+	  import { CONFIG } from '$lib/config';
+	import ExtensionChecker from '$lib/components/dao/ExtensionChecker.svelte';
     
     let item:ExtensionType;
     let componentKey = 0;
+    let currentExtension:string|undefined;
     let sourceCode: string|undefined = '';
     let showModal:boolean;
     const toggleModal = () => {
@@ -21,6 +22,11 @@
       sourceCode = item.contract?.source;
       toggleModal();
     }
+    const extensionChecker = (evt:any) => {
+      item = evt.detail;
+      currentExtension = item.contractId;
+      componentKey++;
+    }
     let sortDir = true;
     let sortField = 'title';
     const reorder = (sf:string) => {
@@ -29,7 +35,7 @@
         componentKey++;
     }
     const extensions:Array<ExtensionType> = [];
-    const keys = Object.keys(EXTENSIONS)
+    const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
     keys.forEach((key) => {
         extensions.push({contractId: CONFIG.VITE_DOA_DEPLOYER + '.' + key, valid: true})
     })
@@ -62,8 +68,11 @@
             <a href="/" class="inline filter pointer m-2" on:click|preventDefault={() => reorder('title')}>{#if sortDir}<Icon src="{ArrowDownCircle}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />{:else}<Icon src="{ArrowUpCircle}" mini class="h-5 w-5 text-white" aria-hidden="true" />{/if} Title</a>
             <a href="/" class="inline filter pointer m-2" on:click|preventDefault={() => reorder('status')}>{#if sortDir}<Icon src="{ArrowDownCircle}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />{:else}<Icon src="{ArrowUpCircle}" mini class="h-5 w-5 text-white" aria-hidden="true" />{/if} Status</a>
           </div>
+          {#key componentKey}
+          <div class="my-10"><ExtensionChecker extension={currentExtension}/></div>
+          {/key}
             {#each sortedProps as item}
-              <div class="w-full grid grid-cols-2 justify-evenly"><ExtensionGridItem extension={item} on:openSourceModal={openSourceModal}/></div>
+              <div class="w-full grid grid-cols-2 justify-evenly"><ExtensionGridItem extension={item} on:openExtensionChecker={extensionChecker} on:openSourceModal={openSourceModal}/></div>
             {/each}
           </div>
         </div>

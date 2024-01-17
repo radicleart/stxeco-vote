@@ -11,19 +11,6 @@ import { CONFIG } from '$lib/config';
 import { addNetSelector, extractResponse } from './bridge_api';
 import type { GovernanceData, ProposalEvent, SubmissionData } from '$types/stxeco.type';
 
-export enum EXTENSIONS {
-  'ede000-governance-token', 
-  'ede001-proposal-voting', 
-  'ede002-threshold-proposal-submission', 
-  'ede003-emergency-proposals', 
-  'ede004-emergency-execute', 
-  'ede005-dev-fund', 
-  'ede006-treasury',
-  'ede007-snapshot-proposal-voting-v5', 
-  'ede008-funded-proposal-submission-v5',
-  'ede009-governance-token-sale'
-};
-
 export const coordinators = [
   { stxAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
   { stxAddress: 'ST1NXBK3K5YYMD6FD41MVNP3JS1GABZ8TRVX023PT', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
@@ -34,6 +21,7 @@ export const coordinators = [
   { stxAddress: 'ST306HDPY54T81RZ7A9NGA2F03B8NRGW6Y59ZRZSD', btcAddress: '' }, // coordinator
   { stxAddress: 'ST3RBZ4TZ3EK22SZRKGFZYBCKD7WQ5B8FFRS57TT6', btcAddress: '' }, // coordinator
   { stxAddress: 'ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY', btcAddress: '' }, // coordinator
+  { stxAddress: 'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F', btcAddress: '' }, // coordinator
 ]
 
 export function getCoordinator(address:string) {
@@ -157,6 +145,14 @@ export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiv
   return res;
 }
 
+export async function isExtension(extensionAddress:string):Promise<{result:boolean}> {
+  if (!extensionAddress) return {result:false}
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/is-extension/' + extensionAddress);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
 export async function getGovernanceData(principle:string):Promise<GovernanceData> {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/get-governance-data/' + principle);
   const response = await fetch(path);
@@ -190,63 +186,6 @@ export async function processProposalContracts(contractIds:string):Promise<any> 
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
-}
-
-export async function getFundingParams(extensionCid:string):Promise<any> {
-  const functionArgs = [`0x${hex.encode(serializeCV(stringAsciiCV('funding-cost')))}`];
-  const data = {
-    contractAddress: extensionCid.split('.')[0],
-    contractName: extensionCid.split('.')[1],
-    functionName: 'get-parameter',
-    functionArgs
-  }
-  const fundingCost = (await callContractReadOnly(data)).value.value;
-  data.functionArgs = [`0x${hex.encode(serializeCV(stringAsciiCV('proposal-start-delay')))}`];
-  const proposalStartDelay = (await callContractReadOnly(data)).value.value;
-  data.functionArgs = [`0x${hex.encode(serializeCV(stringAsciiCV('proposal-duration')))}`];
-  const proposalDuration = (await callContractReadOnly(data)).value.value;
-  return {
-    fundingCost: Number(fundingCost),
-    proposalDuration: Number(proposalDuration),
-    proposalStartDelay: Number(proposalStartDelay),
-  }
-}
-
-export async function getSubmissionData(txId:string):Promise<SubmissionData> {
-  const fundingTx = await getTransaction(txId)
-  const pd = {
-    contractId:fundingTx.contract_call.contract_id,
-    transaction: { txid: fundingTx.tx_id, events: fundingTx.events, contract_call: fundingTx.contract_call }
-  }
-  return pd;
-}
-
-export async function getEdgTotalSupply():Promise<{totalSupply:boolean}> {
-  const functionArgs:Array<any> = [];
-  const data = {
-    contractAddress: CONFIG.VITE_DOA_DEPLOYER,
-    contractName: 'ede000-governance-token',
-    functionName: 'get-total-supply',
-    functionArgs,
-  }
-  const result = (await callContractReadOnly(data)).value;
-  return {
-    totalSupply: Boolean(result),
-  }
-}
-
-export async function getEdgBalance(stxAddress:string):Promise<{balance:boolean}> {
-  const functionArgs = [`0x${hex.encode(serializeCV(principalCV(stxAddress)))}`];
-  const data = {
-    contractAddress: CONFIG.VITE_DOA_DEPLOYER,
-    contractName: 'ede000-governance-token',
-    functionName: 'edg-get-balance',
-    functionArgs,
-  }
-  const result = (await callContractReadOnly(data)).value;
-  return {
-    balance: Boolean(result),
-  }
 }
 
 export async function getTransaction(tx:string):Promise<any> {

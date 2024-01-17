@@ -134,19 +134,6 @@ const ChainUtils = {
       arr[i] = (str.charCodeAt(i).toString(16)).slice(-4)
     }
     return '0x' + arr.join('')
-  },
-  callContractReadOnly: async (data:any) => {
-      const url = CONFIG.VITE_STACKS_API_HIRO + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          arguments: data.functionArgs,
-          sender: data.contractAddress,
-        })
-      });
-      const val = response.json();
-      return val;
   }
 }
 export default ChainUtils

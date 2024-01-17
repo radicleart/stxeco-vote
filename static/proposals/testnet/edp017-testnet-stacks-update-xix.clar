@@ -1,5 +1,5 @@
 ;; DAO: Ecosystem DAO
-;; Title: Test Flexible Voting 2
+;; Title: Test Proposal XIX
 ;; Author(s): Stacks community
 ;; Synopsis: This proposal outlines updates to the Stacks blockchain:
 ;; Description: Stacks is a network-wide upgrade that aims to further strengthen the 

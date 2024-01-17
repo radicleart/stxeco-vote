@@ -49,7 +49,7 @@
 			DaoUtils.setStatus($sbtcConfig.stacksInfo.stacks_tip_height, proposalEvent);
 			console.log(event)
 		} else {
-			goto('/dao/proposals/propose')
+			goto('/dao/proposals/holding')
 		}
 
 		try {
@@ -107,7 +107,7 @@
 					<PoolProposed {proposalEvent} />
 					{/if}
 				</TabItem>
-				<TabItem open={method === 3} on:click={() => goto('/dao/proposals/' + proposalEvent.contractId + '?method=3')} title="Liquid STX">
+				<TabItem open={method === 3} on:click={() => goto('/dao/proposals/' + proposalEvent.contractId + '?method=3')} title="Non-Stackers">
 					{#if proposalEvent.stage === ProposalStage.ACTIVE}
 					<DaoActive {proposalEvent} {balanceAtHeight} {daoVotes}/>
 					{:else if proposalEvent.stage === ProposalStage.INACTIVE}

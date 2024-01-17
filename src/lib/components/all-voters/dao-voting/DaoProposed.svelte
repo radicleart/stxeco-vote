@@ -19,7 +19,6 @@
 </svelte:head>
 
 <div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<h2 class="text-4xl ">Voting through Ecosystem DAO</h2>
 	<p>Voting starts in {proposalEvent.proposalData.startBlockHeight - stacksTipHeight} blocks.</p>
 </div>
-  
+

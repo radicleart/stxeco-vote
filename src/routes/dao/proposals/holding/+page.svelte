@@ -12,7 +12,7 @@
 	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
         
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-    let contractId = $sbtcConfig.currentProposal.contractId || undefined;
+    let contractId:string|undefined;
     let processResult:any;
 
     let showRulesModal:boolean;
@@ -24,7 +24,6 @@
       if (!contractId) return;
       processResult = await processProposalContracts(contractId)
       processResult = await setCurrentProposal(contractId)
-      showRulesModal = true
     }
     
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
@@ -116,94 +115,32 @@
     </script>
     
     <svelte:head>
-        <title>Ecosystem DAO</title>
-        <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
+      <title>Ecosystem DAO - Nakamoto SIP Voting</title>
+      <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
     </svelte:head>
     
-    <Modal showModal={showRulesModal} on:click={closeModal}>
-        <div class="bg-white opacity-10"></div>
-        <div slot="title">
-          <div class="bg-white text-gray-800 mx-20 p-20 rounded-lg">
-            <p>Processing contract<br/><br/> {contractId}</p>
-          </div>
-        </div>
-    </Modal>
-<div class="py-6 mx-auto max-w-4xl md:px-6 ">
-  <div class="flex flex-col w-full my-8 max-w-4xl">
-    <div class="flex flex-col gap-y-4 w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden bg-gray-1000">
-      <h1 class="text-4xl font-semibold"><span class="strokeme-white">Make</span> a Proposal</h1>
-      <p class="strapline">Two types of proposal:
-        <span class="text-warning-500">simple / noop</span> proposals are advisory - the proposal text is in the Clarity contract.
-        <span class="text-warning-500">actionable</span> are contractual - they are expressed by the code
-        undertake some action automatically if the vote carries. For example,
-        actionable proposals can upgrade the protocol, make payments or trigger 
-        other workflows.
-      </p>
-
-      <div class="flex flex-col gap-y-12">
-        <div class="flex flex-col gap-y-2">
-          <h4 class="text-2xl mb-3">Process Proposal</h4>
-          <p>Enter deployed contract id</p>
-          <input type="text" id="propose-contract" class="p-3 rounded-md border text-black" bind:value={contractId}/>
-          <button on:click={() => {processProposal()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-            Process proposal
-          </button>
-        </div>
-
-        {#if showNoop}
-          <div class="flex flex-col">
-            <div class="">
-                <pre class="source-code">{newSource}</pre>
-            </div>
-            <div class="">
-              {#if !showDeployButton}
-                <ProposalDeploymentForm on:addNewPoll={addNewPoll} />
-              {:else if txId}
-              <div>
-                <a href={explorerUrl} target="_blank">View on explorer</a>
-              </div>
-              {:else}
-              <div class="text-center mt-5">
-                {#if newSourceValid}
-                  <p>Contract ready to be deployed - once its fully deployed crowd fund support for this proposal</p>
-                  <button class="btn rounded btn-warning" on:click|preventDefault={() => { deployContract() }}>Deploy proposal</button>
-                {:else}
-                  <p class="bg-danger p-3">Contract is not ready to be deployed - please check the contract implements the trait correctly - using the full address given above.</p>
-                  <button disabled class="btn rounded text-danger">Proposal Trait Invalid</button>
-                {/if}
-              </div>
-              {/if}
-            </div>
-          </div>
-          {/if}
-
-        {#if showFromFile}
-        <div class="">
-          <div class="">
-            <h4 class="text-2xl mb-3">Upload Contract</h4>
-            <p>Please ensure the clarity is unit tested and implements the 
-              <a class="text-primary-500" href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait')} target="_blank">correct trait</a>
-              {#if !showDeployButton}
-                <LoadFile on:fileLoaded={fileLoaded}/>
-              {:else}
-              <div class="flex flex-col">
-                  <div class="col-md-8 col-sm-12">
-                    <pre class="source-code">{newSource}</pre>
-                  </div>
-                </div>
-              {/if}
-            </div>
-          </div>
-        {/if}
-      </div>
-
+    <div class="px-6 md:px-0 -mx-6 my-10 py-12 bg-white/[0.1] shadow-[0px_1px_1px_0px_rgba(255,255,255,0.25)_inset,_0px_-1px_1px_0px_rgba(255,255,255,0.25)_inset] backdrop-blur-xl">
+      <div class="py-6 mx-auto max-w-7xl md:px-6">
+        <p class="text-4xl font-medium leading-[46px] sm:max-w-4xl" style="text-shadow: 1px 1px 20px rgba(8, 0, 102, 0.50)">STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes</p>
       </div>
     </div>
-  </div>
-  <div class="">
-    {#if txId}
-      <div>
-        <a href={explorerUrl} target="_blank">View on explorer</a>
+    <div class="py-6 mx-auto max-w-7xl md:px-6">
+      <div class="flex flex-col w-full my-8">
+        <div>
+          <div class="space-y-6">
+            <div>
+              <span class="inline-block py-1 text-sm px-5 rounded-full bg-purple-fade border border-purple-500">Current proposal</span>
+              <h1 class="text-2xl sm:text-4xl font-bold -mx-4 mt-6"><a href="/" on:click|preventDefault={() => {}} class="hover:bg-white/10 py-2 px-4 rounded-md">SIP-021 - Nakamoto Release <svg class="inline" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M29.6875 20.3125L20.3125 29.6875" stroke="white" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Voting starts soon !
+                </a>
+              </h1>
+            </div>
+          </div>
+        </div>
       </div>
-    {/if}
-  </div>
+    </div>
+    

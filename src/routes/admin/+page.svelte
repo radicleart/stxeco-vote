@@ -1,6 +1,6 @@
 <script lang="ts">
-import Coordinator from '$lib/components/admin/Coordinator.svelte';
-import { sbtcConfig } from '$stores/stores'
+	import Construct from '$lib/components/dao/admin/Construct.svelte';
+	import { CONFIG } from '$lib/config';
 
 </script>
 
@@ -11,13 +11,13 @@ import { sbtcConfig } from '$stores/stores'
 				<div class="flex flex-col gap-10">
 					<div class="">
 						<div class="">
-							<h1 class="text-info"><span class="strokeme-info">sBTC</span> Contract Management</h1>
-							<h6>Contract ID: {CONFIG.VITE_SBTC_CONTRACT_ID}</h6>
+							<h1 class="text-info"><span class="strokeme-info">DAO</span> for Bitcoin</h1>
+							<h6>{CONFIG.VITE_DOA_DEPLOYER + '.' +  CONFIG.VITE_DOA}</h6>
 						</div>
-					</div>
+ 					</div>
 					<div class="">
 						<div class="">
-							<Coordinator/>
+							<Construct/>
 						</div>
 					</div>
 				</div>

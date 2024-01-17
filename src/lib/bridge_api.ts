@@ -15,6 +15,8 @@ function headers() {
 }
 
 export function addNetSelector (path:string) {
+  return path
+  /**
   if (CONFIG.VITE_NETWORK === 'testnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
   } else if (CONFIG.VITE_NETWORK === 'devnet') {
@@ -22,6 +24,7 @@ export function addNetSelector (path:string) {
   } else {
     return path.replace('bridge-api', 'bridge-api/mainnet');
   }
+   */
 }
 
 async function fetchCatchErrors(path:string) {

@@ -23,7 +23,7 @@ onMount(async () => {
 
 </script>
 <div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<p>Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
+	<p class="text-xs text-gray-400">Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
   <div>
     <SoloResults proposal={proposalEvent} />
   </div>

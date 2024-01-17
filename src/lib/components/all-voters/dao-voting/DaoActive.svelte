@@ -14,6 +14,7 @@
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import { loggedIn } from '$lib/stacks_connect';
 	import DaoResults from './DaoResults.svelte';
+	import { fmtAmount, fmtNumber } from 'sbtc-bridge-lib';
 
 	export let proposalEvent: ProposalEvent;
 	export let balanceAtHeight:number
@@ -74,7 +75,7 @@
 		}
 	});
 </script>
-
+<!--
 <Modal showModal={showSourceModal || showRulesModal} on:click={closeModal}>
 	{#if showSourceModal}
 		<div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
@@ -87,7 +88,7 @@
 		{/if}
 	</div>
 </Modal>
-
+-->
 <svelte:head>
 	<title>Ecosystem DAO</title>
 	<meta
@@ -103,6 +104,7 @@
 	</div>
 	<p class="">Vote with your liquid STX balance using your <span class="font-bold">Leather / Xverse wallet</span> </p>
 	<p class="text-warning-500">No STX is spent by voting but you will pay a gas fee.</p>
+	<p class="text-warning-500">Voting closes at block {fmtNumber(proposalEvent.proposalData.endBlockHeight)} in {fmtNumber(proposalEvent.proposalData.endBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height)} blocks.</p>
 	{#if loggedIn()}
 	{#if propStatus === 'voting'}
 		{#if proposalEvent.proposalData && proposalEvent.votingContract === CONFIG.VITE_DOA_PROPOSAL_VOTING_EXTENSION}
