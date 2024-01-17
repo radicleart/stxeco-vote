@@ -5,7 +5,6 @@
     import DaoUtils from '$lib/service/DaoUtils';
     import { ArrowDownCircle, ArrowUpCircle, Icon } from 'svelte-hero-icons';
     import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
-	  import { EXTENSIONS } from '$lib/sbtc_admin';
 	  import { CONFIG } from '$lib/config';
 	import ExtensionChecker from '$lib/components/dao/ExtensionChecker.svelte';
     
@@ -36,7 +35,7 @@
         componentKey++;
     }
     const extensions:Array<ExtensionType> = [];
-    const keys = Object.keys(EXTENSIONS)
+    const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
     keys.forEach((key) => {
         extensions.push({contractId: CONFIG.VITE_DOA_DEPLOYER + '.' + key, valid: true})
     })

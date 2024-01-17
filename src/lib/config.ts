@@ -1,29 +1,41 @@
 const SHARED_DEVENV_CONFIG = {
     VITE_ENVIRONMENT: 'devenv',
-    VITE_PUBLIC_APP_NAME: 'Stacks Ecosystem DAO Devenv',
+    VITE_PUBLIC_APP_NAME: 'Bitcoin DAO Devnet',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_NETWORK: 'devnet',
     VITE_DOA_DEPLOYER: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-    VITE_DOA: 'ecosystem-dao',
-    VITE_DOA_PROPOSAL: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp017-testnet-stacks-update-x',
-    VITE_DOA_ACTIVE_VOTING_EXTENSIONS: 'ede007-snapshot-proposal-voting-v2,ede007-snapshot-proposal-voting-v5',
-    VITE_DOA_SNAPSHOT_VOTING_EXTENSION: 'ede007-snapshot-proposal-voting-v5',
-    VITE_DOA_PROPOSAL_VOTING_EXTENSION: 'ede001-proposal-voting',
-    VITE_DOA_FUNDED_SUBMISSION_EXTENSION: 'ede008-flexible-funded-submission',
-    VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'ede004-emergency-execute',
+    VITE_DOA: 'bitcoin-dao',
+    VITE_DOA_PROPOSAL: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.bdp000-bootstrap',
+    VITE_DOA_ACTIVE_VOTING_EXTENSIONS: 'bde007-snapshot-proposal-voting',
+    VITE_DOA_SNAPSHOT_VOTING_EXTENSION: 'bde007-snapshot-proposal-voting',
+    VITE_DOA_PROPOSAL_VOTING_EXTENSION: 'bde001-proposal-voting',
+    VITE_DOA_FUNDED_SUBMISSION_EXTENSION: 'bde008-flexible-funded-submission',
+    VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'bde004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-    VITE_SBTC_CONTRACT_ID: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asset',
+    VITE_SBTC_CONTRACT_ID: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asset-3',
     VITE_BRIDGE_WS: 'ws://45.79.130.153:3999',
-    VITE_BRIDGE_API: 'http://45.79.130.153:3010/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'http://45.79.130.153:3010/bridge-api/v1',
+    VITE_BRIDGE_API: 'https://devnet.uasu.finance/bridge-api/v1',
+    VITE_CLARITYLAB_API: 'https://devnet.uasu.finance/bridge-api/v1',
     VITE_STACKS_API_HIRO: 'https://api.testnet.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
-    //VITE_STACKS_API: 'http://45.79.130.153:3999',
-    VITE_STACKS_API: 'https://api.testnet.hiro.so',
+    VITE_STACKS_API: 'https://devnet-stacks.uasu.finance',
     VITE_STACKS_WS: 'ws://45.79.130.153:3999',
-    VITE_STACKS_EXPLORER: 'http://45.79.130.153:3020',
-    VITE_BSTREAM_EXPLORER: 'http://45.79.130.153:8083',
-    VITE_MEMPOOL_EXPLORER: 'http://45.79.130.153:8083',
+    VITE_STACKS_EXPLORER: 'https://devnet-stacks-explorer.uasu.finance',
+    VITE_BSTREAM_EXPLORER: 'https://devnet-mempool.uasu.finance',
+    VITE_MEMPOOL_EXPLORER: 'https://devnet-mempool.uasu.finance',
+    VITE_EXTENSIONS: [
+        'bde000-governance-token', 
+        'bde001-proposal-voting', 
+        'bde002-threshold-proposal-submission', 
+        'bde003-emergency-proposals', 
+        'bde004-emergency-execute', 
+        'bde005-dev-fund', 
+        'bde006-treasury',
+        'bde007-snapshot-proposal-voting', 
+        'bde008-flexible-funded-submission',
+        'bde009-governance-token-sale'
+    ]
+      
 }
 
 const SHARED_DEVENV_LOCAL_CONFIG = {
@@ -52,6 +64,18 @@ const SHARED_DEVENV_LOCAL_CONFIG = {
     VITE_STACKS_EXPLORER: 'http://45.79.130.153:3020',
     VITE_BSTREAM_EXPLORER: 'http://45.79.130.153:8083',
     VITE_MEMPOOL_EXPLORER: 'http://45.79.130.153:8083',
+    VITE_EXTENSIONS: [
+        'ede000-governance-token', 
+        'ede001-proposal-voting', 
+        'ede002-threshold-proposal-submission', 
+        'ede003-emergency-proposals', 
+        'ede004-emergency-execute', 
+        'ede005-dev-fund', 
+        'ede006-treasury',
+        'ede007-snapshot-proposal-voting-v5', 
+        'ede008-funded-proposal-submission-v5',
+        'ede009-governance-token-sale'
+    ]
 }
 
 const DEVNET_CONFIG = {
@@ -79,6 +103,18 @@ const DEVNET_CONFIG = {
     VITE_STACKS_EXPLORER: 'http://stacks-explorer:3020',
     VITE_BSTREAM_EXPLORER: 'http://mempool-web/testnet/api',
     VITE_MEMPOOL_EXPLORER: 'http://mempool-web/testnet/api',
+    VITE_EXTENSIONS: [
+        'ede000-governance-token', 
+        'ede001-proposal-voting', 
+        'ede002-threshold-proposal-submission', 
+        'ede003-emergency-proposals', 
+        'ede004-emergency-execute', 
+        'ede005-dev-fund', 
+        'ede006-treasury',
+        'ede007-snapshot-proposal-voting-v5', 
+        'ede008-funded-proposal-submission-v5',
+        'ede009-governance-token-sale'
+    ]
 }
 
 const TESTNET_CONFIG = {
@@ -106,6 +142,18 @@ const TESTNET_CONFIG = {
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
+    VITE_EXTENSIONS: [
+        'ede000-governance-token', 
+        'ede001-proposal-voting', 
+        'ede002-threshold-proposal-submission', 
+        'ede003-emergency-proposals', 
+        'ede004-emergency-execute', 
+        'ede005-dev-fund', 
+        'ede006-treasury',
+        'ede007-snapshot-proposal-voting-v5', 
+        'ede008-funded-proposal-submission-v5',
+        'ede009-governance-token-sale'
+    ]
 }
 
 const MAINNET_CONFIG = {
@@ -133,6 +181,18 @@ const MAINNET_CONFIG = {
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/api',
+    VITE_EXTENSIONS: [
+        'ede000-governance-token', 
+        'ede001-proposal-voting', 
+        'ede002-threshold-proposal-submission', 
+        'ede003-emergency-proposals', 
+        'ede004-emergency-execute', 
+        'ede005-dev-fund', 
+        'ede006-treasury',
+        'ede007-snapshot-proposal-voting-v5', 
+        'ede008-funded-proposal-submission-v5',
+        'ede009-governance-token-sale'
+    ]
 }
 
 export let CONFIG = MAINNET_CONFIG;
@@ -140,6 +200,12 @@ export let CONFIG = MAINNET_CONFIG;
 export function setConfig(network:string) {
     const mode = import.meta.env.MODE
     console.log('mode: ' + mode)
+
+    if (mode === 'shared-devenv') {
+        CONFIG = SHARED_DEVENV_CONFIG;
+        return;
+    }
+
     if (mode === 'local-testnet') {
         CONFIG = TESTNET_CONFIG;
         CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';

@@ -11,19 +11,6 @@ import { CONFIG } from '$lib/config';
 import { addNetSelector, extractResponse } from './bridge_api';
 import type { GovernanceData, ProposalEvent, SubmissionData } from '$types/stxeco.type';
 
-export enum EXTENSIONS {
-  'ede000-governance-token', 
-  'ede001-proposal-voting', 
-  'ede002-threshold-proposal-submission', 
-  'ede003-emergency-proposals', 
-  'ede004-emergency-execute', 
-  'ede005-dev-fund', 
-  'ede006-treasury',
-  'ede007-snapshot-proposal-voting-v5', 
-  'ede008-funded-proposal-submission-v5',
-  'ede009-governance-token-sale'
-};
-
 export const coordinators = [
   { stxAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
   { stxAddress: 'ST1NXBK3K5YYMD6FD41MVNP3JS1GABZ8TRVX023PT', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob

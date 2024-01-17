@@ -2,7 +2,6 @@ import { writable, get } from 'svelte/store';
 import ChainUtils from '$lib/service/ChainUtils';
 import type { ProposalEvent } from "$types/stxeco.type";
 import DaoUtils from '$lib/service/DaoUtils';
-import { EXTENSIONS } from './sbtc_admin';
 import { CONFIG } from './config';
 
 function createStore() {
@@ -29,7 +28,7 @@ function createStore() {
         // console.log(proposal.contractId + ' -> ' + proposal.status.name)
       })
       daoData.extensions = [];
-      const keys = Object.keys(EXTENSIONS)
+      const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
       keys.forEach((key) => {
         daoData.extensions.push(key)
       })

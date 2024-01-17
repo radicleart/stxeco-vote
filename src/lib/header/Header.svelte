@@ -26,6 +26,7 @@
 	
 	const switchNetwork = async () => {
 		let net = CONFIG.VITE_NETWORK;
+		if (net === 'devnet') return
 		if (net === 'mainnet') net = 'testnet';
 		else net = 'mainnet'
 		setConfig(net);

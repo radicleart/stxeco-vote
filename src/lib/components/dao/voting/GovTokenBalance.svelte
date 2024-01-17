@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { CONFIG } from '$lib/config';
-	import { EXTENSIONS, getGovernanceData } from '$lib/sbtc_admin';
+	import { getGovernanceData } from '$lib/sbtc_admin';
 	import { sbtcConfig } from '$stores/stores';
 	import type { GovernanceData } from '$types/stxeco.type';
 	import { onMount } from 'svelte';
 
-  const governanceExt = EXTENSIONS['ede006-treasury'];
+  const governanceExt = CONFIG.VITE_EXTENSIONS.find((o) => o === 'ede006-treasury');
   const governance = governanceExt //&& governanceExt.valid;
 
   let govData:GovernanceData;
