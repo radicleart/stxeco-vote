@@ -14,7 +14,7 @@
 (define-public (execute (sender principal))
 	(begin
 		;; Enable genesis extensions.
-		(try! (contract-call? .bitcoin-dao set-extensions
+		(try! (contract-call? .bitcoin-dao-1 set-extensions
 			(list
 				{extension: .bde000-governance-token, enabled: false}
 				{extension: .bde003-emergency-proposals, enabled: false}
