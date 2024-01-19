@@ -129,7 +129,6 @@
 </script>
 <Notifications>
 	<div class="bg-transparent text-white font-extralight min-h-screen relative">
-		<div class="absolute top-0 left-0 w-full h-[1153px] bg-[url('$lib/assets/bg.png')] bg-cover"></div>
 		{#if inited}
 		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
 			<div class="mx-auto px-6 relative">

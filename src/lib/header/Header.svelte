@@ -23,7 +23,7 @@
 			await loginStacks(loginCallback);
 		}
 	}
-	
+
 	const switchNetwork = async () => {
 		let net = CONFIG.VITE_NETWORK;
 		if (net === 'devnet') return
@@ -99,13 +99,13 @@
 		{#if loggedIn()}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
-			<button class="inline-flex items-center bg-primary-01 px-4 py-2 font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500/50 shrink-0" on:keydown on:click={doLogin}>
+			<button class="inline-flex items-center bg-[#131416] px-4 py-2 font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
 				Connect wallet
 			</button>
 		{/if}
 	</div>
 
-	<NavHamburger class="text-white hover:bg-gray-1000" on:click={toggle} />
+	<NavHamburger class="text-black hover:bg-gray-1000" on:click={toggle} />
 
 	<NavUl
 		{hidden}
