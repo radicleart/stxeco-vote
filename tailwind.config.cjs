@@ -106,13 +106,10 @@ export default {
         "1000": "#601b1b"
       }
     },
-    backgroundImage: {
-      "primary-01": "linear-gradient(80deg, #080066 0%, #7A40EE 100%)", // navy to purple
-      "purple-fade": "linear-gradient(180deg, rgba(122, 64, 238, 0.60) 0%, rgba(122, 64, 238, 0.10) 100%)" // purple fade
-    },
     extend: {
       fontFamily: {
-        'sans': ['OpenSauceTwo', ...defaultTheme.fontFamily.sans],
+        'sans': ['Matter', ...defaultTheme.fontFamily.sans],
+        'mono': ['Matter', ...defaultTheme.fontFamily.mono],
       },
     },
   }
