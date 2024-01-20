@@ -82,8 +82,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        'sans': ['MatterSQ', ...defaultTheme.fontFamily.sans],
-        'mono': ['MatterSQMono', ...defaultTheme.fontFamily.mono],
+        'sans': ['Matter', ...defaultTheme.fontFamily.sans],
+        'mono': ['Matter Mono', ...defaultTheme.fontFamily.mono],
       },
     },
   }
