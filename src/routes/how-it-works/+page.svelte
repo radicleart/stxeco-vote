@@ -176,7 +176,7 @@
     <div>
 			<div class="space-y-6">
 				<div>
-					<span class="inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
+					<span class="font-mono inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4 mt-6">
 						<a href="/" class="py-2 px-4 rounded-md">
 							SIP-021 - Nakamoto Release
