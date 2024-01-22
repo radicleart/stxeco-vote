@@ -178,7 +178,7 @@
 				<div>
 					<span class="font-mono inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4 mt-6">
-						<a href="/" class="py-2 px-4 rounded-md">
+						<a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md">
 							SIP-021 - Nakamoto Release
 							<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
@@ -291,7 +291,7 @@
 				<h2 class="text-[#0A0A0B] text-2xl sm:text-4xl mt-6">Cast your vote</h2>
 				<div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
 					{#each votingOptions as opt}
-						<a href={`/dao/proposals/${currentContract}?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-white/10 hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-8">
+						<a href={`/dao/proposals/${currentContract}?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-transparent hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-8">
 
 							<svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[-4em] left-1/2 -translate-x-1/2" viewBox="0 0 342 376" width="342" height="376" fill="none">
 								<mask id="mask0_48_621" width="397" height="397" x="-28" y="-21" maskUnits="userSpaceOnUse" style="mask-type:alpha">

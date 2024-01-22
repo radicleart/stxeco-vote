@@ -128,7 +128,7 @@
 	})
 </script>
 <Notifications>
-	<div class="bg-transparent text-white font-extralight min-h-screen relative">
+	<div class="bg-white min-h-screen relative">
 		{#if inited}
 		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
 			<div class="mx-auto px-6 relative">
