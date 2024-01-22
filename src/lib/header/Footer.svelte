@@ -18,10 +18,10 @@
       <p class="text-lg text-[#131416]/[0.64] font-mono">Explore the Stacks:</p>
 
       <div class="flex gap-x-6">
-        <a href="https://www.stacks.co/ecosystem" class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+        <a href="https://www.stacks.co/ecosystem" class="text-sm font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
           Ecosystem&nbsp;<span class="text-[#FDFDFC]/[0.64]">-></span>
         </a>
-        <a href="https://www.stacks.co/build" class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2 font-normal text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+        <a href="https://www.stacks.co/build" class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2 font-normal text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
           Developer Hub&nbsp;<span class="text-[#27282B]">-></span>
         </a>
       </div>

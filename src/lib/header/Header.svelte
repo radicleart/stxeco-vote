@@ -99,7 +99,7 @@
 		{#if loggedIn()}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
-			<button class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
+			<button class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 text-sm font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
 				Connect wallet&nbsp;<span class="text-[#FDFDFC]/[0.64]">-></span>
 			</button>
 		{/if}
