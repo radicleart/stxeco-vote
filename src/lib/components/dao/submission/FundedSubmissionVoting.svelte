@@ -8,6 +8,7 @@
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
 	import { getStacksNetwork } from '$lib/stacks_connect';
+	import { goto } from '$app/navigation';
 	
 	export let proposal:ProposalEvent;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
@@ -16,14 +17,14 @@
 	let txId: string|undefined;
 
 	const { addNotification } = getNotificationsContext();
-	const fundingData:FundingData = proposal.funding;
-	const fundingMet = fundingData.funding >= fundingData.parameters.fundingCost;
-	const balance = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
-	const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
-	let proposalDuration = fundingData.parameters.proposalDuration
-	let proposalStartDelay = fundingData.parameters.proposalStartDelay
-	const startHeightMessage = 'The earliest start for voting is in ' + proposalStartDelay + ' blocks ' + ((proposalStartDelay) / 144).toFixed(2) + ' days after proposal is funded at block ~ ' + (fmtNumber(stacksTipHeight + proposalStartDelay));
-	const durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
+	let inited = false
+	let fundingData:FundingData;
+	let fundingMet = false;
+	let stacksTipHeight = 0;
+	let proposalDuration = 0
+	let proposalStartDelay = 0
+	let startHeightMessage = 'The earliest start for voting is in ';
+	let durationMessage = 'The voting window is ';
 	let paramStartDelay = 6;
 	let paramDuration = 144 //proposalDuration;
 	
@@ -110,11 +111,26 @@
 	}
 
 	onMount(async () => {
+		fundingData = proposal.funding;
+		if (!fundingData) {
+			goto('/dao/proposals/propose')
+			return;
+		}
+		fundingMet = fundingData && fundingData.funding >= fundingData.parameters.fundingCost;
+		stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+		proposalDuration = fundingData.parameters.proposalDuration
+		proposalStartDelay = fundingData.parameters.proposalStartDelay
+		startHeightMessage = 'The earliest start for voting is in ' + proposalStartDelay + ' blocks ' + ((proposalStartDelay) / 144).toFixed(2) + ' days after proposal is funded at block ~ ' + (fmtNumber(stacksTipHeight + proposalStartDelay));
+		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
+		paramStartDelay = 6;
+		paramDuration = 144 //proposalDuration;
+		inited = true
 	})
 	
 	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 	</script>
 	
+{#if inited}
 {#if !fundingMet}
 <div class="flex flex-col">
 	<h1 class="text-2xl font-normal">
@@ -153,7 +169,6 @@
 				</div>
 			</div>
 		</form>
-		<p class="sub-text">Your current balance is {balance} STX</p>
 	</div>
 </div>
 <div class="" >
@@ -169,16 +184,4 @@
 	<p>{durationMessage}</p>
 </div>
 {/if}
-	
-	<style>
-	p {
-		color: #ededed;
-		padding: 3px;
-		margin: 0 !important;
-		font-size: 1.0rem;
-	}
-	.sub-text {
-		font-size: 0.95rem;
-	}
-	</style>
-	
+{/if}

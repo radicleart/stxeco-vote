@@ -20,7 +20,7 @@
 	import DaoProposed from '$lib/components/all-voters/dao-voting/DaoProposed.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import { getDaoVotesByProposal, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
-	import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
+	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import Preamble from '$lib/components/all-voters/Preamble.svelte';
 	import SoloVotingActive from '$lib/components/all-voters/solo/SoloVotingActive.svelte';
 	import PoolVotingActive from '$lib/components/all-voters/pool/PoolVotingActive.svelte';
@@ -75,12 +75,22 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	<div class="mt-8 inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
+		{#if inited}
 		<div class="flex items-center gap-2 -mb-1">
 			<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
-			<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">Vote in progress</p>
-		</div>
-		{#if inited}
-		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposalEvent.proposalData.endBlockHeight)}</span>
+			<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
+				{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
+				Funding in progress
+				{:else}
+				Vote in progress
+				{/if}
+				</p>
+			</div>
+			{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
+			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
+			{:else}
+			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposalEvent.proposalData.endBlockHeight)}</span>
+			{/if}
 		{/if}
 	</div>
 	<div class="flex items-center justify-between mt-6">
@@ -104,21 +114,25 @@
 	</div>
 
 	{#if inited}
-	{#if showDetails}
-		<Preamble proposal={proposalEvent} />
-	{/if}
+		{#if showDetails}
+			<Preamble proposal={proposalEvent} />
+		{/if}
 
-	{#if method === 1}
-	<SoloVotingActive proposal={proposalEvent} />
-	{:else if method === 2}
-	<PoolVotingActive proposal={proposalEvent} />
-	{:else if method === 3}
-	<DaoVotingActive proposal={proposalEvent} />
-	{:else}
-	<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-		<Skeleton size="md" />
-	</div>
-	{/if}
+		{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
+		<FundedSubmissionVoting proposal={proposalEvent} />
+		{:else}
+			{#if method === 1}
+			<SoloVotingActive proposal={proposalEvent} />
+			{:else if method === 2}
+			<PoolVotingActive proposal={proposalEvent} />
+			{:else if method === 3}
+			<DaoVotingActive proposal={proposalEvent} />
+			{:else}
+			<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
+				<Skeleton size="md" />
+			</div>
+			{/if}
+		{/if}
 	{/if}
 </div>
 
