@@ -124,7 +124,7 @@
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
 			</div>
 			<div>
-				<span class="inline-block md:text-purple-900 py-2.5 px-2">
+				<span class="inline-block md:text-sand-700 py-2.5 px-2">
 					{getBlockHeigths()}
 				</span>
 			</div>

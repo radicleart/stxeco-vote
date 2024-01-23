@@ -107,7 +107,7 @@
 					<span class="font-mono inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
           <div class="flex items-center justify-between mt-6">
             <h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4">
-              <a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md">
+              <a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
                 SIP-021 - Nakamoto Release
                 <svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
@@ -127,40 +127,40 @@
 				</div>
 
         {#if showDetails}
-        <div class="py-10 px-10 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-          <div>
-            <dl class="divide-y divide-white/10">
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">DAO</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Ecosystem DAO</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Title</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">SIP-021 - Nakamoto Release</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Author(s)</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Stacks Community</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Description</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Nakamoto Release is a network-wide upgrade that aims to further strengthen the connection between Stacks and Bitcoin.</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Voting contract</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede007-snapshot-proposal-voting-v5</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Funding contract</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede008-flexible-funded-submission</dd>
-              </div>
-              <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-white">Proposal contract</dt>
-                <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede017-testnet-stacks-update</dd>
-              </div>
-            </dl>
+          <div class="py-10 px-10 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+            <div>
+              <dl class="divide-y divide-white/10">
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">DAO</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Ecosystem DAO</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Title</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">SIP-021 - Nakamoto Release</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Author(s)</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Stacks Community</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Description</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Nakamoto Release is a network-wide upgrade that aims to further strengthen the connection between Stacks and Bitcoin.</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Voting contract</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede007-snapshot-proposal-voting-v5</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Funding contract</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede008-flexible-funded-submission</dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-white">Proposal contract</dt>
+                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede017-testnet-stacks-update</dd>
+                </div>
+              </dl>
+            </div>
           </div>
-        </div>
         {/if}
 
 				<div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">

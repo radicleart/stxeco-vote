@@ -1,4 +1,4 @@
-;; Title: BDP001 SIP 021 Nakamoto
+;; Title: BDP001 SIP 021 Nakamoto Release
 ;; Author(s): Aaron Blankstein, Charlie Cantoni, Brice Dobry, 
 ;; Jacinta Ferrent, Diwaker Gupta,Jesus Najera, Jude Nelson, 
 ;; Ashton Stephens, Joey Yandle

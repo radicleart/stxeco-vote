@@ -7,12 +7,11 @@ import FormatUtils from '$lib/service/FormatUtils';
 import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
-import ChevronDown from '$lib/components/shared/ChevronDown.svelte';
-import ChevronUp from '$lib/components/shared/ChevronUp.svelte';
+import { getDaoVotesByProposal } from '$lib/dao_api';
 
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
-export let daoVotes:Array<VoteEvent> = [];
+let daoVotes:Array<VoteEvent> = [];
 export let proposal:ProposalEvent;
 
 let showVotes = false;
@@ -40,6 +39,7 @@ let winning = 'danger';
 onMount(async () => {
   stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
   DaoUtils.setStatus(stacksTipHeight, proposal);
+  daoVotes = await getDaoVotesByProposal(proposal.contractId);
   if (daoVotes && daoVotes.length > 0) {
     daoVotes.forEach((o:any) => {
     if (o) votes.push(o)
