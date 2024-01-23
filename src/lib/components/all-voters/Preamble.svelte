@@ -1,32 +1,47 @@
 <script lang="ts">
 import type { ProposalEvent } from '$types/stxeco.type';
-import arr from '$lib/assets/png-assets/stx_eco_directional_arrow.png'
-	import { explorerAddressUrl } from '$lib/utils';
-	import { CONFIG } from '$lib/config';
+import { explorerAddressUrl } from '$lib/utils';
+import { CONFIG } from '$lib/config';
 
 export let proposal:ProposalEvent;
 const proposalMeta = proposal.proposalMeta;
 </script>
 
-<div class="">
-	<div class="grid grid-cols-4 justify-evenly gap-y-2">
-		<div class={'col-span-1'}><p class={'text-primary-500'}>DAO</p></div>
-		<div class={'col-span-3'}><p class="text-white">{proposalMeta.dao || 'Ecosystem DAO'}</p></div>
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Title</p></div>
-		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(proposal.contractId)} target="_blank">{proposalMeta.title}</a></p></div>
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Author(s)</p></div>
-		<div class={'col-span-3'}><p class="text-white">{proposalMeta.author}</p></div>
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Synopsis</p></div>
-		<div class={'col-span-3'}><p class="text-white">{proposalMeta.synopsis}</p></div>
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Description</p></div>
-		<div class={'col-span-3'}><p class="text-white">{@html proposalMeta.description}</p></div>
-		{#if proposal.votingContract}
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Voting Contract</p></div>
-		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(proposal.votingContract)} target="_blank">{proposal.votingContract.split('.')[1]}</a></p></div>
-		{/if}
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Funding Contract</p></div>
-		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION)} target="_blank">{CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION}</a></p></div>
-		<div class={'col-span-1'}><p class={'text-primary-500'}>Proposal Contract</p></div>
-		<div class={'col-span-3'}><p class="text-primary-300"><a href={explorerAddressUrl(proposal.contractId)} target="_blank">{proposal.contractId.split('.')[1]}</a></p></div>
+<div class="py-10 px-10 mt-4 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+	<div>
+		<dl class="divide-y divide-white/10">
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">DAO</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">{proposalMeta.dao || 'Ecosystem DAO'}</dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Title</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0"><a href={explorerAddressUrl(proposal.contractId)} target="_blank">{proposalMeta.title}</a></dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Author(s)</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">{proposalMeta.author}</dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Synopsis</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">{proposalMeta.synopsis}</dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Description</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">{proposalMeta.description}</dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Voting contract</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0"><a href={explorerAddressUrl(proposal.votingContract)} target="_blank">{proposal.votingContract.split('.')[1]}</a></dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Funding contract</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0"><a href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION)} target="_blank">{CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION}</a></dd>
+			</div>
+			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+				<dt class="text-sm font-medium leading-6 text-white">Proposal contract</dt>
+				<dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0"><a href={explorerAddressUrl(proposal.contractId)} target="_blank">{proposal.contractId.split('.')[1]}</a>-update</dd>
+			</div>
+		</dl>
 	</div>
 </div>

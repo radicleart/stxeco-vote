@@ -5,7 +5,7 @@
   import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
   import SoloResults from './SoloResults.svelte';
 
-  export let proposalEvent: ProposalEvent;
+  export let proposal: ProposalEvent;
   let yesAddress:string;
   let noAddress:string;
   let showSourceModal: boolean;

@@ -8,7 +8,7 @@ import { Button } from 'flowbite-svelte';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
 
-export let proposalEvent: ProposalEvent;
+export let proposal: ProposalEvent;
 
 let yesAddress:string;
 let noAddress:string;
@@ -22,8 +22,8 @@ const castVote = async (vfor:boolean) => {
       onFinish: data => {
         txId = data.txId
         console.log('finished contract call!', data);
-        localStorage.setItem('VOTED_FLAG', JSON.stringify(proposalEvent.contractId));
-        goto(`/dao/voting/badge/${proposalEvent.contractId}`);
+        localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
+        goto(`/dao/voting/badge/${proposal.contractId}`);
       },
       onCancel: () => {
         console.log('popup closed!');
@@ -37,6 +37,65 @@ onMount(async () => {
   noAddress = addresses.nAddress as string
 })
 </script>
+<div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
+  <Invoice address={yesAddress} voteFor={true} />
+
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="absolute left-1/2 -translate-x-1/2 bottom-0 w-[360px] h-auto" viewBox="0 0 360 212">
+    <mask id="mask0_105_5377" width="374" height="212" x="-6" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+      <g stroke="#fff" clip-path="url(#clip0_105_5377)">
+        <path d="M319.5 212V0M271.5 212V0M223.5 212V0M175.5 212V0M127.5 212V0M79.5 212V0M31.5 212V0"/>
+      </g>
+    </mask>
+    <g mask="url(#mask0_105_5377)">
+      <mask id="mask1_105_5377" width="374" height="212" x="-6" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance">
+        <rect width="374" height="212" x="368" y="212" fill="url(#paint0_linear_105_5377)" rx=".01" transform="rotate(180 368 212)"/>
+      </mask>
+      <g mask="url(#mask1_105_5377)">
+        <path fill="#131416" fill-opacity=".08" d="M368 212H-6V0h374z"/>
+      </g>
+    </g>
+    <defs>
+      <linearGradient id="paint0_linear_105_5377" x1="555" x2="555" y1="212" y2="424" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#fff"/>
+        <stop offset="1"/>
+      </linearGradient>
+      <clipPath id="clip0_105_5377">
+        <path fill="#fff" d="M368 212H-6V0h374z"/>
+      </clipPath>
+    </defs>
+  </svg>
+</div>
+
+<div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
+  <Invoice address={noAddress} voteFor={false} />
+
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="absolute left-1/2 -translate-x-1/2 bottom-0 w-[360px] h-auto" viewBox="0 0 360 212">
+    <mask id="mask0_105_5377" width="374" height="212" x="-6" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+      <g stroke="#fff" clip-path="url(#clip0_105_5377)">
+        <path d="M319.5 212V0M271.5 212V0M223.5 212V0M175.5 212V0M127.5 212V0M79.5 212V0M31.5 212V0"/>
+      </g>
+    </mask>
+    <g mask="url(#mask0_105_5377)">
+      <mask id="mask1_105_5377" width="374" height="212" x="-6" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance">
+        <rect width="374" height="212" x="368" y="212" fill="url(#paint0_linear_105_5377)" rx=".01" transform="rotate(180 368 212)"/>
+      </mask>
+      <g mask="url(#mask1_105_5377)">
+        <path fill="#131416" fill-opacity=".08" d="M368 212H-6V0h374z"/>
+      </g>
+    </g>
+    <defs>
+      <linearGradient id="paint0_linear_105_5377" x1="555" x2="555" y1="212" y2="424" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#fff"/>
+        <stop offset="1"/>
+      </linearGradient>
+      <clipPath id="clip0_105_5377">
+        <path fill="#fff" d="M368 212H-6V0h374z"/>
+      </clipPath>
+    </defs>
+  </svg>
+</div>
+
+<!--
 <div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
   <h2 class="text-2xl">Voting for Community Pool Stackers</h2>
   <p class="text-warning-500">Send 0.000001 STX from your <span class="font-bold">stacking wallet</span></p>
@@ -67,3 +126,4 @@ onMount(async () => {
     </div>
     {/if}
   </div>
+-->
