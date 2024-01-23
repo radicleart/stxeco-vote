@@ -336,7 +336,7 @@
 							<div class="flex flex-col h-full relative z-[1]">
 								<div class="flex-1">
 									{@html opt.icon}
-									<h4 class="text-lg font-semibold mt-6 text-[#131416] mb-3">{opt.title}</h4>
+									<h4 class="text-lg font-semibold mt-12 text-[#131416] mb-3">{opt.title}</h4>
 								</div>
 								<p class="mt-auto text-[#131416]/[0.64]">{opt.explanation}</p>
 							</div>
