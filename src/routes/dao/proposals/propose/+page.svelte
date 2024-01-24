@@ -114,19 +114,6 @@
     <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-<!--
-<Modal showModal={showRulesModal} on:click={closeModal}>
-    <div class="bg-white opacity-10"></div>
-    <div slot="title">
-      <div class="bg-white text-gray-800 mx-20 p-20 rounded-lg">
-        <p>Processing contract<br/><br/> {contractId}</p>
-      </div>
-    </div>
-</Modal>
--->
-
-
-
   <div class="py-6 mx-auto max-w-7xl md:px-6">
     <div class="flex flex-row w-full my-8">
       <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
@@ -168,26 +155,6 @@
               </div>
             </div>
             {/if}
-            <!--
-            {#if showFromFile}
-            <div>
-              <div>
-                <h4 class="text-2xl mb-3">Upload Contract</h4>
-                <p>Please ensure the clarity is unit tested and implements the
-                  <a class="text-primary-500" href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait')} target="_blank">correct trait</a>
-                  {#if !showDeployButton}
-                    <LoadFile on:fileLoaded={fileLoaded}/>
-                  {:else}
-                  <div class="flex flex-col">
-                      <div class="col-md-8 col-sm-12">
-                        <pre class="source-code">{newSource}</pre>
-                      </div>
-                    </div>
-                  {/if}
-                </div>
-              </div>
-              {/if}
-              -->
               <div>
                 {#if showRulesModal}
                 <div>

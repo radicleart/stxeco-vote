@@ -1,97 +1,25 @@
 <script lang="ts">
 	import { sbtcConfig } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
-	import { openContractDeploy } from '@stacks/connect';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
-	import type { SbtcConfig } from '$types/sbtc_config';
+	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
+	import { onMount } from 'svelte';
+	import DaoUtils from '$lib/service/DaoUtils';
+	import type { ProposalEvent } from '$types/stxeco.type';
 
-  let showDetails = false;
+  let proposal:ProposalEvent;
   const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
-  let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
-  if (!canSubmit) {
-    canSubmit = account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
-  }
-  const contractSource = `
-  ;; DAO: Ecosystem DAO
-  ;; Title: <title>
-  ;; Author: <author>
-  ;; Synopsis: <synopsis>
-  ;; Description: <description>
+  let inited = false;
 
-  (impl-trait '${CONFIG.VITE_DOA_DEPLOYER}.proposal-trait.proposal-trait)
-
-  (define-public (execute (sender principal))
-          (ok true)
-  )
-  `
-  let newProposal:ProposalEvent;
-  let showDeployButton = false;
-  let updated = false;
-  let replacedSource = contractSource;
-  let contractName = '';
-  const addNewPoll = (e: { detail:  { contractName: string; title: string; author: string; synopsis: string; description: string; }; }) => {
-    contractName = e.detail.contractName;
-    newProposal = {
-      proposalMeta: {title: e.detail.title, author: '', dao: 'Ecosystem', description: '', synopsis: '' },
-      proposer: account.stxAddress,
-      funding: { funding: 0, parameters: { fundingCost: 0, proposalDuration: 0, proposalStartDelay: 0}},
-      status: { name: 'deploying', color: '', colorCode: '' },
-      contractId: account.stxAddress + '.' + contractName,
-      contract: {
-        source: replacedSource,
-        publish_height: 0
-      }
-    } as ProposalEvent
-    replacedSource = contractSource.replace('<title>', e.detail.title);
-    replacedSource = replacedSource.replace('<author>', e.detail.author);
-    replacedSource = replacedSource.replace('<synopsis>', e.detail.synopsis);
-    replacedSource = replacedSource.replace('<description>', e.detail.description);
-      showDeployButton = true;
-      updated = true;
-  }
-
-  const fileLoaded = (e: { detail: { contractName: string; source: string; }; }) => {
-    replacedSource = e.detail.source;
-    contractName = e.detail.contractName;
-    showDeployButton = true;
-    newProposal = {
-      proposalMeta: {title: contractName, author: '', dao: 'Ecosystem', description: '', synopsis: '' },
-      proposer: account.stxAddress,
-      funding: { funding: 0, parameters: { fundingCost: 0, proposalDuration: 0, proposalStartDelay: 0}},
-      status: { name: 'deploying', color: '', colorCode: '' },
-      contractId: account.stxAddress + '.' + contractName,
-      contract: {
-        source: replacedSource,
-        publish_height: 0
-      }
-    } as ProposalEvent
-  }
-
-  let txId: string;
-  const deployContract = async () => {
-    await openContractDeploy({
-      codeBody: replacedSource,
-      contractName: contractName,
-      onFinish: data => {
-        sbtcConfig.update((conf:SbtcConfig) => {
-          if (!conf.daoData) conf.daoData = {} as DaoData;
-            conf.daoData.inFlight = {
-            name: 'Deploy',
-            txid: data.txId
-          }
-          return conf;
-        })
-      },
-      onCancel: () => {
-        console.log('popup closed!');
-      },
-    });
-  }
-
-  $: newSource = replacedSource;
-  $: newSourceValid = replacedSource.indexOf(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait.proposal-trait') > -1 || account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
-  $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+	onMount(async () => {
+		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, CONFIG.VITE_DOA_PROPOSAL);
+		if (event) {
+			proposal = event;
+			const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+			DaoUtils.setStatus(stacksTipHeight, proposal);
+		}
+    inited = true;
+	})
 </script>
 
 <svelte:head>
@@ -103,66 +31,8 @@
   <div class="flex flex-col w-full my-8">
     <div>
 			<div class="space-y-6">
-				<div>
-					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
-          <div class="sm:flex sm:items-center sm:justify-between mt-6">
-            <h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
-              <a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
-                SIP-021 - Nakamoto Release
-                <svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M29.6875 20.3125L20.3125 29.6875" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </h1>
-
-            <button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
-              <!-- Show/Hide toggle -->
-              Show details <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2Z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
-				</div>
-
-        {#if showDetails}
-          <div class="py-10 px-10 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-            <div>
-              <dl class="divide-y divide-white/10">
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">DAO</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Ecosystem DAO</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Title</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">SIP-021 - Nakamoto Release</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Author(s)</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Stacks Community</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Description</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Nakamoto Release is a network-wide upgrade that aims to further strengthen the connection between Stacks and Bitcoin.</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Voting contract</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede007-snapshot-proposal-voting-v5</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Funding contract</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede008-flexible-funded-submission</dd>
-                </div>
-                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm leading-6 text-white">Proposal contract</dt>
-                  <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede017-testnet-stacks-update</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        {/if}
-
+        <ProposalHeader {proposal} />
+      
 				<div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
           <div class="mt-6 md:mt-0">
@@ -170,7 +40,6 @@
               <h2 class="text-[#131416] text-2xl mb-3">Proposal was funded</h2>
 						</div>
             <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-              <p>Voting starts in 6 blocks.</p>
               <p>When voting starts you will be able to cast your vote on the proposal.</p>
               <p>There are 3 methods available depending on your stacking status:</p>
               <ul class="list-disc pl-3">
