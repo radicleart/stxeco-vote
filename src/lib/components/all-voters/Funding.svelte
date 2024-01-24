@@ -21,7 +21,6 @@
 	let txId: string|undefined;
 
 	const { addNotification } = getNotificationsContext();
-	let inited = false
 	let fundingData:FundingData;
 	let fundingMet = false;
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
@@ -140,7 +139,6 @@
 			return;
 		}
 		fundingMet = fundingData && fundingData.funding >= fundingData.parameters.fundingCost;
-		if (fundingMet) goto('/dao/proposals/' + proposal.contractId)
 		stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 		proposalDuration = fundingData.parameters.proposalDuration
 		proposalStartDelay = fundingData.parameters.proposalStartDelay
@@ -148,13 +146,11 @@
 		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 		paramStartDelay = 6;
 		paramDuration = 144 //proposalDuration;
-		inited = true
 	})
 
 	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 	</script>
 
-{#if inited}
 {#if !fundingMet}
   
 		<div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
@@ -206,5 +202,4 @@
 </div>
 {:else}
 <Proposed {proposal} />
-{/if}
 {/if}

@@ -23,12 +23,6 @@ onMount(async () => {
     const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
     DaoUtils.setStatus(stacksTipHeight, proposal);
     console.log(event)
-  } else {
-    if ($page.params.slug) {
-      goto('/dao/proposals/' + $page.params.slug)
-    } else {
-      goto('/dao/proposals/propose')
-    }
   }
 })
 
@@ -51,12 +45,17 @@ onMount(async () => {
         <div class="flex flex-row w-full my-8">
           <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
             <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-        
+              {#if proposal}
               <div class="mt-6 md:mt-0 flex flex-col gap-y-5 bg-warning-01">
                 <h1 class="text-4xl">Thank you for your vote!</h1>
                 <p class="text-lg">You are now part of Stacks history 🎉🟧</p>
                 <BadgeClaim {proposal}/>
               </div>
+              {:else}
+              <div class="mt-6 md:mt-0 flex flex-col gap-y-5 bg-warning-01">
+                <h1 class="text-4xl">Proposal not found!</h1>
+              </div>
+              {/if}
         
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" class="relative z-[1] ml-auto w-auto h-auto md:w-[200px] md:h-[233px] lg:w-[180px] lg:h-[auto]" fill="none">
                 <rect width="300" height="350" fill="url(#paint0_linear_42_181)" rx="18"/>

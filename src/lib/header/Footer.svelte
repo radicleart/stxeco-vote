@@ -108,13 +108,13 @@
             <feGaussianBlur stdDeviation="16"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0"/>
-            <feBlend in2="shape" mode="plus-darker" result="effect1_innerShadow_180_5235"/>
+            <feBlend in2="shape"  result="effect1_innerShadow_180_5235"/>
             <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
             <feOffset dy="1"/>
             <feGaussianBlur stdDeviation=".5"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-darker" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235"  result="effect2_innerShadow_180_5235"/>
           </filter>
           <filter id="filter1_ii_180_5235" width="231" height="233" x="857" y="198" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -124,13 +124,13 @@
             <feGaussianBlur stdDeviation="16"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0"/>
-            <feBlend in2="shape" mode="plus-darker" result="effect1_innerShadow_180_5235"/>
+            <feBlend in2="shape"  result="effect1_innerShadow_180_5235"/>
             <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
             <feOffset dy="1"/>
             <feGaussianBlur stdDeviation=".5"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-darker" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235"  result="effect2_innerShadow_180_5235"/>
           </filter>
           <filter id="filter2_ii_180_5235" width="231" height="233" x="918" y="259" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -140,13 +140,13 @@
             <feGaussianBlur stdDeviation="16"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0"/>
-            <feBlend in2="shape" mode="plus-darker" result="effect1_innerShadow_180_5235"/>
+            <feBlend in2="shape"  result="effect1_innerShadow_180_5235"/>
             <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
             <feOffset dy="1"/>
             <feGaussianBlur stdDeviation=".5"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-darker" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235"  result="effect2_innerShadow_180_5235"/>
           </filter>
           <filter id="filter3_b_180_5235" width="163.333" height="163.333" x="884.333" y="225.333" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -168,7 +168,7 @@
             <feGaussianBlur stdDeviation="1"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-lighter" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235" result="effect2_innerShadow_180_5235"/>
           </filter>
           <filter id="filter5_ii_180_5235" width="72" height="74" x="944" y="285" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -184,7 +184,7 @@
             <feGaussianBlur stdDeviation="1"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-lighter" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235" result="effect2_innerShadow_180_5235"/>
           </filter>
           <filter id="filter6_ii_180_5235" width="48" height="50" x="956" y="297" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -200,7 +200,7 @@
             <feGaussianBlur stdDeviation="1"/>
             <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
             <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/>
-            <feBlend in2="effect1_innerShadow_180_5235" mode="plus-lighter" result="effect2_innerShadow_180_5235"/>
+            <feBlend in2="effect1_innerShadow_180_5235" result="effect2_innerShadow_180_5235"/>
           </filter>
           <linearGradient id="paint0_linear_180_5235" x1="972.5" x2="972.5" y1="198" y2="429" gradientUnits="userSpaceOnUse">
             <stop stop-color="#fff"/>
