@@ -118,13 +118,13 @@
 
 <div class="row">
 	{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
-		<div class="">
+		<div>
 			<h1 class={''}>
 				<a href={'/dao/proposals/' + proposalEvent.contractId} >Fund this proposal</a>
 			</h1>
 		</div>
 	{:else}
-		<div class="">
+		<div>
 			<h1 class={'text-primary-500 text-4xl'}>
 				<span class={'text-primary-300'}>Proposal:</span> {proposalEvent.proposalMeta.title}
 			</h1>
@@ -196,22 +196,22 @@
 				{:else}
 					<SnapBallotBox {proposalEvent} {balanceAtHeight} />
 				{/if}
-				{#if !loggedIn()}<div class="">Connect wallet to vote</div>{/if}
+				{#if !loggedIn()}<div>Connect wallet to vote</div>{/if}
 			{:else if propStatus === 'deployed' || propStatus === 'deploying' || propStatus === 'submitted' || propStatus === 'submitting'}
-				<div class="">
+				<div>
 					{#if fundedProposalsValid}
-						<div class="">
+						<div>
 							<FundedSubmissionVoting proposal={proposalEvent} />
 							<Countdown {endBlock} />
 						</div>
 					{/if}
 					{#if thresholdProposalsValid}
-						<div class="">
+						<div>
 							<ThresholdSubmissionVoting proposal={proposalEvent} />
 						</div>
 					{/if}
 					{#if executiveProposalsValid && $sbtcConfig.userSettings.executiveTeamMember}
-						<div class="">
+						<div>
 							<ExecutiveProposalSubmission proposal={proposalEvent} />
 						</div>
 					{/if}

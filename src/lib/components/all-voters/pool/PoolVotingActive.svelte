@@ -11,11 +11,11 @@
 
     <div class="mt-6 md:mt-0">
       <div class="mb-4">
-        <h2 class="font-semibold text-[#131416] text-2xl mb-3">Voting as Pool Stackers (Method 2)</h2>
+        <h2 class="text-[#131416] text-2xl mb-3">Voting as Pool Stackers (Method 2)</h2>
       </div>
       <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-        <p><strong>Instructions</strong>:</p>
-        <p>Voters who are stacking on their own must send <strong>a dust amount of STX (~1 micro stx)</strong> from their PoX Bitcoin reward address to either:</p>
+        <p>Instructions:</p>
+        <p>Voters who are stacking on their own must send a dust amount of STX (~1 micro stx) from their PoX Bitcoin reward address to either:</p>
         <ul class="list-disc pl-3">
           <li>an address representing the “Yes to Nakamoto Release”</li>
           <li>an address representing the “No to Nakamoto Release”.</li>

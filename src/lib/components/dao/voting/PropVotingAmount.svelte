@@ -27,7 +27,7 @@ const castVote = () => {
           <img width="10%" src={'img/logo.png'} alt="logogss" />
         </div>
       </card-text>
-      <card-text class="">
+      <card-text>
         <h2 class="eag-header pointer mb-4">
           Lock ECO Tokens
         </h2>
@@ -35,7 +35,7 @@ const castVote = () => {
           Voting <span class="text-warning">{ getVote() }</span> -> { title }
         </h4>
       </card-text>
-      <card-text class="">
+      <card-text>
         <label for="status-name">Select the number of tokens to vote with - these tokens will be locked until after the vote finishes</label>
         <div class="w-100">
           <div class="form-field">

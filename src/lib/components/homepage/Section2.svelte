@@ -8,7 +8,7 @@ function scrollTo() {
   if (getMeTo) getMeTo.scrollIntoView({behavior: 'smooth'});
 }
 </script>
-  
+
 <section id="section2">
   <div class="row" style="height: 100%; width: 100%;">
     <div class="col-1 sidebar hideme" style="min-height: 100%;">
@@ -17,7 +17,7 @@ function scrollTo() {
     <div class="col-md-11 col-sm-12 mx-0" style="height: 100%; padding-top: 30px;">
       <div class="m-5">
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12 ">
+          <div class="col-lg-6 col-md-6 col-sm-12">
             <div>
               <p><span class="text1">Join our Stacks Community</span>
                 <span class="text2">of forward thinking humans
@@ -37,7 +37,7 @@ function scrollTo() {
               </div>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 hideme"  style="height: 100%;">
-            <div class="">
+            <div>
               <img src={rowers} alt="Rowing together" width="100%" height="auto" />
             </div>
           </div>
@@ -45,7 +45,7 @@ function scrollTo() {
       </div>
     </div>
   </div>
-  
+
 </section>
 
 <style>

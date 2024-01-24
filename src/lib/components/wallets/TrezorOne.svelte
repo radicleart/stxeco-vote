@@ -4,8 +4,8 @@ import electrum2 from '$lib/assets/wallets/electrum2.png';
 import electrum3 from '$lib/assets/wallets/electrum3.png';
 
 </script>
-  
-<div class="">
+
+<div>
   <div class="p-3 border">
     <p>Send 0.05BTC (on testnet) to trezor one address: tb1qsxj8yjqkm0fejw0f2p8uu09wj58jwuxmqakeyk</p>
     <img src={trezor1} alt="night time" />

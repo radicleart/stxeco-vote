@@ -6,7 +6,7 @@ import TrezorOne from '$lib/components/wallets/TrezorOne.svelte';
 export let wallet = 0;
 
 </script>
-        
+
 
 <div class="row">
   <div class="col">
@@ -18,7 +18,7 @@ export let wallet = 0;
       <button class="{wallet === 4 ? 'btn w-25 btn-info' : 'btn btn-outline-info w-25'}" tabindex="-1" aria-disabled="true" on:click={() => wallet = 3}>Ledger</button>
       -->
     </div>
-    <div class="" id="myTabContent">
+    <div id="myTabContent">
       {#if wallet === 1}<div class="pane" id="home" role="tabpanel" aria-labelledby="home-tab"><BitcoinCore/></div>{/if}
       {#if wallet === 2}<div class="pane" id="home" role="tabpanel" aria-labelledby="home-tab"><Electrum/></div>{/if}
       {#if wallet === 3}<div class="pane" id="profile" role="tabpanel" aria-labelledby="profile-tab"><TrezorOne /></div>{/if}

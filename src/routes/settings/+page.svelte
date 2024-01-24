@@ -48,17 +48,17 @@
   provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
 </svelte:head>
 
-<Tooltip class="w-80 !font-extralight !bg-black z-20" triggeredBy="#po-network">
+<Tooltip class="w-80 !bg-black z-20" triggeredBy="#po-network">
   Testnet refers to a test version of the real blockchain. On the other hand, mainnet is the live version of the blockchain network used for real transactions.
 </Tooltip>
-<Tooltip class="w-80 !font-extralight !bg-black z-20" triggeredBy="#po-opdrop">
+<Tooltip class="w-80 !bg-black z-20" triggeredBy="#po-opdrop">
   OP_DROP means you can deposit from any wallet but takes a bit longer. OP_RETURN allows you to deposit/withdraw
   more quickly using your Stacks Bitcoin wallet!
 </Tooltip>
 <div class="mx-auto md:w-3/5 w-full p-6 py-6">
   <div class="my-8">
     <div class="md:p-10 px-4 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
-      <h1 class="text-4xl font-normal">Settings</h1>
+      <h1 class="text-4xl">Settings</h1>
 
       <div class="bg-gray-1000 text-white">
         <div class="border-b border-gray-900/50 pt-6 pb-8">
@@ -74,13 +74,13 @@
         </div>
 
         <div class="border-b border-gray-900/50 pt-6 pb-8">
-          <h2 class="text-2xl font-medium mb-2">Transaction mode</h2>
+          <h2 class="text-2xl mb-2">Transaction mode</h2>
           <div class="bg-gray-1000 flex items-center gap-2">
-            <p class="text-base text-white font-extralight">
+            <p class="text-base text-white">
               You are currently using:
             </p>
-            <div class="w-1/4 text-white font-normal flex items-center gap-2">
-              <span class="inline-flex bg-black rounded-xl text-white px-4 py-1 font-normal">
+            <div class="w-1/4 text-white flex items-center gap-2">
+              <span class="inline-flex bg-black rounded-xl text-white px-4 py-1">
                 {#if $sbtcConfig.userSettings?.useOpDrop}OP_DROP{:else}OP_RETURN{/if}
               </span>
               <div id="po-opdrop">
@@ -88,18 +88,18 @@
               </div>
             </div>
           </div>
-          <div class="mt-4 font-medium text-warning-300">
-            Note: the OP_DROP protocol is not supported in the Developer Release. 
+          <div class="mt-4 text-warning-300">
+            Note: the OP_DROP protocol is not supported in the Developer Release.
           </div>
           <div class="mt-4">
-            <Button on:click={() => toggleSettings('txmode')} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+            <Button on:click={() => toggleSettings('txmode')} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             Switch to {#if $sbtcConfig.userSettings?.useOpDrop}OP_RETURN{:else}OP_DROP{/if}
             </Button>
           </div>
         </div>
 
         <div class="py-6">
-          <h2 class="text-2xl font-medium mb-2">Advanced mode</h2>
+          <h2 class="text-2xl mb-2">Advanced mode</h2>
           <div class="bg-gray-1000 flex gap-2 align-top">
             <Toggle class=" text-white" checked={$sbtcConfig.userSettings?.debugMode} on:click={() => toggleSettings('debug')} ></Toggle>
             <p class="text-white">

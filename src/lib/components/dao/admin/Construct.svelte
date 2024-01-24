@@ -5,9 +5,9 @@
 	import type { ExtensionType } from '$types/stxeco.type';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
-    
+
     let txId: string;
-    
+
     const constructDao = async () => {
       const deployer = CONFIG.VITE_DOA_DEPLOYER;
       const bootstrap = contractPrincipalCV(deployer, 'bdp001-bootstrap')
@@ -30,16 +30,16 @@
     });
 
     }
-    
+
     $: constructed = $settings.extensions?.filter((o:ExtensionType) => o.valid).length > 0 || false;
     $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
     </script>
-    
+
     <svelte:head>
         <title>Ecosystem DAO</title>
         <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
     </svelte:head>
-    
+
     <section>
       <div class="row">
         <h1 class="text-info">Welcome to <span class="strokeme-info">Ecosystem DAO</span></h1>
@@ -48,7 +48,7 @@
     <section>
       {#if !constructed}
       <div class="container my-5">
-        <button on:click={() => constructDao()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 font-normal rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+        <button on:click={() => constructDao()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             Bootstrap DAO
         </button>
       </div>
@@ -59,7 +59,6 @@
       </div>
       {/if}
     </section>
-        
+
     <style>
     </style>
-    

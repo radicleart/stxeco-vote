@@ -13,9 +13,9 @@ const launchApp = () => {
   <div class="max-w-2xl">
     <div class="flex flex-col p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
       {#if CONFIG.VITE_NETWORK === 'mainnet'}
-        <h1 class="text-4xl font-normal">Not Connected on Mainnet</h1>
+        <h1 class="text-4xl">Not Connected on Mainnet</h1>
       {:else}
-        <h1 class="text-4xl font-normal">Server Error!</h1>
+        <h1 class="text-4xl">Server Error!</h1>
       {/if}
       <div>
         {#if CONFIG.VITE_NETWORK === 'mainnet'}

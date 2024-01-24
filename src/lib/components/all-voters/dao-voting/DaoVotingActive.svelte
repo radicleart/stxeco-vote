@@ -23,21 +23,21 @@
 </script>
 
 <div class="flex flex-row w-full my-8">
-  <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl ">
+  <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
     <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
       <div class="mt-6 md:mt-0 flex flex-col gap-y-2">
         <div class="mb-4">
-          <h2 class="font-semibold text-[#131416] text-2xl mb-3">Voting as Non Stackers (Method 3)</h2>
+          <h2 class="text-[#131416] text-2xl mb-3">Voting as Non Stackers (Method 3)</h2>
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-          <p><strong>Instructions</strong>:</p>
+          <p>Instructions:</p>
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
         </div>
-        <div class="rounded-lg relative  py-8 space-y-3 max-w-xl">
+        <div class="mb-3 max-w-xl">
           <Banner class={'bg-yellow'} message={'No STX will be spent by voting but you will pay a gas fee.'} />
         </div>
-        <div class="">
+        <div>
           {#if proposal && typeof proposal.status === 'object'}<BallotBox {proposal} {balanceAtHeight}/> {/if}
         </div>
       </div>

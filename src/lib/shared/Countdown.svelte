@@ -16,7 +16,7 @@ $: display = Duration.fromObject(end.diff(now).toObject()); //.toFormat('dd hh:m
 </script>
 
 {#if endBlock > 0}
-<div class="">
+<div>
     {#if moreThanDay}
     ~ {display.toFormat("d ' days' h ' hrs' m ' mins' ss ' secs'")}
     {:else}

@@ -79,7 +79,7 @@ import VerifyTransactions from './VerifyTransactions.svelte';
   </div>
 
   {#if block}
-  <div class="">
+  <div>
     {#if tx}
       {#if feature === 'sbtcDecode'}
       <DecodeSbtc {tx} />

@@ -57,7 +57,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 {#if soloVotes}
-  <div class="">
+  <div>
     <h1 class={'mb-5 text-2xl text-' + color}><span>Method 1: Voting for Solo Stackers</span></h1>
     <h4 class="text-white">Total number participating wallets: <span class="text-warning">{totalAccountsFor + totalAccountsAgainst}</span></h4>
   </div>
@@ -69,7 +69,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
   <div class="flex justify-start text-sm">
       <a href="/" class={'text-xs text-gray-400'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if !showVotes}show{:else}hide{/if} transactions</a>
   </div>
-  
+
   {#if showVotes}
     <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>

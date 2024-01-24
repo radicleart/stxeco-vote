@@ -76,25 +76,25 @@
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	<div class="mt-8 inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
 		{#if inited}
-		<div class="flex items-center gap-2 -mb-1">
-			<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
-			<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
+			<div class="flex items-center gap-2">
+				<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
+				<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
+					{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
+						Funding in progress
+					{:else}
+						Vote in progress
+					{/if}
+					</p>
+				</div>
 				{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
-				Funding in progress
+					<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
 				{:else}
-				Vote in progress
-				{/if}
-				</p>
-			</div>
-			{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
-			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
-			{:else}
-			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposalEvent.proposalData.endBlockHeight)}</span>
+					<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposalEvent.proposalData.endBlockHeight)}</span>
 			{/if}
 		{/if}
 	</div>
-	<div class="flex items-center justify-between mt-6">
-		<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4">
+	<div class="sm:flex sm:items-center sm:justify-between mt-6">
+		<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
 			<a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
 				SIP-021 - Nakamoto Release
 				<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +105,7 @@
 			</a>
 		</h1>
 
-		<button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2 font-normal text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+		<button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
 			<!-- Show/Hide toggle -->
 			Show details <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
 				<path fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2Z" clip-rule="evenodd" />
@@ -119,18 +119,18 @@
 		{/if}
 
 		{#if proposalEvent.stage === ProposalStage.PARTIAL_FUNDING || proposalEvent.stage === ProposalStage.UNFUNDED}
-		<FundedSubmissionVoting proposal={proposalEvent} />
+			<FundedSubmissionVoting proposal={proposalEvent} />
 		{:else}
 			{#if method === 1}
-			<SoloVotingActive proposal={proposalEvent} />
+				<SoloVotingActive proposal={proposalEvent} />
 			{:else if method === 2}
-			<PoolVotingActive proposal={proposalEvent} />
+				<PoolVotingActive proposal={proposalEvent} />
 			{:else if method === 3}
-			<DaoVotingActive proposal={proposalEvent} />
+				<DaoVotingActive proposal={proposalEvent} />
 			{:else}
-			<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-				<Skeleton size="md" />
-			</div>
+				<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
+					<Skeleton size="md" />
+				</div>
 			{/if}
 		{/if}
 	{/if}

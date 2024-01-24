@@ -12,14 +12,14 @@ import { CONFIG } from '$lib/config';
 import { loggedIn } from '$lib/stacks_connect';
 /**
 proofs = (
-0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
-0xa26c0adbdd5400d76e12dfc5412d08df244085f538fee7c5c5a2e419caf0450a 
-0x45cc4022c36723ff1e4f9ee1a1529b5ffff1cf1121f326145505f52ae6b6ea19 
-0xe6b607cb87927805a43058e0d5ddfd61249c40b622037a074ec3c76eb48a6416 
-0xcba219199a82ffedd0f4582b11e05e4940cf7873c655f4225e7a88e98d883479 
-0xc8409d8249608a85ce79705d7df877b12079dd6b28ad416b801844bfa9cf810a 
+0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6
+0xa26c0adbdd5400d76e12dfc5412d08df244085f538fee7c5c5a2e419caf0450a
+0x45cc4022c36723ff1e4f9ee1a1529b5ffff1cf1121f326145505f52ae6b6ea19
+0xe6b607cb87927805a43058e0d5ddfd61249c40b622037a074ec3c76eb48a6416
+0xcba219199a82ffedd0f4582b11e05e4940cf7873c655f4225e7a88e98d883479
+0xc8409d8249608a85ce79705d7df877b12079dd6b28ad416b801844bfa9cf810a
 0xf5d5ea2d88e8f71b5e34256cc206c44e93258b301b8d94f5bed4f601377e6e36
-block_header = 
+block_header =
 0x00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
   00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
 tx-index=40
@@ -118,7 +118,7 @@ const verifyBlockHeader = async () => {
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(parameters.headerHex))))}`,
     `0x${hex.encode(serializeCV(uintCV(parameters.height)))}`,
   ];
-  
+
   functionName = 'verify-block-header'
   const params = {
     contractAddress: contract.split('.')[0],
@@ -147,7 +147,7 @@ const verifyMerkleProof = async () => {
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(block.merkleroot).reverse())))}`,
     `0x${hex.encode(serializeCV(getProofTuple()))}`,
   ];
-  
+
   functionName = 'verify-merkle-proof'
   const params = {
     contractAddress: contract.split('.')[0],
@@ -245,7 +245,7 @@ onMount(async () => {
     <div class="text-2xl">Proof (space separated):</div>
     <!--
     {#each parameters.proofElements as node}
-    <div class="">{node.direction} : {node.hash}</div>
+    <div>{node.direction} : {node.hash}</div>
     {/each}-->
     <textarea rows="8" class="text-black block p-3 rounded-md border w-full" bind:value={proofString} />
   </div>
@@ -257,14 +257,14 @@ onMount(async () => {
 		  {/if}
 
       <span class="border-e me-4 pe-4"><a href="/" on:click|preventDefault={() => showTree = !showTree} target="_blank">show full merkle tree</a></span>
-      <span class=""><a href={explorerAddressUrl(contract)} target="_blank">contract</a></span>
+      <span><a href={explorerAddressUrl(contract)} target="_blank">contract</a></span>
     </div>
   </div>
 
   <div class="my-5 flex gap-x-5 items-baseline">
-    <div class=""><Button darkScheme={false} label={'Was Tx Mined'} target={''} on:clicked={() => wasTxMined()}/></div>
-    <div class=""><Button darkScheme={false} label={'Verify Block Header'} target={''} on:clicked={() => verifyBlockHeader()}/></div>
-    <div class=""><Button darkScheme={false} label={'Verify Merkle Proof'} target={''} on:clicked={() => verifyMerkleProof()}/></div>
+    <div><Button darkScheme={false} label={'Was Tx Mined'} target={''} on:clicked={() => wasTxMined()}/></div>
+    <div><Button darkScheme={false} label={'Verify Block Header'} target={''} on:clicked={() => verifyBlockHeader()}/></div>
+    <div><Button darkScheme={false} label={'Verify Merkle Proof'} target={''} on:clicked={() => verifyMerkleProof()}/></div>
   </div>
   {#if answer}
     <div class="mb-5">{functionName}</div>
@@ -277,7 +277,7 @@ onMount(async () => {
     {/each}
     </div>
     <div class="my-5 flex gap-x-5 items-baseline">
-      <div class=""><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
+      <div><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
     </div>
     {/if}
 

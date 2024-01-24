@@ -61,7 +61,7 @@ let txId: string;
 $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
-<div class="">
+<div>
   <h1 class={'mb-5 text-2xl text-' + color}><span>Method 3: Voting for Non Stackers</span></h1>
   <h4 class="text-white">Total voting power is <span class="text-warning">{totalVotePower}</span> with votes cast from <span class="text-warning">{daoVotes.length}</span> accounts.</h4>
 </div>

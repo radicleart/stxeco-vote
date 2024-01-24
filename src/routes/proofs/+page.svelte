@@ -11,5 +11,5 @@
 </div>
 </div>
 
-<section class="">
+<section>
 </section>

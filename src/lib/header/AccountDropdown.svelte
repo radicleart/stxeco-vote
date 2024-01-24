@@ -56,7 +56,7 @@
 
 <div id="clipboard"></div>
 
-<button on:click={(e) => handleClick(e)} class="font-mono uppercase inline-flex items-center bg-[#131416] gap-2 px-4 py-2 text-sm font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+<button on:click={(e) => handleClick(e)} class="font-mono uppercase inline-flex items-center bg-[#131416] gap-2 px-4 py-2 text-sm  text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
 	My account
 	<svg class="hidden md:inline w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
 		<path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
@@ -68,7 +68,7 @@
 	<div slot="header" class="overflow-hidden py-1 text-white">
 		<div class="divide-y divide-sand-900">
 			<div class="pb-2">
-				<div class="px-4 py-2 font-normal">Addresses</div>
+				<div class="px-4 py-2">Addresses</div>
 				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="icon-stacks" class="flex items-center gap-3 text-sm">
 						<StacksIcon clazz={'w-5 h-5'}/>
@@ -83,7 +83,7 @@
 				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-c-stacks" class="flex items-center gap-3 text-sm">
 						<LogoBitcoin clazz={'w-5 h-5'}/>
-						<span><span class="font-bold">Cardinal:</span>{' '}{transformAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)}</span>
+						<span><span>Cardinal:</span>{' '}{transformAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-sand-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
@@ -94,7 +94,7 @@
 				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-o-stacks" class="flex items-center gap-3 text-sm">
 						<LogoBitcoin clazz={'w-5 h-5'}/>
-						<span><span class="font-bold">Ordinal:</span>{' '}{transformAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].ordinal)}</span>
+						<span><span>Ordinal:</span>{' '}{transformAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].ordinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', $sbtcConfig.keySets[CONFIG.VITE_NETWORK].ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-sand-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
@@ -104,11 +104,11 @@
 				</div>
 			</div>
 			<div>
-				<div class="mt-1 px-4 py-2 font-normal">Balances</div>
+				<div class="mt-1 px-4 py-2">Balances</div>
 				<div class="px-4 py-2 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
 						<StacksIcon clazz={'w-5 h-5'}/>
-						<span class="font-bold">STX</span>
+						<span>STX</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtMicroToStx($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.balance || 0.000000)}
@@ -118,7 +118,7 @@
 				<div class="px-4 py-2 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
 						<LogoBitcoin clazz={'w-5 h-5'}/>
-						<span class="font-bold">BTC (Cardinal)</span>
+						<span>BTC (Cardinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtSatoshiToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo) || 0.00000000)}
@@ -127,7 +127,7 @@
 				<div class="px-4 py-2 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
 						<LogoBitcoin clazz={'w-5 h-5'}/>
-						<span class="font-bold">BTC (Ordinal)</span>
+						<span>BTC (Ordinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtSatoshiToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].ordinalInfo) || 0.00000000)}
@@ -136,7 +136,7 @@
 				<div class="px-4 py-2 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
 						<LogoSBTC class={'w-5 h-5'}/>
-						<span class="font-bold">sBTC</span>
+						<span>sBTC</span>
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtSatoshiToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance || 0.00000000)}

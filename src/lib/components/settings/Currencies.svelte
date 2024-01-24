@@ -70,13 +70,13 @@
 </script>
 
 {#if inited}
-  <h2 class="text-2xl font-normal mb-2">Currency and units</h2>
+  <h2 class="text-2xl mb-2">Currency and units</h2>
   <div class="mb-4">
-    <h3 class="text-base text-white font-normal mb-3">
+    <h3 class="text-base text-white  mb-3">
       Currencies
     </h3>
     <div class="flex md:flex-row flex-col mr-4 relative z-20">
-      <div class="md:w-1/2 w-full font-normal relative">
+      <div class="md:w-1/2 w-full relative">
         <Button class="!bg-black !border-[0.5px] !border-gray-700 w-full inline-flex justify-between">
           {myCurrency.name} ({myCurrency.currency} - {myCurrency.symbol})
           <Icon src={ChevronDown} mini class=" ml-10 h-5 w-5 text-white" aria-hidden="true" />
@@ -153,12 +153,12 @@
   </div>
 
   <div>
-    <h3 class="text-base text-white font-normal mb-3">
+    <h3 class="text-base text-white mb-3">
       Bitcoin units
     </h3>
-    <div class="flex md:flex-row flex-col gap-4 font-normal">
-      <div aria-hidden="true" on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
-        <div class="text-white font-normal flex gap-3">
+    <div class="flex md:flex-row flex-col gap-4">
+      <div aria-hidden="true" on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2  md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
+        <div class="text-white flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'bitcoin' ? 'text-success-300' : 'text-gray-200'}/>
             <path d="M16.5433 11.09C16.7433 9.76 15.7283 9.045 14.3433 8.56667L14.7933 6.765L13.695 6.49167L13.2567 8.24667C12.9683 8.175 12.6733 8.10667 12.3783 8.04L12.8183 6.27333L11.7217 6L11.2733 7.8L9.06 7.25333L8.76833 8.425C8.76833 8.425 9.58167 8.61167 9.565 8.62333C10.01 8.735 10.09 9.02833 10.0767 9.26167L8.845 14.1983C8.79 14.3317 8.65333 14.535 8.34167 14.4583C8.35333 14.475 7.545 14.2583 7.545 14.2583L7 15.515L9.21 16.0733L8.755 17.8967L9.85167 18.17L10.3017 16.3667C10.6017 16.4483 10.8917 16.5233 11.1767 16.5933L10.7267 18.3883L11.825 18.6617L12.28 16.8417C14.15 17.1983 15.5583 17.055 16.15 15.365C16.6267 14.0033 16.1267 13.2167 15.1417 12.705C15.8583 12.5383 16.3983 12.0667 16.5417 11.0933H16.5433V11.09ZM14.035 14.6067C13.695 15.9683 11.4017 15.2317 10.6583 15.0467L11.26 12.6317C12.0033 12.8167 14.3883 13.185 14.035 14.6067ZM14.375 11.0717C14.0667 12.3117 12.1567 11.6817 11.5367 11.5267L12.0817 9.335C12.7017 9.49 14.6983 9.77833 14.375 11.0717Z" fill="black"/>
@@ -173,8 +173,8 @@
         {/if}
       </div>
 
-      <div aria-hidden="true" on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
-        <div class="text-white font-normal flex gap-3">
+      <div aria-hidden="true" on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
+        <div class="text-white flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'satoshi' ? 'text-success-300' : 'text-gray-200'}/>
             <path d="M16.5433 11.09C16.7433 9.76 15.7283 9.045 14.3433 8.56667L14.7933 6.765L13.695 6.49167L13.2567 8.24667C12.9683 8.175 12.6733 8.10667 12.3783 8.04L12.8183 6.27333L11.7217 6L11.2733 7.8L9.06 7.25333L8.76833 8.425C8.76833 8.425 9.58167 8.61167 9.565 8.62333C10.01 8.735 10.09 9.02833 10.0767 9.26167L8.845 14.1983C8.79 14.3317 8.65333 14.535 8.34167 14.4583C8.35333 14.475 7.545 14.2583 7.545 14.2583L7 15.515L9.21 16.0733L8.755 17.8967L9.85167 18.17L10.3017 16.3667C10.6017 16.4483 10.8917 16.5233 11.1767 16.5933L10.7267 18.3883L11.825 18.6617L12.28 16.8417C14.15 17.1983 15.5583 17.055 16.15 15.365C16.6267 14.0033 16.1267 13.2167 15.1417 12.705C15.8583 12.5383 16.3983 12.0667 16.5417 11.0933H16.5433V11.09ZM14.035 14.6067C13.695 15.9683 11.4017 15.2317 10.6583 15.0467L11.26 12.6317C12.0033 12.8167 14.3883 13.185 14.035 14.6067ZM14.375 11.0717C14.0667 12.3117 12.1567 11.6817 11.5367 11.5267L12.0817 9.335C12.7017 9.49 14.6983 9.77833 14.375 11.0717Z" fill="black"/>
@@ -191,5 +191,5 @@
     </div>
   </div>
 {:else if error}
-  <div class="text-2xl font-normal">{error}</div>
+  <div class="text-2xl">{error}</div>
 {/if}

@@ -43,8 +43,8 @@
 {#if canVote}
 	<div class="bg-card p-5 text-white">
     <div class="row">
-      <div class="">
-        <h4 class="">Emergency Execute</h4>
+      <div>
+        <h4>Emergency Execute</h4>
         <div class="text-small">Signal support for this proposal via multisig voting by executive team.</div>
         <p class="mt-5">{proposal.signals?.signals} of {sigsRequired} signal(s) received so far.</p>
         {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}

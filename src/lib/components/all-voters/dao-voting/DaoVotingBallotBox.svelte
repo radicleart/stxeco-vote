@@ -10,18 +10,18 @@
     import type { ProposalEvent } from '$types/stxeco.type';
     import { sbtcConfig } from '$stores/stores';
     import { getStacksNetwork } from '$lib/stacks_connect';
-    
+
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;
-    
+
     let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height || 0;
     DaoUtils.setStatus(stacksTipHeight, proposal);
-    
+
     let errorMessage:string|undefined;
     let txId: string;
     let canVote = true;
     $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
-    
+
     $: amount = balanceAtHeight;
     const castVote = async (vfor:boolean) => {
         const deployer = CONFIG.VITE_DOA_DEPLOYER;
@@ -61,7 +61,7 @@
             }
         });
     }
-    
+
     //$: canVote = propStatus === 'voting' && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
     if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       canVote = false;
@@ -71,13 +71,13 @@
       await tick();
       amount = balanceAtHeight;
     })
-    
-    </script>
-    
 
-<div class="" >
+    </script>
+
+
+<div>
   <div class="flex flex-col gap-y-4">
-    <div class="text-2xl">
+    <div class="text-xl">
       Snapshot balance
     </div>
     <div class="w-full flex flex-col justify-start">
@@ -92,12 +92,12 @@
       </p>
     </div>
     <div class="w-full flex justify-start gap-x-4">
-        <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(true)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 ">
-          YES
-        </button>
-        <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(false)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-danger-01 px-4 py-2 font-normal rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 ">
-          NO
-        </button>
+      <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(true)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+        YES
+      </button>
+      <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(false)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+        NO
+      </button>
     </div>
   </div>
 </div>
