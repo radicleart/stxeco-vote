@@ -413,7 +413,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		if (userSession.isUserSignedIn()) {
 			await fetchSbtcBalance(conf, fromLogin);
 			const emTeamMam = await isExecutiveTeamMember(conf.keySets[CONFIG.VITE_NETWORK].stxAddress);
-			conf.userSettings.executiveTeamMember = emTeamMam.executiveTeamMember
+			conf.userSettings.executiveTeamMember = false;emTeamMam.executiveTeamMember
 			conf.loggedIn = true;
 		}
 	} catch (err) {

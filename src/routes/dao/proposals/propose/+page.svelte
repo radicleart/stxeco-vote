@@ -114,7 +114,7 @@
     <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-  <div class="py-6 mx-auto max-w-7xl md:px-6">
+<div class="py-6 mx-auto max-w-7xl md:px-6">
     <div class="flex flex-row w-full my-8">
       <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
         <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
@@ -254,4 +254,4 @@
         </div>
       </div>
     </div>
-  </div>
+</div>

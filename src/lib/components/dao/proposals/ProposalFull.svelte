@@ -10,7 +10,7 @@
 	import Modal from '$lib/shared/Modal.svelte';
 	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
 	import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
-	import FundedSubmissionVoting from '$lib/components/dao/submission/FundedSubmissionVoting.svelte';
+	import Funding from '$lib/components/all-voters/Funding.svelte';
 	import ThresholdSubmissionVoting from '$lib/components/dao/submission/ThresholdSubmissionVoting.svelte';
 	import EmergencyExecuteSubmission from '$lib/components/dao/submission/EmergencyExecuteSubmission.svelte';
 	import ExecutiveProposalSubmission from '$lib/components/dao/submission/ExecutiveProposalSubmission.svelte';
@@ -201,7 +201,7 @@
 				<div>
 					{#if fundedProposalsValid}
 						<div>
-							<FundedSubmissionVoting proposal={proposalEvent} />
+							<Funding proposal={proposalEvent} />
 							<Countdown {endBlock} />
 						</div>
 					{/if}

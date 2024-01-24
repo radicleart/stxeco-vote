@@ -1,6 +1,6 @@
 <script lang="ts">
 import { fmtNumber } from '$lib/utils';
-import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
+import type { ProposalEvent } from '$types/stxeco.type';
 import Preamble from './Preamble.svelte';
 
 export let proposal:ProposalEvent;
@@ -11,17 +11,17 @@ let showDetails = false;
 		<div class="flex items-center gap-2">
 			<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
 			<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-			{#if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
-				Funding in progress
+			{#if proposal.proposalData}
+			Vote in progress
 			{:else}
-				Vote in progress
+			Funding in progress
 			{/if}
 			</p>
 		</div>
-		{#if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
-		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
-		{:else}
+		{#if proposal.proposalData}
 		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposal.proposalData.endBlockHeight)}</span>
+		{:else}
+		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
 		{/if}
 </div>
 <div class="sm:flex sm:items-center sm:justify-between mt-6">

@@ -170,8 +170,8 @@
 </div>
 
 <div class="py-4 mx-auto max-w-7xl md:px-6">
-  <div class="flex flex-col w-full my-8">
-    <div>
+  	<div class="flex flex-col w-full my-8">
+    	<div>
 			<div class="space-y-6">
 				<div>
 					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
@@ -343,5 +343,5 @@
 				</div>
 			</div>
 		</div>
-  </div>
+  	</div>
 </div>
