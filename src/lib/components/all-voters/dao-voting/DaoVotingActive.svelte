@@ -31,7 +31,7 @@
           <h2 class="text-[#131416] text-2xl mb-3">Voting as Non Stackers (Method 3)</h2>
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-          <p><strong>Instructions</strong>:</p>
+          <p>Instructions:</p>
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
         </div>
         <div class="mb-3 max-w-xl">

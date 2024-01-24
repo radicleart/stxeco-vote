@@ -170,9 +170,9 @@
               <h2 class="text-[#131416] text-2xl mb-3">Proposal was funded</h2>
 						</div>
             <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-              <p>Voting starts in <strong>6 blocks</strong>.</p>
+              <p>Voting starts in 6 blocks.</p>
               <p>When voting starts you will be able to cast your vote on the proposal.</p>
-              <p>There are <strong>3 methods available</strong> depending on your stacking status:</p>
+              <p>There are 3 methods available depending on your stacking status:</p>
               <ul class="list-disc pl-3">
                 <li>Solo Stackers</li>
                 <li>Community Pool Stackers</li>
