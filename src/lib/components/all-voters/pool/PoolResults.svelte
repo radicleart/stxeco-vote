@@ -57,7 +57,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 {#if poolVotes}
-  <div class="">
+  <div>
     <h1 class={'mb-5 text-2xl text-' + color}><span>Method 2: Voting for Pool Stackers</span></h1>
     <h4 class="text-white">Total voting power is <span class="text-warning">{totalAccountsFor + totalAccountsAgainst}</span></h4>
   </div>

@@ -80,13 +80,13 @@ onMount(async () => {
 </script>
 
 {#if canVote}
-<div class="" >
+<div>
   <div class="flex justify-center">
     <!--
     <h4  class={'text-2xl mb-5 text-' + proposalEvent.status?.color}>Cast Your Vote</h4>
     <div class="text-sm">
       <p>Enter the voting power and cast your vote.</p>
-      <p>Your voting power is the balance you had in the account when voting started - you can vote with anything up to this amount (the minimum voting power is 1 stx). 
+      <p>Your voting power is the balance you had in the account when voting started - you can vote with anything up to this amount (the minimum voting power is 1 stx).
       </p>
     </div>
     -->
@@ -108,12 +108,12 @@ onMount(async () => {
       {#if balanceAtHeight >= 1}
       <div class="flex justify-around">
         <div>
-          <button on:click={() => {errorMessage = undefined; castVote(true)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+          <button on:click={() => {errorMessage = undefined; castVote(true)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             Yes to Nakamoto
           </button>
         </div>
         <div>
-          <button on:click={() => {errorMessage = undefined; castVote(false)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 font-normal rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+          <button on:click={() => {errorMessage = undefined; castVote(false)}} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-danger-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             No to Nakamoto
           </button>
         </div>

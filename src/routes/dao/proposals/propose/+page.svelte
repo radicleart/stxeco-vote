@@ -7,20 +7,20 @@
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
 	import Banner from '$lib/components/shared/Banner.svelte';
-        
+
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     let contractId = $sbtcConfig.currentProposal.contractId || undefined;
     let processResult:any;
 
     let showRulesModal:boolean;
-    
+
     const processProposal = async () => {
       if (!contractId) return;
       processResult = await processProposalContracts(contractId)
       processResult = await setCurrentProposal(contractId)
       showRulesModal = true
     }
-    
+
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
     if (!canSubmit) {
       canSubmit = account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
@@ -33,9 +33,9 @@
     ;; Author: <author>
     ;; Synopsis: <synopsis>
     ;; Description: <description>
-    
+
     (impl-trait '${CONFIG.VITE_DOA_DEPLOYER}.proposal-trait.proposal-trait)
-    
+
     (define-public (execute (sender principal))
             (ok true)
     )
@@ -65,7 +65,7 @@
         showDeployButton = true;
         updated = true;
     }
-    
+
     const fileLoaded = (e: { detail: { contractName: string; source: string; }; }) => {
       replacedSource = e.detail.source;
       contractName = e.detail.contractName;
@@ -82,7 +82,7 @@
         }
       } as ProposalEvent
     }
-    
+
     let txId: string;
     const deployContract = async () => {
       await openContractDeploy({
@@ -108,12 +108,12 @@
     $: newSourceValid = replacedSource.indexOf(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait.proposal-trait') > -1 || account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
     $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
     </script>
-    
+
 <svelte:head>
     <title>Ecosystem DAO</title>
     <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
-    
+
 <!--
 <Modal showModal={showRulesModal} on:click={closeModal}>
     <div class="bg-white opacity-10"></div>
@@ -129,25 +129,25 @@
 
   <div class="py-6 mx-auto max-w-7xl md:px-6">
     <div class="flex flex-row w-full my-8">
-      <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl ">
+      <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
         <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-  
+
           <div class="mt-6 md:mt-0 flex flex-col gap-y-5">
             <div class="flex flex-col gap-y-2">
               <h4 class="text-2xl mb-3">Process Proposal</h4>
               <p>Enter deployed contract id</p>
               <input type="text" id="propose-contract" class="p-3 rounded-md border text-black" bind:value={contractId}/>
-              <button on:click={() => {processProposal()}} class="w-[150px] text-white bg-black justify-startc items-start gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+              <button on:click={() => {processProposal()}} class="w-[150px] text-white bg-black justify-startc items-start gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
                 Process
               </button>
             </div>
-        
+
             {#if showNoop}
             <div class="flex flex-col">
-              <div class="">
+              <div>
                   <pre class="source-code">{newSource}</pre>
               </div>
-              <div class="">
+              <div>
                 {#if !showDeployButton}
                   <ProposalDeploymentForm on:addNewPoll={addNewPoll} />
                 {:else if txId}
@@ -170,10 +170,10 @@
             {/if}
             <!--
             {#if showFromFile}
-            <div class="">
-              <div class="">
+            <div>
+              <div>
                 <h4 class="text-2xl mb-3">Upload Contract</h4>
-                <p>Please ensure the clarity is unit tested and implements the 
+                <p>Please ensure the clarity is unit tested and implements the
                   <a class="text-primary-500" href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait')} target="_blank">correct trait</a>
                   {#if !showDeployButton}
                     <LoadFile on:fileLoaded={fileLoaded}/>
@@ -188,7 +188,7 @@
               </div>
               {/if}
               -->
-              <div class="">
+              <div>
                 {#if showRulesModal}
                 <div>
                   <Banner message={'Processing this proposal and adding to DAO'}/>
@@ -201,7 +201,7 @@
                 {/if}
               </div>
             </div>
-  
+
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" class="relative z-[1] ml-auto w-auto h-auto md:w-[200px] md:h-[233px] lg:w-[180px] lg:h-[auto]" fill="none">
               <rect width="300" height="350" fill="url(#paint0_linear_42_181)" rx="18"/>
               <path stroke="#141414" stroke-opacity=".8" stroke-width="12" d="M80.133 75.828C75.524 80.605 73 86.861 73 93.5v164c0 14.063 11.435 25.5 25.475 25.5h101.05c14.04 0 25.475-11.437 25.475-25.5V117.298a.359.359 0 0 0-.104-.246l-.005-.005-48.902-48.94-.005-.005a.348.348 0 0 0-.239-.102h-44.356a.313.313 0 0 0 0 .625h35.634c5.799 0 8.414 5.232 8.414 8.79v27.132c0 7.207 5.859 13.064 13.049 13.064h27.111c3.555 0 8.788 2.612 8.788 8.411V257.5c0 13.713-11.147 24.875-24.86 24.875H98.475c-13.713 0-24.86-11.162-24.86-24.875v-164a24.765 24.765 0 0 1 6.951-17.254l-.433-.418Zm0 0c.07-.074.14-.15.207-.227m-.207.227.207-.227m0 0C85.164 70.686 91.57 68 98.475 68h12.086a.313.313 0 0 1 0 .625H98.475c-6.8 0-13.18 2.707-17.907 7.62l-.228-.644Z"/>
@@ -213,7 +213,7 @@
                 </linearGradient>
               </defs>
             </svg>
-    
+
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 326 325" fill="none" class="w-[326px] h-[325px] bottom-[-2em] right-[-2em] absolute">
               <mask id="mask0_47_300" width="408" height="408" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha">
                 <g stroke="#fff" stroke-width="1.25" clip-path="url(#clip0_47_300)">
@@ -288,4 +288,3 @@
       </div>
     </div>
   </div>
-  

@@ -5,29 +5,29 @@
   import { sbtcConfig } from '$stores/stores'
   import Button from '../shared/Button.svelte';
 	import TransactionAnalysis from './TransactionAnalysis.svelte';
-  
+
   //const contractCall = openContractCall();
   let errorReason:string|undefined;
   let pubkeying = true;
   let minting = false;
   let burning = false;
   let proofs = true;
-  
+
   let romeoPublicKey = $sbtcConfig.sbtcContractData.sbtcWalletPublicKey || '02aaed53527e3771645a050568a3cc9820361899c36f689cac15b57cc7885f3ca1';
   if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
     const s = $sbtcConfig.sbtcContractData
     //coordinator = s.coordinator?.addr?.value || '';
     //romeoPublicKey = s.sbtcWalletAddress;
   }
-  
+
   const wallet = async () => {
     const res:any = await setsBTCPublicKey(CONFIG.VITE_SBTC_CONTRACT_ID, romeoPublicKey);
     if (res && res.error) errorReason = res.reason
     console.log(res)
   }
-  
+
   </script>
-     
+
   <div class="p-2">
     <div class="flex justify-between">
         <div>&nbsp;</div>
@@ -40,7 +40,7 @@
 
 
     {#if pubkeying}
-      <div class="">
+      <div>
         <div>sBTC Public Key</div>
         <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={romeoPublicKey}/>
         <div class="py-0">
@@ -50,13 +50,13 @@
       {/if}
 
       {#if minting}
-      <div class="">
+      <div>
           <MintTokens />
         </div>
       {/if}
 
       {#if burning}
-      <div class="">
+      <div>
           <BurnTokens />
         </div>
       {/if}
@@ -65,8 +65,8 @@
     {@html errorReason}
     {/if}
   </div>
-  
-  
+
+
   <style>
     input {
       width: 100%;

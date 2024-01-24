@@ -123,9 +123,9 @@ const selectAssetId = () => {
       <div class="my-5">
         <p class="text-2xl mb-2">Select collection</p>
         <select class="text-black h-10 w-1/2 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
-          <option class="" value={''}>Choose an NFT collection for your badge</option>
+          <option value={''}>Choose an NFT collection for your badge</option>
           {#each sortedAssets as asset}
-          <option class="" value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
+          <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
           {/each}
         </select>
       </div>

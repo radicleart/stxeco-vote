@@ -127,7 +127,7 @@
 
 <!--
 <div class="text-white leading-none mt-2 px-1 py-1">
-  <div class="block font-bold">Vote {(voteFor) ? 'YES' : 'NO'} by sending a tiny amount of STX here.</div>
+  <div class="block">Vote {(voteFor) ? 'YES' : 'NO'} by sending a tiny amount of STX here.</div>
 </div>
 <div class={getOuterClasses()}>
   <div class="h-[144px] max:w-1/2 rounded-lg overflow-hidden mr-4 border border-gray-600">
@@ -138,7 +138,7 @@
       <div id={(voteFor) ? 'address-field-yes' : 'address-field-no'} class="grow text-1xl p-1 break-words w-full">{getAddress(false)}</div>
     </div>
     <div class="flex justify-end gap-1 gap-x-1 mt-1">
-      <div class={(showCopy) ? 'block font-bold visible me-4' : 'block font-bold invisible me-4'}>copied bitcoin {(voteFor) ? 'vote yes' : 'vote no'} address</div>
+      <div class={(showCopy) ? 'block visible me-4' : 'block invisible me-4'}>copied bitcoin {(voteFor) ? 'vote yes' : 'vote no'} address</div>
       <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerAddressUrl(getAddress(true))} />
       <button id="copy-address" type="button" on:click={() => copy()} class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
         <Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />

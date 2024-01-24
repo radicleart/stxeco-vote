@@ -77,8 +77,8 @@
 	}
 
 	const getNavActiveClass = (item:string) => {
-		if (location.pathname === item) return 'font-normal text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
-		return 'font-normal text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
+		if (location.pathname === item) return ' text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
+		return ' text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
 	}
 
 </script>
@@ -99,7 +99,7 @@
 		{#if loggedIn()}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
-			<button class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 text-sm font-normal text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
+			<button class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 text-sm  text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
 				Connect wallet&nbsp;<span class="text-[#FDFDFC]/[0.64]">-></span>
 			</button>
 		{/if}
@@ -110,7 +110,7 @@
 	<NavUl
 		{hidden}
 		class="order-1 md:flex-1"
-		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:font-medium !md:space-x-4"
+		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4"
 	>
 		<div class="w-full flex flex-row justify-between">
 			<div class="flex">
@@ -134,7 +134,7 @@
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button id="connect-wallet" class="opacity-10 block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button id="connect-wallet" class="opacity-10 block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2  text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}

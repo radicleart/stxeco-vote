@@ -43,17 +43,17 @@
 </svelte:head>
 <div class="py-6 mx-auto max-w-7xl md:px-6">
   <div class="flex flex-row w-full my-8">
-    <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl ">
+    <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
         <div class="mt-6 md:mt-0 flex flex-col gap-y-2">
           <div class="mb-4">
-            <h2 class="font-semibold text-[#131416] text-2xl mb-3">Proposals</h2>
+            <h2 class="text-[#131416] text-2xl mb-3">Proposals</h2>
           </div>
           <Tabs style="underline" contentClass="py-4">
             <TabItem open={tabStatus === 'funding'} on:click={() => goto('/dao/proposals?status=funding')} title="Funding">
               {#if inited}
-              <div class="bg-white/5 rounded-md p-4 ">
+              <div class="bg-white/5 rounded-md p-4">
                 {#if funding && funding.length > 0}
                 <ProposalFundingHeader/>
                 {#each funding as event}
@@ -69,7 +69,7 @@
             </TabItem>
             <TabItem open={tabStatus === 'open'} on:click={() => goto('/dao/proposals?status=open')} title="Open">
               {#if inited}
-              <div class="bg-white/5 rounded-md p-4 ">
+              <div class="bg-white/5 rounded-md p-4">
                 {#if open && open.length > 0}
                 <ProposalVotingHeader/>
                 {#each open as event}
@@ -85,7 +85,7 @@
             </TabItem>
             <TabItem open={tabStatus === 'closed'} on:click={() => goto('/dao/proposals?status=closed')} title="Closed">
               {#if inited}
-              <div class="bg-white/5 rounded-md p-4 ">
+              <div class="bg-white/5 rounded-md p-4">
                 {#if closed && closed.length > 0}
                 <ProposalVotingHeader/>
                 {#each closed as event}

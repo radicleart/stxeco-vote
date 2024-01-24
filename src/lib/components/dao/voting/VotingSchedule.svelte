@@ -15,7 +15,7 @@ let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 const proposalData = proposalEvent.proposalData || { votesFor: 0, votesAgainst: 0, concluded: false, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
 const endBH = proposalData.endBlockHeight - proposalData.startBlockHeight
 const currentBH = stacksTipHeight - proposalData.startBlockHeight
-$: currentBHN = (currentBH / endBH) * 100 
+$: currentBHN = (currentBH / endBH) * 100
 let txId: string;
 $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 
@@ -65,12 +65,12 @@ const concludeVote = async () => {
         </div>
       {:else}
         {#if txId}
-        <div class="">Votes are being counted.</div>
+        <div>Votes are being counted.</div>
         <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
         {:else}
-        <div class="">Please conclude for votes to be counted.</div>
+        <div>Please conclude for votes to be counted.</div>
         <div class="py-4">
-          <Button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal text-black rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+          <Button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2  text-black rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
             Conclude vote
           </Button>
         </div>

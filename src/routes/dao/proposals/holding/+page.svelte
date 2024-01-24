@@ -104,9 +104,9 @@
     <div>
 			<div class="space-y-6">
 				<div>
-					<span class="font-mono inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
-          <div class="flex items-center justify-between mt-6">
-            <h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4">
+					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
+          <div class="sm:flex sm:items-center sm:justify-between mt-6">
+            <h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
               <a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
                 SIP-021 - Nakamoto Release
                 <svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -117,7 +117,7 @@
               </a>
             </h1>
 
-            <button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2 font-normal text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+            <button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
               <!-- Show/Hide toggle -->
               Show details <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
                 <path fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2Z" clip-rule="evenodd" />
@@ -131,31 +131,31 @@
             <div>
               <dl class="divide-y divide-white/10">
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">DAO</dt>
+                  <dt class="text-sm leading-6 text-white">DAO</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Ecosystem DAO</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Title</dt>
+                  <dt class="text-sm leading-6 text-white">Title</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">SIP-021 - Nakamoto Release</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Author(s)</dt>
+                  <dt class="text-sm leading-6 text-white">Author(s)</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Stacks Community</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Description</dt>
+                  <dt class="text-sm leading-6 text-white">Description</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">Nakamoto Release is a network-wide upgrade that aims to further strengthen the connection between Stacks and Bitcoin.</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Voting contract</dt>
+                  <dt class="text-sm leading-6 text-white">Voting contract</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede007-snapshot-proposal-voting-v5</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Funding contract</dt>
+                  <dt class="text-sm leading-6 text-white">Funding contract</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede008-flexible-funded-submission</dd>
                 </div>
                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt class="text-sm font-medium leading-6 text-white">Proposal contract</dt>
+                  <dt class="text-sm leading-6 text-white">Proposal contract</dt>
                   <dd class="mt-1 text-sm leading-6 text-sand-300 sm:col-span-2 sm:mt-0">ede017-testnet-stacks-update</dd>
                 </div>
               </dl>
@@ -167,7 +167,7 @@
 
           <div class="mt-6 md:mt-0">
             <div class="mb-4">
-              <h2 class="font-semibold text-[#131416] text-2xl mb-3">Proposal was funded</h2>
+              <h2 class="text-[#131416] text-2xl mb-3">Proposal was funded</h2>
 						</div>
             <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
               <p>Voting starts in <strong>6 blocks</strong>.</p>

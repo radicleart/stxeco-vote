@@ -5,7 +5,7 @@ import play from '$lib/assets/png-assets/stx_eco_play_video.png'
 import pause from '$lib/assets/png-assets/stx_eco_pause_video.png'
 import adown from '$lib/assets/png-assets/stx_eco_arrow_down.png'
 
-// medium 
+// medium
 const bgvideo = 'https://prismic-io.s3.amazonaws.com/edao/ea5c92b8-d910-479c-813b-a3ef19292578_stx_eco_colour_balls_animation_medium.mp4';
 
 let playing = true;
@@ -31,18 +31,18 @@ const scrollTo = () => {
 }
 
 </script>
-  
+
 <section id="section1" class="h-full">
   <video autoplay muted loop id="myVideo">
     <source src={bgvideo} type="video/mp4">
   </video>
   <!-- Optional: some overlay text to describe the video -->
   <div class="flex flex-col gap-y-5 h-full align-middle self-center mt-20 justify-start px-[115px]">
-    <h1 class="text-4xl font-bold">
+    <h1 class="text-4xl">
       vote. voice. contribute
       <br/>collaborate. create
     </h1>
-    <p class="text-2xl font-bold">Be the future of decentralised democracy
+    <p class="text-2xl">Be the future of decentralised democracy
     </p>
     <button class="btn w-[250px] " on:click={() => { openVoting() }}>Vote for SIP 15</button>
   </div>
@@ -90,7 +90,7 @@ section {
   text-align: right;
   padding: 5px 20px;
   border: 0pt solid rgb(85, 12, 12);
-} 
+}
 
 /* Add some content at the bottom of the video/page
 .content {
@@ -100,7 +100,7 @@ section {
   color: #f1f1f1;
   width: 100%;
   padding: 40px;
-} 
+}
 */
 .btn {
   border: none;

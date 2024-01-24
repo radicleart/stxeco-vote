@@ -9,10 +9,10 @@
 	import { onMount } from 'svelte';
 	import { getStacksNetwork } from '$lib/stacks_connect';
 	import { goto } from '$app/navigation';
-	
+
 	export let proposal:ProposalEvent;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
-	
+
 	let amount = 500000;
 	let txId: string|undefined;
 
@@ -27,7 +27,7 @@
 	let durationMessage = 'The voting window is ';
 	let paramStartDelay = 6;
 	let paramDuration = 144 //proposalDuration;
-	
+
 	const getSTXMintPostConds = function (amt:number) {
 		const postConds = []
 		if (!account.stxAddress) return [];
@@ -39,7 +39,7 @@
 		))
 		return postConds
 	}
-		
+
 	const submitOriginal = async () => {
 		if (amount < 500000) {
 			addNotification({
@@ -126,14 +126,14 @@
 		paramDuration = 144 //proposalDuration;
 		inited = true
 	})
-	
+
 	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 	</script>
-	
+
 {#if inited}
 {#if !fundingMet}
 <div class="flex flex-col">
-	<h1 class="text-2xl font-normal">
+	<h1 class="text-2xl">
 		Fund proposal : {fmtMicroToStx(fundingData.parameters.fundingCost - fundingData.funding)} STX needed!
 	</h1>
 	<div class="w-full flex flex-col gap-y-4">
@@ -162,8 +162,8 @@
 					<label class="block" for="Contribution">funding required is {fundingData.parameters.fundingCost} uSTX</label>
 					<input bind:value={amount} type="number" id="Contribution" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 				</div>
-				<div class="">
-					<button on:click={() => {submitFlexible()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+				<div>
+					<button on:click={() => {submitFlexible()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 						Fund proposal
 					  </button>
 				</div>
@@ -171,8 +171,8 @@
 		</form>
 	</div>
 </div>
-<div class="" >
-	<div class="">
+<div>
+	<div>
 		<p>{startHeightMessage}</p>
 		<p>{durationMessage}</p>
 	</div>

@@ -14,7 +14,7 @@ const getExplorerUrl = () => {
 }
 </script>
 
-<div class="">
+<div>
   <div class="my-4">
     <h4>Intro.</h4>
     <p>The transaction has been copied to the clipboard.</p>
@@ -36,7 +36,7 @@ const getExplorerUrl = () => {
   </div>
   <div class="slide">
     <h4>3. Broadcast the Transaction.</h4>
-    <p class=""><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
+    <p><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
     <img src={bitcoincore3} alt="night time" />
   </div>
   <div class="slide">

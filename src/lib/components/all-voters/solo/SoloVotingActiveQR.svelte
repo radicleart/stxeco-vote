@@ -82,13 +82,13 @@
     <h2 class="text-2xl">Voting for Solo Stackers</h2>
 		<a href="/" on:click|preventDefault={() => showSourceModal = !showSourceModal}>show results</a>
 	</div>
-  <p class="text-warning-500">Send a dust BTC transaction from your <span class="font-bold">bitcoin reward wallet</span></p>
+  <p class="text-warning-500">Send a dust BTC transaction from your bitcoin reward wallet</p>
   <p>Voters who are Stacking on their own must send a dust amount of BTC (~6,000 sats) from their
     PoX reward address to an address representing a ‘Yes to Nakamoto’ vote or an address
     representing a No to Nakamoto’ vote.</p>
   <div class="w-full flex md:flex-row flex-col  gap-4">
-    <div class=""><Invoice address={yesAddress} voteFor={true} /></div>
-    <div class=""><Invoice address={noAddress} voteFor={false} /></div>
+    <div><Invoice address={yesAddress} voteFor={true} /></div>
+    <div><Invoice address={noAddress} voteFor={false} /></div>
   </div>
 </div> -->
 

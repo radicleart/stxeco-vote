@@ -59,17 +59,17 @@
   })
 </script>
 
-<h2 class="text-2xl font-medium mb-2">Network</h2>
+<h2 class="text-2xl mb-2">Network</h2>
 <div class="flex gap-2 mb-2 items-center">
-  <p class="text-base text-white font-extralight">
+  <p class="text-base text-white">
     You are currently on:
   </p>
-  <p class="text-white font-normal">
-		<span class="inline-flex bg-black rounded-xl text-white px-4 py-1 font-normal">
+  <p class="text-white">
+		<span class="inline-flex bg-black rounded-xl text-white px-4 py-1">
       {CONFIG.VITE_ENVIRONMENT}
     </span>
   </p>
-  <div id="po-network" class="">
+  <div id="po-network">
 		<Icon src="{InformationCircle}" class="text-white w-6 h-6" mini aria-hidden="true" />
   </div>
 </div>
@@ -83,16 +83,16 @@
 
 <div class="mt-4">
 	<!--
-	<Button on:click={() => toggleNetwork()} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+	<Button on:click={() => toggleNetwork()} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2  text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 		Switch network
 	</Button>
 	-->
 	{#if mode === 'development'}
 	<div class="mt-4">
-	<Button on:click={() => switchDevnet()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
+	<Button on:click={() => switchDevnet()} class="text-center focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
 		Switch to devnet
 	</Button>
-	<Button on:click={() => switchDevenv()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
+	<Button on:click={() => switchDevenv()} class="text-center focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
 		Switch to devenv (shared devnet)
 	</Button>
 	</div>

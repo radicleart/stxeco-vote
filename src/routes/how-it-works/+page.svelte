@@ -44,7 +44,7 @@
 					<path fill="#0A0A0B" d="M77 307V83.455c0-6.628-5.373-12-12-12H41c-6.627 0-12-5.373-12-12V.727H0V319h65c6.627 0 12-5.373 12-12Z"/>
 				</svg>
 
-				<p class="text-3xl font-medium leading-[46px] sm:max-w-4xl text-white">
+				<p class="text-3xl leading-[46px] sm:max-w-4xl text-white">
 					STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes
 				</p>
 			</div>
@@ -176,8 +176,8 @@
     <div>
 			<div class="space-y-6">
 				<div>
-					<span class="font-mono inline-block py-1 text-sm px-2 rounded-full text-[#131416] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
-					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl -mx-4 mt-6">
+					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
+					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
 							SIP-021 - Nakamoto Release
 							<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,11 +204,11 @@
 
 					<div class="mt-6 md:mt-0">
 						<div class="mb-4">
-							<h2 class="font-semibold text-[#131416] text-xl mb-3">Summary</h2>
+							<h2 class="text-[#131416] text-xl mb-3">Summary</h2>
 							<p class="text-lg text-[#605D5D]">The proposal suggests a significant change to the Stacks blockchain for faster and more reliable blocks by separating block production from cryptographic sortitions. Goals include faster blocks, Bitcoin finality, resistance to Bitcoin forks, and preventing advantages for Bitcoin miners.</p>
 						</div>
 						<div class="pt-4">
-							<h2 class="font-semibold text-xl mb-3 text-[#131416]">Learn more</h2>
+							<h2 class="text-xl mb-3 text-[#131416]">Learn more</h2>
 							<ul class="list-disc pl-4 text-[#605D5D]">
 								<li><a class="underline" href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
 							</ul>
@@ -336,7 +336,7 @@
 							<div class="flex flex-col h-full relative z-[1]">
 								<div class="flex-1">
 									{@html opt.icon}
-									<h4 class="text-lg font-semibold mt-12 text-[#131416] mb-3">{opt.title}</h4>
+									<h4 class="text-lg mt-12 text-[#131416] mb-3">{opt.title}</h4>
 								</div>
 								<p class="mt-auto text-[#131416]/[0.64]">{opt.explanation}</p>
 							</div>

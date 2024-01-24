@@ -15,7 +15,7 @@
     export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;
     let canv:any;
-    let img1:any; 
+    let img1:any;
     let img2:any;
     let componentKey = 0;
 
@@ -139,8 +139,8 @@
 
 <div class="flex justify-between mt-5">
   <div class="text-2xl">Download Your Badge</div>
-  <div class="">
-    <button class={'text-black md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 font-normal  rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0'} on:click|preventDefault={toggleCanvas}>back</button>
+  <div>
+    <button class={'text-black md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2   rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0'} on:click|preventDefault={toggleCanvas}>back</button>
   </div>
 </div>
 {#if !hasVotes}
@@ -164,7 +164,7 @@
     <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
   </div>
   <div class="flex justify-between w-[400px]">
-      <a href="/" on:click|preventDefault={saveImage}><Icon class="" src={ArrowDownCircle} width={30} height={30}/></a>
+      <a href="/" on:click|preventDefault={saveImage}><Icon src={ArrowDownCircle} width={30} height={30}/></a>
       <span class="text-sm"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>twitter preview</a></span>
   </div>
 </div>
