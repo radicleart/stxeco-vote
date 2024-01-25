@@ -137,36 +137,32 @@
     });
 </script>
 
-<p class="text-lg font-semibold">Select the banner</p>
+<p class="text-base mt-3 mb-1">Select the banner</p>
 <div class="flex flex-row gap-4 mb-8">
-    <div class="bg-white py-5 px-10">
-      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="180px" src={bannerBlue} alt="blue banner"/></a>
-    </div>
-    <div class="bg-white py-5 px-10">
-      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="180px" src={bannerWhite} alt="white banner"/></a>
-    </div>
+  <div class="bg-white flex items-center justify-center py-6 px-10 rounded-lg">
+    <button on:click|preventDefault={() => switchImage(2)}><img width="180px" src={bannerBlue} alt="blue banner"/></button>
+  </div>
+  <div class="bg-white flex items-center justify-center py-6 px-10 rounded-lg">
+    <button on:click|preventDefault={() => switchImage(1)}><img width="180px" src={bannerWhite} alt="white banner"/></button>
+  </div>
 </div>
-<p class="text-lg font-semibold">Custom badge preview</p>
+<p class="text-base mt-3 mb-1">Custom badge preview</p>
 {#if !downloaded}
-{#key componentKey}
-<div class="flex flex-col">
-  <div>
-    <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
-  </div>
-  <div class="flex justify-between w-[400px] mt-3">
-    <div class="flex flex-nowrap gap-x-5">
-      <button class={'text-black bg-white text-sm md:w-auto md:inline-flex items-center gap-x-1.5 px-4 py-1   rounded-xl border-none font-extralight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white-500/50 '} on:click|preventDefault={toggleCanvas}>&lt;-- BACK</button>
-      <button class={'text-white bg-black text-sm md:w-auto md:inline-flex items-center gap-x-1.5 px-4 py-1   rounded-xl border-none font-extralight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 '} on:click|preventDefault={saveImage}>DOWNLOAD --&gt;</button>
+  {#key componentKey}
+    <div>
+      <div>
+        <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
+        <button class="ml-auto mt-2 text-xs font-mono uppercase inline-block items-center bg-[#EEEBE7] px-2 py-1 text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={() => {toggleRoundness()}}>Preview as circle</button>
+      </div>
+
+      <div class="flex justify-between w-[400px] mt-6">
+        <div class="flex flex-nowrap gap-x-2">
+          <button class="text-sm font-mono uppercase inline-flex items-center bg-white text-[#131416] px-4 py-2 rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={toggleCanvas}><span>&lt;-</span>&nbsp;Back</button>
+          <button class="text-sm font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={saveImage}>Download&nbsp;<span class="text-[#FDFDFC]/[0.64]">-&gt;</span></button>
+        </div>
+      </div>
     </div>
-    <div class="text-xs font-extralight"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>preview</a></div>
-  </div>
-</div>
-{/key}
+  {/key}
 {:else}
-<div class="icontainer"></div>
+  <div class="icontainer"></div>
 {/if}
-<style>
-  canvas {
-    border: 1pt solid #ccc;
-  }
-</style>

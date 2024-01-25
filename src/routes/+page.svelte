@@ -186,7 +186,7 @@
 						</a>
 					</h1>
 				</div>
-				<div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+				<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" class="w-auto h-auto md:w-[200px] md:h-[233px] lg:w-[300px] lg:h-[350px]" fill="none">
 						<rect width="300" height="350" fill="url(#paint0_linear_42_181)" rx="18"/>
 						<path stroke="#141414" stroke-opacity=".8" stroke-width="12" d="M80.133 75.828C75.524 80.605 73 86.861 73 93.5v164c0 14.063 11.435 25.5 25.475 25.5h101.05c14.04 0 25.475-11.437 25.475-25.5V117.298a.359.359 0 0 0-.104-.246l-.005-.005-48.902-48.94-.005-.005a.348.348 0 0 0-.239-.102h-44.356a.313.313 0 0 0 0 .625h35.634c5.799 0 8.414 5.232 8.414 8.79v27.132c0 7.207 5.859 13.064 13.049 13.064h27.111c3.555 0 8.788 2.612 8.788 8.411V257.5c0 13.713-11.147 24.875-24.86 24.875H98.475c-13.713 0-24.86-11.162-24.86-24.875v-164a24.765 24.765 0 0 1 6.951-17.254l-.433-.418Zm0 0c.07-.074.14-.15.207-.227m-.207.227.207-.227m0 0C85.164 70.686 91.57 68 98.475 68h12.086a.313.313 0 0 1 0 .625H98.475c-6.8 0-13.18 2.707-17.907 7.62l-.228-.644Z"/>
@@ -287,9 +287,9 @@
 			</div>
 			<div class="space-y-6 mt-24">
 				<h2 class="text-[#0A0A0B] text-2xl sm:text-4xl mt-6">Cast your vote</h2>
-				<div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
+				<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
 					{#each votingOptions as opt}
-						<a href={`/dao/proposals/${currentContract}?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-transparent hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-8 transition duration-300 ease-in-out">
+						<a href={`/dao/proposals/${currentContract}?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-transparent hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-6 transition duration-300 ease-in-out">
 
 							<svg xmlns="http://www.w3.org/2000/svg" class="absolute top-[-4em] left-1/2 -translate-x-1/2" viewBox="0 0 342 376" width="342" height="376" fill="none">
 								<mask id="mask0_48_621" width="397" height="397" x="-28" y="-21" maskUnits="userSpaceOnUse" style="mask-type:alpha">
