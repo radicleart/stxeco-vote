@@ -8,6 +8,7 @@ import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import { getDaoVotesByProposal } from '$lib/dao_api';
+	import VoteResultsRow from '../VoteResultsRow.svelte';
 
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
@@ -25,9 +26,11 @@ const reorder = (sf:string) => {
     componentKey++;
 }
 const votes: any[] = []
-let totalAccountsFor = 0;
-let totalAccountsAgainst = 0;
-let totalVotePower = (proposal.proposalData) ? FormatUtils.fmtNumber(Math.floor(ChainUtils.fromMicroAmount(proposal.proposalData.votesFor + proposal.proposalData.votesAgainst))) : 0;
+let accountsFor = 0;
+let accountsAgainst = 0;
+let stxFor = 0;
+let stxAgainst = 0;
+let stxPower = 0;
 const scrollTop = () => {
   const getMeTo = document.getElementById("page-header");
   if (getMeTo) getMeTo.scrollIntoView({behavior: 'smooth'});
@@ -42,13 +45,17 @@ onMount(async () => {
   daoVotes = await getDaoVotesByProposal(proposal.contractId);
   if (daoVotes && daoVotes.length > 0) {
     daoVotes.forEach((o:any) => {
-    if (o) votes.push(o)
-    if (o.for) {
-      totalAccountsFor++;
-    } else {
-      totalAccountsAgainst++;
-    }
-  });
+      if (o) votes.push(o)
+      const amount = Number(o.amount)
+      if (o.for) {
+        accountsFor++;
+        stxFor += amount
+      } else {
+        accountsAgainst++;
+        stxAgainst += amount
+      }
+      stxPower += amount
+    });
   }
 
   inFavour = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
@@ -61,14 +68,7 @@ let txId: string;
 $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
-<div>
-  <h1 class={'mb-5 text-2xl text-' + color}><span>Method 3: Voting for Non Stackers</span></h1>
-  <h4 class="text-white">Total voting power is <span class="text-warning">{totalVotePower}</span> with votes cast from <span class="text-warning">{daoVotes.length}</span> accounts.</h4>
-</div>
-
-  <div class="bg-card py-4 px-5 my-8">
-    <VotingResults {proposal} totalAccountsAgainst={totalAccountsAgainst} totalAccountsFor={totalAccountsFor}/>
-  </div>
+<VoteResultsRow {stxPower} {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <div class="flex justify-start text-sm">
     <a href="/" class={'text-xs text-gray-400'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if !showVotes}show{:else}hide{/if} transactions</a>

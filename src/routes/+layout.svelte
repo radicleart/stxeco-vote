@@ -30,6 +30,7 @@
 
 	let componentKey = 0;
 	let componentKey1 = 0;
+	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'testnet')
 	setConfigByUrl($page.url.searchParams);
 	if (!isLegal(location.href)) {
 		//componentKey++;
@@ -44,10 +45,9 @@
 		//const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
 		const search = nav.to?.url.searchParams;
 		if (nav.to?.url.searchParams?.has('chain')) {
-			nav.to?.url.searchParams.append('chain', 'mainnet')
+			//nav.to?.url.searchParams.set('chain', 'mainnet')
 		} else {
-			nav.to?.url.searchParams.delete('chain')
-			nav.to?.url.searchParams.append('chain', CONFIG.VITE_NETWORK)
+			nav.to?.url.searchParams.set('chain', CONFIG.VITE_NETWORK)
 		}
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})

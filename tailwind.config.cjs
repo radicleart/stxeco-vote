@@ -27,6 +27,7 @@ export default {
       "midpurple": "#9985FF",
       "lightpurple": "#BBADFF",
       "bloodorange": "#FC6432",
+      "lightgray": "#F4F3F0",
       "bitcoinorange": "#FD9D41",
       "yellow": "#F8F65B",
 
@@ -82,7 +83,8 @@ export default {
     },
     backgroundImage: {
       "warning-01": "rgba(248, 246, 91, 0.40);",
-      "warning-02": "rgba(248, 246, 248, 0.40);",
+      "primary-02": "linear-gradient(306.12deg, #FC6432 21.1%, #F4F3F0 84.08%)",
+      "primary-01": "linear-gradient(180deg, #FC6432 8.49%, #F4F3F0 35.05%)",
     },
     extend: {
       fontFamily: {
