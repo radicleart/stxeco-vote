@@ -9,16 +9,15 @@
 </script>
 
 <div class="flex flex-col w-full my-8">
-  <div class="py-10 px-10 md:px-12 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+  <div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
     <div class="mt-6 md:mt-0">
       <div class="mb-4">
         <h2 class="text-[#131416] text-2xl mb-3">Voting as Solo Stackers (Method 1)</h2>
       </div>
-      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-        <p>Instructions:</p>
+      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
         <p>Voters who are stacking on their own must send a dust amount of BTC (~6000 sats) from their PoX Bitcoin reward address to either:</p>
-        <ul class="list-disc pl-3">
+        <ul class="list-disc pl-6">
           <li>an address representing the “Yes to Nakamoto Release”</li>
           <li>an address representing the “No to Nakamoto Release”.</li>
         </ul>

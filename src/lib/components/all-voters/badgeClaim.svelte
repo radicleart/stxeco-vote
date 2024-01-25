@@ -9,7 +9,7 @@
     import bns from '$lib/assets/bns.jpg'
     import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
     import Banner from "$lib/components/shared/Banner.svelte";
-    
+
     const voted = true;
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     let votes: any[] = [];
@@ -29,7 +29,7 @@
     let loading = true;
     const gateway = "https://hashone.mypinata.cloud/";
     const gatewayAr = "https://arweave.net/";
-    
+
     const nextPage = async (init:boolean) => {
       searching = true;
       if (init) {
@@ -38,8 +38,8 @@
       }
       loading = true;
       assets = []
-    
-      holdings = await getNftsbyPage(account.stxAddress, assetId, pageSize, offset)
+
+      holdings = await getNftsbyPage('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', assetId, pageSize, offset)
       holdings.results = holdings.results.filter((o:any) => typeof o.metaData !== 'undefined')
       if (!init && holdings.total <= (currentPage * pageSize)) return;
       holdings.results.forEach((item:any) => {
@@ -62,11 +62,11 @@
       loading = false;
       searching = false;
     }
-    
+
     const selectAssetId = () => {
       nextPage(true)
     }
-    
+
       let imageSrc:string = bns;
       let canvasMode = false;
       const selectItem = (event: any) => {
@@ -77,12 +77,12 @@
       const toggleCanvas = () => {
         canvasMode = !canvasMode;
       }
-    
+
       let sortedAssets: any[] = [];
       onMount(async () => {
         const contractId = $page.params.slug;
         // await nextPage(true)
-        assetIdList = await getNftAssetClasses(account.stxAddress);
+        assetIdList = await getNftAssetClasses('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5');
         if (assetIdList && assetIdList.length > 0) {
           assetIdList.forEach((o) => {
             sortedAssets.push({
@@ -92,68 +92,53 @@
             })
           })
           sortedAssets = sortedAssets.sort(DaoUtils.dynamicSort('assetName'));
-          votes = await getDaoVotesByProposalAndVoter(contractId, account.stxAddress)
+          votes = await getDaoVotesByProposalAndVoter(contractId, 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5')
           noAssets = false;
         }
       })
 </script>
 
 {#if !noAssets}
+  <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 max-w-xl">
+    {#if canvasMode}
+      <div>
+        <p class="mb-3">Create a personalized badge featuring a Stacks banner overlaying one of your NFTs, showcasing your active participation in the Stacks community.</p>
+        <p class="mb-3">Select the desired banner to place atop your NFT. Once chosen, adjust the banner's position to your liking and proceed to download your customized badge. You can also preview it as a circle to visualize how it will appear as a social media avatar.</p>
+        <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
+      </div>
+    {:else}
+      <p class="mb-3">Create a personalized badge featuring a Stacks banner overlaying one of your NFTs, showcasing your active participation in the Stacks community.</p>
+      <p>Let’s start with choosing a collection:</p>
+      <p class="text-base mt-3 mb-1">NFT collection</p>
+      <select class="text-black h-10 w-3/4 px-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
+        <option value={''}>Choose an NFT collection</option>
+        {#each sortedAssets as asset}
+          <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
+        {/each}
+      </select>
 
-<div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
-{#if canvasMode}
-<div class="flex flex-col">
-  <p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
-  <p class="mb-5">Now choose the banner you would like to apply on top of your NFT. After this you can adjust the position of the banner and proceed to download your custom badge.</p>
-  <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
-</div>
-{:else}
-<p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
-<p>Let’s start with choosing a collection:</p>
-<p class="text-lg font-semibold">NFT collection</p>
-<select class="text-black h-10 w-3/4 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
-  <option value={''}>Choose an NFT collection</option>
-  {#each sortedAssets as asset}
-  <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
-  {/each}
-</select>
-
-{#key componentKey}
-{#if assetId && assets.length === 0}
-<div class="w-1/2 ">
-  {#if searching}
-  <Banner bannerType={'warning'} message={'Searching your NFTs'}/>
-  {:else}
-  <Banner bannerType={'warning'} message={'No nfts found'}/>
-  {/if}
-</div>
-{/if}
-{/key}
-
-{#if assets.length > 0}
-{#key componentKey}
-<p class="text-lg font-semibold">Select the NFT</p>
-<div class="grid grid-cols-4 gap-2">
-  {#each assets as item}
-  <MetaData {item} on:select_item={selectItem}/>
-  {/each}
-</div>
-{/key}
-{/if}
-{/if}
-
-
-  <!--
-  <div class="flex flex-col gap-y-5">
-    {#key componentKey}
-        {#if assets.length > 0}
-          {#if canvasMode}
+      {#key componentKey}
+        {#if assetId && assets.length === 0}
+        <div class="w-1/2 mt-2">
+          {#if searching}
+            <Banner bannerType={'waiting'} message={'Loading your NFTs...'}/>
           {:else}
+            <Banner bannerType={'warning'} message={'No NFTs found'}/>
           {/if}
-        {:else if assetId}
+        </div>
         {/if}
-    {/key}
+      {/key}
+
+      {#if assets.length > 0}
+        {#key componentKey}
+          <p class="text-base mt-3 mb-1">Select the NFT</p>
+          <div class="grid grid-cols-4 gap-2 mt-2">
+            {#each assets as item}
+              <MetaData {item} on:select_item={selectItem}/>
+            {/each}
+          </div>
+        {/key}
+      {/if}
+    {/if}
   </div>
-  -->
-</div>
 {/if}
