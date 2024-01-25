@@ -38,7 +38,7 @@
 			url.searchParams.set('chain', net);
 		}
 		//await dispatch('network_switch_event')
-		location.assign(url.search);
+		window.location.href = url.origin + '?chain=' + net //.assign(url.search);
 	}
 
 	let componentKey = 0;

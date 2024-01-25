@@ -176,7 +176,7 @@
 				<div>
 					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
-						<a href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c" class="py-2 px-4 rounded-md" target="_blank">
+						<a href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" class="py-2 px-4 rounded-md" target="_blank">
 							SIP-021 - Nakamoto Release
 							<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
@@ -208,7 +208,7 @@
 						<div class="pt-4">
 							<h2 class="text-xl mb-3 text-[#131416]">Learn more</h2>
 							<ul class="list-disc pl-4 text-[#605D5D]">
-								<li><a class="underline" href="https://github.com/stacksgov/sips/pull/155/files#diff-f54db5667e06bf510f4dfd4e8c0169c309558f037c2fc758759dc74a6bd9679c">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
+								<li><a class="underline" href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
 							</ul>
 						</div>
 					</div>

@@ -84,6 +84,7 @@
 			conf.currentProposal = currentProposal
 			return conf;
 		});
+		inited = true;
 		const soloPoolData = await getPoolAndSoloVotesByProposal(currentProposal.contractId)
 		const stacksInfo = await fetchStacksInfo();
 		sbtcConfig.update((conf) => {
@@ -113,7 +114,7 @@
 				sbtcConfig.update(() => conf);
 			}
 
-			initApp();
+			await initApp();
 			inited = true;
 
 			await connectToStacks();

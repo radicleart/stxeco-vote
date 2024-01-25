@@ -104,17 +104,19 @@
 </script>
 
 {#if !noAssets}
+<div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
+  <p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
+  <p>Let’s start with choosing a collection:</p>
+  <p>NFT collection</p>
+
 <div>
   {#if !canvasMode}
-  <div class="my-5">
-    <p class="text-2xl mb-2">Select collection</p>
-    <select class="text-black h-10 w-1/2 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
-      <option value={''}>Choose an NFT collection for your badge</option>
+    <select class="text-black h-10 w-3/4 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
+      <option value={''}>Choose an NFT collection</option>
       {#each sortedAssets as asset}
       <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
       {/each}
     </select>
-  </div>
   {/if}
   {#key componentKey}
       {#if assets.length > 0}
@@ -152,5 +154,6 @@
       </div>
       {/if}
   {/key}
+</div>
 </div>
 {/if}
