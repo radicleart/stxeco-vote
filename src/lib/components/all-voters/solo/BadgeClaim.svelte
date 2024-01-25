@@ -8,13 +8,8 @@
     import { CONFIG } from "$lib/config";
     import bns from '$lib/assets/bns.jpg'
     import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
-    import { loggedIn } from "$lib/stacks_connect";
-    import { goto } from "$app/navigation";
-    import BannerWithSpinner from "$lib/shared/BannerWithSpinner.svelte";
     import Banner from "$lib/components/shared/Banner.svelte";
-    import type { ProposalEvent } from "$types/stxeco.type";
     
-    export let proposal:ProposalEvent;
     const voted = true;
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     let votes: any[] = [];
@@ -104,50 +99,61 @@
 </script>
 
 {#if !noAssets}
+
 <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-8 space-y-3 max-w-xl">
+{#if canvasMode}
+<div class="flex flex-col">
   <p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
-  <p>Let’s start with choosing a collection:</p>
-  <p class="text-lg font-semibold">NFT collection</p>
-  
+  <p class="mb-5">Now choose the banner you would like to apply on top of your NFT. After this you can adjust the position of the banner and proceed to download your custom badge.</p>
+  <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
+</div>
+{:else}
+<p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
+<p>Let’s start with choosing a collection:</p>
+<p class="text-lg font-semibold">NFT collection</p>
+<select class="text-black h-10 w-3/4 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
+  <option value={''}>Choose an NFT collection</option>
+  {#each sortedAssets as asset}
+  <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
+  {/each}
+</select>
+
+{#key componentKey}
+{#if assetId && assets.length === 0}
+<div class="w-1/2 ">
+  {#if searching}
+  <Banner bannerType={'warning'} message={'Searching your NFTs'}/>
+  {:else}
+  <Banner bannerType={'warning'} message={'No nfts found'}/>
+  {/if}
+</div>
+{/if}
+{/key}
+
+{#if assets.length > 0}
+{#key componentKey}
+<p class="text-lg font-semibold">Select the NFT</p>
+<div class="grid grid-cols-4 gap-2">
+  {#each assets as item}
+  <MetaData {item} on:select_item={selectItem}/>
+  {/each}
+</div>
+{/key}
+{/if}
+{/if}
+
+
+  <!--
   <div class="flex flex-col gap-y-5">
-    {#if !canvasMode}
-      <select class="text-black h-10 w-3/4 ps-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
-        <option value={''}>Choose an NFT collection</option>
-        {#each sortedAssets as asset}
-        <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
-        {/each}
-      </select>
-    {/if}
     {#key componentKey}
         {#if assets.length > 0}
           {#if canvasMode}
-          <div class="row">
-            <p class="mb-8">You can now make a custom badge with a Stacks banner on top of one of your NFTs to show the world your involvement in the Stacks community.</p>
-            <p>Let’s start with choosing a collection:</p>
-            <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
-          </div>
           {:else}
-          <div class="flex justify-between">
-            <p class="text-2xl">Select NFT</p>
-            <!-- <p class="text-primary-500"><a href="/" on:click|preventDefault={() => nextPage(false)}>page {currentPage} / {(Math.floor(holdings.total / pageSize)) + 1} ({holdings.total} NFTs)</a></p>-->
-          </div>
-          <p class="text-lg font-semibold">Select the NFT</p>
-          <div class="grid grid-cols-4 gap-2">
-            {#each assets as item}
-            <MetaData {item} on:select_item={selectItem}/>
-            {/each}
-          </div>
           {/if}
         {:else if assetId}
-        <div class="w-1/2 ">
-          {#if searching}
-          <Banner bannerType={'warning'} message={'Searching your NFTs'}/>
-          {:else}
-          <Banner bannerType={'warning'} message={'No nfts found'}/>
-          {/if}
-        </div>
         {/if}
     {/key}
   </div>
+  -->
 </div>
 {/if}

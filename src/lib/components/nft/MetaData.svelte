@@ -46,17 +46,14 @@
 </script>
 
 {#if typeof item === 'object' && item.metaData && item.metaData.image}
-<div class="col-4">
-	<div class="text-white">
+<div class="">
+	<div class="">
 		{#if item.metaData}
-		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} n/f </h6>
 		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img class="w-60" {src} on:error={handleError} alt={'Image for ' + item?.token?.id}/></a>
 		{:else if item.asset_identifier.indexOf('bns::names') > -1}
-		<h6 class="text-info" title={owner}>{contractName()}: {bnsName + '.' + bnsNamespace} </h6>
 		<a href="/" on:click|preventDefault={() => {toggleCanvas(item)}}><img class="w-60" src={'/img/bns.jpg'} alt={bnsName}/></a>
 		{:else}
-		<h6 class={(owner) ? 'text-warning' : 'text-info'} title={owner}>{contractName()} #{item?.token?.id} n/f </h6>
-		<img class="w-60" src={questionmark} alt={'Missing Image for ' + item?.token?.id}/>
+		<img class="w-auto" src={questionmark} alt={'Missing Image for ' + item?.token?.id}/>
 		{/if}
 	</div>
 </div>

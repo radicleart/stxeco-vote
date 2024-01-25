@@ -7,12 +7,9 @@ import { loggedIn } from "$lib/stacks_connect";
 import { goto } from "$app/navigation";
 import type { ProposalEvent } from "$types/stxeco.type";
 import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
-import BadgeClaim from "$lib/components/all-voters/badgeClaim.svelte";
-	import DaoVotingBallotBox from "$lib/components/all-voters/dao-voting/DaoVotingBallotBox.svelte";
-	import Banner from "$lib/shared/Banner.svelte";
+	import BadgeClaim from "$lib/components/all-voters/solo/BadgeClaim.svelte";
 
 let proposal:ProposalEvent;
-let funding = false;
 
 onMount(async () => {
   if (!loggedIn()) {
@@ -50,7 +47,7 @@ onMount(async () => {
         <div class="mt-6 md:mt-0 flex flex-col gap-y-5 bg-warning-01">
           <h1 class="text-4xl">Thank you for your vote!</h1>
           <p class="text-lg">You are now part of Stacks history 🎉🟧</p>
-          <BadgeClaim {proposal}/>
+          <BadgeClaim/>
         </div>
       </div>
 

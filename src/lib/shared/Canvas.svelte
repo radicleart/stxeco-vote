@@ -137,35 +137,28 @@
     });
 </script>
 
-<div class="flex justify-between mt-5">
-  <div class="text-2xl">Download Your Badge</div>
-  <div>
-    <button class={'text-black md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2   rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0'} on:click|preventDefault={toggleCanvas}>back</button>
-  </div>
-</div>
-{#if !hasVotes}
-<div class="flex justify-center text-warning-500">
-  <p>Please register a vote on the proposal to see the I Voted Banner </p>
-</div>
-{:else}
-<div class="my-8 flex justify-between">
-  <div>Choose banner, position and download:
-    <div class="ms-5">
-      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src={bannerBlue} alt="blue banner"/></a>
-      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src={bannerWhite} alt="white banner"/></a>
+<p class="text-lg font-semibold">Select the banner</p>
+<div class="flex flex-row gap-4 mb-8">
+    <div class="bg-white py-5 px-10">
+      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="180px" src={bannerBlue} alt="blue banner"/></a>
     </div>
-  </div>
+    <div class="bg-white py-5 px-10">
+      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="180px" src={bannerWhite} alt="white banner"/></a>
+    </div>
 </div>
-{/if}
+<p class="text-lg font-semibold">Custom badge preview</p>
 {#if !downloaded}
 {#key componentKey}
 <div class="flex flex-col">
   <div>
     <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
   </div>
-  <div class="flex justify-between w-[400px]">
-      <a href="/" on:click|preventDefault={saveImage}><Icon src={ArrowDownCircle} width={30} height={30}/></a>
-      <span class="text-sm"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>twitter preview</a></span>
+  <div class="flex justify-between w-[400px] mt-3">
+    <div class="flex flex-nowrap gap-x-5">
+      <button class={'text-black bg-white text-sm md:w-auto md:inline-flex items-center gap-x-1.5 px-4 py-1   rounded-xl border-none font-extralight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white-500/50 '} on:click|preventDefault={toggleCanvas}>&lt;-- BACK</button>
+      <button class={'text-white bg-black text-sm md:w-auto md:inline-flex items-center gap-x-1.5 px-4 py-1   rounded-xl border-none font-extralight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 '} on:click|preventDefault={saveImage}>DOWNLOAD --&gt;</button>
+    </div>
+    <div class="text-xs font-extralight"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>preview</a></div>
   </div>
 </div>
 {/key}
