@@ -12,7 +12,7 @@
   let bannerClassList = ''
   onMount(async () => {
     if (bannerType === 'warning') {
-      bannerClassList = clazz + ' bg-warning-400';
+      bannerClassList = clazz + ' bg-yellow';
     } else if (bannerType === 'danger') {
       bannerClassList = clazz + ' bg-error-400';
     } else if (bannerType === 'success') {

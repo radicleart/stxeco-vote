@@ -51,6 +51,8 @@ const DaoUtils = {
       } else {
         proposal.status = { name: 'draft', color: 'primary-500', colorCode: 'primary-500' };
       }
+      const fundingMet = proposal.funding && proposal.funding.funding >= proposal.funding.parameters.fundingCost;
+      if (fundingMet) proposal.stage = ProposalStage.PROPOSED
     } else {
       proposal.stage = ProposalStage.PROPOSED
       if (stacksTipHeight >= proposal.proposalData.startBlockHeight) {

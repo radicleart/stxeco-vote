@@ -20,7 +20,7 @@ const config = {
 	],
 	kit: {
 		adapter: adapter({ fallback: 'index.html' }),
-		prerender: { entries: ['/', '/how-it-works'] },
+		prerender: { entries: ['/'] },
 		paths: {
 			base: process.env.VITE_BASE_URL
 		}

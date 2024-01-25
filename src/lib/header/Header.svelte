@@ -38,7 +38,7 @@
 			url.searchParams.set('chain', net);
 		}
 		//await dispatch('network_switch_event')
-		location.assign(url.search);
+		window.location.href = url.origin + '?chain=' + net //.assign(url.search);
 	}
 
 	let componentKey = 0;
@@ -117,7 +117,6 @@
 				<!--
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How to vote</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
 				-->

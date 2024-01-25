@@ -9,7 +9,7 @@
     import { openContractCall } from '@stacks/connect';
     import type { ProposalEvent } from '$types/stxeco.type';
     import { sbtcConfig } from '$stores/stores';
-    import { getStacksNetwork } from '$lib/stacks_connect';
+    import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
 
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;
@@ -25,12 +25,17 @@
     $: amount = balanceAtHeight;
     const castVote = async (vfor:boolean) => {
         const deployer = CONFIG.VITE_DOA_DEPLOYER;
+        if (!loggedIn()) {
+          errorMessage = 'Please connect your wallet to vote';
+          return;
+        }
         if (amount === 0 || amount < 1 ) {
           errorMessage = 'Minimum voting power is 1 STX';
           return;
         }
         if (amount > balanceAtHeight) {
-          errorMessage = 'Maximum voting power is ' + balanceAtHeight + ' STX';
+          errorMessage = 'Maximum voting power is ' + balanceAtHeight + ' STX (your balance when voting opened)';
+          amount = balanceAtHeight;
           return;
         }
         let forCV = trueCV()
@@ -82,22 +87,22 @@
     </div>
     <div class="w-full flex flex-col justify-start">
       <input class="w-1/2 rounded-lg p-2 text-black border-gray-800" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/>
-      {#if amount < balanceAtHeight}
-      <div class="d-flex justify-content-end form-text text-small">
-        <a class="text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}><u>maximum voting power</u></a>
-      </div>
-      {/if}
       <p class="text-sm mt-5">
         Your snapshot balance at block <span class="text-bold">{FormatUtils.fmtNumber(proposal.proposalData?.startBlockHeight)}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.
       </p>
     </div>
     <div class="w-full flex justify-start gap-x-4">
-      <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(true)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+      <button on:click={() => {errorMessage = undefined; castVote(true)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
         YES
       </button>
-      <button disabled={balanceAtHeight === 0} on:click={() => {errorMessage = undefined; castVote(false)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+      <button on:click={() => {errorMessage = undefined; castVote(false)}} class="w-[150px] md:inline-flex items-start gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
         NO
       </button>
     </div>
+    {#if errorMessage}
+    <div class="w-full flex justify-start gap-x-4">
+      {errorMessage}
+    </div>
+    {/if}
   </div>
 </div>

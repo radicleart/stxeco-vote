@@ -7,20 +7,23 @@
 	import type { FundingData, ProposalEvent } from '$types/stxeco.type';
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
-	import { getStacksNetwork } from '$lib/stacks_connect';
+	import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
 	import { goto } from '$app/navigation';
+	import { processProposalContracts } from '$lib/sbtc_admin';
+	import DaoUtils from '$lib/service/DaoUtils';
+	import Proposed from './Proposed.svelte';
 
 	export let proposal:ProposalEvent;
+	let errorMessage:string|undefined;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
 
 	let amount = 500000;
 	let txId: string|undefined;
 
 	const { addNotification } = getNotificationsContext();
-	let inited = false
 	let fundingData:FundingData;
 	let fundingMet = false;
-	let stacksTipHeight = 0;
+	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 	let proposalDuration = 0
 	let proposalStartDelay = 0
 	let startHeightMessage = 'The earliest start for voting is in ';
@@ -75,14 +78,29 @@
 	}
 
 	const submitFlexible = async () => {
+        if (!loggedIn()) {
+          errorMessage = 'Please connect your wallet to vote';
+          return;
+        }
+        if (paramStartDelay < 6 ) {
+          errorMessage = 'Start delay minimum is 6 blocks';
+          return;
+        }
+        if (paramStartDelay > 500 ) {
+          errorMessage = 'Start delay maximum is 500 blocks';
+          return;
+        }
+        if (paramDuration < 144 ) {
+          errorMessage = 'Duration minimum is 144 blocks';
+          return;
+        }
+        if (paramDuration > 5000 ) {
+          errorMessage = 'Duration maximum is 5000 blocks';
+          return;
+        }
 		if (amount < 500000) {
-			addNotification({
-				position: 'bottom-right',
-				heading: 'Please fix',
-				type: 'error',
-				description: 'Minimum contribution is 0.5 STX',
-			});
-			return
+			errorMessage = 'Half a STX required to fund';
+			return;
 		}
 		//const amountUSTX = ChainUtils.toOnChainAmount(amount);
 		const amountCV = uintCV(amount);
@@ -111,6 +129,10 @@
 	}
 
 	onMount(async () => {
+		const processResult = await processProposalContracts(proposal.contractId)
+		const refreshedProposal = processResult.find((o:ProposalEvent) =>  o.contractId === proposal.contractId )
+		if (refreshedProposal) proposal = refreshedProposal; 
+		DaoUtils.setStatus(stacksTipHeight, proposal)
 		fundingData = proposal.funding;
 		if (!fundingData) {
 			goto('/dao/proposals/propose')
@@ -124,25 +146,31 @@
 		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 		paramStartDelay = 6;
 		paramDuration = 144 //proposalDuration;
-		inited = true
 	})
 
 	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 	</script>
 
-{#if inited}
 {#if !fundingMet}
-<div class="flex flex-col">
+  
+		<div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
+  
 	<h1 class="text-2xl">
 		Fund proposal : {fmtMicroToStx(fundingData.parameters.fundingCost - fundingData.funding)} STX needed!
 	</h1>
-	<div class="w-full flex flex-col gap-y-4">
-		<p class="text-sm font-thin">(minimum contribution is 0.5 STX)</p>
-		{#if txId}
+	<div class="mt-6 w-full flex flex-col gap-y-4">
+		<div>
 			<div>
-				<a href={explorerUrl} target="_blank">View on explorer</a>
+				<p>{startHeightMessage}</p>
+				<p>{durationMessage}</p>
 			</div>
-		{/if}
+			<p class="text-sm font-thin">(minimum contribution is 0.5 STX)</p>
+			{#if txId}
+				<div>
+					<a href={explorerUrl} target="_blank">View on explorer</a>
+				</div>
+			{/if}
+		</div>
 		<form on:submit|preventDefault class="form-inline">
 			<div class="w-full flex flex-col gap-y-4">
 				<div class="w-full">
@@ -167,21 +195,11 @@
 						Fund proposal
 					  </button>
 				</div>
+				{#if errorMessage}<div>{errorMessage}</div>{/if}
 			</div>
 		</form>
 	</div>
 </div>
-<div>
-	<div>
-		<p>{startHeightMessage}</p>
-		<p>{durationMessage}</p>
-	</div>
-</div>
 {:else}
-<div class="flex flex-col gap-y-10">
-	<p>Funding target met {fmtMicroToStx(fundingData.funding)} of {fmtMicroToStx(fundingData.parameters.fundingCost)} STX raised</p>
-	<p>{startHeightMessage}</p>
-	<p>{durationMessage}</p>
-</div>
-{/if}
+<Proposed {proposal} />
 {/if}

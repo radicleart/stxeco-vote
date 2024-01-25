@@ -80,6 +80,10 @@ export default {
         "1000": "#601b1b"
       }
     },
+    backgroundImage: {
+      "warning-01": "rgba(248, 246, 91, 0.40);",
+      "warning-02": "rgba(248, 246, 248, 0.40);",
+    },
     extend: {
       fontFamily: {
         'sans': ['Matter', ...defaultTheme.fontFamily.sans],

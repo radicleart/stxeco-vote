@@ -79,13 +79,12 @@
 			conf.proposals = daoProposals
 			return conf;
 		});
-		componentKey1++
 		let currentProposal = await getCurrentProposal()
 		sbtcConfig.update((conf) => {
 			conf.currentProposal = currentProposal
 			return conf;
 		});
-		componentKey1++
+		inited = true;
 		const soloPoolData = await getPoolAndSoloVotesByProposal(currentProposal.contractId)
 		const stacksInfo = await fetchStacksInfo();
 		sbtcConfig.update((conf) => {
@@ -98,7 +97,6 @@
 			await authenticate($sbtcConfig)
 		}
 		setAuthorisation($sbtcConfig.authHeader)
-		componentKey1++
 	}
 
 	onMount(async () => {
@@ -116,7 +114,7 @@
 				sbtcConfig.update(() => conf);
 			}
 
-			initApp();
+			await initApp();
 			inited = true;
 
 			await connectToStacks();
@@ -127,7 +125,6 @@
 		}
 	})
 </script>
-<Notifications>
 	<div class="bg-white min-h-screen relative">
 		{#if inited}
 		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
@@ -140,4 +137,3 @@
 		<Footer />
 		{/if}
 	</div>
-</Notifications>
