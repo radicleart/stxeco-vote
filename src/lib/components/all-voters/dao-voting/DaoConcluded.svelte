@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import type { ProposalData, ProposalEvent, VoteEvent } from '$types/stxeco.type';
-	import DaoResults from './DaoResults.svelte';
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 

@@ -14,6 +14,7 @@
 	</div>
 	<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting info</span>
 </div>
+
 <div class="sm:flex sm:items-center sm:justify-between mt-6">
 <h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
 	<a href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" class="py-2 px-4 rounded-md" target="_blank">
@@ -25,15 +26,17 @@
 		</svg>
 	</a>
 </h1>
+</div>
 <div class="flex flex-row w-full my-8">
 	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-			<p class="text-2xl mb-5">Voting information</p>
-			<p>Voting information is being gathered from the blockchain - thank you for your patience.</p>
+			<div>
+				<p class="text-2xl mb-5">Voting information</p>
+				<p>Voting information is being gathered from the blockchain - thank you for your patience.</p>
+			</div>
 			<NakamotoBackground />
 			<NakamotoShield />
 		</div>
 	</div>
 </div>
 
-</div>

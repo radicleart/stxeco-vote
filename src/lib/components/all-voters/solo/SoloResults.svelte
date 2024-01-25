@@ -9,6 +9,7 @@ import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import ChevronDown from '$lib/components/shared/ChevronDown.svelte';
 import ChevronUp from '$lib/components/shared/ChevronUp.svelte';
+	import VoteResultsRow from '../VoteResultsRow.svelte';
 
 export let proposal:ProposalEvent;
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
@@ -25,8 +26,11 @@ const reorder = (sf:string) => {
     componentKey++;
 }
 const votes: any[] = []
-let totalAccountsFor = 0;
-let totalAccountsAgainst = 0;
+let accountsFor = 0;
+let accountsAgainst = 0;
+let stxFor = 0;
+let stxAgainst = 0;
+let stxPower = 0;
 let totalVotePower = (proposal.proposalData) ? FormatUtils.fmtNumber(Math.floor(ChainUtils.fromMicroAmount(proposal.proposalData.votesFor + proposal.proposalData.votesAgainst))) : 0;
 
 let stacksTipHeight = 0;
@@ -40,10 +44,13 @@ onMount(async () => {
     soloVotes.forEach((o:any) => {
       if (o) votes.push(o)
       if (o.for) {
-        totalAccountsFor++;
+        accountsFor++;
+        stxFor += (o.amount === 0) ? 100 : o.amount
       } else {
-        totalAccountsAgainst++;
+        accountsAgainst++;
+        stxAgainst += (o.amount === 0) ? 100 : o.amount
       }
+      stxPower += (o.amount === 0) ? 100 : o.amount
     });
   }
 
@@ -57,14 +64,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 {#if soloVotes}
-  <div>
-    <h1 class={'mb-5 text-2xl text-' + color}><span>Method 1: Voting for Solo Stackers</span></h1>
-    <h4 class="text-white">Total number participating wallets: <span class="text-warning">{totalAccountsFor + totalAccountsAgainst}</span></h4>
-  </div>
-  <div class="flex flex-col gap-y-4 my-10 mx-auto items-center justify-center">
-    <div class="w-1/4 flex justify-between"><div>Votes for: </div><div>{totalAccountsFor}</div> </div>
-    <div class="w-1/4 flex justify-between"><div>Votes against: </div><div>{totalAccountsAgainst}</div> </div>
-  </div>
+  <VoteResultsRow {stxPower} {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <div class="flex justify-start text-sm">
       <a href="/" class={'text-xs text-gray-400'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if !showVotes}show{:else}hide{/if} transactions</a>
