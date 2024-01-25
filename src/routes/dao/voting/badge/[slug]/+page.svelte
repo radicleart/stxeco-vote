@@ -10,9 +10,10 @@ import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import BadgeClaim from "$lib/components/all-voters/BadgeClaim.svelte";
 import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
+	import SpaceHolder from "$lib/components/all-voters/SpaceHolder.svelte";
 
 let proposal:ProposalEvent;
-
+let inited = false;
 onMount(async () => {
   if (!loggedIn()) {
     goto('/')
@@ -27,6 +28,7 @@ onMount(async () => {
   } else {
     goto('/')
   }
+  inited = true
 })
 
 </script>
@@ -37,10 +39,9 @@ onMount(async () => {
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
+{#if inited}
 <div class="py-6 mx-auto max-w-7xl md:px-6">
-  {#if proposal}
-<ProposalHeader {proposal} />
-{/if}
+  {#if proposal}<ProposalHeader {proposal} />{/if}
 <div class="flex flex-row w-full my-8">
   <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
     <div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
@@ -59,3 +60,6 @@ onMount(async () => {
   </div>
 </div>
 </div>
+{:else}
+<SpaceHolder />
+{/if}

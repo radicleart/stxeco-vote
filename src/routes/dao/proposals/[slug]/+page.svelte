@@ -22,6 +22,7 @@
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
+	import SpaceHolder from '$lib/components/all-voters/SpaceHolder.svelte';
 
 	let soloVotes:Array<VoteEvent>;
 	let poolVotes:Array<VoteEvent>;
@@ -113,5 +114,7 @@
 		<DaoConcluded {proposal}/>
 		{/if}
 	{/if}
+	{:else}
+	<SpaceHolder />
 	{/if}
 </div>
