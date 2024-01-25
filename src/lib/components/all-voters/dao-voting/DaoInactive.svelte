@@ -6,19 +6,21 @@
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 	import { CONFIG } from '$lib/config';
 	import { explorerTxUrl } from '$lib/utils';
+	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 
-	export let proposalEvent: ProposalEvent;
+	export let proposal: ProposalEvent;
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 	let txId:string|undefined;
 
 	const concludeVote = async () => {
     const deployer = CONFIG.VITE_DOA_DEPLOYER;
-    const proposalCV = contractPrincipalCV(proposalEvent.contractId.split('.')[0], proposalEvent.contractId.split('.')[1])
+    const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     await openContractCall({
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,
-        contractName: proposalEvent.votingContract.split('.')[1],
+        contractName: proposal.votingContract.split('.')[1],
         functionName: 'conclude',
         functionArgs: [proposalCV],
         onFinish: data => {
@@ -39,19 +41,32 @@
 		content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin"
 	/>
 </svelte:head>
-
-<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<p>Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
-	{#if txId}
-	<div><a href={explorerTxUrl(txId)} target="_blank">Track progress on the explorer</a></div>
-	{:else}
-	<div>Please conclude for votes to be counted.</div>
-	<div class="py-4">
-	  <button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-		Conclude vote
-	  </button>
+<div class="flex flex-row w-full my-8">
+	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+			<div class="flex flex-col gap-y-12">
+				<div class="flex flex-col">
+					<p class="text-2xl mb-5">Voting ended</p>
+					<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>
+					<p>Votes are now being counted.</p>
+					<p>Vote results will be displayed as soon as the vote count is over.</p>
+					<p>Thank you for your patience.</p>
+				</div>
+				
+				{#if txId}
+				<div><a href={explorerTxUrl(txId)} target="_blank">Track progress on the explorer</a></div>
+				{:else}
+				<div>
+					  <button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-black text-white px-4 py-2 rounded-xl border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+						Conclude vote
+					  </button>
+				</div>
+				{/if}
+			</div>
+			<NakamotoBackground />
+			<NakamotoShield />
+		</div>
 	</div>
-	{/if}
-
 </div>
+
 

@@ -3,9 +3,10 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { ProposalData, ProposalEvent, VoteEvent } from '$types/stxeco.type';
 	import DaoResults from './DaoResults.svelte';
+	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 
-	export let proposalEvent: ProposalEvent;
-	export let daoVotes:Array<VoteEvent>;
+	export let proposal: ProposalEvent;
 
 	let proposalData: ProposalData;
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
@@ -13,7 +14,7 @@
 	let inFavour:number;
 
 	onMount(async () => {
-		const pd = proposalEvent.proposalData
+		const pd = proposal.proposalData
 		inFavour = (pd && (pd.votesFor + pd.votesAgainst) > 0) ? Number(((pd.votesFor / (pd.votesFor + pd.votesAgainst)) * 100).toFixed(2)) : 0;
 		if (inFavour > 80) {
 			winning = 'success';
@@ -31,38 +32,18 @@
 </svelte:head>
 
 
-<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<p class="text-xs text-gray-400">Voting ended {stacksTipHeight - proposalEvent.proposalData.endBlockHeight} blocks ago.</p>
-	<!--
-	{#if proposalData}
-		{#if proposalData.passed}
-		<h4 class={'text-2xl mb-5 text-' + proposalEvent.status?.color}>Vote Passed</h4>
-		<div class={'mb-4 flex justify-around text-' + winning}>
-		<div>
-			<span class="text-center">{inFavour}%</span> <span class="text-white"> in favour of this proposal</span>
+<div class="flex flex-row w-full my-8">
+	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+			<div class="flex flex-col gap-y-12">
+				<div class="flex flex-col">
+					<p class="text-2xl mb-5">Voting ended</p>
+					<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>
+				</div>
+				
+				<p class="text-lg">Vote results can be found <a class="text-warning-900 underline" href={`/dao/proposals/${proposal.contractId}/results`}>here</a>.</p></div>
+			<NakamotoBackground />
+			<NakamotoShield />
 		</div>
-		</div>
-		{:else}
-		<h4 class={'text-' + proposalEvent.status?.color}>Vote Failed to Pass</h4>
-		<div class={'mb-4 flex justify-around text-' + winning}>
-		<div>
-			<span class="text-center">{100 - inFavour}%</span> <span class="text-white"> against this proposal</span>
-		</div>
-		</div>
-		{/if}
-		<div class={'flex justify-around text-' + proposalEvent.status?.color}>
-			<div>
-			  <p class="text-center">{fmtMicroToStx(proposalData.votesFor)} <span class="text-white">votes for</span></p>
-			</div>
-			<div>
-			  <p class="text-center">{fmtMicroToStx(proposalData.votesAgainst)} <span class="text-white">votes against</span></p>
-			</div>
-		</div>
-	
-	{/if}
-	-->
-	<div>
-		<DaoResults proposal={proposalEvent} {daoVotes} />
 	</div>
 </div>
-  
