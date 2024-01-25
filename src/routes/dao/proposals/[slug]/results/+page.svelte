@@ -1,27 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Skeleton } from 'flowbite-svelte';
-	import { fmtNumber } from '$lib/utils.js'
+	import { Skeleton, Tabs, TabItem } from 'flowbite-svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import { page } from '$app/stores';
 	import { CONFIG } from '$lib/config';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import { goto } from '$app/navigation';
-	import Funding from '$lib/components/all-voters/Funding.svelte';
-	import DaoInactive from '$lib/components/all-voters/dao-voting/DaoInactive.svelte';
 	import { getDaoVotesByProposal, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
 	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
-	import SoloVotingActive from '$lib/components/all-voters/solo/SoloVotingActive.svelte';
-	import PoolVotingActive from '$lib/components/all-voters/pool/PoolVotingActive.svelte';
-	import DaoVotingActive from '$lib/components/all-voters/dao-voting/DaoVotingActive.svelte';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
-	import Proposed from '$lib/components/all-voters/Proposed.svelte';
-	import Holding from '$lib/components/all-voters/Holding.svelte';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
-	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
+	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
+	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
+	import SoloResults from '$lib/components/all-voters/solo/SoloResults.svelte';
+	import DaoInactive from '$lib/components/all-voters/dao-voting/DaoInactive.svelte';
+	import { goto } from '$app/navigation';
+	import SpaceHolder from '$lib/components/all-voters/SpaceHolder.svelte';
 
 	let soloVotes:Array<VoteEvent>;
 	let poolVotes:Array<VoteEvent>;
@@ -72,46 +66,30 @@
 </svelte:head>
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
+
 	{#if inited}
 
-	{#if proposal}
-	<ProposalHeader {proposal} />
+		{#if proposal}
+		<ProposalHeader {proposal} />
+		{/if}
+
+		{#if proposal.stage !== ProposalStage.CONCLUDED}
+		<Tabs style="underline" contentClass="py-4">
+            <TabItem open={method === 1} on:click={() => goto(`/dao/proposals/${proposal.contractId}/results?method=1`)} title="Solo Stackers">
+				<SoloResults {proposal} />
+        	</TabItem>
+            <TabItem open={method === 2} on:click={() => goto(`/dao/proposals/${proposal.contractId}/results?method=1`)} title="Pool Stackers">
+				<PoolResults {proposal} />
+            </TabItem>
+            <TabItem open={method === 3} on:click={() => goto(`/dao/proposals/${proposal.contractId}/results?method=1`)} title="Non Stackers">
+				<DaoResults {proposal} />
+            </TabItem>
+        </Tabs>
+		{:else}
+		<DaoInactive {proposal}/>
+		{/if}
+	{:else}
+	<SpaceHolder />
 	{/if}
 
-	{#if !activeFlag}
-	<div class="flex flex-row w-full my-8">
-		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-			<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-				{#if proposalNotReady}
-				<Holding />
-				{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
-				<Funding {proposal} />
-				{:else if proposal.stage === ProposalStage.PROPOSED}
-				<Proposed {proposal} />
-				{/if}
-				<NakamotoBackground />
-				<NakamotoShield />
-			</div>
-		</div>
-	</div>
-	{:else}
-		{#if proposal.stage === ProposalStage.ACTIVE}
-			{#if method === 1}
-				<SoloVotingActive {proposal} />
-			{:else if method === 2}
-				<PoolVotingActive {proposal} />
-			{:else if method === 3}
-				<DaoVotingActive {proposal} />
-			{:else}
-				<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-					<Skeleton size="md" />
-				</div>
-			{/if}
-		{:else if proposal.stage === ProposalStage.INACTIVE}
-		<DaoInactive {proposal}/>
-		{:else}
-		<DaoConcluded {proposal}/>
-		{/if}
-	{/if}
-	{/if}
 </div>
