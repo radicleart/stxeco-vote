@@ -99,6 +99,8 @@ export type ProposalData = {
   startBlockHeight:number;
   votesAgainst:number;
   votesFor:number;
+  burnStartHeight:number;
+  burnEndHeight:number;
 }
 export type SubmissionData = {
   contractId:string;

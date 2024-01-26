@@ -74,46 +74,48 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	{#if inited}
-		{#if proposal}
-		<ProposalHeader {proposal} />
-		{/if}
 
-		{#if !activeFlag}
-			<div>
-				<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-					<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-						{#if proposalNotReady}
-						<Holding />
-						{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
-						<Funding {proposal} />
-						{:else if proposal.stage === ProposalStage.PROPOSED}
-						<Proposed {proposal} />
-						{/if}
-						<NakamotoBackground />
-						<NakamotoShield />
-					</div>
-				</div>
-			</div>
-		{:else}
-			{#if proposal.stage === ProposalStage.ACTIVE}
-				{#if method === 1}
-					<SoloVotingActive {proposal} />
-				{:else if method === 2}
-					<PoolVotingActive {proposal} />
-				{:else if method === 3}
-					<DaoVotingActive {proposal} />
-				{:else}
-					<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-						<Skeleton size="md" />
-					</div>
+	{#if proposal}
+	<ProposalHeader {proposal} />
+	{/if}
+
+	{#if !activeFlag}
+	<div class="flex flex-row w-full my-8">
+
+		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+				{#if proposalNotFound}
+				<Holding />
+				{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
+				<Funding {proposal} />
+				{:else if proposal.stage === ProposalStage.PROPOSED}
+				<Proposed {proposal} />
 				{/if}
-			{:else if proposal.stage === ProposalStage.INACTIVE}
-			<DaoInactive {proposal}/>
-			{:else}
-			<DaoConcluded {proposal}/>
-			{/if}
-		{/if}
+				<NakamotoBackground />
+				<NakamotoShield />
+			</div>
+		</div>
+	</div>
 	{:else}
-		<Placeholder />
+		{#if proposal.stage === ProposalStage.ACTIVE}
+			{#if method === 1}
+				<SoloVotingActive {proposal} />
+			{:else if method === 2}
+				<PoolVotingActive {proposal} />
+			{:else if method === 3}
+				<DaoVotingActive {proposal} />
+			{:else}
+				<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
+					<Skeleton size="md" />
+				</div>
+			{/if}
+		{:else if proposal.stage === ProposalStage.INACTIVE}
+		<DaoInactive {proposal}/>
+		{:else}
+		<DaoConcluded {proposal}/>
+		{/if}
+	{/if}
+	{:else}
+	<Placeholder />
 	{/if}
 </div>

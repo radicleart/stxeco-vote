@@ -208,7 +208,8 @@
 						<div class="pt-4">
 							<h2 class="text-xl mb-3 text-[#131416]">Learn more</h2>
 							<ul class="list-disc pl-4 text-[#605D5D]">
-								<li><a class="underline" href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
+								<li><a class="underline" href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" target="_blank">Stacks Improvement Proposal: Nakamoto v1 on GitHub</a></li>
+								<li><a class="underline" href="https://stacks.org/nakamoto-voting-guide" target="_blank">Nakamoto: Your Guide to Voting</a></li>
 							</ul>
 						</div>
 					</div>

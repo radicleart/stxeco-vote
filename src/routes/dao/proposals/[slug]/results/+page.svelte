@@ -94,7 +94,7 @@
 		{#if proposal}
 		<ProposalHeader {proposal} />
 		{/if}
-		<div
+		<div>
 			<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 				<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 					<div class="flex flex-col gap-y-12">
