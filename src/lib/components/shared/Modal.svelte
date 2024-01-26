@@ -1,37 +1,35 @@
 <script>
+    export let showModal = false;
 
-export let showModal = false;
-
-scroll(0,0);
+    scroll(0,0);
 </script>
 
 {#if showModal}
-<div class="backdrop" >
+<div class="backdrop" on:keyup tabindex="0" role="button" aria-pressed="false">
     <div class="sv-modal">
         <slot name="title"></slot>
         <slot></slot>
-        <slot name="close"></slot>
-        <slot name="debug"></slot>
     </div>
 </div>
 {/if}
 
 <style>
     .backdrop {
-        z-index: 500;
-        width: 80%;
-        margin: auto;
+        z-index: 5000;
+        width: 100%;
+        height: 100%;
         position: absolute;
-        background-color: #fff;
-        color: black;
-        top: -250px;
+        background: rgba(0,0,0,0.8);
+        top: -100px;
         left: 0;
         right: 0;
-        padding: 30px;
-        border-radius: 40px;
     }
     .sv-modal {
-        padding-bottom: 40px;
-        min-height: 80%;
+        padding: 10px;
+        border-radius: 0px;
+        min-width: 400px;
+        min-height: 70vh;
+        margin: 10% 10%;
+        background: transparent;
     }
 </style>

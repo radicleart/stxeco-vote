@@ -59,7 +59,7 @@
               console.log('finished contract call!', data);
               //ChainUtils.updateVoters();
               localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
-              goto(`/dao/voting/badge/${proposal.contractId}`);
+              goto(`/dao/proposals/${proposal.contractId}/badge`);
             },
             onCancel: () => {
               console.log('popup closed!');

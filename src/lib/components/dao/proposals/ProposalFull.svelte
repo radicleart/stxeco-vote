@@ -150,7 +150,7 @@
 	<button
 		class={'text-primary-700'}
 		on:click|preventDefault={() => {
-			goto(`/dao/voting/badge/${proposalEvent.contractId}`);
+          goto(`/dao/proposals/${proposalEvent.contractId}/badge`);
 		}}>badge</button
 	>
 	<a class={'text-primary-700'} href={explorerAddressUrl(CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_SNAPSHOT_VOTING_EXTENSION)} target="_blank">explorer</a>

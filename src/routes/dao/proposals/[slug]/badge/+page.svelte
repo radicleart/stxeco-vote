@@ -7,10 +7,10 @@ import { loggedIn } from "$lib/stacks_connect";
 import { goto } from "$app/navigation";
 import type { ProposalEvent } from "$types/stxeco.type";
 import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
-import BadgeClaim from "$lib/components/all-voters/BadgeClaim.svelte";
 import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
 	import Placeholder from "$lib/components/all-voters/Placeholder.svelte";
+	import BadgeClaim from "$lib/components/all-voters/badgeClaim.svelte";
 
 let proposal:ProposalEvent;
 let inited = false;

@@ -39,7 +39,8 @@
       loading = true;
       assets = []
 
-      holdings = await getNftsbyPage('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', assetId, pageSize, offset)
+      //holdings = await getNftsbyPage('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', assetId, pageSize, offset)
+      holdings = await getNftsbyPage(account.stxAddress, assetId, pageSize, offset)
       holdings.results = holdings.results.filter((o:any) => typeof o.metaData !== 'undefined')
       if (!init && holdings.total <= (currentPage * pageSize)) return;
       holdings.results.forEach((item:any) => {
@@ -82,7 +83,8 @@
       onMount(async () => {
         const contractId = $page.params.slug;
         // await nextPage(true)
-        assetIdList = await getNftAssetClasses('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5');
+        //assetIdList = await getNftAssetClasses('ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5');
+        assetIdList = await getNftAssetClasses(account.stxAddress);
         if (assetIdList && assetIdList.length > 0) {
           assetIdList.forEach((o) => {
             sortedAssets.push({
@@ -92,7 +94,8 @@
             })
           })
           sortedAssets = sortedAssets.sort(DaoUtils.dynamicSort('assetName'));
-          votes = await getDaoVotesByProposalAndVoter(contractId, 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5')
+          //votes = await getDaoVotesByProposalAndVoter(contractId, 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5')
+          votes = await getDaoVotesByProposalAndVoter(contractId, account.stxAddress)
           noAssets = false;
         }
       })
