@@ -1,7 +1,7 @@
 <script lang="ts">
 import FormatUtils from '$lib/service/FormatUtils';
 import ChainUtils from '$lib/service/ChainUtils';
-import Countdown from '$lib/shared/Countdown.svelte'
+import Countdown from '$lib/components/shared/Countdown.svelte'
 import { openContractCall } from '@stacks/connect';
 import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 import { CONFIG } from '$lib/config';

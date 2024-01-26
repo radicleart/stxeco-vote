@@ -7,8 +7,8 @@
 	import SnapBallotBox from '$lib/components/dao/voting/SnapVotingBallotBox.svelte';
 	import { goto } from '$app/navigation';
 	import EmergencyExecuted from '$lib/components/dao/proposals/EmergencyExecuted.svelte';
-	import Modal from '$lib/shared/Modal.svelte';
-	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
+	import Modal from '$lib/components/shared/Modal.svelte';
+	import ClaritySytaxHighlighter from '$lib/components/shared/ClaritySytaxHighlighter.svelte';
 	import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
 	import Funding from '$lib/components/all-voters/Funding.svelte';
 	import ThresholdSubmissionVoting from '$lib/components/dao/submission/ThresholdSubmissionVoting.svelte';
@@ -16,7 +16,7 @@
 	import ExecutiveProposalSubmission from '$lib/components/dao/submission/ExecutiveProposalSubmission.svelte';
 	import Preamble from '$lib/components/all-voters/Preamble.svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import Countdown from '$lib/shared/Countdown.svelte';
+	import Countdown from '$lib/components/shared/Countdown.svelte';
 	import FormatUtils from '$lib/service/FormatUtils';
 	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import { sbtcConfig } from '$stores/stores';

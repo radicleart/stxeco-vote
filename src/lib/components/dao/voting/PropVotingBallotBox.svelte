@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Modal from '$lib/shared/Modal.svelte';
+  import Modal from '$lib/components/shared/Modal.svelte';
   import { CONFIG } from '$lib/config';
   import { openContractCall } from '@stacks/connect';
   import { PostConditionMode, contractPrincipalCV, falseCV, trueCV, uintCV } from '@stacks/transactions';

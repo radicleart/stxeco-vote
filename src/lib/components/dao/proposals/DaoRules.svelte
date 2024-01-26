@@ -1,5 +1,5 @@
 <script>
-	import RepeatContent from '$lib/shared/RepeatContent.svelte';
+	import RepeatContent from '$lib/components/shared/RepeatContent.svelte';
   
 	  let slug = 'twopointone';
   

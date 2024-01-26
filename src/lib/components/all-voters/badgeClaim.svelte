@@ -2,7 +2,7 @@
     import { page } from "$app/stores";
     import { onMount } from 'svelte';
     import MetaData from '$lib/components/nft/MetaData.svelte';
-    import Canvas from '$lib/shared/Canvas.svelte';
+    import Canvas from '$lib/components/shared/Canvas.svelte';
     import DaoUtils from '$lib/service/DaoUtils';
     import { sbtcConfig } from "$stores/stores";
     import { CONFIG } from "$lib/config";
