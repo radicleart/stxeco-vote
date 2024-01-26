@@ -62,16 +62,16 @@ const TESTNET_CONFIG = {
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
     VITE_EXTENSIONS: [
-        'ede000-governance-token', 
-        'ede001-proposal-voting', 
-        'ede002-threshold-proposal-submission', 
-        'ede003-emergency-proposals', 
-        'ede004-emergency-execute', 
-        'ede005-dev-fund', 
-        'ede006-treasury',
-        'ede007-snapshot-proposal-voting-v5', 
-        'ede008-funded-proposal-submission-v5',
-        'ede009-governance-token-sale'
+        'bde000-governance-token', 
+        'bde001-proposal-voting', 
+        'bde002-threshold-proposal-submission', 
+        'bde003-emergency-proposals', 
+        'bde004-emergency-execute', 
+        'bde005-dev-fund', 
+        'bde006-treasury',
+        'bde007-snapshot-proposal-voting', 
+        'bde008-funded-proposal-submission',
+        'bde009-governance-token-sale'
     ]
 }
 

@@ -83,7 +83,7 @@
 	<div>
 		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-				{#if proposalNotReady}
+				{#if proposalNotFound}
 				<Holding />
 				{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
 				<Funding {proposal} />
