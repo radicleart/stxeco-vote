@@ -22,7 +22,7 @@
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
-	import SpaceHolder from '$lib/components/all-voters/SpaceHolder.svelte';
+	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 
 	let soloVotes:Array<VoteEvent>;
 	let poolVotes:Array<VoteEvent>;
@@ -74,47 +74,46 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	{#if inited}
-
-	{#if proposal}
-	<ProposalHeader {proposal} />
-	{/if}
-
-	{#if !activeFlag}
-	<div>
-		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-				{#if proposalNotReady}
-				<Holding />
-				{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
-				<Funding {proposal} />
-				{:else if proposal.stage === ProposalStage.PROPOSED}
-				<Proposed {proposal} />
-				{/if}
-				<NakamotoBackground />
-				<NakamotoShield />
-			</div>
-		</div>
-	</div>
-	{:else}
-		{#if proposal.stage === ProposalStage.ACTIVE}
-			{#if method === 1}
-				<SoloVotingActive {proposal} />
-			{:else if method === 2}
-				<PoolVotingActive {proposal} />
-			{:else if method === 3}
-				<DaoVotingActive {proposal} />
-			{:else}
-				<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-					<Skeleton size="md" />
-				</div>
-			{/if}
-		{:else if proposal.stage === ProposalStage.INACTIVE}
-		<DaoInactive {proposal}/>
-		{:else}
-		<DaoConcluded {proposal}/>
+		{#if proposal}
+		<ProposalHeader {proposal} />
 		{/if}
-	{/if}
+
+		{#if !activeFlag}
+			<div>
+				<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+					<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+						{#if proposalNotReady}
+						<Holding />
+						{:else if proposal.stage === ProposalStage.PARTIAL_FUNDING || proposal.stage === ProposalStage.UNFUNDED}
+						<Funding {proposal} />
+						{:else if proposal.stage === ProposalStage.PROPOSED}
+						<Proposed {proposal} />
+						{/if}
+						<NakamotoBackground />
+						<NakamotoShield />
+					</div>
+				</div>
+			</div>
+		{:else}
+			{#if proposal.stage === ProposalStage.ACTIVE}
+				{#if method === 1}
+					<SoloVotingActive {proposal} />
+				{:else if method === 2}
+					<PoolVotingActive {proposal} />
+				{:else if method === 3}
+					<DaoVotingActive {proposal} />
+				{:else}
+					<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
+						<Skeleton size="md" />
+					</div>
+				{/if}
+			{:else if proposal.stage === ProposalStage.INACTIVE}
+			<DaoInactive {proposal}/>
+			{:else}
+			<DaoConcluded {proposal}/>
+			{/if}
+		{/if}
 	{:else}
-	<SpaceHolder />
+		<Placeholder />
 	{/if}
 </div>

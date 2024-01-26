@@ -1,10 +1,8 @@
 <script lang="ts">
 	import NakamotoBackground from "../shared/NakamotoBackground.svelte";
 	import NakamotoShield from "../shared/NakamotoShield.svelte";
-
 </script>
 
-  
 <div class="mt-8 inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
 	<div class="flex items-center gap-2">
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
@@ -12,7 +10,7 @@
 			Vote info loading
 		</p>
 	</div>
-	<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting info</span>
+	<div class="h-2 bg-sand-400 rounded my-1 animate-pulse"></div>
 </div>
 
 <div class="sm:flex sm:items-center sm:justify-between mt-6">
@@ -31,8 +29,11 @@
 	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 			<div>
-				<p class="text-2xl mb-5">Voting information</p>
-				<p>Voting information is being gathered from the blockchain - thank you for your patience.</p>
+				<div class="h-6 bg-sand-600 rounded animate-pulse w-2/3"></div>
+				<div class="h-2 bg-sand-500 rounded animate-pulse mt-6"></div>
+				<div class="h-2 bg-sand-500 rounded mt-3 animate-pulse w-3/4"></div>
+				<div class="h-2 bg-sand-500 rounded mt-3 animate-pulse w-2/3"></div>
+				<div class="h-2 bg-sand-500 rounded mt-3 animate-pulse"></div>
 			</div>
 			<NakamotoBackground />
 			<NakamotoShield />

@@ -41,7 +41,8 @@
 		content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin"
 	/>
 </svelte:head>
-<div class="flex flex-row w-full my-8">
+
+<div>
 	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 			<div class="flex flex-col gap-y-12">
@@ -52,14 +53,16 @@
 					<p>Vote results will be displayed as soon as the vote count is over.</p>
 					<p>Thank you for your patience.</p>
 				</div>
-				
+
 				{#if txId}
-				<div><a href={explorerTxUrl(txId)} target="_blank">Track progress on the explorer</a></div>
+					<div>
+						<a href={explorerTxUrl(txId)} target="_blank">Track progress on the explorer</a>
+					</div>
 				{:else}
 				<div>
-					  <button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-black text-white px-4 py-2 rounded-xl border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+					<button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-black text-white px-4 py-2 rounded-xl border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 						Conclude vote
-					  </button>
+					</button>
 				</div>
 				{/if}
 			</div>
