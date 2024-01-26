@@ -10,7 +10,7 @@ import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import BadgeClaim from "$lib/components/all-voters/BadgeClaim.svelte";
 import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
-	import SpaceHolder from "$lib/components/all-voters/SpaceHolder.svelte";
+	import Placeholder from "$lib/components/all-voters/Placeholder.svelte";
 
 let proposal:ProposalEvent;
 let inited = false;
@@ -60,5 +60,5 @@ onMount(async () => {
     </div>
   </div>
 {:else}
-  <SpaceHolder />
+  <Placeholder />
 {/if}

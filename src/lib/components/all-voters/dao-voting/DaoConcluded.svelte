@@ -21,7 +21,7 @@
 		proposalData = pd
 	});
 </script>
- 
+
 <svelte:head>
 	<title>Ecosystem DAO</title>
 	<meta
@@ -31,7 +31,7 @@
 </svelte:head>
 
 
-<div class="flex flex-row w-full my-8">
+<div>
 	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 		<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 			<div class="flex flex-col gap-y-12">
@@ -39,7 +39,7 @@
 					<p class="text-2xl mb-5">Voting ended</p>
 					<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>
 				</div>
-				
+
 				<p class="text-lg">Vote results can be found <a class="text-warning-900 underline" href={`/dao/proposals/${proposal.contractId}/results`}>here</a>.</p></div>
 			<NakamotoBackground />
 			<NakamotoShield />

@@ -22,7 +22,7 @@
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
-	import SpaceHolder from '$lib/components/all-voters/SpaceHolder.svelte';
+	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 
 	let soloVotes:Array<VoteEvent>;
 	let poolVotes:Array<VoteEvent>;
@@ -80,7 +80,8 @@
 	{/if}
 
 	{#if !activeFlag}
-	<div>
+	<div class="flex flex-row w-full my-8">
+
 		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 				{#if proposalNotFound}
@@ -115,6 +116,6 @@
 		{/if}
 	{/if}
 	{:else}
-	<SpaceHolder />
+	<Placeholder />
 	{/if}
 </div>
