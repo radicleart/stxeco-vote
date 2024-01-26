@@ -17,7 +17,7 @@
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
 	import Notifications from 'svelte-notifications';
-	import { getDaoProposals, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
+	import { getDaoProposals, getPoolAndSoloAddresses, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
 	import type { ProposalEvent } from '$types/stxeco.type';
 	import { getCurrentProposal } from '$lib/sbtc_admin';
 
@@ -85,7 +85,7 @@
 			return conf;
 		});
 		inited = true;
-		const soloPoolData = await getPoolAndSoloVotesByProposal(currentProposal.contractId)
+		const soloPoolData = await getPoolAndSoloAddresses()
 		const stacksInfo = await fetchStacksInfo();
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo

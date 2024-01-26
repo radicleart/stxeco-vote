@@ -1,7 +1,7 @@
 import { CONFIG } from '$lib/config';
 import { addNetSelector, extractResponse } from './bridge_api';
 
-export async function getAddresses() {
+export async function getPoolAndSoloAddresses() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/addresses');
   const response = await fetch(path);
   const res = await extractResponse(response);

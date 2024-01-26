@@ -11,7 +11,7 @@
 	import { goto } from '$app/navigation';
 	import Funding from '$lib/components/all-voters/Funding.svelte';
 	import DaoInactive from '$lib/components/all-voters/dao-voting/DaoInactive.svelte';
-	import { getDaoVotesByProposal, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
+	import { getDaoVotesByProposal } from '$lib/dao_api';
 	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import SoloVotingActive from '$lib/components/all-voters/solo/SoloVotingActive.svelte';
 	import PoolVotingActive from '$lib/components/all-voters/pool/PoolVotingActive.svelte';
@@ -24,14 +24,12 @@
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 
-	let soloVotes:Array<VoteEvent>;
-	let poolVotes:Array<VoteEvent>;
 	let daoVotes:Array<VoteEvent>;
 	let method:number = -1;
 	let errorReason:string|undefined;
 	let proposal:ProposalEvent;
 	let balanceAtHeight:number = 0;
-	let proposalNotFound = true;
+	let proposalNotFound = false;
 	let activeFlag = false;
 	let inited = false;
 
@@ -43,9 +41,6 @@
 			const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 			DaoUtils.setStatus(stacksTipHeight, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
-			const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
-			poolVotes = allVotes.poolVotes;
-			soloVotes = allVotes.soloVotes;
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 		} else {
 			proposalNotFound = true

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getNotificationsContext } from 'svelte-notifications';
 	import { CONFIG } from '$lib/config';
 	import { sbtcConfig } from '$stores/stores';
 	import { FungibleConditionCode, PostConditionMode, contractPrincipalCV, makeStandardSTXPostCondition, someCV, uintCV } from '@stacks/transactions';
@@ -12,15 +11,16 @@
 	import { processProposalContracts } from '$lib/sbtc_admin';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Proposed from './Proposed.svelte';
+	import Placeholder from './Placeholder.svelte';
 
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;
+	let inited = false;
 	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
 
 	let amount = 500000;
 	let txId: string|undefined;
 
-	const { addNotification } = getNotificationsContext();
 	let fundingData:FundingData;
 	let fundingMet = false;
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
@@ -45,12 +45,6 @@
 
 	const submitOriginal = async () => {
 		if (amount < 500000) {
-			addNotification({
-				position: 'bottom-right',
-				heading: 'Please fix',
-				type: 'error',
-				description: 'Minimum contribution is 0.5 STX',
-			});
 			return
 		}
 		//const amountUSTX = ChainUtils.toOnChainAmount(amount);
@@ -146,14 +140,16 @@
 		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 		paramStartDelay = 6;
 		paramDuration = 144 //proposalDuration;
+		inited = true
 	})
 
 	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
-	</script>
+</script>
 
+{#if inited}
 {#if !fundingMet}
   
-		<div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
+<div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
   
 	<h1 class="text-2xl">
 		Fund proposal : {fmtMicroToStx(fundingData.parameters.fundingCost - fundingData.funding)} STX needed!
@@ -202,4 +198,7 @@
 </div>
 {:else}
 <Proposed {proposal} />
+{/if}
+{:else}
+<Placeholder />
 {/if}
