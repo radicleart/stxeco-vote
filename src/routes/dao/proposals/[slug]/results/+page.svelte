@@ -15,7 +15,7 @@
 	import SoloResults from '$lib/components/all-voters/solo/SoloResults.svelte';
 	import DaoInactive from '$lib/components/all-voters/dao-voting/DaoInactive.svelte';
 	import { goto } from '$app/navigation';
-	import SpaceHolder from '$lib/components/all-voters/SpaceHolder.svelte';
+	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import PoolVotingActiveQr from '$lib/components/all-voters/pool/PoolVotingActiveQR.svelte';
@@ -94,7 +94,7 @@
 		{#if proposal}
 		<ProposalHeader {proposal} />
 		{/if}
-		<div class="flex flex-row w-full my-8">
+		<div
 			<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 				<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 					<div class="flex flex-col gap-y-12">
@@ -110,7 +110,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		{#if proposal.stage !== ProposalStage.CONCLUDED}
 
 		<div id="tabs-header">
@@ -119,19 +119,19 @@
 		<div >
 		<Tabs  style="underline" contentClass="py-4">
 			{#key componentKey}
-            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100" 
+            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="Solo Stackers" >
 				<div class="bg-lightgray py-8 px-4">
 					<SoloResults {proposal} />
 				</div>
         	</TabItem>
-            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100" 
+            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 			open={method === 2} on:keyup={(e) => changeMethod(e, 2)} title="Pool Stackers" >
 				<div class="bg-lightgray py-8 px-4">
 					<PoolResults {proposal} />
 				</div>
             </TabItem>
-            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100" 
+            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non Stackers" >
 				<div class="bg-lightgray py-8 px-4">
 					<DaoResults {proposal} />
@@ -146,7 +146,7 @@
 	{:else if proposalNotFound}
 	<div>Proposal not found - please return <a href="/" class="underline">home</a>.</div>
 	{:else}
-	<SpaceHolder />
+	<Placeholder />
 	{/if}
 
 </div>
