@@ -138,9 +138,9 @@ export function setConfig(network:string) {
     }
 }
 export function setConfigByUrl(search:URLSearchParams) {
-    let network = 'mainnet'
+    let network = 'testnet'
     if (search.has('chain')) {
-        network = search.get('chain') || 'mainnet'
+        network = search.get('chain') || 'testnet'
     }
     setConfig(network)
 }
