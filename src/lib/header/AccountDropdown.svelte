@@ -146,6 +146,10 @@
 		</div>
 	</div>
 	{#if coordinator}
+		<DropdownItem defaultClass="px-4 py-2 text-white hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/pox')}>
+			<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
+			Cycle info
+		</DropdownItem>
 		<DropdownItem defaultClass="px-4 py-2 text-white hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => goto('/dao/extensions')}>
 			<Icon src="{ArrowRight}" mini class="inline h-5 w-5 text-white" aria-hidden="true" />
 			extensions
