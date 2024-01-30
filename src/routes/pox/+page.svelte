@@ -26,51 +26,52 @@ import Banner from '$lib/components/shared/Banner.svelte';
 </script>
 
 <svelte:head>
-    <title>Ecosystem DAO</title>
-    <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
+  <title>Ecosystem DAO</title>
+  <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-{#if poxInfo}
-<div>
-  <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-    <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-      <div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
-        <div class="mb-4">
-          <h2 class="text-[#131416] text-2xl mb-3">PoX Information</h2>
-        </div>
-        <div class="mb-3 max-w-xl">
-          <Banner bannerType={'warning'} message={'Voting is tied to PoX cycles.'} />
-        </div>
-        <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
-          {#if method === 1}
-          <Cycles {poxInfo} />
-          {:else}
-          <PoxLookup {poxInfo} on:back={reset}/>
-          {/if}
-          <div class="flex justify-end gap-x-4">
+
+<div class="max-w-7xl md:px-6 py-6 relative mx-auto">
+  {#if poxInfo}
+    <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+      <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+        <div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
+          <div class="mb-4">
+            <h2 class="text-[#131416] text-2xl mb-3">PoX Information</h2>
+          </div>
+          <div class="mb-3 max-w-xl">
+            <Banner bannerType={'info'} message={'Voting is tied to PoX cycles.'} />
+          </div>
+          <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
             {#if method === 1}
-            <div class="">
-              <a href="/" on:click|preventDefault={() => method = 2} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
-                PoX Calculator&nbsp;<span class="text-[#27282B]">-&gt;</span>
-              </a>
+            <Cycles {poxInfo} />
+            {:else}
+            <PoxLookup {poxInfo} on:back={reset}/>
+            {/if}
+            <div class="flex justify-end gap-x-4">
+              {#if method === 1}
+              <div class="">
+                <a href="/" on:click|preventDefault={() => method = 2} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+                  PoX Calculator&nbsp;<span class="text-[#27282B]">-&gt;</span>
+                </a>
+              </div>
+              {/if}
+              {#if method === 2}
+              <div class="">
+                <a href="/" on:click|preventDefault={() => method = 1} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+                  <span class="text-[#27282B]">&lt;-</span>&nbsp;BACK
+                </a>
+              </div>
+              {/if}
             </div>
-            {/if}          
-            {#if method === 2}
-            <div class="">
-              <a href="/" on:click|preventDefault={() => method = 1} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
-                <span class="text-[#27282B]">&lt;-</span>&nbsp;BACK
-              </a>
-            </div>  
-            {/if}          
           </div>
         </div>
-      </div>
 
-      <NakamotoBackground />
-      <NakamotoShield />
+        <NakamotoBackground />
+        <NakamotoShield />
+      </div>
     </div>
-  </div>
+  {:else}
+    <Placeholder />
+  {/if}
 </div>
-{:else}
-<Placeholder />
-{/if}

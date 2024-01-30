@@ -20,7 +20,7 @@
     } else if (bannerType === 'waiting' || bannerType === 'checking') {
       bannerClassList = clazz + ' bg-lightpurple/60';
     } else {
-      bannerClassList = clazz + ' bg-sand-400';
+      bannerClassList = clazz + ' bg-sand-500/60';
     }
   })
 </script>
