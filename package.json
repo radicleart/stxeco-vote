@@ -8,6 +8,7 @@
 		"dev": "vite dev --port=8080 --mode linode-staging",
 		"tst": "vite dev --port=8082 --mode linode-staging",
 		"lt": "vite dev --port=8082 --mode local-testnet",
+		"lm": "vite dev --port=8082 --mode local-mainnet",
 		"build-linode": "vite build --mode linode-staging",
 		"build-stag": "vite build --mode staging",
 		"build": "vite build",

@@ -23,6 +23,7 @@
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
+	import { isCoordinator } from '$lib/sbtc_admin';
 
 	let daoVotes:Array<VoteEvent>;
 	let method:number = -1;
@@ -46,7 +47,7 @@
 			proposalNotFound = true
 		}
 
-		if (CONFIG.VITE_NETWORK === 'mainnet') {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
 			proposalNotFound = true
 			activeFlag = false
 		}
@@ -71,7 +72,7 @@
 	{#if inited}
 
 	{#if proposal}
-	<ProposalHeader {proposal} />
+	<ProposalHeader {proposal} {method} />
 	{/if}
 
 	{#if !activeFlag}
