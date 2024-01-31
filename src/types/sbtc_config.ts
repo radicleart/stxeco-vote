@@ -1,6 +1,7 @@
 import type { SbtcContractDataType, AddressObject, ExchangeRate, AuthorisationDataType } from 'sbtc-bridge-lib' 
 import type { DaoData, GovernanceData, ProposalEvent } from './stxeco.type';
 import type { SoloPoolData } from './stxeco_stacker_type';
+import type { PoxInfo } from './pox_types';
 
 export type SbtcConfig = {
   daoData?: DaoData;
@@ -15,6 +16,7 @@ export type SbtcConfig = {
   stxAddress?: string;
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataType;
+  poxInfo:PoxInfo,
   stacksInfo: {
     burn_block_height: number;
     server_version: string;

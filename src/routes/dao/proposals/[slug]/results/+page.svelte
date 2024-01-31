@@ -92,7 +92,7 @@
 	{#if inited}
 
 		{#if proposal}
-		<ProposalHeader {proposal} />
+		<ProposalHeader {proposal} method={1} />
 		{/if}
 		<div>
 			<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">

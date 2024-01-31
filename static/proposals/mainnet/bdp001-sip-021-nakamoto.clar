@@ -3,7 +3,8 @@
 ;; Jacinta Ferrent, Diwaker Gupta,Jesus Najera, Jude Nelson, 
 ;; Ashton Stephens, Joey Yandle
 ;; Synopsis:
-;; This proposal outlines a significant change to mining and block validation that will make the blockchain faster and more reliable.
+;; This proposal outlines a significant change to mining and block validation 
+;; that will make the Stacks blockchain faster and more reliable.
 ;; Description:
 ;; The document outlines a significant change to the Stacks blockchain, 
 ;; known as the "Nakamoto" release. This change would uncouple Stacks block 
