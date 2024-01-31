@@ -16,6 +16,7 @@
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
+	let showBitcoin = true
 
 	const doLogin = async () => {
 		if (loggedIn()) doLogout()
@@ -46,9 +47,13 @@
 		componentKey++;
 	})
 
-	$: getBlockHeigths = () => {
-		let msg = 'Block Height: '
-		msg += ($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' n/a ';
+	$: getBlockHeigths = (showBitcoin:boolean) => {
+		let msg;
+		if (showBitcoin) {
+			msg = 'Bitcoin height: ' + (($sbtcConfig.poxInfo) ? fmtNumber($sbtcConfig.poxInfo.current_burnchain_block_height) : ' n/a ');
+		} else {
+			msg = 'Stacks height: ' + (($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' n/a ');
+		}
 		return msg
 	}
 
@@ -122,9 +127,9 @@
 				-->
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
 			</div>
-			<div>
-				<span class="inline-block md:text-sand-700 py-2.5 px-2">
-					{getBlockHeigths()}
+			<div >
+				<span role="contentinfo" class="inline-block md:text-sand-700 py-2.5 px-2" on:mouseenter={() => showBitcoin = false}  on:mouseleave={() => showBitcoin = true}>
+					{#if showBitcoin}{getBlockHeigths(showBitcoin)}{:else}{getBlockHeigths(showBitcoin)}{/if}
 				</span>
 			</div>
 		</div>

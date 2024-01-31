@@ -1,9 +1,22 @@
 <script lang="ts">
 import { fmtNumber } from '$lib/utils';
+	import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent } from '$types/stxeco.type';
 import Preamble from './Preamble.svelte';
 
 export let proposal:ProposalEvent;
+export let method:number;
+
+const endBitcoinBlock = () => {
+	const poxInfo = $sbtcConfig.poxInfo;
+	if (poxInfo.current_cycle.id === 77) {
+		return poxInfo.next_cycle.prepare_phase_start_block_height + 4200 - 1
+	} else if (poxInfo.current_cycle.id === 78) {
+		return poxInfo.next_cycle.prepare_phase_start_block_height + 2100 - 1
+	} else if (poxInfo.current_cycle.id === 79) {
+		return poxInfo.next_cycle.prepare_phase_start_block_height -1
+	}
+}
 let showDetails = false;
 </script>
 
@@ -19,7 +32,11 @@ let showDetails = false;
 			</p>
 		</div>
 		{#if proposal.proposalData}
-		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at block {fmtNumber(proposal.proposalData.endBlockHeight)}</span>
+			{#if method === 3}
+			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at stacks block {fmtNumber(proposal.proposalData.endBlockHeight)}</span>
+			{:else}
+			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at bitcoin block {fmtNumber(endBitcoinBlock())}</span>
+			{/if}
 		{:else}
 		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
 		{/if}

@@ -20,6 +20,7 @@
 	import { getDaoProposals, getPoolAndSoloAddresses, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
 	import type { ProposalEvent } from '$types/stxeco.type';
 	import { getCurrentProposal } from '$lib/sbtc_admin';
+	import { getPoxInfo } from '$lib/pox_api';
 
 	const unsubscribe1 = sbtcConfig.subscribe(() => {});
 	const unsubscribe2 = stacksStore.subscribe(() => {});
@@ -87,8 +88,11 @@
 		inited = true;
 		const soloPoolData = await getPoolAndSoloAddresses()
 		const stacksInfo = await fetchStacksInfo();
+		const poxInfo = await getPoxInfo()
+
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo
+			conf.poxInfo = poxInfo
 			conf.soloPoolData = soloPoolData
 			return conf;
 		});
