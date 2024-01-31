@@ -29,7 +29,8 @@ const switchMethod = (newMethod:number) => {
 	if (method === newMethod) return
 	const sp = $page.url.searchParams
 	sp.set('method', '' + newMethod)
-	goto($page.url.origin)
+	//goto($page.url.href)
+	location.assign($page.url.href)
 }
 </script>
 
