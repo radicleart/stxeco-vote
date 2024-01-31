@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-import Banner from '$lib/components/shared/Banner.svelte';
+  import Banner from '$lib/components/shared/Banner.svelte';
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 	import { getPoxInfo } from '$lib/pox_api';
@@ -32,16 +32,16 @@ import Banner from '$lib/components/shared/Banner.svelte';
 </script>
 
 <svelte:head>
-    <title>Ecosystem DAO</title>
-    <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
+  <title>Ecosystem DAO</title>
+  <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-{#if poxInfo}
-<div>
-  <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-    <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+<div class="max-w-7xl md:px-6 py-6 relative mx-auto">
+  {#if poxInfo}
+    <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+      <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
       <div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
-        <div class="mb-4">
+      <div class="mb-4">
           <h2 class="text-[#131416] text-2xl mb-3">PoX Information</h2>
         </div>
         <div class="mb-3 max-w-xl">
@@ -83,13 +83,13 @@ import Banner from '$lib/components/shared/Banner.svelte';
             {/if}          
           </div>
         </div>
-      </div>
 
-      <NakamotoBackground />
-      <NakamotoShield />
+        <NakamotoBackground />
+        <NakamotoShield />
+      </div>
     </div>
   </div>
+  {:else}
+    <Placeholder />
+  {/if}
 </div>
-{:else}
-<Placeholder />
-{/if}
