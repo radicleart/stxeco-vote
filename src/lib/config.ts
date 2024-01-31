@@ -122,10 +122,13 @@ export function setConfig(network:string) {
     if (mode === 'shared-devenv') {
         CONFIG = SHARED_DEVENV_CONFIG;
         return;
-    }
-
-    if (mode === 'local-testnet') {
+    } else if (mode === 'local-testnet') {
         CONFIG = TESTNET_CONFIG;
+        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
+        CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
+        return;
+    } else if (mode === 'local-mainnet') {
+        CONFIG = MAINNET_CONFIG;
         CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
         CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
         return;
