@@ -46,7 +46,7 @@
 	<input type="number" id="reward-cycle" class="p-3 rounded-sm border-none text-black" bind:value={cycle}/>
 
 	<button on:click={() => {processAddress()}} class="w-[150px] text-white justify-start items-start gap-x-1.5 bg-black px-4 py-2 rounded-xl border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-	  Process
+	  Lookup
 	</button>
 </div>
 {#if stackerInfo}

@@ -84,10 +84,10 @@
           </div>
         </div>
 
-        <NakamotoBackground />
-        <NakamotoShield />
       </div>
-    </div>
+      <NakamotoBackground />
+      <NakamotoShield />
+  </div>
   </div>
   {:else}
     <Placeholder />

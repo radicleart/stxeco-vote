@@ -36,3 +36,10 @@ export async function getPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry>
   return res;
 }
 
+export async function syncPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/sync/pox-entries/' + cycle);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+

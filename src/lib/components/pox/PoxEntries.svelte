@@ -25,6 +25,7 @@
 
 	onMount(async () => {
     	poxEntries = await getPoxEntriesByCycle(cycle)
+		console.log(poxEntries.length)
   	})
 
 </script>
@@ -33,7 +34,6 @@
 	<p class="text-lg text-[#131416]/[0.64]">PoX entries by cycle</p>
 </div>
 <div class="flex gap-x-2">
-	<label for ="reward-cycle" class="text-sand-500">Cycle</label>
 	<input type="number" id="reward-cycle" class="w-1/2 p-3 rounded-sm border-none text-black" bind:value={cycle}/>
 
 	<button on:click={() => {fetchPage()}} class="w-[150px] text-white justify-start items-start gap-x-1.5 bg-black px-4 py-2 rounded-xl border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">

@@ -78,7 +78,7 @@
 	{#if !activeFlag}
 	<div class="flex flex-row w-full my-8">
 
-		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+		<div class="flex flex-col w-full my-8 bg-[#400000] rounded-2xl">
 			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 				{#if proposalNotFound}
 				<Holding />
