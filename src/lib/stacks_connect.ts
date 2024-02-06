@@ -33,8 +33,9 @@ const allowed = [
 	{ btc: '1EJboSZVgPNrKCVmhmkV2rjLW4KN2Urti', stx: 'SP1ACWJC0TMD9F3Q3FJQFDWV9GSSTXN8RY31HR10B'}, // igor
 	{ btc: '1FFaqXGJPNvU28QhsCz9gsRatc1C55V33e', stx: 'SP2E57N3DDG0CSF6XYWABZ1E7QBF8CTKJ4J1PHP0V'}, // jude
 	{ btc: 'bc1q8j0gh8754jd9jerlxvpvxx4kc82e4u7f8ynnvp', stx: 'SP1R3S5RB1FSKCGQGW16ZHHPK6FAN57EAQ3RD7HP9'}, // marten
+	{ btc: 'bc1qfauslzp5fp285d3q64fl743zke0qz4h6helkgj', stx: 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z'}, // marten
 ]
-	
+
 export function isAllowed(address:string) {
 	return allowed.find((o) => o.stx === address);
 }
