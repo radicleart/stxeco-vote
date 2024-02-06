@@ -4,11 +4,12 @@
 
 
 	import { fmtNumber } from '$lib/utils';
-	import type { ProposalEvent } from '$types/stxeco.type';
+	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import Preamble from './Preamble.svelte';
 	import { goto } from '$app/navigation';
 	import { sbtcConfig } from '$stores/stores';
 	import { page } from '$app/stores';
+	import { NAKAMOTO_VOTE_START_HEIGHT } from '$lib/dao_api';
 
 	export let proposal:ProposalEvent;
 	export let method:number;
@@ -16,21 +17,27 @@
 	let dropdownOpen = false;
 
 	const endBitcoinBlock = () => {
-	const poxInfo = $sbtcConfig.poxInfo;
-	if (poxInfo.current_cycle.id === 77) {
-		return poxInfo.next_cycle.prepare_phase_start_block_height + 4200 - 1
-	} else if (poxInfo.current_cycle.id === 78) {
-		return poxInfo.next_cycle.prepare_phase_start_block_height + 2100 - 1
-	} else if (poxInfo.current_cycle.id === 79) {
-		return poxInfo.next_cycle.prepare_phase_start_block_height -1
+		const poxInfo = $sbtcConfig.poxInfo;
+		if (poxInfo.current_cycle.id === 77) {
+			return poxInfo.next_cycle.prepare_phase_start_block_height + 4200 - 1
+		} else if (poxInfo.current_cycle.id === 78) {
+			return poxInfo.next_cycle.prepare_phase_start_block_height + 2100 - 1
+		} else if (poxInfo.current_cycle.id === 79) {
+			return poxInfo.next_cycle.prepare_phase_start_block_height -1
+		}
 	}
-}
-const switchMethod = (newMethod:number) => {
-	if (method === newMethod) return
-	const sp = $page.url.searchParams
-	sp.set('method', '' + newMethod)
-	location.assign($page.url.href)
-}
+
+	const startsInBitcoinBlock = () => {
+		const startH = NAKAMOTO_VOTE_START_HEIGHT
+		return startH - $sbtcConfig.stacksInfo.burn_block_height;
+	}
+
+	const switchMethod = (newMethod:number) => {
+		if (method === newMethod) return
+		const sp = $page.url.searchParams
+		sp.set('method', '' + newMethod)
+		location.assign($page.url.href)
+	}
 </script>
 
 <div class="flex items-start justify-between mt-8">
@@ -41,7 +48,7 @@ const switchMethod = (newMethod:number) => {
 				{#if proposal.proposalData}
 					Vote in progress
 				{:else}
-					Funding in progress
+					Voting starts in {fmtNumber(startsInBitcoinBlock())} blocks
 				{/if}
 			</p>
 		</div>
@@ -52,10 +59,11 @@ const switchMethod = (newMethod:number) => {
 			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at bitcoin block {fmtNumber(endBitcoinBlock())}</span>
 			{/if}
 		{:else}
-		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Awaiting funding</span>
+		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider"><!--Awaiting funding--></span>
 		{/if}
 	</div>
 
+	{#if proposal.stage === ProposalStage.ACTIVE}
 	<div>
 		<p class="text-sm text-[#131416]/[0.64] text-right mb-1">Switch voting method:</p>
 		<button on:click={() => (dropdownOpen = !dropdownOpen)} class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] text-[#27282B] gap-2 px-4 py-2 text-xs rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
@@ -87,6 +95,7 @@ const switchMethod = (newMethod:number) => {
 				</DropdownItem>
 		</Dropdown>
 	</div>
+	{/if}
 </div>
 <div class="sm:flex sm:items-center sm:justify-between mt-6">
 	<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
