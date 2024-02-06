@@ -49,11 +49,11 @@
 
 	$: getBlockHeigths = (showBitcoin:boolean) => {
 		let msg;
-		if (showBitcoin) {
-			msg = 'Bitcoin height: ' + (($sbtcConfig.poxInfo) ? fmtNumber($sbtcConfig.poxInfo.current_burnchain_block_height) : ' n/a ');
-		} else {
-			msg = 'Stacks height: ' + (($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' n/a ');
-		}
+		msg = 'Block heights: ' + (($sbtcConfig.poxInfo) ? fmtNumber($sbtcConfig.poxInfo.current_burnchain_block_height) : ' n/a ');
+		msg += ' / ' + (($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' ');
+		//if (showBitcoin) {
+		//} else {
+		//}
 		return msg
 	}
 
@@ -124,8 +124,8 @@
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
-				-->
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
+				-->
 			</div>
 			<div >
 				<span role="contentinfo" class="inline-block md:text-sand-700 py-2.5 px-2" on:mouseenter={() => showBitcoin = false}  on:mouseleave={() => showBitcoin = true}>

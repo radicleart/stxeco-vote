@@ -53,8 +53,8 @@
 		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
-			DaoUtils.setStatus(stacksTipHeight, proposal);
+			const burn_block_height = $sbtcConfig.stacksInfo.burn_block_height;
+			DaoUtils.setStatus(burn_block_height, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
 			const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			poolVotes = allVotes.poolVotes;
@@ -94,6 +94,8 @@
 		{#if proposal}
 		<ProposalHeader {proposal} method={1} />
 		{/if}
+		<DaoInactive {proposal}/>
+		<!--
 		<div>
 			<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 				<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
@@ -110,6 +112,7 @@
 				</div>
 			</div>
 		</div>
+		-->
 
 		{#if proposal.stage !== ProposalStage.CONCLUDED}
 
@@ -140,8 +143,6 @@
 			{/key}
         </Tabs>
 		</div>
-		{:else}
-		<DaoInactive {proposal}/>
 		{/if}
 	{:else if proposalNotFound}
 	<div>Proposal not found - please return <a href="/" class="underline">home</a>.</div>

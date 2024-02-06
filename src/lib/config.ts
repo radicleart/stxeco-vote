@@ -140,10 +140,14 @@ export function setConfig(network:string) {
         CONFIG = MAINNET_CONFIG;
     }
 }
-export function setConfigByUrl(search:URLSearchParams) {
-    let network = 'testnet'
+export function setConfigByUrl(search:URLSearchParams, hostname:string) {
+    let network = 'mainnet'
+    if (hostname === 'stx.eco') {
+        setConfig(network)
+        return
+    }
     if (search.has('chain')) {
-        network = search.get('chain') || 'testnet'
+        network = search.get('chain') || 'mainnet'
     }
     setConfig(network)
 }
