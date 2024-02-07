@@ -10,6 +10,8 @@
 	import { sbtcConfig } from '$stores/stores';
 	import { page } from '$app/stores';
 	import { NAKAMOTO_VOTE_START_HEIGHT } from '$lib/dao_api';
+	import Countdown from '../shared/Countdown.svelte';
+	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
 
 	export let proposal:ProposalEvent;
 	export let method:number;
@@ -41,27 +43,7 @@
 </script>
 
 <div class="flex items-start justify-between mt-8">
-	<div class="inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
-		<div class="flex items-center gap-2">
-			<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
-			<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-				{#if proposal.proposalData}
-					Vote in progress
-				{:else}
-					Voting starts in {fmtNumber(startsInBitcoinBlock())} blocks
-				{/if}
-			</p>
-		</div>
-		{#if proposal.proposalData}
-			{#if method === 3}
-			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at stacks block {fmtNumber(proposal.proposalData.endBlockHeight)}</span>
-			{:else}
-			<span class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at bitcoin block {fmtNumber(endBitcoinBlock())}</span>
-			{/if}
-		{:else}
-		<span class="font-mono text-[#131416] text-xs uppercase tracking-wider"><!--Awaiting funding--></span>
-		{/if}
-	</div>
+	<ProposalStageUpdate {proposal} {method} />
 
 	{#if proposal.stage === ProposalStage.ACTIVE}
 	<div>

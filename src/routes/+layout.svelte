@@ -101,6 +101,24 @@
 		setAuthorisation($sbtcConfig.authHeader)
 	}
 
+	let timer:any;
+
+	onDestroy(() => {
+		clearInterval(timer)
+	})
+
+	const startTimer = () => {
+		timer = setInterval(async () => {
+			const stacksInfo = await fetchStacksInfo();
+			//const poxInfo = await getPoxInfo()
+			sbtcConfig.update((conf) => {
+				conf.stacksInfo = stacksInfo
+				//conf.poxInfo = poxInfo
+				return conf;
+			});
+		}, 20000)
+	}
+
 	onMount(async () => {
 		try {
 			const conf = $sbtcConfig;
@@ -120,7 +138,8 @@
 			inited = true;
 
 			await connectToStacks();
-			subscribeBlockUpdates();
+			//subscribeBlockUpdates();
+			startTimer();
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)

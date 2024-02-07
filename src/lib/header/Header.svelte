@@ -52,7 +52,7 @@
  	}
 
 	$: getBitcoinHeight = () => {
-		return (($sbtcConfig.poxInfo) ? fmtNumber($sbtcConfig.poxInfo.current_burnchain_block_height) : ' ')
+		return (($sbtcConfig.poxInfo) ? fmtNumber($sbtcConfig.stacksInfo.burn_block_height) : ' ')
  	}
 
 	const loginCallback = async () => {

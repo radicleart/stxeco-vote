@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ProposalStageUpdate from "$lib/components/all-voters/ProposalStageUpdate.svelte";
 	import { CONFIG } from "$lib/config";
 	import { sbtcConfig } from "$stores/stores";
 
@@ -174,7 +175,8 @@
     	<div>
 			<div class="space-y-6">
 				<div>
-					<span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span>
+					<ProposalStageUpdate proposal={undefined} method={1} />
+					<!-- <span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span> -->
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" class="py-2 px-4 rounded-md" target="_blank">
 							SIP-021 - Nakamoto Release
