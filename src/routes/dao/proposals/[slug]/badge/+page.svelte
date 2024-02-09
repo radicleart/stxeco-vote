@@ -46,8 +46,8 @@ onMount(async () => {
     <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
-        <div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
-          <div class="mt-6 md:mt-0 flex flex-col gap-y-5 bg-warning-01">
+        <div class="flex flex-col gap-y-2 bg-warning-01">
+          <div class="flex flex-col gap-y-5 bg-warning-01">
             <h1 class="text-4xl">Thank you for your vote!</h1>
             <p class="text-lg">You are now part of Stacks history 🎉🟧</p>
             <BadgeClaim/>

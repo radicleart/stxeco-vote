@@ -125,7 +125,7 @@
 	onMount(async () => {
 		const processResult = await processProposalContracts(proposal.contractId)
 		const refreshedProposal = processResult.find((o:ProposalEvent) =>  o.contractId === proposal.contractId )
-		if (refreshedProposal) proposal = refreshedProposal; 
+		if (refreshedProposal) proposal = refreshedProposal;
 		DaoUtils.setStatus(stacksTipHeight, proposal)
 		fundingData = proposal.funding;
 		if (!fundingData) {
@@ -148,9 +148,9 @@
 
 {#if inited}
 {#if !fundingMet}
-  
-<div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
-  
+
+<div class="flex flex-col gap-y-2 bg-warning-01">
+
 	<h1 class="text-2xl">
 		Fund proposal : {fmtMicroToStx(fundingData.parameters.fundingCost - fundingData.funding)} STX needed!
 	</h1>

@@ -41,41 +41,41 @@
 	}
 </script>
 
-<div class="flex items-start justify-between mt-8">
+<div class="sm:flex sm:items-start sm:justify-between mt-8">
 	<ProposalStageUpdate {proposal} {method} />
 
 	{#if proposal.stage === ProposalStage.ACTIVE}
-	<div>
-		<p class="text-sm text-[#131416]/[0.64] text-right mb-1">Switch voting method:</p>
-		<button on:click={() => (dropdownOpen = !dropdownOpen)} class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] text-[#27282B] gap-2 px-4 py-2 text-xs rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
-			{#if method === 1}
-			Solo Stackers - Method 1
-			{:else if method === 2}
-			Pool Stackers - Method 2
-			{:else}
-			DAO Voting - Method 3
-			{/if}
-			<svg class="hidden md:inline w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-				<path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-			</svg>
-		</button>
-		<Dropdown
-			containerClass="z-30 rounded-lg !bg-[#EEEBE7] !border py-1 !border-[#131416]/[0.16]"
-			placement='bottom-end'>
-				<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(1)}>
-					{#if method === 1}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
-					Solo Stackers (Method 1)
-				</DropdownItem>
-				<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(2)}>
-					{#if method === 2}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
-					Pool Stackers (Method 2)
-				</DropdownItem>
-				<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(3)}>
-					{#if method === 3}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
-					DAO Voting (Method 3)
-				</DropdownItem>
-		</Dropdown>
-	</div>
+		<div class="mt-4 sm:mt-0">
+			<p class="text-sm text-[#131416]/[0.64] sm:text-right mb-1">Switch voting method:</p>
+			<button on:click={() => (dropdownOpen = !dropdownOpen)} class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] text-[#27282B] gap-2 px-4 py-2 text-xs rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+				{#if method === 1}
+				Solo Stackers - Method 1
+				{:else if method === 2}
+				Pool Stackers - Method 2
+				{:else}
+				DAO Voting - Method 3
+				{/if}
+				<svg class="inline w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+					<path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+				</svg>
+			</button>
+			<Dropdown
+				containerClass="z-30 rounded-lg !bg-[#EEEBE7] !border py-1 !border-[#131416]/[0.16]"
+				placement='bottom-end'>
+					<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(1)}>
+						{#if method === 1}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
+						Solo Stackers (Method 1)
+					</DropdownItem>
+					<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(2)}>
+						{#if method === 2}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
+						Pool Stackers (Method 2)
+					</DropdownItem>
+					<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(3)}>
+						{#if method === 3}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
+						DAO Voting (Method 3)
+					</DropdownItem>
+			</Dropdown>
+		</div>
 	{/if}
 </div>
 <div class="sm:flex sm:items-center sm:justify-between mt-6">

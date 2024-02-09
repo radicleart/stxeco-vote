@@ -113,18 +113,18 @@
 	<NavUl
 		{hidden}
 		class="order-1 md:flex-1"
-		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4"
+		ulClass="dark:bg-transparent dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end"
 	>
-		<div class="w-full flex flex-row justify-between">
+			<!--
 			<div class="flex">
-				<!--
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
-				-->
 			</div>
+			-->
+		<li>
 			<div>
 				<span role="contentinfo" class="inline-flex items-center gap-3 md:text-sand-700 py-2.5 px-2">
 					Block height:
@@ -138,9 +138,9 @@
 					</span>
 				</span>
 			</div>
-		</div>
+		</li>
 
-		<NavLi nonActiveClass="md:hidden ml-0 md:ml-2">
+		<NavLi nonActiveClass="md:hidden">
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}

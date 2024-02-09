@@ -35,20 +35,20 @@
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-<div class="px-6 md:px-0 py-12">
+<div class="py-12 rounded-2xl sm:rounded-none">
 	<div class="py-4 mx-auto max-w-7xl md:px-6">
 		<div class="relative">
-			<div class="bg-[#0A0A0B] relative sm:max-w-[50%] rounded-t-xl px-12 pt-16 pb-32 z-[1]">
-				<svg class="absolute bottom-0 right-[-48px]" xmlns="http://www.w3.org/2000/svg" width="77" height="319" fill="none">
+			<div class="bg-[#0A0A0B] relative sm:max-w-[50%] rounded-t-xl px-12 pt-16 pb-16 sm:pb-32 z-[1]">
+				<svg class="hidden sm:block absolute bottom-0 right-[-48px]" xmlns="http://www.w3.org/2000/svg" width="77" height="319" fill="none">
 					<path fill="#0A0A0B" d="M77 307V83.455c0-6.628-5.373-12-12-12H41c-6.627 0-12-5.373-12-12V.727H0V319h65c6.627 0 12-5.373 12-12Z"/>
 				</svg>
 
-				<p class="text-3xl leading-[46px] sm:max-w-4xl text-white">
+				<p class="text-xl sm:text-3xl leading-[32px] sm:leading-[46px] sm:max-w-4xl text-white">
 					STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes
 				</p>
 			</div>
 
-			<svg class="absolute bottom-0 right-0 z-0" xmlns="http://www.w3.org/2000/svg" width="738" height="389" fill="none">
+			<svg class="absolute bottom-[-38px] sm:bottom-0 right-0 z-0" xmlns="http://www.w3.org/2000/svg" width="738" height="389" fill="none">
 				<g clip-path="url(#clip0_44_279)">
 					<path fill="#EEEBE7" fill-rule="evenodd" d="M738 60c0-6.627-5.373-12-12-12H108c-6.627 0-12 5.373-12 12v216c0 6.627 5.373 12 12 12h29.5c6.627 0 12 5.373 12 12v215c0 6.627 5.373 12 12 12H726c6.627 0 12-5.373 12-12V60Z" clip-rule="evenodd"/>
 					<g clip-path="url(#clip1_44_279)">
@@ -180,7 +180,7 @@
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" class="py-2 px-4 rounded-md" target="_blank">
 							SIP-021 - Nakamoto Release
-							<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg class="inline w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 								<path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 								<path d="M29.6875 20.3125L20.3125 29.6875" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
@@ -202,7 +202,7 @@
 					</svg>
 
 
-					<div class="mt-6 md:mt-0">
+					<div class="">
 						<div class="mb-4">
 							<h2 class="text-[#131416] text-xl mb-3">Summary</h2>
 							<p class="text-lg text-[#605D5D]">The proposal suggests a significant change to the Stacks blockchain for faster and more reliable blocks by separating block production from cryptographic sortitions. Goals include faster blocks, Bitcoin finality, resistance to Bitcoin forks, and preventing advantages for Bitcoin miners.</p>
@@ -340,6 +340,10 @@
 									<h4 class="text-lg mt-12 text-[#131416] mb-3">{opt.title}</h4>
 								</div>
 								<p class="mt-auto text-[#131416]/[0.64]">{opt.explanation}</p>
+							</div>
+
+							<div class="mt-3 text-center sm:hidden w-full text-sm font-mono uppercase inline-block bg-bloodorange px-4 py-2 text-[#0A0A0B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" role="button">
+								Vote now
 							</div>
 						</a>
 					{/each}

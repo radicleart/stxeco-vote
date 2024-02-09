@@ -17,11 +17,11 @@
 	})
 </script>
 
-  
-<div class="mt-6 md:mt-0 flex flex-col gap-y-5 bg-warning-01">
+
+<div class="flex flex-col gap-y-5 bg-warning-01">
 	<h1 class="text-3xl mb-6">Voting starts soon</h1>
 	{#if proposal.proposalData}
-	<p class="text-lg">Voting on this proposal will begin in {fmtNumber(proposal.proposalData.startBlockHeight - stacksTipHeight)} blocks</p>
-	<p class="text-lg">Voting will end at block {fmtNumber(proposal.proposalData.endBlockHeight)}</p>
+		<p class="text-base">Voting on this proposal will begin in {fmtNumber(proposal.proposalData.startBlockHeight - stacksTipHeight)} blocks.</p>
+		<p class="text-base">Voting will end at block #{fmtNumber(proposal.proposalData.endBlockHeight)}.</p>
 	{/if}
 </div>

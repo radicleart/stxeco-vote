@@ -40,7 +40,7 @@
   {#if poxInfo}
     <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-      <div class="mt-6 md:mt-0 flex flex-col gap-y-2 bg-warning-01">
+      <div class="flex flex-col gap-y-2 bg-warning-01">
       <div class="mb-4">
           <h2 class="text-[#131416] text-2xl mb-3">PoX Information</h2>
         </div>
@@ -68,19 +68,19 @@
               <a href="/" on:click|preventDefault={() => method = 3} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
                 PoX Entries&nbsp;<span class="text-[#27282B]">-&gt;</span>
               </a>
-            </div>  
+            </div>
             <div class="">
               <a href="/" on:click|preventDefault={() => method = 4} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
                 Reward slots&nbsp;<span class="text-[#27282B]">-&gt;</span>
               </a>
-            </div>  
+            </div>
             {:else if method > 1}
             <div class="">
               <a href="/" on:click|preventDefault={() => method = 1} class="text-sm font-mono uppercase inline-flex items-center bg-[#EEEBE7] px-4 py-2  text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
                 <span class="text-[#27282B]">&lt;-</span>&nbsp;BACK
               </a>
-            </div>  
-            {/if}          
+            </div>
+            {/if}
           </div>
         </div>
 
