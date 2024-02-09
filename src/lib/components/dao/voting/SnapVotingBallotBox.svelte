@@ -16,9 +16,10 @@ import { Button } from 'flowbite-svelte'
 export let proposalEvent: ProposalEvent;
 export let balanceAtHeight:number = 0;
 
-let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height || 0;
 const proposalData = proposalEvent.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
-DaoUtils.setStatus(stacksTipHeight, proposalEvent);
+const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposalEvent);
 const propStatus = proposalEvent.status?.name;
 
 let errorMessage:string|undefined;

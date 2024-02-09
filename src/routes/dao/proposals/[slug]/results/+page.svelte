@@ -21,6 +21,8 @@
 	import PoolVotingActiveQr from '$lib/components/all-voters/pool/PoolVotingActiveQR.svelte';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import VoteResultsRow from '$lib/components/all-voters/VoteResultsRow.svelte';
+	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
+	import { isCoordinator } from '$lib/sbtc_admin';
 
 	let soloVotes:Array<VoteEvent>;
 	let poolVotes:Array<VoteEvent>;
@@ -53,8 +55,9 @@
 		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const burn_block_height = $sbtcConfig.stacksInfo?.burn_block_height | 0;
-			DaoUtils.setStatus(burn_block_height, proposal);
+			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
 			const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			poolVotes = allVotes.poolVotes;
@@ -73,7 +76,7 @@
 			errorReason = e.message;
 		}
 
-		if (CONFIG.VITE_NETWORK === 'mainnet') {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
 			proposalNotFound = true
 			activeFlag = false
 		}
@@ -95,27 +98,8 @@
 		<ProposalHeader {proposal} method={1} />
 		{/if}
 		<DaoInactive {proposal}/>
-		<!--
-		<div>
-			<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-				<div class="py-10 px-10 md:px-12 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-					<div class="flex flex-col gap-y-12">
-						<div class="flex flex-col gap-y-5">
-							<p class="text-2xl mb-5">Voting ended</p>
-							<p>Voting ended <span class="font-bold">{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</span>.</p>
-							<p><span class="font-extrabold">{countTotal} unique addresses</span> took part in the vote.</p>
-							<p>Detailed results are displayed below.</p>
-						</div>
-					</div>
-					<NakamotoBackground />
-					<NakamotoShield />
-				</div>
-			</div>
-		</div>
-		-->
 
-		{#if proposal.stage !== ProposalStage.CONCLUDED}
-
+		{#if proposal.stage === ProposalStage.CONCLUDED}
 		<div id="tabs-header">
 			<VoteResultsOverview />
 		</div>
@@ -144,8 +128,14 @@
         </Tabs>
 		</div>
 		{/if}
+
 	{:else if proposalNotFound}
-	<div>Proposal not found - please return <a href="/" class="underline">home</a>.</div>
+	<ProposalHeader {proposal} method={1} />
+	<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+		<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+			<HoldingResults />
+		</div>
+	</div>
 	{:else}
 	<Placeholder />
 	{/if}

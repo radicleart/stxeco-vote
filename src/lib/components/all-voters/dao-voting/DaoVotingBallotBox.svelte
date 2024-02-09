@@ -14,8 +14,9 @@
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;
 
-    let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height || 0;
-    DaoUtils.setStatus(stacksTipHeight, proposal);
+    const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+		const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 
     let errorMessage:string|undefined;
     let txId: string;

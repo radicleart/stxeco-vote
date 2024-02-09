@@ -39,8 +39,9 @@
 		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
-			DaoUtils.setStatus(stacksTipHeight, proposal);
+			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 		} else {

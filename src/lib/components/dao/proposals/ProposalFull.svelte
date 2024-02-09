@@ -75,7 +75,10 @@
 			}
 		}
 		if (proposalEvent) {
-			DaoUtils.setStatus($sbtcConfig.stacksInfo.stacks_tip_height, proposalEvent);
+			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposalEvent);
+
 			//if (proposalEvent.contractId.indexOf('edp015-sip-015-activation') > -1) {
 			//	goto(`/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp-sip-activation`);
 			//}
