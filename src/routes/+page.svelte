@@ -201,8 +201,7 @@
 						</defs>
 					</svg>
 
-
-					<div class="">
+					<div class="mt-4 sm:mt-0 relative z-[1]">
 						<div class="mb-4">
 							<h2 class="text-[#131416] text-xl mb-3">Summary</h2>
 							<p class="text-lg text-[#605D5D]">The proposal suggests a significant change to the Stacks blockchain for faster and more reliable blocks by separating block production from cryptographic sortitions. Goals include faster blocks, Bitcoin finality, resistance to Bitcoin forks, and preventing advantages for Bitcoin miners.</p>
