@@ -91,6 +91,6 @@ const concludeVote = async () => {
     {:else}
       <div class="text-xs flex justify-between">
         <div>{ FormatUtils.fmtNumber(proposalData.endBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height) } blocks</div>
-        <div><Countdown endBlock={proposalData.endBlockHeight - stacksTipHeight} /></div>
+        <div><Countdown scaleFactor={1} endBlock={proposalData.endBlockHeight - stacksTipHeight} /></div>
       </div>
     {/if}

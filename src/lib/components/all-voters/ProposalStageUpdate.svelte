@@ -41,7 +41,7 @@
 		{/if}
 	{:else}
 	<div class="mt-1 font-mono text-[#131416] text-xs uppercase tracking-wider">
-		<Countdown endBlock={startsInBitcoinBlock()} />
+		<Countdown scaleFactor={1} endBlock={startsInBitcoinBlock()} />
 	</div>
 	{/if}
 </div>
