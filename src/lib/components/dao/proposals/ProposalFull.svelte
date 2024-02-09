@@ -202,7 +202,7 @@
 					{#if fundedProposalsValid}
 						<div>
 							<Funding proposal={proposalEvent} />
-							<Countdown {endBlock} />
+							<Countdown scaleFactor={1} {endBlock} />
 						</div>
 					{/if}
 					{#if thresholdProposalsValid}

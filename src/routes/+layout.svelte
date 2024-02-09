@@ -73,23 +73,22 @@
 	}
 
 	const initApp = async () => {
+		const stacksInfo = await fetchStacksInfo();
 		const daoProposals = await getDaoProposals()
-		sbtcConfig.update((conf) => {
-			conf.proposals = daoProposals
-			return conf;
-		});
 		let currentProposal = await getCurrentProposal()
 		sbtcConfig.update((conf) => {
+			conf.stacksInfo = stacksInfo
+			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;
 		});
+
 		inited = true;
+
 		const soloPoolData = await getPoolAndSoloAddresses()
-		const stacksInfo = await fetchStacksInfo();
 		const poxInfo = await getPoxInfo()
 
 		sbtcConfig.update((conf) => {
-			conf.stacksInfo = stacksInfo
 			conf.poxInfo = poxInfo
 			conf.soloPoolData = soloPoolData
 			return conf;

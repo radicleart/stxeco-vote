@@ -2,10 +2,12 @@
 import { DateTime, Duration } from 'luxon'
 
 export let endBlock = 0;
+export let scaleFactor:number = 1;
 
 const dayInMillis = 1000 * 60 * 60 * 24;
 let now: any = DateTime.local();
-let end= DateTime.local().plus({ minutes: endBlock * 10 });
+const blockProdTime = (scaleFactor) ? (10 * scaleFactor) : 10
+let end= DateTime.local().plus({ minutes: endBlock * blockProdTime });
 //let end= DateTime.local().plus({ days: 900 });
 let moreThanDay = (end.toMillis() - now.toMillis()) > dayInMillis;
 const myInt =  setInterval(() => {

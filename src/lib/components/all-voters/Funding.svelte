@@ -12,6 +12,8 @@
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Proposed from './Proposed.svelte';
 	import Placeholder from './Placeholder.svelte';
+	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
+	import Countdown from '../shared/Countdown.svelte';
 
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;
@@ -23,13 +25,12 @@
 
 	let fundingData:FundingData;
 	let fundingMet = false;
-	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 	let proposalDuration = 0
 	let proposalStartDelay = 0
-	let startHeightMessage = 'The earliest start for voting is in ';
-	let durationMessage = 'The voting window is ';
-	let paramStartDelay = 6;
-	let paramDuration = 144 //proposalDuration;
+	let startHeightMessage:string;
+	let durationMessage:string;
+	let paramStartDelay = 0;
+	let paramDuration = Math.floor(0.83 * (NAKAMOTO_VOTE_STOPS_HEIGHT - NAKAMOTO_VOTE_START_HEIGHT));
 
 	const getSTXMintPostConds = function (amt:number) {
 		const postConds = []
@@ -88,7 +89,7 @@
           errorMessage = 'Duration minimum is 144 blocks';
           return;
         }
-        if (paramDuration > 5000 ) {
+        if (paramDuration > 15000 ) {
           errorMessage = 'Duration maximum is 5000 blocks';
           return;
         }
@@ -123,6 +124,8 @@
 	}
 
 	onMount(async () => {
+		const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height
+		paramStartDelay = Math.floor( 0.83 * (NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height));
 		const processResult = await processProposalContracts(proposal.contractId)
 		const refreshedProposal = processResult.find((o:ProposalEvent) =>  o.contractId === proposal.contractId )
 		if (refreshedProposal) proposal = refreshedProposal;
@@ -133,13 +136,10 @@
 			return;
 		}
 		fundingMet = fundingData && fundingData.funding >= fundingData.parameters.fundingCost;
-		stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 		proposalDuration = fundingData.parameters.proposalDuration
 		proposalStartDelay = fundingData.parameters.proposalStartDelay
-		startHeightMessage = 'The earliest start for voting is in ' + proposalStartDelay + ' blocks ' + ((proposalStartDelay) / 144).toFixed(2) + ' days after proposal is funded at block ~ ' + (fmtNumber(stacksTipHeight + proposalStartDelay));
+		startHeightMessage = 'The earliest start for voting is in ' + (paramStartDelay) + ' stacks blocks at ' + (fmtNumber(stacksTipHeight + paramStartDelay));
 		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
-		paramStartDelay = 6;
-		paramDuration = 144 //proposalDuration;
 		inited = true
 	})
 
@@ -175,12 +175,14 @@
 					</div>
 				</div>
 				<div class="w-full">
-					<label class="block" for="start-block">start on or after block</label>
+					<label class="block" for="start-block">voting will begin after</label>
 					<input bind:value={paramStartDelay} type="number" id="start-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
+					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={paramStartDelay} scaleFactor={1/0.83} /></span>
 				</div>
 				<div class="w-full">
 					<label class="block" for="duration-block">voting open for minimum {paramDuration} blocks</label>
 					<input bind:value={paramDuration} type="number" id="duration-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
+					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={paramStartDelay + paramDuration} scaleFactor={1/0.83} /></span>
 				</div>
 				<div class="w-full">
 					<label class="block" for="Contribution">funding required is {fundingData.parameters.fundingCost} uSTX</label>

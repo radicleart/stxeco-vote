@@ -43,7 +43,7 @@
 				<div class="col-span-2">Cycle ends</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height - 1)} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height - 1 - bitcoinTip)} bitcoin blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip} /></span>
 				</div>
 			</div>
 			</div>
@@ -61,11 +61,11 @@
 				<div class="col-span-2">Cycle starts</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height)} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip)} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip} /></span>
 				</div>
 				<div class="col-span-2">Cycle ends</div>
 				<div class="col-span-4">{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + 2100)} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + 2100 - bitcoinTip)} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + 2100} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + 2100} /></span>
 				</div>
 			</div>
 			</div>
@@ -83,12 +83,12 @@
 				<div class="col-span-2">Cycle starts</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (2100))} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + 2100)} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2100)} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2100)} /></span>
 				</div>
 				<div class="col-span-2">Cycle ends</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (2*2100))} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (2*2100) - bitcoinTip)} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2*2100)} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2*2100)} /></span>
 				</div>
 			</div>
 			</div>
@@ -106,12 +106,12 @@
 				<div class="col-span-2">Cycle starts</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (2*2100))} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2*2100))} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2*2100)}/></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (2*2100)}/></span>
 				</div>
 				<div class="col-span-2">Cycle ends</div>
 				<div class="col-span-4">
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (3*2100))} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (3*2100) - bitcoinTip)} blocks
-				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (3*2100)} /></span>
+				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (3*2100)} /></span>
 				</div>
 				{#if isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)}
 				<div class="col-span-2"></div>
