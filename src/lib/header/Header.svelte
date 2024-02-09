@@ -113,7 +113,7 @@
 	<NavUl
 		{hidden}
 		class="order-1 md:flex-1"
-		ulClass="dark:bg-transparent dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end"
+		ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end"
 	>
 			<!--
 			<div class="flex">
@@ -140,11 +140,11 @@
 			</div>
 		</li>
 
-		<NavLi nonActiveClass="md:hidden">
+		<NavLi nonActiveClass="md:hidden" class="-ml-2 -mr-3">
 			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button id="connect-wallet" class="opacity-10 block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2  text-white rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 px-4 py-2 bg-[#131416] text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#131416]" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}
