@@ -1,4 +1,5 @@
 import { CONFIG } from "$lib/config";
+import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 import { getProposalFromContractId } from "$lib/sbtc_admin";
 import { sbtcConfig } from "$stores/stores";
 import { type ExtensionType, type ProposalEvent, ProposalStage, type ProposalData } from "../../types/stxeco.type";
@@ -33,7 +34,7 @@ const DaoUtils = {
     return event
   },
 
-  setStatus: (stacksTipHeight:number, proposal:ProposalEvent) => {    
+  setStatus: (method:number, burnHeight:number, stacksTipHeight:number, proposal:ProposalEvent) => {    
     proposal.status = { name: 'unkown', color: 'primary-500', colorCode: 'primary-500' };
     if (proposal && typeof proposal.executedAt === 'number' && proposal.executedAt > 0 && typeof proposal.signals?.signals === 'number' && proposal.signals?.signals > 0) {
       proposal.stage = ProposalStage.CONCLUDED
@@ -55,15 +56,19 @@ const DaoUtils = {
       if (fundingMet) proposal.stage = ProposalStage.PROPOSED
     } else {
       proposal.stage = ProposalStage.PROPOSED
-      if (stacksTipHeight >= proposal.proposalData.startBlockHeight) {
-        proposal.stage = ProposalStage.ACTIVE
+      if (method === 3) {
+        if (stacksTipHeight >= proposal.proposalData.startBlockHeight) proposal.stage = ProposalStage.ACTIVE
+        if (stacksTipHeight >= proposal.proposalData.endBlockHeight) proposal.stage = ProposalStage.INACTIVE
+      } else {
+        if (burnHeight >= NAKAMOTO_VOTE_START_HEIGHT) proposal.stage = ProposalStage.ACTIVE
+        if (burnHeight >= NAKAMOTO_VOTE_STOPS_HEIGHT) proposal.stage = ProposalStage.INACTIVE
       }
-      if (stacksTipHeight >= proposal.proposalData.endBlockHeight) {
-        proposal.stage = ProposalStage.INACTIVE
-        if (proposal.proposalData.concluded) {
-          proposal.stage = ProposalStage.CONCLUDED
-        }
+      if (burnHeight >= NAKAMOTO_VOTE_STOPS_HEIGHT && stacksTipHeight >= proposal.proposalData.endBlockHeight && proposal.proposalData.concluded) {
+        proposal.stage = ProposalStage.CONCLUDED
       }
+
+
+
       if (proposal.votingContract.indexOf(CONFIG.VITE_DOA_PROPOSAL_VOTING_EXTENSION) > -1) {
         proposal.status = { name: 'submitted', color: 'primary-500', colorCode: 'primary-500' };
         if (stacksTipHeight < proposal.proposalData.startBlockHeight) {

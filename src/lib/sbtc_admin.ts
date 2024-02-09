@@ -33,7 +33,7 @@ export function getCoordinator(address:string) {
 }
 
 export function isCoordinator(address:string) {
-	return coordinators.find((o) => o.stxAddress === address);
+	return address && coordinators.find((o) => o.stxAddress === address);
 }
 
 export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, headerHex: string) {

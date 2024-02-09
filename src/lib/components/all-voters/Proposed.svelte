@@ -3,6 +3,7 @@
 	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
 	import type { ProposalEvent } from '$types/stxeco.type';
+	import Holding from './Holding.svelte';
 
 	export let proposal:ProposalEvent;
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
@@ -18,10 +19,6 @@
 </script>
 
 
-<div class="flex flex-col gap-y-5 bg-warning-01">
-	<h1 class="text-3xl mb-6">Voting starts soon</h1>
-	{#if proposal.proposalData}
-		<p class="text-base">Voting on this proposal will begin in {fmtNumber(proposal.proposalData.startBlockHeight - stacksTipHeight)} blocks.</p>
-		<p class="text-base">Voting will end at block #{fmtNumber(proposal.proposalData.endBlockHeight)}.</p>
-	{/if}
+<div class="flex flex-col gap-y-5 bg-warning-01 p-2 ">
+	<Holding />
 </div>

@@ -40,8 +40,9 @@ let stacksTipHeight = 0;
 let inFavour = 0;
 let winning = 'danger';
 onMount(async () => {
-  stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
-  DaoUtils.setStatus(stacksTipHeight, proposal);
+  const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
   daoVotes = await getDaoVotesByProposal(proposal.contractId);
   if (daoVotes && daoVotes.length > 0) {
     daoVotes.forEach((o:any) => {

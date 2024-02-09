@@ -30,7 +30,7 @@
 	let startHeightMessage:string;
 	let durationMessage:string;
 	let paramStartDelay = 0;
-	let paramDuration = Math.floor(0.83 * (NAKAMOTO_VOTE_STOPS_HEIGHT - NAKAMOTO_VOTE_START_HEIGHT));
+	let paramDuration = Math.floor(0.83 * (NAKAMOTO_VOTE_STOPS_HEIGHT - NAKAMOTO_VOTE_START_HEIGHT)) + 144;
 
 	const getSTXMintPostConds = function (amt:number) {
 		const postConds = []
@@ -124,12 +124,13 @@
 	}
 
 	onMount(async () => {
-		const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height
 		paramStartDelay = Math.floor( 0.83 * (NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height));
 		const processResult = await processProposalContracts(proposal.contractId)
 		const refreshedProposal = processResult.find((o:ProposalEvent) =>  o.contractId === proposal.contractId )
 		if (refreshedProposal) proposal = refreshedProposal;
-		DaoUtils.setStatus(stacksTipHeight, proposal)
+		const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+		const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 		fundingData = proposal.funding;
 		if (!fundingData) {
 			goto('/dao/proposals/propose')

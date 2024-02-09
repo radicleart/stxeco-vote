@@ -26,7 +26,9 @@
   onMount(async () => {
     try {
       for (const prop of $sbtcConfig.proposals!) {
-        DaoUtils.setStatus($sbtcConfig.stacksInfo.stacks_tip_height, prop)
+        const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+			  const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			  DaoUtils.setStatus(3, burnHeight, stacksTipHeight, prop);
       }
       funding = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PARTIAL_FUNDING || o.stage === ProposalStage.UNFUNDED)
       open = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED || o.stage === ProposalStage.ACTIVE)

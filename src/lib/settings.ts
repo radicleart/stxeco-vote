@@ -23,9 +23,10 @@ function createStore() {
       const daoData = await res.json();
       daoData.proposals = daoData.proposals.filter((p:ProposalType) => p.contract.tx_status !== 'failed')
       const stacksTipHeight = daoData.info?.stacks_tip_height || 0;
+      const burnHeight = daoData.info?.burn_block_height || 0;
       daoData.proposals.forEach((proposal:ProposalEvent) => {
-        DaoUtils.setStatus(stacksTipHeight, proposal);
-        // console.log(proposal.contractId + ' -> ' + proposal.status.name)
+        DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
+          // console.log(proposal.contractId + ' -> ' + proposal.status.name)
       })
       daoData.extensions = [];
       //const keys = Object.keys(CONFIG.VITE_EXTENSIONS)
