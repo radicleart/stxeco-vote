@@ -94,6 +94,12 @@
         });
         fabric.Image.fromURL(imageSrc, function(img) {
           img1 = img.set({scaleX: (400 / (img.width || 100)), scaleY: (400 / (img.height||100)), left: 0, top: 0, angle: 0});
+          img1.lockMovementX = true;
+          img1.lockMovementY = true;
+          img1.lockScalingX = true;
+          img1.lockScalingY = true;
+          img1.lockRotation = true;
+
           //img1.scaleToWidth(50);
           //img1.scaleToHeight(50);
           //canv.setBackgroundImage(img, canv.renderAll.bind(canv), {
@@ -110,18 +116,18 @@
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
               if (bannerImageSrc.indexOf('white') > -1) {
-                img2 = img.set({scaleX: (canv.width / ((img.width || 100)))*0.9, scaleY: ((canv.height * 0.5) / (img.height || 100))*0.9, left: 20, top: 200, angle: 0});
+                img2 = img.set({scaleX: (canv.width / ((img.width || 100))), scaleY: ((canv.height * 0.5) / (img.height || 100)), left: 0, top: 200, angle: 0});
               } else {
-                img2 = img.set({scaleX: (canv.width / (img.width || 100))*0.9, scaleY: ((canv.height * 0.5) / (img.height || 100))*0.9, left: 20, top: 200, angle: 0});
+                img2 = img.set({scaleX: (canv.width / (img.width || 100)), scaleY: ((canv.height * 0.5) / (img.height || 100)), left: 0, top: 200, angle: 0});
               }
               //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();
               canv.remove(text).renderAll();
               //canv.moveTo(img2, 100);
               //canv.on('img2:modified', modifiedHandler);
-              canv.on({
-                'object:modified' : modifiedHandler
-              });
+              //canv.on({
+              //  'object:modified' : modifiedHandler
+              //});
             }, { crossOrigin: 'anonymous' });
           }
         }, { crossOrigin: 'anonymous' });
