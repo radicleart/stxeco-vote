@@ -201,8 +201,8 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 
 export function appDetails() {
 	return {
-		name: 'sBTC Bridge',
-		icon: (window) ? window.location.origin + '/img/icon_sbtc.png' : '/img/icon_sbtc.png',
+		name: 'stx.eco',
+		icon: (window) ? window.location.origin + '/img/stx_eco_logo_icon_white.png' : '/img/stx_eco_logo_icon_white.png',
 	}
 }
 

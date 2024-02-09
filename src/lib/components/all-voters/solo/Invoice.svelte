@@ -65,7 +65,7 @@
   const paymentUri = () => {
     let uri = 'bitcoin:' + address;
     uri += '?amount=' + fmtSatoshiToBitcoin(amount)
-    uri += '&label=' + encodeURI('Deposit BTC to mint sBTC on Stacks')
+    uri += '&label=' + encodeURI('Vote on major Stacks upgrades')
     return uri
   }
 

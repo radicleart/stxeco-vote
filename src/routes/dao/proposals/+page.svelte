@@ -42,8 +42,8 @@
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - Transactions</title>
-  <meta name="description" content="A detailed table of all the transactions going through the sBTC Bridge." />
+  <title>Transactions</title>
+  <meta name="description" content="A detailed table of all the transactions." />
 </svelte:head>
 <div class="py-6 mx-auto max-w-7xl md:px-6">
   <div>

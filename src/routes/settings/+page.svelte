@@ -9,6 +9,7 @@
 	import Addresses from '$lib/components/settings/Addresses.svelte';
 	import Networks from '$lib/components/settings/Networks.svelte';
 	import type { ExchangeRate } from 'sbtc-bridge-lib';
+	import { StxBalanceFromJSON } from '@stacks/blockchain-api-client';
 
 	const toggleSettings = (arg:string) => {
 		const conf:SbtcConfig = $sbtcConfig;
@@ -43,9 +44,8 @@
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - Settings</title>
-  <meta name="description" content="The sBTC Bridge
-  provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
+  <title>stx.eco</title>
+  <meta name="description" content="Voting on major protocol upgrades." />
 </svelte:head>
 
 <Tooltip class="w-80 !bg-black z-20" triggeredBy="#po-network">
