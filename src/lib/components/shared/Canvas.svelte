@@ -93,12 +93,14 @@
           fill: "blue"
         });
         fabric.Image.fromURL(imageSrc, function(img) {
-          img1 = img.set({scaleX: (400 / (img.width || 100)), scaleY: (400 / (img.height||100)), left: 0, top: 0, angle: 0});
+          img1 = img //.set({scaleX: (canv.width / img1W) * 0.2, scaleY: (canv.height / img1H), left: 0, top: 0, angle: 0});
           img1.lockMovementX = true;
           img1.lockMovementY = true;
           img1.lockScalingX = true;
           img1.lockScalingY = true;
           img1.lockRotation = true;
+          img1.scaleToHeight(canvasWidth);
+          img1.scaleToWidth(canvasWidth);
 
           //img1.scaleToWidth(50);
           //img1.scaleToHeight(50);
@@ -112,53 +114,56 @@
           if (bannerImageSrc.length === 0) {
             canv.remove(text).renderAll();
           }
-          canv.setDimensions({width:400, height:400})
+          canv.setDimensions({width:canvasWidth, height:canvasWidth})
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
+              const reductioW = (canv.width / (img.width || 100)) * 1
+              const reductioH = (canv.width / (img.height || 100)) * 1
               if (bannerImageSrc.indexOf('white') > -1) {
-                img2 = img.set({scaleX: (canv.width / ((img.width || 100))), scaleY: ((canv.height * 0.5) / (img.height || 100)), left: 0, top: 200, angle: 0});
+                img2 = img.set({scaleX: reductioW, scaleY: reductioH});
               } else {
-                img2 = img.set({scaleX: (canv.width / (img.width || 100)), scaleY: ((canv.height * 0.5) / (img.height || 100)), left: 0, top: 200, angle: 0});
+                img2 = img.set({scaleX: reductioW, scaleY: reductioH});
               }
-              //img2 = img.set({left: 0, top: 300, angle: 0});
+              img2.scaleToWidth(canvasWidth);
+              img2.viewportCenterV();
+              img2.set({top: canvasWidth - (canvasWidth/2)});
               canv.add(img2).renderAll();
               canv.remove(text).renderAll();
-              //canv.moveTo(img2, 100);
-              //canv.on('img2:modified', modifiedHandler);
-              //canv.on({
-              //  'object:modified' : modifiedHandler
-              //});
             }, { crossOrigin: 'anonymous' });
           }
         }, { crossOrigin: 'anonymous' });
         // canv.add(rect);
-        canv.setDimensions({width:400, height:400})
+        canv.setDimensions({width:canvasWidth, height:canvasWidth})
         canv.add(text);
     };
 
+    let canvasWidth = window.innerWidth
     onMount(async () => {
+      const cEl = document.getElementById('canvas-div')
+      if (cEl) {
+        canvasWidth = cEl.clientWidth
+      }
       await mountCanvas();
     });
 </script>
 
 <p class="text-base mt-3 mb-1">Select the banner</p>
 <div class="flex flex-row gap-4 mb-8">
-  <div class="bg-white flex items-center justify-center py-6 px-10 rounded-lg">
-    <button on:click|preventDefault={() => switchImage(2)}><img width="180px" src={bannerBlue} alt="blue banner"/></button>
+  <div class="bg-white flex items-center justify-center py-2 px-2 rounded-lg">
+    <button on:click|preventDefault={() => switchImage(2)}><img width="auto" src={bannerBlue} alt="blue banner"/></button>
   </div>
-  <div class="bg-white flex items-center justify-center py-6 px-10 rounded-lg">
-    <button on:click|preventDefault={() => switchImage(1)}><img width="180px" src={bannerWhite} alt="white banner"/></button>
+  <div class="bg-white flex items-center justify-center py-2 px-2 rounded-lg">
+    <button on:click|preventDefault={() => switchImage(1)}><img width="auto" src={bannerWhite} alt="white banner"/></button>
   </div>
 </div>
 <p class="text-base mt-3 mb-1">Custom badge preview</p>
 {#if !downloaded}
   {#key componentKey}
-    <div>
-      <div>
-        <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
-        <button class="ml-auto mt-2 text-xs font-mono uppercase inline-block items-center bg-[#EEEBE7] px-2 py-1 text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={() => {toggleRoundness()}}>Preview as circle</button>
+    <div id="canvas-div" class="border-none border-error-500">
+        <canvas bind:this={canvas} width={canvasWidth} class="border-2 border-lightpurple" height={canvasWidth} />
       </div>
-
+    <div>
+      <button class="ml-auto mt-2 text-xs font-mono uppercase inline-block items-center bg-[#EEEBE7] px-2 py-1 text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={() => {toggleRoundness()}}>Preview as circle</button>
       <div class="flex justify-between w-[400px] mt-6">
         <div class="flex flex-nowrap gap-x-2">
           <button class="text-sm font-mono uppercase inline-flex items-center bg-white text-[#131416] px-4 py-2 rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={toggleCanvas}><span>&lt;-</span>&nbsp;Back</button>

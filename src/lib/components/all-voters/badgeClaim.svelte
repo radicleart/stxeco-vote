@@ -113,7 +113,7 @@
       <p class="mb-3">Create a personalized badge featuring a Stacks banner overlaying one of your NFTs, showcasing your active participation in the Stacks community.</p>
       <p>Let’s start with choosing a collection:</p>
       <p class="text-base mt-3 mb-1">NFT collection</p>
-      <select class="text-black h-10 w-3/4 px-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
+      <select class="text-black h-10 w-full px-3 border rounded-lg" bind:value={assetId} on:change="{() => { selectAssetId() }}">
         <option value={''}>Choose an NFT collection</option>
         {#each sortedAssets as asset}
           <option value={asset}>{asset.assetName + ' (from collection: ' + asset.contractName + ')'}</option>
@@ -122,7 +122,7 @@
 
       {#key componentKey}
         {#if assetId && assets.length === 0}
-        <div class="w-1/2 mt-2">
+        <div class="w-full mt-2">
           {#if searching}
             <Banner bannerType={'waiting'} message={'Loading your NFTs...'}/>
           {:else}
