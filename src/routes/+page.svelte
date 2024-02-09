@@ -48,7 +48,7 @@
 				</p>
 			</div>
 
-			<svg class="absolute bottom-[-38px] sm:bottom-0 right-0 z-0" xmlns="http://www.w3.org/2000/svg" width="738" height="389" fill="none">
+			<svg class="absolute bottom-[-88px] sm:bottom-0 right-0 z-0" xmlns="http://www.w3.org/2000/svg" width="738" height="389" fill="none">
 				<g clip-path="url(#clip0_44_279)">
 					<path fill="#EEEBE7" fill-rule="evenodd" d="M738 60c0-6.627-5.373-12-12-12H108c-6.627 0-12 5.373-12 12v216c0 6.627 5.373 12 12 12h29.5c6.627 0 12 5.373 12 12v215c0 6.627 5.373 12 12 12H726c6.627 0 12-5.373 12-12V60Z" clip-rule="evenodd"/>
 					<g clip-path="url(#clip1_44_279)">
