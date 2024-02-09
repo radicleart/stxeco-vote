@@ -138,7 +138,7 @@
 			inited = true;
 
 			await connectToStacks();
-			//subscribeBlockUpdates();
+			subscribeBlockUpdates();
 			startTimer();
 		} catch (err) {
 			errorReason = COMMS_ERROR

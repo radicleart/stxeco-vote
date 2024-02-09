@@ -10,7 +10,7 @@
   export let address:string;
   export let voteFor = false;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
-  let amount = 546;
+  let amount = 6000;
   let copied = false;
   let valueCopy:string|undefined;
   let areaDom:any;

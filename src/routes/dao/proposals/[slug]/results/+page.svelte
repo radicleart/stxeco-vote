@@ -53,7 +53,7 @@
 		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const burn_block_height = $sbtcConfig.stacksInfo.burn_block_height;
+			const burn_block_height = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(burn_block_height, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
 			const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)

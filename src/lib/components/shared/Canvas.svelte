@@ -2,10 +2,8 @@
     import { onMount, onDestroy, tick } from "svelte";
     import { fabric } from "fabric";
     import { createEventDispatcher } from "svelte";
-	import { ArrowDownCircle, Icon } from "svelte-hero-icons";
-	import { DownloadOutline, DownloadSolid } from "flowbite-svelte-icons";
-	import bannerBlue from '$lib/assets/banner-blue.png'
-	import bannerWhite from '$lib/assets/banner-white.png'
+    import bannerBlue from '$lib/assets/banner-blue.png'
+    import bannerWhite from '$lib/assets/banner-white.png'
 
     const dispatch = createEventDispatcher();
     let downloaded = false;
@@ -112,9 +110,9 @@
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
               if (bannerImageSrc.indexOf('white') > -1) {
-                img2 = img.set({scaleX: (canv.width / ((img.width || 100) * 1.1)), scaleY: ((canv.height * 0.27) / (img.height || 100)), left: 10, top: 280, angle: 0});
+                img2 = img.set({scaleX: (canv.width / ((img.width || 100)))*0.9, scaleY: ((canv.height * 0.5) / (img.height || 100))*0.9, left: 20, top: 200, angle: 0});
               } else {
-                img2 = img.set({scaleX: (canv.width / (img.width || 100)), scaleY: ((canv.height * 0.22) / (img.height || 100)), left: 10, top: 280, angle: 0});
+                img2 = img.set({scaleX: (canv.width / (img.width || 100))*0.9, scaleY: ((canv.height * 0.5) / (img.height || 100))*0.9, left: 20, top: 200, angle: 0});
               }
               //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();

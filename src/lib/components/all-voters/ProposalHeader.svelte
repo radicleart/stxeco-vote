@@ -30,8 +30,7 @@
 	}
 
 	const startsInBitcoinBlock = () => {
-		const startH = NAKAMOTO_VOTE_START_HEIGHT
-		return startH - $sbtcConfig.stacksInfo.burn_block_height;
+		return NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo?.burn_block_height | 0;
 	}
 
 	const switchMethod = (newMethod:number) => {

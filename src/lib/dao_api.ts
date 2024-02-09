@@ -1,7 +1,7 @@
 import { CONFIG } from '$lib/config';
 import { addNetSelector, extractResponse } from './bridge_api';
 
-export const NAKAMOTO_VOTE_START_HEIGHT = 829750
+export const NAKAMOTO_VOTE_START_HEIGHT = 829750 + 100
 export const NAKAMOTO_VOTE_STOPS_HEIGHT = 833950
 
 export async function getPoolAndSoloAddresses() {

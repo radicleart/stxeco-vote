@@ -13,8 +13,8 @@
 	let showPoxEntries = false;
 	let method:number = 1;
 	let cycle:number;
-	let stacksTip = $sbtcConfig.stacksInfo.stacks_tip_height;
-	let bitcoinTip = $sbtcConfig.stacksInfo.burn_block_height;
+	$: stacksTip = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+	$: bitcoinTip = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 
 	const loadPoxEntries = async (cycle:number) => {
 		await syncPoxEntriesByCycle(cycle)
@@ -128,5 +128,5 @@
 	</Tabs>
 </div>
 {#if showPoxEntries}
-<PoxEntries {cycle} />
+<PoxEntries {poxInfo} />
 {/if}

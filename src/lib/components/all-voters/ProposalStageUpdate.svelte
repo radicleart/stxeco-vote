@@ -10,11 +10,11 @@
 	export let method:number;
 
 	$: endBitcoinBlock = () => {
-		return NAKAMOTO_VOTE_STOPS_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height;
+		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_STOPS_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
 	}
 
 	$: startsInBitcoinBlock = () => {
-		return NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height;
+		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
 	}
 
 	onMount(() => {
@@ -37,7 +37,7 @@
 		{#if method === 3}
 		<div class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at stacks block {fmtNumber(proposal.proposalData.endBlockHeight)}</div>
 		{:else}
-		<div class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at bitcoin block {fmtNumber(endBitcoinBlock())}</div>
+		<div class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends in {fmtNumber(endBitcoinBlock())} bitcoin blocks</div>
 		{/if}
 	{:else}
 	<div class="mt-1 font-mono text-[#131416] text-xs uppercase tracking-wider">
