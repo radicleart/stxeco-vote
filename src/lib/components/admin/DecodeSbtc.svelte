@@ -28,7 +28,7 @@ onMount(async () => {
 <div class=" w-full">
 
   {#if error}<p class="text-danger">{error}</p>{/if}
-  <div><h2 class="text-2xl mb-2 pb-2 border-b-2">sBTC Data</h2></div>
+  <div><h2 class="text-2xl mb-2 pb-2 border-b-2">Data</h2></div>
   <div class="flex gap-x-5 justify-start">
     <div class="w-1/5">Type</div>
     <div class="w-4/5 justify-start">{getType(res.opcode)}</div>

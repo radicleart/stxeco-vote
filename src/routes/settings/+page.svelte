@@ -43,9 +43,8 @@
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - Settings</title>
-  <meta name="description" content="The sBTC Bridge
-  provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
+  <title>Ecosystem DAO</title>
+  <meta name="description" content="Vote on major upgrades to the Stacks protocol." />
 </svelte:head>
 
 <Tooltip class="w-80 !bg-black z-20" triggeredBy="#po-network">

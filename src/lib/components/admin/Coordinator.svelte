@@ -41,7 +41,7 @@
 
     {#if pubkeying}
       <div>
-        <div>sBTC Public Key</div>
+        <div>Public Key</div>
         <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={romeoPublicKey}/>
         <div class="py-0">
           <Button darkScheme={false} label={'Set BTC Wallet'} target={''} on:clicked={() => wallet()}/>

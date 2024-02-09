@@ -1,6 +1,3 @@
-/**
- * sbtc - interact with Stacks Blockchain to read sbtc contract info
- */
 import type { SbtcConfig } from '$types/sbtc_config';
 import type { SbtcContractDataType } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';

@@ -51,13 +51,6 @@ export async function extractResponse(response:any) {
   }
 }
 
-/**
- * fetch a bunch of objects needed in the UI;
- * 1. sbtc contract data
- * 2. current btc exchange rate data 
- * 3. keys: pair of custodial keys for testing reclaima nd reveal transactions 
- * @returns 
- */
 export async function fetchUiInit() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/init-ui');
   try {

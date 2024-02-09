@@ -1,9 +1,9 @@
 <script lang="ts">
-import Button from "../shared/Button.svelte";
 import { fetchBlock, fetchTransaction } from '$lib/bridge_api';
 import VerifyTransactions from './VerifyTransactions.svelte';
 	import DecodeSbtc from "./DecodeSbtc.svelte";
 	import { sbtcConfig } from "$stores/stores";
+	import { Button } from 'flowbite-svelte';
 
   let blockHash:any;
   let tx:any;
@@ -55,7 +55,7 @@ import VerifyTransactions from './VerifyTransactions.svelte';
       <label
         class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
         for="radioDefault02">
-        sBTC decode
+        decode
       </label>
     </div>
     <div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
