@@ -56,7 +56,7 @@ const DaoUtils = {
       if (fundingMet) proposal.stage = ProposalStage.PROPOSED
     } else {
       proposal.stage = ProposalStage.PROPOSED
-      if (method === 3) {
+      if (method === 3 || proposal.contractId.indexOf('bdp001-sip-021-nakamoto') === -1) {
         if (stacksTipHeight >= proposal.proposalData.startBlockHeight) proposal.stage = ProposalStage.ACTIVE
         if (stacksTipHeight >= proposal.proposalData.endBlockHeight) proposal.stage = ProposalStage.INACTIVE
       } else {

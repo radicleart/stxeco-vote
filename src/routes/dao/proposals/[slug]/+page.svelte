@@ -103,6 +103,9 @@
 					<Skeleton size="md" />
 				</div>
 			{/if}
+		{:else if proposal.stage === ProposalStage.PROPOSED}
+		<Holding />
+
 		{:else if proposal.stage === ProposalStage.INACTIVE}
 		<DaoInactive {proposal}/>
 		{:else}
