@@ -9,10 +9,11 @@ import { getStacksNetwork } from './stacks_connect'
 import { hex } from '@scure/base';
 import { CONFIG } from '$lib/config';
 import { addNetSelector, extractResponse } from './bridge_api';
-import type { GovernanceData, ProposalEvent, SubmissionData } from '$types/stxeco.type';
+import type { GovernanceData, ProposalEvent } from '$types/stxeco.type';
 
 export const coordinators = [
-  
+  { stxAddress: 'ST2SACH111M97FZWN2Z8XMJ1FCKSJM3NGE35S6ZKN', btcAddress: 'xverse testnet' }, // devnet + electrum bob
+  { stxAddress: 'SP2SACH111M97FZWN2Z8XMJ1FCKSJM3NGE37MGXAT', btcAddress: 'xverse mainnet' }, // devnet + electrum bob
   { stxAddress: 'SP2F0DP9Z3KSS0DABDBJN0DA0SHMCVWHXPVTH3PJJ', btcAddress: '' }, // devnet + electrum bob
   { stxAddress: 'ST3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNZN9J752', btcAddress: '' }, // devnet + electrum bob
   { stxAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
