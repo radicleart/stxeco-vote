@@ -7,7 +7,7 @@ export let proposal:ProposalEvent;
 const proposalMeta = proposal.proposalMeta;
 </script>
 
-<div class="py-10 px-10 mt-4 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+<div class="px-8 py-8 sm:py-10 sm:px-10 mt-4 md:px-12 bg-[#0A0A0B] text-white rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 	<div>
 		<dl class="divide-y divide-white/10">
 			<div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

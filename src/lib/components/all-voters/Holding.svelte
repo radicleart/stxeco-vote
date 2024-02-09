@@ -1,4 +1,4 @@
-<div class="mt-6 md:mt-0">
+<div class="">
     <div class="mb-4">
         <h2 class="text-[#131416] text-2xl mb-3">Vote starts soon</h2>
     </div>

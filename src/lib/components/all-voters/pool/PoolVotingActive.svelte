@@ -11,12 +11,12 @@
 <div class="flex flex-col w-full my-8">
   <div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 
-    <div class="mt-6 md:mt-0">
+    <div class="">
       <div class="mb-4">
         <h2 class="text-[#131416] text-2xl mb-3">Voting as Pool Stackers (Method 2)</h2>
       </div>
       <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
-        <p>Voters who are stacking in a pool send a dust amount of STX (~1 micro stx) from the stacks 
+        <p>Voters who are stacking in a pool send a dust amount of STX (~1 micro stx) from the stacks
           address they registered with the pool. The dust amount is sent to either:</p>
         <ul class="list-disc pl-6">
           <li>an address representing the “Yes to Nakamoto Release”</li>
