@@ -6,7 +6,7 @@
 	import { CONFIG } from "$lib/config";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import { sbtcConfig } from "$stores/stores";
-  import type { ProposalEvent } from "$types/stxeco.type";
+  import { ProposalStage, type ProposalEvent } from "$types/stxeco.type";
 	import BallotBox from "./DaoVotingBallotBox.svelte";
 	import { onMount } from 'svelte';
 
@@ -38,7 +38,7 @@
           <Banner bannerType={'warning'} message={'No STX will be spent by voting but you will pay a gas fee.'} />
         </div>
         <div>
-          {#if proposal && typeof proposal.status === 'object'}
+          {#if proposal && proposal.stage === ProposalStage.ACTIVE}
           <BallotBox {proposal} {balanceAtHeight}/>
           {/if}
         </div>
