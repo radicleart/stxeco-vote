@@ -7,6 +7,7 @@ import type { ProposalEvent } from '$types/stxeco.type';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
 import NakamotoResultsBackground from '$lib/components/shared/NakamotoResultsBackground.svelte';
+	import { loggedIn } from '$lib/stacks_connect';
 
 export let proposal: ProposalEvent;
 
@@ -14,8 +15,15 @@ let yesAddress:string;
 let noAddress:string;
 let showStxTransfer = true;
 let txId: string;
+let errorMessage: string|undefined;
+let vforCurrent: boolean;
 
 const castVote = async (vfor:boolean) => {
+  if (!loggedIn()) {
+    vforCurrent = vfor
+    errorMessage = 'Please connect your wallet to vote';
+    return;
+  }
   await openSTXTransfer({
     amount: '1',
     recipient: (vfor) ? yesAddress : noAddress,
@@ -46,6 +54,11 @@ onMount(async () => {
     <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote yes
     </button>
+    {#if errorMessage && vforCurrent}
+    <div class="mt-3 w-full flex justify-start gap-x-4">
+      {errorMessage}
+    </div>
+    {/if}
   </div>
 
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
@@ -53,6 +66,11 @@ onMount(async () => {
     <button on:click={() => {castVote(false)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote no
     </button>
+    {#if errorMessage && !vforCurrent}
+    <div class="mt-3 w-full flex justify-start gap-x-4">
+      {errorMessage}
+    </div>
+    {/if}
   </div>
 {:else}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">

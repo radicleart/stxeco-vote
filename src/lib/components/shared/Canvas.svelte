@@ -160,7 +160,7 @@
 {#if !downloaded}
   {#key componentKey}
     <div id="canvas-div" class="border-none border-error-500">
-        <canvas bind:this={canvas} width={canvasWidth} class="border-2 border-lightpurple" height={canvasWidth} />
+        <canvas bind:this={canvas} width={canvasWidth}  height={canvasWidth} style={'width: ' + canvasWidth + 'px; height: ' + canvasWidth + 'px; border-radius: ' + borders + ';'}/>
       </div>
     <div>
       <button class="ml-auto mt-2 text-xs font-mono uppercase inline-block items-center bg-[#EEEBE7] px-2 py-1 text-[#27282B] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:click|preventDefault={() => {toggleRoundness()}}>Preview as circle</button>
