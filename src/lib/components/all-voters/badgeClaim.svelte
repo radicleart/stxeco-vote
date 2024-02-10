@@ -14,6 +14,7 @@
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     let votes: any[] = [];
     let assetIdList: any[] = [];
+    let errorMessage:string|undefined;
     let assetId:any;
     let componentKey = 0
     let noAssets = true;
@@ -44,17 +45,24 @@
       holdings.results = holdings.results.filter((o:any) => typeof o.metaData !== 'undefined')
       if (!init && holdings.total <= (currentPage * pageSize)) return;
       holdings.results.forEach((item:any) => {
-        let image = item?.metaData?.image || '';
-        if (image.startsWith('ipfs://')) {
-          image = item.metaData.image.replace('ipfs://', gateway + 'ipfs/')
-        } else if (image.startsWith('ipfs/')) {
-          image = gateway + image;
-        } else if (image.startsWith('ar://')) {
-          image = item.metaData.image.replace('ar://', gatewayAr)
-        }
-        if (item && item.metaData) {
-          item.metaData.image = image;
-          assets.push(item)
+        let image = item?.metaData?.image || undefined;
+        if (item?.metaData.asset_type.indexOf('video') > -1) {
+          errorMessage = 'sorry, vidoes ot supported'
+        } else {
+          if (image.startsWith('ipfs://')) {
+            image = image.replace('ipfs://', gateway + 'ipfs/')
+          } else if (image.startsWith('ipfs/')) {
+            image = gateway + image;
+          } else if (image.startsWith('ar://')) {
+            image = image.replace('ar://', gatewayAr)
+          }
+          if (image.indexOf('ipfs/ipfs') > -1) {
+            image = image.replace('ipfs/ipfs', 'ipfs')
+          }
+          if (item && item.metaData) {
+            item.metaData.image = image;
+            assets.push(item)
+          }
         }
       })
       offset += pageSize;
