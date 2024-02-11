@@ -5,6 +5,7 @@
 	import Countdown from '../shared/Countdown.svelte';
 	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import { onDestroy, onMount } from 'svelte';
+	import DaoUtils from '$lib/service/DaoUtils';
 
 	export let proposal:ProposalEvent|undefined;
 	export let method:number;
@@ -25,11 +26,21 @@
 		return ($sbtcConfig.stacksInfo && proposal) ? proposal.proposalData.startBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height : 0;
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		if (!proposal) {
+			let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $sbtcConfig.currentProposal.contractId);
+			if (event) {
+				proposal = event;
+				const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
+				const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+				DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
+			}
+		}
 	})
 
 </script>
 
+{#if proposal}
 <div class="inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
 	<div class="mb-1 flex items-center gap-2">
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
@@ -65,3 +76,4 @@
 	</div>
 	{/if}
 </div>
+{/if}

@@ -6,6 +6,7 @@
 	import { CONFIG } from "$lib/config";
 	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
+	import { loggedIn } from "$lib/stacks_connect";
 	import { fmtMicroToStx } from "$lib/utils";
 	import { sbtcConfig } from "$stores/stores";
   import { ProposalStage, type ProposalEvent } from "$types/stxeco.type";
@@ -60,6 +61,9 @@
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
+          {#if !loggedIn()}
+          <p>Connect your wallet to vote!</p>
+          {/if}
         </div>
     
         <div class="mb-3 max-w-xl">

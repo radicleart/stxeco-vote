@@ -99,8 +99,9 @@ const ChainUtils = {
   toOnChainAmount: function (amount: number, gftPrecision?: number|undefined) {
     try {
       if (!gftPrecision) {
-        amount = amount * precision
-        return amount; // Math.round(amount * precision) / precision
+        //amount = Math.floor(amount * precision)
+        //return amount; // Math.round(amount * precision) / precision
+        return Math.round(amount * precision * precision) / precision
       } else {
         const newPrec = Math.pow(10, gftPrecision)
         amount = amount * newPrec
