@@ -10,6 +10,7 @@
     import type { ProposalEvent } from '$types/stxeco.type';
     import { sbtcConfig } from '$stores/stores';
     import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
+	import Banner from '$lib/components/shared/Banner.svelte';
 
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;
@@ -60,6 +61,7 @@
               console.log('finished contract call!', data);
               //ChainUtils.updateVoters();
               localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
+              localStorage.setItem('VOTED_TXID_3', JSON.stringify({txId}));
               goto(`/dao/proposals/${proposal.contractId}/badge`);
             },
             onCancel: () => {
@@ -72,9 +74,32 @@
     if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       canVote = false;
     }
+    const lookupTransaction = async (txId:string) => {
+      const url = CONFIG.VITE_STACKS_API_HIRO + '/extended/v1/tx/' + txId;
+      try {
+        const response = await fetch(url);
+        const val = await response.json();
+        return val;
+      } catch (err) {
+        console.log('callContractReadOnly4: ', err);
+      }
+    }
 
     onMount(async () => {
-
+      if (localStorage.getItem('VOTED_TXID_3')) {
+		    const txIdObj = localStorage.getItem('VOTED_TXID_3');
+		    if (txIdObj) {
+          const potentialTxId = (JSON.parse(txIdObj)).txId
+          const tx = await lookupTransaction(potentialTxId);
+          if (tx && tx.tx_status === 'pending' && tx.sender_address === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+            txId = potentialTxId
+          } else {
+            if (tx.sender_address === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+              localStorage.removeItem('VOTED_TXID_3');
+            }
+          }
+        }
+	    }
       amount = balanceAtHeight;
     })
 
@@ -85,6 +110,14 @@
   <div class="flex flex-col gap-y-4">
     <div class="text-xl">
       Snapshot balance
+    </div>
+    {#if txId}
+    <div class="mb-3 max-w-xl">
+      <Banner bannerType={'warning'} message={'Your vote is in the mempool and should be confirmed soon. See <a href="'+explorerUrl+'" target="_blank">explorer!</a>'} />
+    </div>
+    {:else}
+    <div class="mb-3 max-w-xl">
+      <Banner bannerType={'warning'} message={'No STX will be spent by voting but you will pay a gas fee.'} />
     </div>
     <div class="w-full flex flex-col justify-start">
       <input class="w-1/2 rounded-lg p-2 text-black border-gray-800" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/>
@@ -104,6 +137,7 @@
     <div class="w-full flex justify-start gap-x-4">
       {errorMessage}
     </div>
+    {/if}
     {/if}
   </div>
 </div>
