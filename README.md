@@ -57,12 +57,12 @@ Current stacks block is 138784
 Voting starts in 202 bitcoin blocks / 202*0.83=168 stacks blocks
 Voting ends in 4302 bitcoin blocks / 4302*0.83=3571 stacks blocks
 
-## Voting For Non Stackers
+## Voting with liquid STX
 
-The Ecosystem DAO allows anyone with liquid STX to vote On proposals.
-Liquid STX is the users balance less any STX they have locked in PoX stacking protocol.
-This balance (aka voting power) is read at the block height at which the voting started, preventing the same STX from being transferred between
-accounts and used to vote again. This is referred to as "snapshot" voting.
+User with liquid STX can vote on proposals using the Ecosystem DAO.
+Liquid STX is the users balance less any STX they have locked in PoX stacking protocol, 
+at the block height at which the voting started (preventing the same STX from being transferred between accounts and used to effectively double vote).
+This is referred to as "snapshot" voting.
 
-For SIP 21 Nakamoto Upgrade to pass the DAO vote requires 66% of all the STX committed by voting
-to in favour of the proposal.
+For SIP 21 Nakamoto Upgrade to pass 66% of all liquid STX committed by voting
+must in favour of the proposal.
