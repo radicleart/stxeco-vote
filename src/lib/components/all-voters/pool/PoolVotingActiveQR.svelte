@@ -7,7 +7,7 @@ import type { ProposalEvent } from '$types/stxeco.type';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
 import NakamotoResultsBackground from '$lib/components/shared/NakamotoResultsBackground.svelte';
-	import { loggedIn } from '$lib/stacks_connect';
+	import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
 
 export let proposal: ProposalEvent;
 
@@ -26,6 +26,7 @@ const castVote = async (vfor:boolean) => {
   }
   await openSTXTransfer({
     amount: '1',
+    network: getStacksNetwork(),
     recipient: (vfor) ? yesAddress : noAddress,
       onFinish: data => {
         txId = data.txId
@@ -45,6 +46,7 @@ onMount(async () => {
   if (locked && locked > 0) showStxTransfer = true
   yesAddress = addresses.yAddress as string
   noAddress = addresses.nAddress as string
+
 })
 </script>
 

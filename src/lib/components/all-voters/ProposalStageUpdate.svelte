@@ -13,6 +13,10 @@
 		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_STOPS_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
 	}
 
+	$: endStacksBlock = () => {
+		return ($sbtcConfig.stacksInfo && proposal) ? proposal.proposalData.endBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height : 0;
+	}
+
 	$: startsInBitcoinBlock = () => {
 		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
 	}
@@ -27,11 +31,13 @@
 </script>
 
 <div class="inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
-	<div class="flex items-center gap-2">
+	<div class="mb-1 flex items-center gap-2">
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
 		<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-			{#if proposal && proposal.proposalData && proposal.stage === ProposalStage.ACTIVE}
-				Vote in progress
+			{#if method !== 3 && $sbtcConfig.stacksInfo.burn_block_height  >= NAKAMOTO_VOTE_START_HEIGHT }
+			Vote in progress
+			{:else if method === 3 && startsInStacksBlock() <= 0 }
+			Vote in progress
 			{:else}
 				{#if method === 3}
 				Voting starts in {fmtNumber(startsInStacksBlock())} blocks
@@ -44,8 +50,10 @@
 	{#if proposal && proposal.proposalData && proposal.stage === ProposalStage.ACTIVE}
 		{#if method === 3}
 		<div class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends at stacks block {fmtNumber(proposal.proposalData.endBlockHeight)}</div>
+		<div class="mt-1 font-mono text-[#131416] text-xs uppercase tracking-wider"><Countdown scaleFactor={1/0.83} endBlock={endStacksBlock()} /></div>
 		{:else}
 		<div class="font-mono text-[#131416] text-xs uppercase tracking-wider">Ends in {fmtNumber(endBitcoinBlock())} bitcoin blocks</div>
+		<div class="mt-1 font-mono text-[#131416] text-xs uppercase tracking-wider"><Countdown scaleFactor={1} endBlock={endBitcoinBlock()} /></div>
 		{/if}
 	{:else}
 	<div class="mt-1 font-mono text-[#131416] text-xs uppercase tracking-wider">

@@ -74,7 +74,7 @@
     }
 
     onMount(async () => {
-      await tick();
+
       amount = balanceAtHeight;
     })
 
