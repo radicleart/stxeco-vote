@@ -31,7 +31,7 @@
 	let proposal:ProposalEvent;
 	let balanceAtHeight:number = 0;
 	let proposalNotFound = false;
-	let activeFlag = false;
+	let activeFlag = true;
 	let inited = false;
 
 	onMount(async () => {
@@ -43,14 +43,14 @@
 			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			daoVotes = await getDaoVotesByProposal(event.contractId);
-			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
+			//activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 		} else {
 			proposalNotFound = true
 		}
 
 		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
-			proposalNotFound = true
-			activeFlag = false
+			//proposalNotFound = true
+			//activeFlag = false
 		}
 
 		try {
@@ -97,7 +97,15 @@
 			{:else if method === 2}
 				<PoolVotingActive {proposal} />
 			{:else if method === 3}
+				{#if $sbtcConfig.stacksInfo?.stacks_tip_height >= proposal.proposalData.startBlockHeight}
 				<DaoVotingActive {proposal} />
+				{:else}
+				<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
+					<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+						<Holding />
+					</div>
+				</div>
+				{/if}
 			{:else}
 				<div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
 					<Skeleton size="md" />

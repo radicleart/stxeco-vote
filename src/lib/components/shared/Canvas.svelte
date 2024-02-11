@@ -25,7 +25,7 @@
       //const dataUrl = rawDataUrl.replace('data:', '').replace(/^.+,/, '');;
       const image1 = rawDataUrl; //.replace('image/png', 'image/octet-stream');
       const link = document.createElement('a');
-      link.download = 'I_Voted_For_Stacks_Two_Point_One.png';
+      link.download = 'I_Voted_For_Stacks_Nakamoto.png';
       link.href = image1;
       link.target = '_blank'
       link.click();

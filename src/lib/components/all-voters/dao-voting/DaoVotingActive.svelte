@@ -4,7 +4,9 @@
 	import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
 	import { CONFIG } from "$lib/config";
+	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
+	import { fmtMicroToStx } from "$lib/utils";
 	import { sbtcConfig } from "$stores/stores";
   import { ProposalStage, type ProposalEvent } from "$types/stxeco.type";
 	import BallotBox from "./DaoVotingBallotBox.svelte";
@@ -12,18 +14,43 @@
 
   export let proposal: ProposalEvent;
 	let balanceAtHeight:number
+  const votes: any[] = []
+  let voted = 0;
+  let votedPower = 0;
+  let inited = false;
 
 	onMount(async () => {
+    let adjustBal = 0
 			try {
 				const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
-				balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
+				adjustBal = Number(response.stx.balance) - Number(response.stx.locked)
 			} catch (e:any) {
-				balanceAtHeight = 0;
+				adjustBal = 0;
 			}
+      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
+      if (daoVotes && daoVotes.length > 0) {
+        daoVotes.forEach((o:any) => {
+          if (o) votes.push(o)
+          const amountVoted = Number(o.amount)
+          if (o.for) {
+            votedPower += amountVoted
+          } else {
+            votedPower += amountVoted
+          }
+          voted++
+        });
+        balanceAtHeight = adjustBal - votedPower
+				balanceAtHeight = ChainUtils.fromMicroAmount(balanceAtHeight)
+      } else {
+				balanceAtHeight = ChainUtils.fromMicroAmount(adjustBal)
+      }
+      inited = true
+
 	});
 
 </script>
 
+{#if inited}
 <div>
   <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
     <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
@@ -33,7 +60,12 @@
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
+          {#if voted > 0}
+          <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/badge?method=3" >collect your badge here!</a>'} />
+          {/if}
         </div>
+    
+        {#if balanceAtHeight > 0}
         <div class="mb-3 max-w-xl">
           <Banner bannerType={'warning'} message={'No STX will be spent by voting but you will pay a gas fee.'} />
         </div>
@@ -42,6 +74,7 @@
           <BallotBox {proposal} {balanceAtHeight}/>
           {/if}
         </div>
+        {/if}
       </div>
 
       <NakamotoBackground />
@@ -49,3 +82,4 @@
     </div>
   </div>
 </div>
+{/if}

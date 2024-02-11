@@ -46,8 +46,8 @@
       if (!init && holdings.total <= (currentPage * pageSize)) return;
       holdings.results.forEach((item:any) => {
         let image = item?.metaData?.image || undefined;
-        if (item?.metaData.asset_type.indexOf('video') > -1) {
-          errorMessage = 'sorry, vidoes ot supported'
+        if (item?.metaData?.asset_type?.indexOf('video') > -1) {
+          errorMessage = 'sorry, vidoes not supported'
         } else {
           if (image.startsWith('ipfs://')) {
             image = image.replace('ipfs://', gateway + 'ipfs/')
@@ -59,6 +59,7 @@
           if (image.indexOf('ipfs/ipfs') > -1) {
             image = image.replace('ipfs/ipfs', 'ipfs')
           }
+          //image = 'https://satoshibles.com/token/btc/4094/image.png'
           if (item && item.metaData) {
             item.metaData.image = image;
             assets.push(item)

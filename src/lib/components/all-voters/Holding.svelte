@@ -1,6 +1,6 @@
 <div class="">
     <div class="mb-4">
-        <h2 class="text-[#131416] text-2xl mb-3">Vote starts soon</h2>
+        <h2 class="text-[#131416] text-2xl mb-3">Vote for liquid stackers starts soon</h2>
     </div>
     <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
         <p>When voting starts you will be able to cast your vote on the proposal.</p>
