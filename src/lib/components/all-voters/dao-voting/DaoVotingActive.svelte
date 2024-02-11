@@ -60,15 +60,15 @@
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
+        </div>
+    
+        <div class="mb-3 max-w-xl">
           {#if voted > 0}
           <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/badge?method=3" >collect your badge here!</a>'} />
           {/if}
         </div>
-    
+
         {#if balanceAtHeight > 0}
-        <div class="mb-3 max-w-xl">
-          <Banner bannerType={'warning'} message={'No STX will be spent by voting but you will pay a gas fee.'} />
-        </div>
         <div>
           {#if proposal && proposal.stage === ProposalStage.ACTIVE}
           <BallotBox {proposal} {balanceAtHeight}/>

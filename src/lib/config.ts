@@ -15,7 +15,7 @@ const SHARED_DEVENV_CONFIG = {
     VITE_BRIDGE_WS: 'ws://45.79.130.153:3999',
     VITE_BRIDGE_API: 'https://devnet.uasu.finance/bridge-api/v1',
     VITE_CLARITYLAB_API: 'https://devnet.uasu.finance/bridge-api/v1',
-    VITE_STACKS_API_HIRO: 'https://api.testnet.hiro.so',
+    VITE_STACKS_API_HIRO: 'https://api.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
     VITE_STACKS_API: 'https://devnet-stacks.uasu.finance',
     VITE_STACKS_WS: 'ws://45.79.130.153:3999',

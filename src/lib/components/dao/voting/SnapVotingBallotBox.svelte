@@ -58,6 +58,7 @@ const castVote = async (vfor:boolean) => {
           console.log('finished contract call!', data);
           //ChainUtils.updateVoters();
           localStorage.setItem('VOTED_FLAG', JSON.stringify(proposalEvent.contractId));
+          localStorage.setItem('VOTED_TXID_3', txId);
           goto(`/dao/proposals/${proposalEvent.contractId}/badge`);
         },
         onCancel: () => {
