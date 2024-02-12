@@ -83,8 +83,8 @@ export default {
     },
     backgroundImage: {
       "warning-01": "rgba(248, 246, 91, 0.40);",
-      "primary-02": "linear-gradient(306.12deg, #FC6432 21.1%, #F4F3F0 84.08%)",
-      "primary-01": "linear-gradient(180deg, #FC6432 8.49%, #F4F3F0 35.05%)",
+      "primary-02": "linear-gradient(306.12deg, #f7b8a3 21.1%, #F4F3F0 84.08%)",
+      "primary-01": "linear-gradient(180deg, #f5beab 8.49%, #F4F3F0 45.05%)",
     },
     extend: {
       fontFamily: {

@@ -12,7 +12,7 @@ import { getDaoVotesByProposal } from '$lib/dao_api';
 
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
-let daoVotes:Array<VoteEvent> = [];
+export let daoVotes:Array<VoteEvent> = [];
 export let proposal:ProposalEvent;
 
 let showVotes = false;
@@ -43,7 +43,6 @@ onMount(async () => {
   const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
 	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
-  daoVotes = await getDaoVotesByProposal(proposal.contractId);
   if (daoVotes && daoVotes.length > 0) {
     daoVotes.forEach((o:any) => {
       if (o) votes.push(o)
@@ -75,19 +74,21 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
     <a href="/" class={'text-xs text-gray-400'} on:click|preventDefault={() => { showVotes = !showVotes }}>{#if !showVotes}show{:else}hide{/if} transactions</a>
   </div>
 
-  {#if showVotes}
-    <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
+{#if showVotes}
+    <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-5">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
     </div>
     {#key componentKey}
+    <div class="mb-5">
     {#each sortedEvents as item}
-    <div class="grid grid-cols-4 w-full justify-evenly">
+    <div class="grid grid-cols-4 w-full justify-evenly mb-3">
       <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-1/2 break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>{item.voter}</div>
       <div class="break-words">{@html ChainUtils.fromOnChainAmount(item.amount)}</div>
       <div class="break-words">{@html (item.for) ? '<span class="text-warning">for</span>' : 'against'}</div>
     </div>
     {/each}
+    </div>
     {/key}
 {/if}

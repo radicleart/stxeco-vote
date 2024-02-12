@@ -13,7 +13,7 @@ import ChevronUp from '$lib/components/shared/ChevronUp.svelte';
 
 export let proposal:ProposalEvent;
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-let soloVotes:Array<VoteEvent>|undefined;
+export let soloVotes:Array<VoteEvent> = [];
 
 let showVotes = false;
 let componentKey = 0;
@@ -41,7 +41,6 @@ onMount(async () => {
 	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 
-  soloVotes = $sbtcConfig.soloPoolData?.soloVotes
   if (soloVotes && soloVotes.length > 0) {
     soloVotes.forEach((o:any) => {
       if (o) votes.push(o)

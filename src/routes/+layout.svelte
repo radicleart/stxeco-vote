@@ -11,14 +11,12 @@
 	import { sbtcConfig } from '$stores/stores'
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
-	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
+	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import { fetchStacksInfo, setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
-	import Notifications from 'svelte-notifications';
-	import { getDaoProposals, getPoolAndSoloAddresses, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
-	import type { ProposalEvent } from '$types/stxeco.type';
+	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/sbtc_admin';
 	import { getPoxInfo } from '$lib/pox_api';
 
@@ -43,8 +41,6 @@
 			login()
 			return;
 		}
-		//const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-		const search = nav.to?.url.searchParams;
 		if (!nav.to?.url.searchParams?.has('chain') && $page.url.hostname === 'localhost') {
 			nav.to?.url.searchParams.set('chain', CONFIG.VITE_NETWORK)
 		}

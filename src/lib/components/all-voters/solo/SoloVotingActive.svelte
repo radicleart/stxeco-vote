@@ -26,7 +26,7 @@
 
     <NakamotoBackground />
     <NakamotoShield />
-</div>
+  </div>
 </div>
 
 <div class="mb-8 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">

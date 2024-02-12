@@ -1,5 +1,4 @@
 <script lang="ts">
-import VotingResults from '$lib/components/dao/results/VotingResults.svelte';
 import DaoUtils from '$lib/service/DaoUtils';
 import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
@@ -7,17 +6,14 @@ import FormatUtils from '$lib/service/FormatUtils';
 import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
-import ChevronDown from '$lib/components/shared/ChevronDown.svelte';
-import ChevronUp from '$lib/components/shared/ChevronUp.svelte';
-	import VoteResultsRow from '../VoteResultsRow.svelte';
+import VoteResultsRow from '../VoteResultsRow.svelte';
 
+export let poolVotes:Array<VoteEvent> = [];
 export let proposal:ProposalEvent;
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-let poolVotes:Array<VoteEvent>|undefined;
 
 let showVotes = false;
 let componentKey = 0;
-const color = 'warning';
 let sortDir = '';
 let sortField = 'voter';
 const reorder = (sf:string) => {
@@ -40,7 +36,6 @@ onMount(async () => {
   const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
 	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
-  poolVotes = $sbtcConfig.soloPoolData?.poolVotes
   if (poolVotes && poolVotes.length > 0) {
     poolVotes.forEach((o:any) => {
       if (o) votes.push(o)
