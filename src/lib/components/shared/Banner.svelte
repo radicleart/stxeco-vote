@@ -27,7 +27,7 @@
 
 <div class="flex px-4 py-3 rounded-md text-base text-black {bannerClassList}">
   <div class="flex items-center gap-2">
-    <div>
+    <div class="self-start ">
       {#if bannerType === 'warning'}
         <Icon src="{ExclamationCircle}" class="text-black w-5 h-5" aria-hidden="true" />
       {:else if bannerType === 'danger'}

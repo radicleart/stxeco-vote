@@ -7,7 +7,7 @@
 	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import { loggedIn } from "$lib/stacks_connect";
-	import { fmtMicroToStx } from "$lib/utils";
+	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 	import { sbtcConfig } from "$stores/stores";
   import { ProposalStage, type ProposalEvent } from "$types/stxeco.type";
 	import BallotBox from "./DaoVotingBallotBox.svelte";
@@ -78,6 +78,10 @@
           <BallotBox {proposal} {balanceAtHeight}/>
           {/if}
         </div>
+        {:else}
+          <div class="mb-3 max-w-xl">
+            <Banner bannerType={'danger'} message={'Account not eligible to vote. Your balance when voting began (at block ' + fmtNumber(proposal.proposalData.startBlockHeight) + ') was 0 STX.'} />
+          </div>
         {/if}
       </div>
 
