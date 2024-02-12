@@ -91,18 +91,6 @@ const DaoUtils = {
     return status;
   },
 
-  getVotingMessage: function (pd:ProposalData|undefined, stacksTipHeight:number) {
-      if (!pd) return 'unknown';
-      if (stacksTipHeight > pd.endBlockHeight) {
-        if (pd.concluded) return 'vote concluded';
-        else return 'voting ended';
-      } else if (stacksTipHeight < pd.startBlockHeight) {
-        return 'Voting starts at ( ' + pd.startBlockHeight + ' ) in ' + (pd.startBlockHeight - stacksTipHeight) + ' blocks';
-      } else {
-        return (pd.endBlockHeight - stacksTipHeight) + ' blocks to go!'
-      }
-  },
-
   getMetaData: function (source:string) {
     // const preamble:Array<string> = [];
     let lines = source.split('\n');

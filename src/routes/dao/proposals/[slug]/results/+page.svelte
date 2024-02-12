@@ -7,8 +7,8 @@
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getDaoVotesByProposal, getPoolAndSoloVotesByProposal } from '$lib/dao_api';
-	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
+	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getSummary } from '$lib/dao_api';
+	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
 	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
@@ -20,11 +20,10 @@
 	import { isCoordinator } from '$lib/sbtc_admin';
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import type { ResultsSummary } from '$types/pox_types';
 
-	let soloVotes:Array<VoteEvent>;
-	let poolVotes:Array<VoteEvent>;
-	let daoVotes:Array<VoteEvent>;
-	let countTotal:number = 0;
+	let summary:ResultsSummary;
+	let uniqueAll:number = 0;
 	let componentKey:number = 0;
 	let method:number = -1;
 	let errorReason:string|undefined;
@@ -71,11 +70,12 @@
 			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
 			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
-			daoVotes = await getDaoVotesByProposal(event.contractId) || [];
-			const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
-			poolVotes = allVotes.poolVotes || [];
-			soloVotes = allVotes.soloVotes || [];
-			countTotal = daoVotes.length + poolVotes.length + soloVotes.length
+
+			summary = await getSummary()
+			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
+			//poolVotes = allVotes.poolVotes || [];
+			//soloVotes = allVotes.soloVotes || [];
+			uniqueAll = summary.uniqueDaoVoters + summary.uniquePoolVoters + summary.uniqueSoloVoters;
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 			isApproved()
 		} else {
@@ -116,13 +116,13 @@
 				<div class="mb-3 max-w-md">
 					<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
 				  <p>Voting ended {blockSinceEnd()} blocks ago</p>
-				  <p>{countTotal} unique addresses took part in the vote. Detailed results are displayed below.</p>
+				  <p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
 				</div>
 				{:else}
 				<div class="mb-3 max-w-md">
 					<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
 					<p>Voting ends in {- blockSinceEnd()} blocks</p>
-					<p>{countTotal} unique addresses took part in the vote. Detailed results are displayed below.</p>
+					<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
 				</div>
 				{/if}
 				</div>
@@ -142,19 +142,19 @@
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="Solo Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<SoloResults {proposal} {soloVotes} />
+					<SoloResults {proposal} {summary} />
 				</div>
         	</TabItem>
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 			open={method === 2} on:keyup={(e) => changeMethod(e, 2)} title="Pool Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<PoolResults {proposal} {poolVotes} />
+					<PoolResults {proposal} {summary} />
 				</div>
             </TabItem>
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<DaoResults {proposal} {daoVotes} />
+					<DaoResults {proposal} {summary} />
 				</div>
             </TabItem>
 			{/key}
