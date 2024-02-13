@@ -1,6 +1,5 @@
 <script lang="ts">
 	import NakamotoResultsBackground from "../shared/NakamotoResultsBackground.svelte";
-	import tick from '$lib/assets/tick.png'
 	import cross from '$lib/assets/cross.png'
 	import { sbtcConfig } from "$stores/stores";
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";

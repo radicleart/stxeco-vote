@@ -17,6 +17,7 @@ let showStxTransfer = true;
 let txId: string;
 let errorMessage: string|undefined;
 let vforCurrent: boolean;
+let inited = false;
 
 const castVote = async (vfor:boolean) => {
   if (!loggedIn()) {
@@ -47,9 +48,10 @@ onMount(async () => {
   if (locked && locked > 0) showStxTransfer = true
   yesAddress = addresses.yAddress as string
   noAddress = addresses.nAddress as string
-
+  inited = true
 })
 </script>
+{#if inited}
 
 {#if showStxTransfer}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
@@ -85,4 +87,5 @@ onMount(async () => {
     <Invoice address={noAddress} voteFor={false} />
     <NakamotoResultsBackground />
   </div>
-{/if}
+  {/if}
+  {/if}
