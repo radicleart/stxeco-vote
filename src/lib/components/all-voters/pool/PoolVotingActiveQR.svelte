@@ -13,7 +13,7 @@ export let proposal: ProposalEvent;
 
 let yesAddress:string;
 let noAddress:string;
-let showStxTransfer = true;
+let showStxTransfer = false;
 let txId: string;
 let errorMessage: string|undefined;
 let vforCurrent: boolean;
@@ -44,8 +44,10 @@ const castVote = async (vfor:boolean) => {
 
 onMount(async () => {
   const addresses = $sbtcConfig.soloPoolData?.poolAddresses!
-  const locked = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.locked
+  let locked = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.locked
+  locked = Number(locked)
   if (locked && locked > 0) showStxTransfer = true
+
   yesAddress = addresses.yAddress as string
   noAddress = addresses.nAddress as string
   inited = true

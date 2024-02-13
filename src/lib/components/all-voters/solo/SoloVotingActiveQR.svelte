@@ -7,9 +7,11 @@
   let yesAddress:string;
   let noAddress:string;
   let inited = false;
+  let addresses:any;
+
 
   onMount(async () => {
-    const addresses = $sbtcConfig.soloPoolData?.soloAddresses!
+    addresses = $sbtcConfig.soloPoolData?.soloAddresses!
     yesAddress = addresses.yAddress as string
     noAddress = addresses.nAddress as string
     inited = true
@@ -17,6 +19,7 @@
 </script>
 
 {#if inited}
+
 <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
   <Invoice address={yesAddress} voteFor={true} />
   <NakamotoResultsBackground />
