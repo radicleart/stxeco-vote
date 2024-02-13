@@ -17,6 +17,17 @@
 	<div class="p-8 stretch bg-[#121314] rounded-2xl self-start">
 	  	<h3 class="text-3xl text-white font-extralight">Vote results</h3>
 	</div>
+	{#if blockSinceEnd() < 0}
+	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
+		<div class="flex justify-between mb-5">
+			<div></div>
+			<div><span class="text-4xl font-extrabold"></span></div>
+		</div>
+		<div class="flex justify-between">
+			<div><span class="">Voting is in progress - official results will be available after voting ends</span></div>
+		</div>
+	</div>
+	{:else}
 	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
 		{#if approved}
 		<div class="flex justify-between mb-5">
@@ -38,4 +49,5 @@
 		{/if}
 		<NakamotoResultsBackground />
 	</div>
+	{/if}
 </div>
