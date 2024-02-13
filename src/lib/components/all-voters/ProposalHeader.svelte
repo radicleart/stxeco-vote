@@ -1,16 +1,9 @@
 <script lang="ts">
-	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
+	import { Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, CheckCircle } from "svelte-hero-icons"
-
-
-	import { fmtNumber } from '$lib/utils';
 	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import Preamble from './Preamble.svelte';
-	import { goto } from '$app/navigation';
-	import { sbtcConfig } from '$stores/stores';
 	import { page } from '$app/stores';
-	import { NAKAMOTO_VOTE_START_HEIGHT } from '$lib/dao_api';
-	import Countdown from '../shared/Countdown.svelte';
 	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
 
 	export let proposal:ProposalEvent;
@@ -18,19 +11,8 @@
 	let showDetails = false;
 	let dropdownOpen = false;
 
-	const endBitcoinBlock = () => {
-		const poxInfo = $sbtcConfig.poxInfo;
-		if (poxInfo.current_cycle.id === 77) {
-			return poxInfo.next_cycle.prepare_phase_start_block_height + 4200 - 1
-		} else if (poxInfo.current_cycle.id === 78) {
-			return poxInfo.next_cycle.prepare_phase_start_block_height + 2100 - 1
-		} else if (poxInfo.current_cycle.id === 79) {
-			return poxInfo.next_cycle.prepare_phase_start_block_height -1
-		}
-	}
-
-	const startsInBitcoinBlock = () => {
-		return NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo?.burn_block_height | 0;
+	const showMethodSwitcher = () => {
+		return proposal.stage === ProposalStage.ACTIVE && $page.route.id?.indexOf('/results') === -1
 	}
 
 	const switchMethod = (newMethod:number) => {
@@ -44,7 +26,7 @@
 <div class="sm:flex sm:items-start sm:justify-between mt-8">
 	<ProposalStageUpdate {proposal} {method} />
 
-	{#if proposal.stage === ProposalStage.ACTIVE}
+	{#if showMethodSwitcher()}
 		<div class="mt-4 sm:mt-0">
 			<p class="text-sm text-[#131416]/[0.64] sm:text-right mb-1">Switch voting method:</p>
 			<button on:click={() => (dropdownOpen = !dropdownOpen)} class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] text-[#27282B] gap-2 px-4 py-2 text-xs rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">

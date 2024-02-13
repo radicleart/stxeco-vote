@@ -66,11 +66,11 @@
           {/if}
         </div>
     
+        {#if voted > 0}
         <div class="mb-3 max-w-xl">
-          {#if voted > 0}
-          <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a class="underline" href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/badge?method=3" >collect your badge here!</a>'} />
-          {/if}
+          <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/badge?method=3" >collect your badge here!</a>'} />
         </div>
+        {/if}
 
         {#if balanceAtHeight > 0}
         <div>

@@ -2,11 +2,8 @@
   import { onMount } from 'svelte';
   import Invoice from './Invoice.svelte';
   import { sbtcConfig } from '$stores/stores';
-  import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
-  import SoloResults from './SoloResults.svelte';
 	import NakamotoResultsBackground from '$lib/components/shared/NakamotoResultsBackground.svelte';
 
-  export let proposal: ProposalEvent;
   let yesAddress:string;
   let noAddress:string;
 

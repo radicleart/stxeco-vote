@@ -95,5 +95,19 @@ export type RewardSlot = {
     totalUstx: number;
     delegations: number;
   }
+  export type ResultAggregate = {
+    _id: {
+        event: string;
+        for: boolean;
+    },
+    total:number;
+    count:number;
+  }
+  export type ResultsSummary = {
+    uniqueDaoVoters:number;
+    uniquePoolVoters:number;
+    uniqueSoloVoters:number;
+    summary: Array<ResultAggregate>
+  }
   export type PoxAddress = { version: string; hashBytes: string; }
   

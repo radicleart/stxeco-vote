@@ -4,6 +4,13 @@ import { addNetSelector, extractResponse } from './bridge_api';
 export const NAKAMOTO_VOTE_START_HEIGHT = 829750 + 100
 export const NAKAMOTO_VOTE_STOPS_HEIGHT = 833950
 
+export async function getSummary() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/results/summary');
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
 export async function getPoolAndSoloAddresses() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/addresses');
   const response = await fetch(path);
@@ -18,13 +25,6 @@ export async function getPoolAndSoloVotesByProposal(proposalCid:string) {
   return res;
 }
 
-export async function getSoloVotesByProposal() {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/proposals');
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
 export async function getDaoProposals() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/proposals');
   const response = await fetch(path);
@@ -32,11 +32,25 @@ export async function getDaoProposals() {
   return res;
 }
 
-export async function getDaoVotesByProposal(contractId:string) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/voter/events-proposal/' + contractId);
+export async function findDaoVotes() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/results/non-stackers');
   const response = await fetch(path);
   const res = await extractResponse(response);
-  return res;
+  return res || [] ;
+}
+
+export async function findSoloVotes() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/results/solo-stackers');
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
+}
+
+export async function findPoolVotes() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/results/pool-stackers');
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
 }
 
 export async function getNftAssetClasses(stxAddress:string) {

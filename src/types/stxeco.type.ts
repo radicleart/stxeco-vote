@@ -55,6 +55,8 @@ export type VoteEvent = {
   votingContractId:string;
   proposalContractId: string;
   submitTxId: string;
+  delegations?: number;
+  poxStacker?: string;
 }
 
 export enum ProposalStage {
