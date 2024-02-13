@@ -26,7 +26,7 @@
         <Banner bannerType={'warning'} message={'Be sure to send from the bitcoin address you registered as your reward address!'} />
       </div>
       <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
-        <p>If your reward address is the current connected wallet address <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
+        <p>If your bitcoin reward address is the connected wallet address <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
       </div>
     </div>
 
