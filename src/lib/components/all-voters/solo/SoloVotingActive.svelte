@@ -1,10 +1,11 @@
 <script lang="ts">
+	import Banner from "$lib/components/shared/Banner.svelte";
 	import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
 	import type { ProposalEvent } from "$types/stxeco.type";
 	import SoloVotingActiveQr from "./SoloVotingActiveQR.svelte";
 
-
+  let showPaymentButtons = false;
 </script>
 
 <div class="flex flex-col w-full my-8">
@@ -21,6 +22,12 @@
           <li>an address representing the “No to Nakamoto Release”.</li>
         </ul>
       </div>
+      <div class="rounded-lg py-6 space-y-3 max-w-xl">
+        <Banner bannerType={'warning'} message={'Be sure to send from the bitcoin address you registered as your reward address!'} />
+      </div>
+      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
+        <p>If your reward address is the current connected wallet address <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
+      </div>
     </div>
 
     <NakamotoBackground />
@@ -32,5 +39,5 @@
   <div class="p-8 bg-[#121314] rounded-2xl">
     <h3 class="text-3xl text-white">Cast your vote</h3>
   </div>
-  <SoloVotingActiveQr/>
+  <SoloVotingActiveQr {showPaymentButtons}/>
 </div>
