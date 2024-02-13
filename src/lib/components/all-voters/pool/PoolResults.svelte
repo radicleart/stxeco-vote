@@ -33,7 +33,7 @@ const fetchTransactions = async () => {
   }
   if (votes.length === 0) {
     const newV = await findPoolVotes();
-    if (newV) votes = newV.poolVotes
+    if (newV) votes = newV.poolVotes.filter((o:VoteEvent) => o.amount > 0)
   }
   showVotes = true
 }

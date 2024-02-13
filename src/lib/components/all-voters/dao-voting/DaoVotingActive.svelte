@@ -14,20 +14,14 @@
 	import { onMount } from 'svelte';
 
   export let proposal: ProposalEvent;
-	let balanceAtHeight:number
+	export let adjustBal:number
   const votes: any[] = []
   let voted = 0;
+  let balanceAtHeight = 0;
   let votedPower = 0;
   let inited = false;
 
 	onMount(async () => {
-    let adjustBal = 0
-			try {
-				const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
-				adjustBal = Number(response.stx.balance) - Number(response.stx.locked)
-			} catch (e:any) {
-				adjustBal = 0;
-			}
       const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
       if (daoVotes && daoVotes.length > 0) {
         daoVotes.forEach((o:any) => {
@@ -40,11 +34,12 @@
           }
           voted++
         });
-        balanceAtHeight = adjustBal - votedPower
-				balanceAtHeight = ChainUtils.fromMicroAmount(balanceAtHeight)
+        balanceAtHeight = ChainUtils.toOnChainAmount(adjustBal) - votedPower
+				balanceAtHeight = (balanceAtHeight)
       } else {
-				balanceAtHeight = ChainUtils.fromMicroAmount(adjustBal)
+				balanceAtHeight = ChainUtils.toOnChainAmount(adjustBal)
       }
+      balanceAtHeight = ChainUtils.fromMicroAmount(balanceAtHeight)
       inited = true
 
 	});

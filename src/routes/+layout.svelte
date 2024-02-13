@@ -12,7 +12,7 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
-	import { fetchStacksInfo, setAuthorisation } from '$lib/bridge_api';
+	import { fetchStacksInfo, getBalanceAtHeight, setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
@@ -72,6 +72,7 @@
 		const stacksInfo = await fetchStacksInfo();
 		const daoProposals = await getDaoProposals()
 		let currentProposal = await getCurrentProposal()
+
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo
 			conf.proposals = daoProposals

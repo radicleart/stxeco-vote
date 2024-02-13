@@ -52,7 +52,7 @@
 			const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
-			balanceAtHeight = 0;
+			balanceAtHeight = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxBalance;
 			errorReason = e.message;
 		}
 		inited = true;
@@ -93,7 +93,7 @@
 				<PoolVotingActive {proposal} />
 			{:else if method === 3}
 				{#if $sbtcConfig.stacksInfo?.stacks_tip_height >= proposal.proposalData.startBlockHeight}
-				<DaoVotingActive {proposal} />
+				<DaoVotingActive {proposal} adjustBal={balanceAtHeight} />
 				{:else}
 				<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
 					<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">

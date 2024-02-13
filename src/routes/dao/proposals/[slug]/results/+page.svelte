@@ -108,31 +108,29 @@
 	{#if inited}
 
 		<ProposalHeader {proposal} method={1} />
+		{#if voteConcluded()}
 		<div class="flex flex-col w-full my-8">
 			<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-		  
-			  <div class="">
-				{#if blockSinceEnd() > 0}
-				<div class="mb-3 max-w-md">
-					<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
-				  <p>Voting ended {blockSinceEnd()} blocks ago</p>
-				  <p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
-				</div>
-				{:else}
-				<div class="mb-3 max-w-md">
-					<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
-					<p>Voting ends in {- blockSinceEnd()} blocks</p>
+			  	<div class="">
+					{#if blockSinceEnd() > 0}
+					<div class="mb-3 max-w-md">
+						<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
+					<p>Voting ended {blockSinceEnd()} blocks ago</p>
 					<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+					</div>
+					{:else}
+					<div class="mb-3 max-w-md">
+						<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
+						<p>Voting ends in {- blockSinceEnd()} blocks</p>
+						<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+					</div>
+					{/if}
 				</div>
-				{/if}
-				</div>
-		  
-			  <NakamotoBackground />
-			  <NakamotoShield />
+				<NakamotoBackground />
+				<NakamotoShield />
 			</div>
-		  </div>
+		</div>
 		  
-		{#if voteConcluded()}
 		<div id="tabs-header">
 			<VoteResultsOverview {approved} />
 		</div>

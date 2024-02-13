@@ -55,9 +55,12 @@ onMount(async () => {
   const votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
   stxFor = votesFor?.total || 0
   stxAgainst = votesAgn?.total || 0
-  stxPower = stxFor + stxAgainst
   accountsFor = votesFor?.count || 0
   accountsAgainst = votesAgn?.count || 0
+
+  stxFor = summary.proposalData.votesFor
+  stxAgainst = summary.proposalData.votesAgainst
+
 
   inFavour = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
   if (inFavour > 80) {
@@ -68,7 +71,7 @@ onMount(async () => {
 $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
-<VoteResultsRow {stxPower} {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
+<VoteResultsRow {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <div class="flex justify-start">
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>

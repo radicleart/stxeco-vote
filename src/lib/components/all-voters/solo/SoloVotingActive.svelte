@@ -2,10 +2,65 @@
 	import Banner from "$lib/components/shared/Banner.svelte";
 	import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
-	import type { ProposalEvent } from "$types/stxeco.type";
+	import { CONFIG } from "$lib/config";
+	import { isLeather, loggedIn } from "$lib/stacks_connect";
+	import { sbtcConfig } from "$stores/stores";
+	import { BitcoinNetworkType, sendBtcTransaction, type Recipient } from "sats-connect";
 	import SoloVotingActiveQr from "./SoloVotingActiveQR.svelte";
 
+  const addresses = $sbtcConfig.soloPoolData?.soloAddresses!
+
+  const castVote = async (vfor:boolean) => {
+  if (!loggedIn()) {
+    errorMessage = 'Please connect your wallet to vote';
+    return;
+  }
+  if (isLeather()) {
+    await castVoteLeather(vfor)
+  } else {
+    await castVoteXverse(vfor)
+  }
+}
+
+  const castVoteLeather = async (vfor:boolean) => {
+    window.btc?.request('sendTransfer', {
+              address: (vfor) ? addresses.yAddress : addresses.nAddress,
+              amount: 6000,
+              network: CONFIG.VITE_NETWORK,
+            })
+            .then((resp: any) => {
+              console.log({ sucesss: resp });
+            })
+            .catch((error: any) => {
+              console.log({ error });
+            });
+  }
+
+  const castVoteXverse = async(vfor:boolean) => {
+    const recipients:Recipient = {
+      address: (vfor) ? addresses.yAddress : addresses.nAddress,
+      amountSats: 6000n
+    }
+    const sendBtcOptions = {
+      payload: {
+        network: {
+          type: (CONFIG.VITE_NETWORK === 'mainnet') ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet,
+        },
+        recipients: [recipients],
+        senderAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal,
+      },
+      onFinish: (response: any) => {
+        alert(response);
+      },
+      onCancel: () => alert("Canceled"),
+    };
+
+    await sendBtcTransaction(sendBtcOptions);
+  }
+
+  let errorMessage: string|undefined;
   let showPaymentButtons = false;
+
 </script>
 
 <div class="flex flex-col w-full my-8">
@@ -27,8 +82,28 @@
       </div>
       <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
         <p>If your bitcoin reward address is the connected wallet address <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
+
+      {#if showPaymentButtons}
+      <div class="flex gap-x-2">
+        <div class=" w-1/2">
+          <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
+          Vote yes
+        </button>
+      </div>
+      <div class=" w-1/2">
+        <button on:click={() => {castVote(false)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
+          Vote no
+        </button>
       </div>
     </div>
+    {#if errorMessage}
+      <div class="mt-3 w-full flex justify-start gap-x-4">
+        {errorMessage}
+      </div>
+      {/if}
+      {/if}
+    </div>
+  </div>
 
     <NakamotoBackground />
     <NakamotoShield />
@@ -39,5 +114,5 @@
   <div class="p-8 bg-[#121314] rounded-2xl">
     <h3 class="text-3xl text-white">Cast your vote</h3>
   </div>
-  <SoloVotingActiveQr {showPaymentButtons}/>
+  <SoloVotingActiveQr/>
 </div>

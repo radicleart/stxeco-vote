@@ -1,3 +1,4 @@
+import type { ProposalData } from "./stxeco.type";
 
 
 export type StackerInfo = {
@@ -107,7 +108,8 @@ export type RewardSlot = {
     uniqueDaoVoters:number;
     uniquePoolVoters:number;
     uniqueSoloVoters:number;
-    summary: Array<ResultAggregate>
+    summary: Array<ResultAggregate>,
+    proposalData:ProposalData;
   }
   export type PoxAddress = { version: string; hashBytes: string; }
   

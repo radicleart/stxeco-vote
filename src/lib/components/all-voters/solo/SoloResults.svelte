@@ -31,7 +31,7 @@ const fetchTransactions = async () => {
   }
   if (votes.length === 0) {
     const newV = await findSoloVotes();
-    if (newV) votes = newV.soloVotes.filter((o) => o.amount > 0)
+    if (newV) votes = newV.soloVotes.filter((o:VoteEvent) => o.amount > 0)
   }
   showVotes = true
 }
