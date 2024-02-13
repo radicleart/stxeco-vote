@@ -88,7 +88,7 @@
 	{:else}
 		{#if proposal.stage === ProposalStage.ACTIVE}
 			{#if method === 1}
-				<SoloVotingActive {proposal} />
+				<SoloVotingActive />
 			{:else if method === 2}
 				<PoolVotingActive {proposal} />
 			{:else if method === 3}

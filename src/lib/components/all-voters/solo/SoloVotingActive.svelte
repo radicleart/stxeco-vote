@@ -4,7 +4,6 @@
 	import type { ProposalEvent } from "$types/stxeco.type";
 	import SoloVotingActiveQr from "./SoloVotingActiveQR.svelte";
 
-  export let proposal: ProposalEvent;
 
 </script>
 
@@ -33,5 +32,5 @@
   <div class="p-8 bg-[#121314] rounded-2xl">
     <h3 class="text-3xl text-white">Cast your vote</h3>
   </div>
-  <SoloVotingActiveQr {proposal}/>
+  <SoloVotingActiveQr/>
 </div>

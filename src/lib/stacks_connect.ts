@@ -21,6 +21,7 @@ const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 const authMessage = 'Please sign authentication'
 let userMessage:string;
+let provider:StacksProvider;
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
@@ -109,7 +110,7 @@ function getStacksAddress() {
 }
 
 function getProvider() {
-	const provider:StacksProvider = getStacksProvider()
+	if (!provider) provider = getStacksProvider()
 	const prod = (provider.getProductInfo) ? provider.getProductInfo() : undefined;
 	if (!prod) throw new Error('Provider not found')
 	return prod
