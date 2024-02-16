@@ -10,6 +10,7 @@ import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
 	import type { ResultsSummary } from '$types/pox_types';
+	import VoteTransactions from '../VoteTransactions.svelte';
 
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
@@ -76,22 +77,8 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
   <div class="flex justify-start">
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   </div>
-
-{#if showVotes}
-    <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-5">
-      <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
-    </div>
+  {#if showVotes}
     {#key componentKey}
-    <div class="mb-5">
-    {#each sortedEvents as item}
-    <div class="grid grid-cols-4 w-full justify-evenly mb-3">
-      <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-1/2 break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>{item.voter}</div>
-      <div class="break-words">{@html ChainUtils.fromOnChainAmount(item.amount)}</div>
-      <div class="py-2">{@html (item.for) ? '<span class="bg-success-300 text-success-800 py-2 px-3  border-success-500 rounded-2xl">Yes</span>' : '<span class="bg-danger-300 text-danger-100 py-2 px-3  border-danger-500 rounded-2xl">No</span>'}</div>
-    </div>
-    {/each}
-    </div>
+    <VoteTransactions {votes}/>
     {/key}
-{/if}
+  {/if}

@@ -69,7 +69,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 {#if inited}
-  <VoteResultsRow {stxPower} {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
+  <VoteResultsRow {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <div class="flex justify-start">
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
