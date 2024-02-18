@@ -80,8 +80,8 @@
 	}
 
 	const getNavActiveClass = (item:string) => {
-		if (location.pathname === item) return ' text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
-		return ' text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
+		if (location.pathname.indexOf(item) > -1) return ' text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
+		return ' text-base !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
 	}
 
 </script>
@@ -111,18 +111,25 @@
 
 		<NavUl
 			{hidden}
-			class="order-1 md:flex-1"
-			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end"
+			class="order-1 md:flex-0"
+			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end md:text-sand-700 py-2.5 px-2"
 		>
+			<div class="flex">
+				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
 				<!--
-				<div class="flex">
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
-				</div>
 				-->
+			</div>
+			</NavUl>
+			<NavUl
+			{hidden}
+			class="order-1 md:flex-1"
+			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end md:text-sand-700 py-2.5 px-2"
+		>
 			<li>
 				<div>
 					<span role="contentinfo" class="inline-flex items-center gap-3 md:text-sand-700 py-2.5 px-2">

@@ -15,10 +15,6 @@ import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
 let proposal:ProposalEvent;
 let inited = false;
 onMount(async () => {
-  if (!loggedIn()) {
-    goto('/')
-    return
-  }
   let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
   if (event) {
     proposal = event;
@@ -46,7 +42,7 @@ onMount(async () => {
     {/if}
     <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-
+        {#if loggedIn()}
         <div class="flex flex-col gap-y-2 bg-warning-01">
           <div class="flex flex-col gap-y-5 bg-warning-01">
             <h1 class="text-4xl">Thank you for your vote!</h1>
@@ -54,6 +50,14 @@ onMount(async () => {
             <BadgeClaim/>
           </div>
         </div>
+        {:else}
+        <div class="flex flex-col gap-y-2 bg-warning-01">
+          <div class="flex flex-col gap-y-5 bg-warning-01">
+            <h1 class="text-4xl">Thank you for voting!</h1>
+            <p class="text-base">Connect your wallet to continue.</p>
+          </div>
+        </div>
+        {/if}
 
         <NakamotoBackground />
         <NakamotoShield />
