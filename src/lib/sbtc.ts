@@ -1,5 +1,4 @@
 import type { SbtcConfig } from '$types/sbtc_config';
-import type { SbtcContractDataType } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
@@ -60,9 +59,7 @@ export function openWebSocket() {
 }
 
 export const defaultSbtcConfig:SbtcConfig = {
-  pegIn: true,
   loggedIn: false,
-  sigData: undefined,
   userSettings: {
     useOpDrop: false,
     debugMode: false,
@@ -83,5 +80,61 @@ export const defaultSbtcConfig:SbtcConfig = {
     executiveTeamMember: false
   },
   keySets: {},
+  sbtcContractData: {
+    coordinator: undefined,
+    contractId: '',
+    contractOwner: '',
+    sbtcWalletAddress: '',
+    sbtcWalletPublicKey: '',
+    numKeys: undefined,
+    numParties: undefined,
+    tradingHalted: undefined,
+    tokenUri: undefined,
+    threshold: undefined,
+    totalSupply: undefined,
+    decimals: undefined,
+    name: undefined,
+    burnHeight: undefined
+  },
+  poxInfo: {
+    contract_id: '',
+    pox_activation_threshold_ustx: 0,
+    first_burnchain_block_height: 0,
+    current_burnchain_block_height: 0,
+    prepare_phase_block_length: 0,
+    reward_phase_block_length: 0,
+    reward_slots: 0,
+    rejection_fraction: 0,
+    total_liquid_supply_ustx: 0,
+    current_cycle: {
+      id: 0,
+      min_threshold_ustx: 0,
+      stacked_ustx: 0,
+      is_pox_active: false
+    },
+    next_cycle: {
+      id: 0,
+      min_threshold_ustx: 0,
+      min_increment_ustx: 0,
+      stacked_ustx: 0,
+      prepare_phase_start_block_height: 0,
+      blocks_until_prepare_phase: 0,
+      reward_phase_start_block_height: 0,
+      blocks_until_reward_phase: 0,
+      ustx_until_pox_rejection: 0
+    },
+    min_amount_ustx: 0,
+    prepare_cycle_length: 0,
+    reward_cycle_id: 0,
+    reward_cycle_length: 0,
+    rejection_votes_left_required: 0,
+    next_reward_cycle_in: 0,
+  },
+  stacksInfo: {
+    burn_block_height: 0,
+    server_version: '',
+    network_id: 0,
+    stacks_tip_height: 0
+  }
 }
 

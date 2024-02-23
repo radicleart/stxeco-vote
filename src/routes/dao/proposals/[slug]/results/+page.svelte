@@ -24,7 +24,6 @@
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
-	let componentKey:number = 0;
 	let method:number = -1;
 	let errorReason:string|undefined;
 	let proposal:ProposalEvent;
@@ -111,20 +110,46 @@
 		{#if voteConcluded()}
 		<div class="flex flex-col w-full my-8">
 			<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-			  	<div class="">
-					{#if blockSinceEnd() > 0}
-					<div class="mb-3 max-w-md">
-						<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
-					<p>Voting ended {blockSinceEnd()} blocks ago</p>
-					<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
-					</div>
-					{:else}
-					<div class="mb-3 max-w-md">
-						<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
-						<p>Voting ends in {- blockSinceEnd()} blocks</p>
+			  	<div class="flex flex-col items-stretch justify-items-stretch">
+					<div>
+						{#if blockSinceEnd() > 0}
+						<div class="mb-3 max-w-md">
+							<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
+						<p>Voting ended {blockSinceEnd()} blocks ago</p>
 						<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+						</div>
+						{:else}
+						<div class="mb-3 max-w-md">
+							<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
+							<p>Voting ends in {- blockSinceEnd()} blocks</p>
+							<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+						</div>
+						{/if}
 					</div>
-					{/if}
+					<!--
+					<div class="text-[#131416]/[0.44] self-baseline flex flex-col">
+						<div>
+							<button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
+								Count details <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+									<path fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2Z" clip-rule="evenodd" />
+								</svg>
+							</button>
+							</div>
+						{#if showDetails}
+						<div>
+							<h1>Count Methodology</h1>
+							<div class="my-5 ">
+								<h2>Solo count</h2>
+								<p>Bitcoin transactions were read from the Bitcoin chain for each address.</p>
+								<p>The transactions were connected to pox entries.</p>
+								<ol>
+									<li>Vote transactions collected from bitcoin</li>
+								</ol>
+							</div>
+						</div>
+						{/if}
+					</div>
+					-->
 				</div>
 				<NakamotoBackground />
 				<NakamotoShield />
@@ -132,11 +157,10 @@
 		</div>
 		  
 		<div id="tabs-header">
-			<VoteResultsOverview {approved} />
+			<VoteResultsOverview {approved} {summary}/>
 		</div>
 		<div >
 		<Tabs  style="underline" contentClass="py-4">
-			{#key componentKey}
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="Solo Stackers" >
 				<div class="bg-lightgray py-8 px-4">
@@ -155,7 +179,6 @@
 					<DaoResults {proposal} {summary} />
 				</div>
             </TabItem>
-			{/key}
         </Tabs>
 		</div>
 		{:else}

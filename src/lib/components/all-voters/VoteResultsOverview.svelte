@@ -13,6 +13,8 @@
 	let poolPercent= '0'
 	let soloPercent = '0'
 	let daoPercent = '0'
+	let daoAccountsFor = 0
+	let daoAccountsAgainst = 0
 
 	const blockSinceEnd = () => {
 		return $sbtcConfig.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
@@ -40,6 +42,8 @@
 		stxFor = votesFor?.total || 0
 		stxAgainst = votesAgn?.total || 0
 		stxPower = stxFor + stxAgainst
+		daoAccountsFor = votesFor?.count || 0
+		daoAccountsAgainst = votesAgn?.count || 0
 
 		daoPercent = ((stxFor / stxPower) * 100).toFixed(4)
 	})
@@ -53,10 +57,6 @@
 	{#if blockSinceEnd() < 0}
 	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
 		<div class="flex justify-between mb-5">
-			<div></div>
-			<div><span class="text-4xl font-extrabold"></span></div>
-		</div>
-		<div class="flex justify-between">
 			<div><span class="">Voting is in progress - official results will be available after voting ends</span></div>
 		</div>
 		<div class="flex justify-between mb-5">
@@ -69,7 +69,7 @@
 			<div><span class="text-4xl font-extrabold">{poolPercent} %</span></div>
 			<div>{#if Number(poolPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>
-		<div class="flex justify-between mb-5">
+		<div class="flex justify-between mb-2">
 			<div><span class="text-4xl font-extrabold">Non Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
 			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>

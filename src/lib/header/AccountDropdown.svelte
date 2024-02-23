@@ -13,9 +13,11 @@
 	import { fmtSatoshiToBitcoin, fmtMicroToStx, bitcoinBalanceFromMempool } from '$lib/utils'
 	import { isCoordinator } from '$lib/sbtc_admin';
 	import { goto } from '$app/navigation';
+	import type { AddressObject } from 'sbtc-bridge-lib';
 	const dispatch = createEventDispatcher();
 
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
+	const account:AddressObject = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
 
 	let copied = false;
 	let dropdownOpen = false;
@@ -69,6 +71,19 @@
 		<div class="divide-y divide-sand-900">
 			<div class="pb-2">
 				<div class="px-4 py-2">Addresses</div>
+				{#if account.bnsNameInfo?.names?.length > 0}
+				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
+					<div id="icon-bns" class="flex items-center gap-3 text-sm">
+						<StacksIcon clazz={'w-5 h-5'}/>
+						<span>{account.bnsNameInfo.names[0]}</span>
+					</div>
+					<div class="ml-auto flex items-center">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-bns', account.bnsNameInfo.names[0])} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-sand-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+							<Icon on:keyup on:click={(event) => handleClick(event)} src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
+						</button>
+					</div>
+				</div>
+				{/if}
 				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="icon-stacks" class="flex items-center gap-3 text-sm">
 						<StacksIcon clazz={'w-5 h-5'}/>
@@ -81,12 +96,12 @@
 					</div>
 				</div>
 				<div class="px-4 py-1 grid grid-flow-col auto-cols-auto gap-6 items-center">
-					<div id="bitcoin-c-stacks" class="flex items-center gap-3 text-sm">
+					<div id="icon-bitcoin" class="flex items-center gap-3 text-sm">
 						<LogoBitcoin clazz={'w-5 h-5'}/>
 						<span><span>Cardinal:</span>{' '}{transformAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-sand-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-bitcoin', $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-sand-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
