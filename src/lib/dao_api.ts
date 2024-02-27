@@ -46,6 +46,25 @@ export async function findSoloVotes() {
   return res || [];
 }
 
+export async function findPoxEntriesByAddress(bitcoinAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/pox-entries/' + bitcoinAddress);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
+}
+
+export async function findPoolStackerEventsByStacker(stacksAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/pool-stacker-events/' + stacksAddress);
+  const response = await fetch(path);
+  return await response.json();
+}
+
+export async function findPoolStackerEventsByHashBytes(hashBytes:string, page:number, limit:number) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/solo-stacker-events/' + hashBytes + '/' + page + '/' + limit);
+  const response = await fetch(path);
+  return await response.json();
+}
+
 export async function findPoolVotes() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/results/pool-stackers');
   const response = await fetch(path);
@@ -77,3 +96,11 @@ export async function getDaoVotesByProposalAndVoter(proposal:string, stxAddress:
   const res = await extractResponse(response);
   return res;
 }
+
+export async function getVoterEvents(stxAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/dao/voter/events/' + stxAddress);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+

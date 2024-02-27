@@ -4,8 +4,8 @@
 	import cross from '$lib/assets/cross.png'
 	import { sbtcConfig } from "$stores/stores";
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
-	import type { ResultsSummary } from "$types/pox_types";
 	import { onMount } from "svelte";
+	import type { ResultsSummary } from "$types/pox_types";
 
 	export let approved = false;
 	export let summary:ResultsSummary;
@@ -13,6 +13,8 @@
 	let poolPercent= '0'
 	let soloPercent = '0'
 	let daoPercent = '0'
+	let daoAccountsFor = 0
+	let daoAccountsAgainst = 0
 
 	const blockSinceEnd = () => {
 		return $sbtcConfig.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
@@ -40,6 +42,8 @@
 		stxFor = votesFor?.total || 0
 		stxAgainst = votesAgn?.total || 0
 		stxPower = stxFor + stxAgainst
+		daoAccountsFor = votesFor?.count || 0
+		daoAccountsAgainst = votesAgn?.count || 0
 
 		daoPercent = ((stxFor / stxPower) * 100).toFixed(4)
 	})
@@ -66,13 +70,10 @@
 		</div>
 		<div class="flex justify-between mb-5">
 			<div><span class="text-4xl font-extrabold">Pool Stackers</span></div>
-			<div><span class="text-4xl font-extrabold">coming soon</span></div>
-			<!--
-				<div><span class="text-4xl font-extrabold">{poolPercent} %</span></div>
+			<div><span class="text-4xl font-extrabold">{poolPercent} %</span></div>
 			<div>{#if Number(poolPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
-				-->
 		</div>
-		<div class="flex justify-between mb-5">
+		<div class="flex justify-between mb-2">
 			<div><span class="text-4xl font-extrabold">Non Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
 			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>

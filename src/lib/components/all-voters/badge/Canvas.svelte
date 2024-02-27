@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, onDestroy, tick } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import { fabric } from "fabric";
     import { createEventDispatcher } from "svelte";
     import bannerBlue from '$lib/assets/banner-blue.png'
@@ -76,6 +76,16 @@
           preserveObjectStacking: true
         });
         var text = new fabric.Text('Loading image..', {
+          left: 10,
+          top: 10,
+          strokeWidth: 0,
+          stroke:"#ffffff",
+          paintFirst: "stroke",
+          fill: '#ffffff',
+          fontSize: 24,
+          charSpacing:1
+        });
+        var bnsText = new fabric.Text('BNS NAME', {
           left: 10,
           top: 10,
           strokeWidth: 0,

@@ -58,7 +58,7 @@ export type PoxInfo = {
     reward_cycle_length: number;
     rejection_votes_left_required: number;
     next_reward_cycle_in: number;
-    contract_versions: [
+    contract_versions?: [
         {
             contract_id: string;
             activation_burnchain_block_height: number;
@@ -109,6 +109,7 @@ export type RewardSlot = {
     uniquePoolVoters:number;
     uniqueSoloVoters:number;
     summary: Array<ResultAggregate>,
+    summaryWithZeros: Array<ResultAggregate>,
     proposalData:ProposalData;
   }
   export type PoxAddress = { version: string; hashBytes: string; }

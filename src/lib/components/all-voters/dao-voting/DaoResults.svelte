@@ -10,6 +10,7 @@ import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
 	import type { ResultsSummary } from '$types/pox_types';
+	import AddressLookup from '../AddressLookup.svelte';
 	import VoteTransactions from '../VoteTransactions.svelte';
 
 const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
@@ -19,7 +20,6 @@ export let proposal:ProposalEvent;
 
 let showVotes = false;
 let componentKey = 0;
-const color = 'warning';
 let sortDir = '';
 let sortField = 'voter';
 const reorder = (sf:string) => {
@@ -32,7 +32,6 @@ let accountsFor = 0;
 let accountsAgainst = 0;
 let stxFor = 0;
 let stxAgainst = 0;
-let stxPower = 0;
 
 const fetchTransactions = async () => {
   if (showVotes) {
@@ -74,10 +73,11 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 
 <VoteResultsRow {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
-  <div class="flex justify-start">
-    <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
-  </div>
-  {#if showVotes}
+<div class="flex justify-between">
+  <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
+</div>
+
+{#if showVotes}
     {#key componentKey}
     <VoteTransactions {votes}/>
     {/key}

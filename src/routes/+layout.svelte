@@ -80,6 +80,11 @@
 			return conf;
 		});
 
+		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
+		if (loggedIn() && !$sbtcConfig.authHeader) {
+			await authenticate($sbtcConfig)
+		}
+		setAuthorisation($sbtcConfig.authHeader)
 		inited = true;
 
 		const soloPoolData = await getPoolAndSoloAddresses()
@@ -90,11 +95,6 @@
 			conf.soloPoolData = soloPoolData
 			return conf;
 		});
-		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
-		if (loggedIn() && !$sbtcConfig.authHeader) {
-			await authenticate($sbtcConfig)
-		}
-		setAuthorisation($sbtcConfig.authHeader)
 	}
 
 	let timer:any;

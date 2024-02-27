@@ -54,6 +54,7 @@ export type VoteEvent = {
   voter: string;
   for: boolean;
   amount: number;
+  burnBlockHeight:number;
   votingContractId:string;
   proposalContractId: string;
   submitTxId: string;
