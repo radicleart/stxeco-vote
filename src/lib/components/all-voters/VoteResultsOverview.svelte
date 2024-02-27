@@ -57,6 +57,10 @@
 	{#if blockSinceEnd() < 0}
 	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
 		<div class="flex justify-between mb-5">
+			<div></div>
+			<div><span class="text-4xl font-extrabold"></span></div>
+		</div>
+		<div class="flex justify-between mb-5">
 			<div><span class="">Voting is in progress - official results will be available after voting ends</span></div>
 		</div>
 		<div class="flex justify-between mb-5">

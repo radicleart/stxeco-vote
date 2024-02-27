@@ -1,3 +1,4 @@
+import type { PoxAddress } from "./pox_types";
 
 export type HoldingsType = {
   nfts: any;
@@ -47,6 +48,7 @@ export type ProposalEvent = {
   stage: ProposalStage;
 }
 export type VoteEvent = {
+  stackerData?: Array<PoolStackerEvent>;
   event: string;
   proposal: string;
   voter: string;
@@ -56,6 +58,8 @@ export type VoteEvent = {
   votingContractId:string;
   proposalContractId: string;
   submitTxId: string;
+  blockHeight: number;
+  burnBlockHeight: number;
   delegations?: number;
   poxStacker?: string;
 }
@@ -125,4 +129,85 @@ export type DaoData = {
     name: string;
     txid: string;
   }|undefined
+}
+export type PoolStackerEvent = {
+  _id?:string;
+  submitTxId: string;
+  eventIndex: number;
+  event: string;
+  locked: number;
+  balance: number;
+  stacker: string;
+  burnchainUnlockHeight: number;
+  data: DelegationStx;
+}
+
+export type HandleUnlock = {
+  firstCycleLocked: number;
+  firstUnlockedCycle: number;
+  poxAddr?: PoxAddress;
+}
+export type DelegationStx = {
+  amountUstx: number;
+  delegator: string;
+  poxAddr?: PoxAddress;
+  unlockBurnHeight: number;
+}
+export type DelegationAggregationIncrease = {
+  amountUstx: number;
+  delegator?: string;
+  poxAddr?: PoxAddress;
+  rewardCycle: number;
+}
+export type DelegationStackExtend = {
+  delegator: string;
+  extendCount: number;
+  poxAddr: PoxAddress;
+  stacker: string;
+  unlockBurnHeight: number;
+}
+export type DelegationStackIncrease = {
+  delegator: string;
+  increaseBy: number;
+  poxAddr: PoxAddress;
+  stacker: string;
+  totalLocked: number;
+}
+export type DelegationStackStx = {
+  delegator: string;
+  lockAmount: number;
+  lockPeriod: number;
+  poxAddr?: PoxAddress;
+  stacker: string;
+  startBurnHeight: number;
+  unlockBurnHeight: number;
+}
+export type StackStx = {
+  lockAmount: number;
+  lockPeriod: number;
+  poxAddr?: PoxAddress;
+  startBurnHeight: number;
+  unlockBurnHeight: number;
+}
+export type StackIncrease = {
+  increaseBy: number;
+  poxAddr?: PoxAddress;
+  totalLocked: number;
+}
+export type StackAggregationCommit = {
+  amountUstx: number;
+  delegator?: string;
+  poxAddr?: PoxAddress;
+  rewardCycle: number;
+}
+export type StackExtend = {
+  extendCount: number;
+  poxAddr?: PoxAddress;
+  unlockBurnHeight: number;
+}
+export type DelegationStackAggregationCommitIndexed = {
+  amountUstx: number;
+  delegator?: string;
+  poxAddr?: PoxAddress;
+  rewardCycle: number;
 }

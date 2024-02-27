@@ -1,9 +1,6 @@
 <script lang="ts">
 import DaoUtils from '$lib/service/DaoUtils';
-import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
-import FormatUtils from '$lib/service/FormatUtils';
-import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import VoteResultsRow from '../VoteResultsRow.svelte';
@@ -13,10 +10,11 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
+	import { CONFIG } from '$lib/config';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+
 let votes: Array<VoteEvent> = []
 let allVotes: Array<VoteEvent> = []
 let includeZeros = false;
@@ -26,7 +24,6 @@ let showAddressLookup = false;
 let componentKey = 0;
 let sortDir = '';
 let sortField = 'voter';
-
 const reorder = (sf:string) => {
     sortField = sf;
     sortDir = (sortDir === '-') ? '' : '-';
@@ -52,7 +49,6 @@ const fetchTransactions = async () => {
   showVotes = true
 }
 
-let totalVotePower = (proposal.proposalData) ? FormatUtils.fmtNumber(Math.floor(ChainUtils.fromMicroAmount(proposal.proposalData.votesFor + proposal.proposalData.votesAgainst))) : 0;
 let accountsFor = 0;
 let accountsAgainst = 0;
 let stxFor = 0;
@@ -103,8 +99,8 @@ onMount(async () => {
   analysisMode()
   inited = true;
 })
-
 $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
+
 </script>
 
 {#if inited}

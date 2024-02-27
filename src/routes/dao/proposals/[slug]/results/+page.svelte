@@ -7,8 +7,8 @@
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight } from '$lib/bridge_api';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getSummary } from '$lib/dao_api';
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
+	import { NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolVotes, getSummary } from '$lib/dao_api';
+	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
 	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
@@ -24,6 +24,8 @@
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
+	let componentKey:number = 0;
+	let poolVotes:Array<VoteEvent>;
 	let method:number = -1;
 	let errorReason:string|undefined;
 	let proposal:ProposalEvent;
@@ -62,20 +64,20 @@
 	}
 
 	const uniqueVotes = (summary:any) => {
-		let votesFor = summary.summary.find((o) => o._id.event === 'pool-vote' && o._id.for)
-		let votesAgn = summary.summary.find((o) => o._id.event === 'pool-vote' && !o._id.for)
+		let votesFor = summary.summary.find((o:any) => o._id.event === 'pool-vote' && o._id.for)
+		let votesAgn = summary.summary.find((o:any) => o._id.event === 'pool-vote' && !o._id.for)
 		let stxFor = votesFor?.count || 0
 		let stxAgainst = votesAgn?.count || 0
 		let stxPower = stxFor + stxAgainst
 
-		votesFor = summary.summary.find((o) => o._id.event === 'solo-vote' && o._id.for)
-		votesAgn = summary.summary.find((o) => o._id.event === 'solo-vote' && !o._id.for)
+		votesFor = summary.summary.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
+		votesAgn = summary.summary.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
 		stxFor = votesFor?.count || 0
 		stxAgainst = votesAgn?.count || 0
 		stxPower += stxFor + stxAgainst
 
-		votesFor = summary.summary.find((o) => o._id.event === 'vote' && o._id.for)
-		votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
+		votesFor = summary.summary.find((o:any) => o._id.event === 'vote' && o._id.for)
+		votesAgn = summary.summary.find((o:any) => o._id.event === 'vote' && !o._id.for)
 		stxFor = votesFor?.count || 0
 		stxAgainst = votesAgn?.count || 0
 		stxPower += stxFor + stxAgainst
@@ -91,13 +93,15 @@
 			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
 			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
-
+			const results = await findPoolVotes()
+			//poolVotes = results.poolVotes
 			summary = await getSummary()
 			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			//poolVotes = allVotes.poolVotes || [];
 			//soloVotes = allVotes.soloVotes || [];
 			uniqueAll = uniqueVotes(summary);
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
+			
 			isApproved()
 		} else {
 			proposalNotFound = true
@@ -179,7 +183,7 @@
 		</div>
 		  
 		<div id="tabs-header">
-			<VoteResultsOverview {approved} {summary}/>
+			<VoteResultsOverview {approved} {summary} />
 		</div>
 		<div >
 		<Tabs  style="underline" contentClass="py-4">
