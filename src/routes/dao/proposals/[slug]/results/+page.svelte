@@ -61,6 +61,28 @@
 		}
 	}
 
+	const uniqueVotes = (summary:any) => {
+		let votesFor = summary.summary.find((o) => o._id.event === 'pool-vote' && o._id.for)
+		let votesAgn = summary.summary.find((o) => o._id.event === 'pool-vote' && !o._id.for)
+		let stxFor = votesFor?.count || 0
+		let stxAgainst = votesAgn?.count || 0
+		let stxPower = stxFor + stxAgainst
+
+		votesFor = summary.summary.find((o) => o._id.event === 'solo-vote' && o._id.for)
+		votesAgn = summary.summary.find((o) => o._id.event === 'solo-vote' && !o._id.for)
+		stxFor = votesFor?.count || 0
+		stxAgainst = votesAgn?.count || 0
+		stxPower += stxFor + stxAgainst
+
+		votesFor = summary.summary.find((o) => o._id.event === 'vote' && o._id.for)
+		votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
+		stxFor = votesFor?.count || 0
+		stxAgainst = votesAgn?.count || 0
+		stxPower += stxFor + stxAgainst
+
+		return stxPower
+	}
+
 	onMount(async () => {
 		method = Number($page.url.searchParams.get('method')) || 3
 		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
@@ -74,7 +96,7 @@
 			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			//poolVotes = allVotes.poolVotes || [];
 			//soloVotes = allVotes.soloVotes || [];
-			uniqueAll = summary.uniqueDaoVoters + summary.uniquePoolVoters + summary.uniqueSoloVoters;
+			uniqueAll = uniqueVotes(summary);
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 			isApproved()
 		} else {
