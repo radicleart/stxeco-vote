@@ -15,7 +15,7 @@
 	let cycle = poxInfo.reward_cycle_id;
 
 	const stackerInfo = (entry:PoxEntry) => {
-		dispatch('stacker-info', { entry })
+		dispatch('/stacker-info', { entry })
 	}
 
     const fetchPage = async () => {

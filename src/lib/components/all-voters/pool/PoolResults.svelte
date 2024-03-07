@@ -121,7 +121,18 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </div>
 
   {#if showVotes}
-    <div class="grid grid-cols-6 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
+	<div class="mt-6 w-1/2">
+    <p>
+      <span class="text-sm">
+        Transactions sent to the two voting addresses are matched
+        against stacker info read from the pox-3 
+        contract and event stream, over cycles 78 and 79. If the 
+        pox-3 data shows the address was stacking in a pool the amount
+        of stx locked is counted as the users vote.
+      </span>
+    </p>
+  </div>
+  <div class="grid grid-cols-6 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Height</a></div>

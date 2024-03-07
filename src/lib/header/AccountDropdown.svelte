@@ -14,6 +14,7 @@
 	import { isCoordinator } from '$lib/sbtc_admin';
 	import { goto } from '$app/navigation';
 	import type { AddressObject } from 'sbtc-bridge-lib';
+	import { disconnect } from '@stacks/connect';
 	const dispatch = createEventDispatcher();
 
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
@@ -41,6 +42,7 @@
 	}
 
 	const doLogout = () => {
+		disconnect()
 		dispatch('init_logout');
 	}
 

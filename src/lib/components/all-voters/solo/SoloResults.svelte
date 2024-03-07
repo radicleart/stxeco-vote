@@ -5,12 +5,13 @@ import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
 import VoteResultsRow from '../VoteResultsRow.svelte';
-import type { ResultsSummary } from '$types/pox_types';
 import { findSoloVotes } from '$lib/dao_api';
 import SoloResultsRow from './SoloResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import { Icon, InformationCircle, MagnifyingGlassCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
+	import { isCoordinator } from '$lib/sbtc_admin';
+	import type { ResultsSummary } from '$types/pox_types';
 
 export let proposal:ProposalEvent;
 export let summary:ResultsSummary;
@@ -70,11 +71,11 @@ const analysisMode = () => {
   } else {
       votes = allVotes.filter((o:VoteEvent) => o.amount > 0)
   }
-  let votesFor = summary.summary.find((o) => o._id.event === 'solo-vote' && o._id.for);
-  let votesAgn = summary.summary.find((o) => o._id.event === 'solo-vote' && !o._id.for);
+  let votesFor = summary.summary.find((o:any) => o._id.event === 'solo-vote' && o._id.for);
+  let votesAgn = summary.summary.find((o:any) => o._id.event === 'solo-vote' && !o._id.for);
   if (includeZeros) {
-    votesFor = summary.summaryWithZeros.find((o) => o._id.event === 'solo-vote' && o._id.for)
-    votesAgn = summary.summaryWithZeros.find((o) => o._id.event === 'solo-vote' && !o._id.for)
+    votesFor = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
+    votesAgn = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
   }
   stxFor = votesFor?.total || 0
   stxAgainst = votesAgn?.total || 0
@@ -110,13 +111,16 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
-    
+    {#if isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)}
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => analysisMode() }>
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="analysis-label" />
     </a>
+    {/if}
+    <!--
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => openAddressLookup() }>
       <Icon src="{MagnifyingGlassCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="search-label" />
     </a>
+    -->
   </div>
 </div>
 
@@ -124,7 +128,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 	<div class="mt-6 w-1/2">
 			<p>
         <span class="text-sm">Pox-3 reward set data is read from the pox-3 
-          contract using get-reward-set-pox-address over cycles 78 and 79. The data
+          contract and event stream over cycles 78 and 79. The data
           is indexed into a local database and matched against bitcoin vote transactions
           sent to the yes or no voting addresses.
         </span>

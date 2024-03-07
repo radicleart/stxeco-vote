@@ -53,6 +53,13 @@ export async function findPoxEntriesByAddress(bitcoinAddress:string) {
   return res || [];
 }
 
+export async function findRewardSlotsByAddress(bitcoinAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/reward-slot/' + bitcoinAddress);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
+}
+
 export async function findPoolStackerEventsByStacker(stacksAddress:string) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/pool-stacker-events/' + stacksAddress);
   const response = await fetch(path);
