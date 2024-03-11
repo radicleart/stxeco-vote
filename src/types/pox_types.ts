@@ -143,6 +143,7 @@ export type PoolStackerEvent = {
         for: boolean;
     },
     total:number;
+    totalNested:number;
     count:number;
   }
   export type ResultsSummary = {

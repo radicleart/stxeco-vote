@@ -46,7 +46,11 @@
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
 		<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
 			{#if method !== 3 && $sbtcConfig.stacksInfo.burn_block_height  >= NAKAMOTO_VOTE_START_HEIGHT }
-			Vote in progress
+				{#if $sbtcConfig.stacksInfo.burn_block_height  < NAKAMOTO_VOTE_STOPS_HEIGHT}
+				Vote in progress
+				{:else}
+				Voting closed
+				{/if}
 			{:else if method === 3 && startsInStacksBlock() <= 0 }
 			Vote in progress
 			{:else}

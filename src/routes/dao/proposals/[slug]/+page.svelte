@@ -110,7 +110,7 @@
 		<Holding />
 
 		{:else if proposal.stage === ProposalStage.INACTIVE}
-		<DaoInactive {proposal}/>
+		<DaoInactive {proposal} {method}/>
 		{:else}
 		<DaoConcluded {proposal}/>
 		{/if}

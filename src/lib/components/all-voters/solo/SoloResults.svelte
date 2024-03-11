@@ -28,7 +28,10 @@ let accountsFor = 0;
 let accountsAgainst = 0;
 let stxFor = 0;
 let stxAgainst = 0;
+let stxForUnnested = 0;
+let stxAgainstUnnested = 0;
 let stxPower = 0;
+let stxPowerUnnested = 0;
 
 let inited = false;
 let inFavour = 0;
@@ -77,9 +80,12 @@ const analysisMode = () => {
     votesFor = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
     votesAgn = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
   }
-  stxFor = votesFor?.total || 0
-  stxAgainst = votesAgn?.total || 0
+  stxFor = votesFor?.totalNested || 0
+  stxAgainst = votesAgn?.totalNested || 0
+  stxForUnnested = votesFor?.total || 0
+  stxAgainstUnnested = votesAgn?.total || 0
   stxPower = stxFor + stxAgainst
+  stxPowerUnnested = stxForUnnested + stxAgainstUnnested
   accountsFor = votesFor?.count || 0
   accountsAgainst = votesAgn?.count || 0
   inFavour = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
@@ -125,18 +131,39 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </div>
 
   {#if showVotes}
-	<div class="mt-6 w-1/2">
-			<p>
-        <span class="text-sm">Pox-3 reward set data is read from the pox-3 
-          contract and event stream over cycles 78 and 79. The data
-          is indexed into a local database and matched against bitcoin vote transactions
-          sent to the yes or no voting addresses.
-        </span>
+	<div class="grid grid-cols-2 w-full text-sm gap-x-8">
+    <div class="">
+      <p class="font-bold mt-3 mb-2">Explanation</p>
+      <p class="">Pox-3 reward set data is read from the pox-3 
+        contract and event stream over cycles 78 and 79. The data
+        is indexed into a local database and matched against bitcoin vote transactions
+        sent to the yes or no voting addresses.
       </p>
-	</div>
+      <p class="font-semibold mt-3 mb-2">Vote counting</p>
+      <p class="">The counting process sums all the stx controlled by a voting address
+        in cycles 78 and 79. The voting power is taken as the mean value over the two
+        cycles.
+      </p>
+    </div>
+    <div class="">
+      <p class="font-semibold mt-3 mb-2">Voting addresses</p>
+      <p class="">Counting includes transactions sent from addresses derived from the
+        same private key as the voting address but for practical purposes only those
+        addresses linked by a single transaction to the voting address are
+        taken into consideration - this appears as <i>nested address</i> in the 
+        detailed results.
+      </p>
+      <p class="font-semibold mt-3 mb-2">Wrapped reward slots</p>
+      <p class="">Voting addresses can wrap a stacking address which link to other 
+        reward slots - allowing stackers to de-risk their holdings by distributing
+        across multiple wallets. The stacks controlled by this type of wrapping 
+        are including in the total counts.
+      </p>
+    </div>
+  </div>
     <div class="grid grid-cols-6 w-full justify-evenly mt-6  border-b border-gray-300 pb-3 mb-3">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
+      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power/Wrapped</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('burnBlockHeight')}>Height</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
       <div>&nbsp;</div>

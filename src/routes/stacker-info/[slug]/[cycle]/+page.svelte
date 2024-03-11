@@ -4,12 +4,14 @@
 	import StackerDashboard from '$lib/components/all-voters/analysis/StackerDashboard.svelte';
 
 	let address:string;
+	let cycle:number;
 	let inited = false;
 
 	onMount(async () => {
 		address = $page.params.slug
+		cycle = Number($page.params.cycle)
 		inited = true
-	})
+	}) 
 </script>
 
 <svelte:head>
@@ -18,5 +20,5 @@
 </svelte:head>
 
 {#if inited}
-<StackerDashboard {address} cycle={78} />
+<StackerDashboard {address} {cycle} />
 {/if}

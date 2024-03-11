@@ -9,6 +9,7 @@
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
 
 	export let proposal: ProposalEvent;
+	export let method = 1
 	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
 	let txId:string|undefined;
 
@@ -48,12 +49,12 @@
 				{#if proposal.stage === ProposalStage.INACTIVE || proposal.stage === ProposalStage.CONCLUDED}
 					<div class="flex flex-col">
 						<p class="text-2xl mb-5">Voting ended</p>
-						<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>
+						<!--<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>-->
 						<p>Votes are now being counted.</p>
 						<p>Vote results will be displayed as soon as the vote count is over.</p>
 						<p>Thank you for your patience.</p>
 					</div>
-					{#if proposal.stage === ProposalStage.INACTIVE}
+					{#if method === 3 && proposal.stage === ProposalStage.INACTIVE}
 					<div>
 						<button on:click={() => concludeVote()} class="md:w-auto md:inline-flex items-center gap-x-1.5 bg-black text-white px-4 py-2 rounded-xl border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 							Conclude vote

@@ -10,33 +10,33 @@
 
 	export let stackerInfo:StackerInfo;
 	export let amount:number;
+	let showCycleInfo = false; // interesting but too much info here
 
 	onMount(async () => {
   	})
 
 </script>
 
-<div class="flex flex-col gap-y-5">
+<div class="flex flex-col gap-y-5 mt-4">
 {#if stackerInfo?.stacker}
 	<p>{#if !stackerInfo.stacker?.rewardSetIndexes || stackerInfo.stacker?.rewardSetIndexes.length === 0}
 	No reward set slots.
 	{:else}
 	{stackerInfo.stacker?.rewardSetIndexes.length} reward slots.
 	{/if}
-		The reward address id {stackerInfo.stacker?.bitcoinAddr} with first cycle
-		{fmtNumber(stackerInfo.stacker?.firstRewardCycle)}
+		The reward address id {stackerInfo.stacker?.bitcoinAddr}
 	</p>
 {/if}
 {#if stackerInfo?.delegation && stackerInfo.delegation.amountUstx > 0}
 	<p>
-		Stacker delegated {stackerInfo.delegation.amountUstx} to {stackerInfo.delegation.delegatedTo}
+		Stacker delegated {fmtNumber(Math.floor(Number(fmtMicroToStx(stackerInfo.delegation.amountUstx))))} to {stackerInfo.delegation.delegatedTo}
 		until {stackerInfo.delegation.untilBurnHt || 'indefinitely'}
 	</p>
 {/if}
-{#if stackerInfo?.cycleInfo}
+{#if stackerInfo?.cycleInfo && showCycleInfo}
 	<p>
 		Cycle {stackerInfo.cycle} has {stackerInfo.cycleInfo?.numRewardSetPoxAddresses || 0} reward set addresses and
-		a total of {fmtMicroToStx(Number(stackerInfo.cycleInfo?.totalUstxStacked || 0))} stx locked.
+		a total of {fmtNumber(Math.floor(Number(fmtMicroToStx(stackerInfo.cycleInfo?.totalUstxStacked || 0))))} stx locked.
 	</p>
 {/if}
 </div>

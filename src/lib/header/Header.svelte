@@ -116,8 +116,8 @@
 		>
 			<div class="flex">
 				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/stacker-info')}><a href={'/stacker-info/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
 				<!--
+				<NavLi nonActiveClass={getNavActiveClass('/stacker-info')}><a href={'/stacker-info/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>

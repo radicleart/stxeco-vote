@@ -48,20 +48,23 @@ export type ProposalEvent = {
   stage: ProposalStage;
 }
 export type VoteEvent = {
-  stackerData?: Array<PoolStackerEvent>;
+  stackerData?: any;
   event: string;
-  proposal: string;
   voter: string;
+  voterProxy: string;
   for: boolean;
   amount: number;
-  burnBlockHeight:number;
+  amountNested: number;
   votingContractId:string;
   proposalContractId: string;
   submitTxId: string;
+  submitTxIdProxy: string;
   blockHeight: number;
   burnBlockHeight: number;
-  delegations?: number;
+  delegateTo?: string;
+  delegateTxId?: string;
   poxStacker?: string;
+  poxAddr?: PoxAddress;
 }
 
 export enum ProposalStage {
