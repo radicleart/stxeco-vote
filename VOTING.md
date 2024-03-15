@@ -4,15 +4,19 @@
 
 Information on the SIP 21 Nakamoto upgrade voting.
 
-### Voting API
+### Voting End Points
 
-End points for reading voting information:
+Api end points for reading voting information:
 
 - [summary](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/results/summary)
 - [solo votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/votes-solo)
 - [pool votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/votes-pool)
 - [dao votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/results/non-stackers)
+
+The stx.eco application provides results and more in depth stacking information per address;
+
 - [results page](https://stx.eco/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/results?method=1)
+- [e.g. stacker info](https://stx.eco/stacker-info/SP0ATPX8ZDQT2SZE61EGC4GVSY4MN6G17WPDKP8M)
 
 ### Issues to consider for the next vote
 
@@ -33,11 +37,16 @@ Pool stacker votes were counted by indexing the pox-3 pox tables and event strea
 matching stacking events against vote transactions. The results were sampled and double
 checked against Ortega datasets.
 
+Votes were counted as the average of the pool stackers stacked STX over cycle 78 and 79 as per the SIP.
+
 ## Solo Stacker Voting
 
 Some votes were not backed by PoX data and so did not contribute to the results. Most of these
 look like to have been transactions sent in error possibly out of enthusiasm some were not
 included for reason below.
+
+Votes were counted as the average of the solo stackers stacked STX over cycle 78 and 79 as per the SIP.
+
 
 ### Pool operator votes
 
@@ -53,7 +62,9 @@ These votes were removed from the count as per the SIP.
 SIP 21 states that votes must come from the pox reward address. In some scenarios, e.g. because of the
 the way addresses are rotated in centralised exchanges, this was not possible.
 Some solo stacker votes were therefore not counted for this reason even though they may have
-otherwise been valid.
+otherwise been valid. A caveat to this is where we were able to find pox information relating to the
+address that had directly funded the voting address. In the two cases where this was the
+case the vote was included.
 
 ### Multisig address votes
 
@@ -71,10 +82,9 @@ this address resolves to (assuming version 0x04 the vote address is p2wsh) for t
 
 ## Non Stacker Voting
 
-This is the easiest of the three voting methods to count - the votes are controlled by the DAO contract.
-
-The votes were counted by indexing the event data from the contract and by reading the 
-data directly fom the database. The SQL query to fetch non stacker data (c/o Justin @ [Ortega](https://app.ortege.ai/))
+Votes are controlled by the DAO contract. Counts are read from the contract. Individual
+vote transaction are read from contract event stream and double checked against directly
+querying the stacks database. The SQL to fetch non stacker data (c/o Justin @ [Ortega](https://app.ortege.ai/))
 
 ```sql
 SELECT 
