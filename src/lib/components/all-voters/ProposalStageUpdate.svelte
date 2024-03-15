@@ -51,9 +51,11 @@
 				{:else}
 				Voting closed
 				{/if}
-			{:else if method === 3 && startsInStacksBlock() <= 0 }
-			Vote in progress
-			{:else}
+				{:else if method === 3 && endStacksBlock() <= 0 }
+				Voting closed
+				{:else if method === 3 && startsInStacksBlock() <= 0 }
+				Vote in progress
+					{:else}
 				{#if method === 3}
 				Voting starts in {fmtNumber(startsInStacksBlock())} blocks
 				{:else}

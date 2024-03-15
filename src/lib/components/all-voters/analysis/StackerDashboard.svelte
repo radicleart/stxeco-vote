@@ -138,12 +138,12 @@
 			{#if showStackerInfo}
 			<div>
 				<p class="">How this address is currently participating in stacking</p>
-				<StackerContractInfo stackerInfo={info.stackerInfo[0]} amount={0} />
+				<StackerContractInfo stackerInfo={info.stackerInfo[0]} />
 			</div>
 			{/if}
 			{/if}
 
-			{#if info.stackerEvents.length > 0}
+			{#if info.stackerEvents && info.stackerEvents.length > 0}
 			<div>
 				<div class="flex justify-between md:w-1/2 text-2xl border-1 rounded-sm py-2 pe-4">
 					<h2 class="">Stacking history</h2>
@@ -158,7 +158,7 @@
 			{/if}
 			{/if}
 
-			{#if info.poxEntries.length > 0}
+			{#if info.poxEntries && info.poxEntries.length > 0}
 			<div>
 				<div class="flex justify-between md:w-1/2 text-2xl border-1 rounded-sm py-2 pe-4">
 					<h2 class="">PoX table entries</h2>

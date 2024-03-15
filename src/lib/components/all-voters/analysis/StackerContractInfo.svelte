@@ -1,15 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
-	import { sbtcConfig } from "$stores/stores";
-	import { CONFIG } from "$lib/config";
-	import { getPoxInfoByRewardSlot, getPoxInfoByStacker } from "$lib/pox_api";
-	import type { PoxEntry, PoxInfo, StackerInfo } from "$types/pox_types";
+	import type { StackerInfo } from "$types/pox_types";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 
-	const dispatch = createEventDispatcher();
-
 	export let stackerInfo:StackerInfo;
-	export let amount:number;
 	let showCycleInfo = false; // interesting but too much info here
 
 	onMount(async () => {

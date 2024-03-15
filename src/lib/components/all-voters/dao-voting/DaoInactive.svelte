@@ -7,6 +7,7 @@
 	import { explorerTxUrl } from '$lib/utils';
 	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import { getStacksNetwork } from '$lib/stacks_connect';
 
 	export let proposal: ProposalEvent;
 	export let method = 1
@@ -17,6 +18,7 @@
     const deployer = CONFIG.VITE_DOA_DEPLOYER;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     await openContractCall({
+		network: getStacksNetwork(),
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,

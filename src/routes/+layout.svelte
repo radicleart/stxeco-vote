@@ -112,7 +112,7 @@
 				//conf.poxInfo = poxInfo
 				return conf;
 			});
-		}, 20000)
+		}, 120000)
 	}
 
 	onMount(async () => {

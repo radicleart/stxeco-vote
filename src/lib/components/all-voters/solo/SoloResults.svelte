@@ -31,7 +31,7 @@ let stxAgainst = 0;
 let stxForUnnested = 0;
 let stxAgainstUnnested = 0;
 let stxPower = 0;
-let stxPowerUnnested = 0;
+let stxPowerNested = 0;
 
 let inited = false;
 let inFavour = 0;
@@ -80,12 +80,12 @@ const analysisMode = () => {
     votesFor = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
     votesAgn = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
   }
-  stxFor = votesFor?.totalNested || 0
-  stxAgainst = votesAgn?.totalNested || 0
+  stxFor = votesFor?.total || 0
+  stxAgainst = votesAgn?.total || 0
   stxForUnnested = votesFor?.total || 0
   stxAgainstUnnested = votesAgn?.total || 0
-  stxPower = stxFor + stxAgainst
-  stxPowerUnnested = stxForUnnested + stxAgainstUnnested
+  stxPower = stxForUnnested + stxAgainstUnnested
+  stxPowerNested = stxFor + stxAgainst
   accountsFor = votesFor?.count || 0
   accountsAgainst = votesAgn?.count || 0
   inFavour = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
@@ -131,6 +131,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </div>
 
   {#if showVotes}
+  <!--
 	<div class="grid grid-cols-2 w-full text-sm gap-x-8">
     <div class="">
       <p class="font-bold mt-3 mb-2">Explanation</p>
@@ -150,20 +151,22 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
       <p class="">Counting includes transactions sent from addresses derived from the
         same private key as the voting address but for practical purposes only those
         addresses linked by a single transaction to the voting address are
-        taken into consideration - this appears as <i>nested address</i> in the 
-        detailed results.
+        taken into consideration. In some cases multiple votes txs were sent which resolve
+        to an address that links to the same rewards slots - only the first tx 
+        is counted in these cases.
       </p>
-      <p class="font-semibold mt-3 mb-2">Wrapped reward slots</p>
-      <p class="">Voting addresses can wrap a stacking address which link to other 
-        reward slots - allowing stackers to de-risk their holdings by distributing
+      <p class="font-semibold mt-3 mb-2">Stacking pools</p>
+      <p class="">Voting addresses which wrap a stacking address enable pool
+        operators to de-risk their holdings by distributing
         across multiple wallets. The stacks controlled by this type of wrapping 
-        are including in the total counts.
+        are excluded from the total counts as per the SIP.
       </p>
     </div>
   </div>
+  -->
     <div class="grid grid-cols-6 w-full justify-evenly mt-6  border-b border-gray-300 pb-3 mb-3">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
-      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power/Wrapped</a></div>
+      <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('burnBlockHeight')}>Height</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
       <div>&nbsp;</div>

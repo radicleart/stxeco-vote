@@ -11,6 +11,7 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
 	import { CONFIG } from '$lib/config';
+	import { isCoordinator } from '$lib/sbtc_admin';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -18,6 +19,8 @@ export let proposal:ProposalEvent;
 let votes: Array<VoteEvent> = []
 let allVotes: Array<VoteEvent> = []
 let includeZeros = false;
+const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+let coordinator = isCoordinator(account.stxAddress);
 
 let showVotes = false;
 let showAddressLookup = false;
@@ -113,10 +116,11 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
-    
+    {#if coordinator}
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => analysisMode() }>
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="analysis-label" />
     </a>
+    {/if}
   </div>
 </div>
 
