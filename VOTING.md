@@ -58,8 +58,8 @@ Votes were counted as the average of the solo stackers stacked STX over cycle 78
 
 Two pool operators seem to have voted:
 
-- plan better = 42M = bc1qmv2pxw5ahvwsu94kq5f520jgkmljs3af8ly6tr
-- xverse = 3,518,745 = bc1qs33quxgnwkrspgu82lmaczw7gtcfa88pll8fqm
+- bc1qmv2pxw5ahvwsu94kq5f520jgkmljs3af8ly6tr (~42M)
+- bc1qs33quxgnwkrspgu82lmaczw7gtcfa88pll8fqm (~3.5M)
 
 These votes were removed from the count as per the SIP.
 
