@@ -9,6 +9,7 @@ import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$li
 import { isCoordinator } from '$lib/sbtc_admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
+	import { ArrowUpDownSolid } from 'flowbite-svelte-icons';
 
 export let item:VoteEvent;
 
@@ -82,13 +83,14 @@ onMount(async () => {
 
 {#if inited}
 <div class="grid grid-cols-6 w-full justify-evenly text-sm">
-  <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>
-    <span><span class="pe-5">{#if coordinator}{item.voter}{:else}{truncate(item.voter)}{/if}</span> 
-    <a title="Show in Explorer" href={explorerTxUrl(item.submitTxId)} target="_blank" class=" h-4 w-4 rounded-md  inline-flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+  <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-1/2 break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>
+    <span class="">
+      <span class="pe-5 ">{item.voter}</span> 
+      <a title="Show in Explorer" href={explorerTxUrl(item.submitTxId)} target="_blank" class=" h-4 w-4 rounded-md bg-black inline-flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
       <Icon src="{ArrowUpRight}" mini class="inline-block h-5 w-5 text-white" aria-hidden="true" />
-    </a>
-  </span>
-  </div>
+    </a>  
+    </span>
+    </div>
   <div class="">{@html ChainUtils.fromOnChainAmount(item.amount)}</div>
   <div class={(checkBlockHeight()) ? 'text-base' : 'text-danger-500'}>{fmtNumber(item.burnBlockHeight || 0)}</div>
   <div class="py-1">{@html (item.for) ? '<span class="bg-success-300 text-success-800 py-2 px-3  border-success-500 rounded-2xl">Yes</span>' : '<span class="bg-danger-300 text-danger-100 py-2 px-3  border-danger-500 rounded-2xl">No</span>'}</div>

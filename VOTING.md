@@ -22,6 +22,7 @@ The stx.eco application provides results and more in depth stacking information 
 
 - problems with connecting ledger
 - ineligible votes
+- privacy issues
 
 Note: ineligible votes were either users sending pool stacking votes from addresses
 which were not pool stacking and likewise for solo stackers.
@@ -30,6 +31,11 @@ We had 986 pool stacker votes and only 370 counting. With solo it was 156 to 28.
 with solo stacker votes is more nuanced - see below for more info.
 
 We need to address this in future votes e.g. by improving messaging and additional UI/UX checks.
+
+Finally, large stake holders wish to preserve their privacy and ask for some voting information
+to be obfuscated. This runs contrary to the stx.eco principle of maximising openness
+and transparency. This is an area for further investigation where technologies like zero knowledge
+may be of service.
 
 ## Pool Stacker Voting
 
