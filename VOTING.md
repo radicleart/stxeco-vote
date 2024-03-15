@@ -74,17 +74,9 @@ case the vote was included.
 
 ### Multisig address votes
 
-E.g. the address below sent a vote tx but the vote was not included because the pox data the address
-resolved to could not be found. We tried finding the pox address both my the non direct method
-described above and also by looking at the addresses within the multi-sig.
-
-- [bc1qq5gxnfse4azcmn6d588z35ytpyyc2ctsjmfl5peghd5nl943rftsc32wtx](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/results/solo-multisig/bc1qq5gxnfse4azcmn6d588z35ytpyyc2ctsjmfl5peghd5nl943rftsc32wtx)
-
-this address resolves to (assuming version 0x04 the vote address is p2wsh) for the address derivation I get following addresses for the multisig (unable to find pox data though for them);
-
-- bc1qq4uftfpl9al340de5zf8ece44hm53yjwu8x3q2
-- bc1q9rzehag6m3wwlam3lf685zvwe5atx52mytrdgx
-- bc1q28vm2sd3md2py3652rflm4fkqcyjf6uv32dacs
+At least one voting address was identified as a multisig. The vote was not included
+because no link to pox data could be found. Constituent addresses of the multisig and
+transactions which funded the voting transaction were considered.
 
 ## Non Stacker Voting
 
