@@ -11,6 +11,7 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
 	import { CONFIG } from '$lib/config';
+	import { isCoordinator } from '$lib/sbtc_admin';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -18,6 +19,8 @@ export let proposal:ProposalEvent;
 let votes: Array<VoteEvent> = []
 let allVotes: Array<VoteEvent> = []
 let includeZeros = false;
+const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+let coordinator = isCoordinator(account.stxAddress);
 
 let showVotes = false;
 let showAddressLookup = false;
@@ -113,15 +116,27 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
-    
+    {#if coordinator}
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => analysisMode() }>
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="analysis-label" />
     </a>
+    {/if}
   </div>
 </div>
 
   {#if showVotes}
-    <div class="grid grid-cols-6 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
+	<div class="mt-6 w-1/2">
+    <p>
+      <span class="text-sm">
+        Transactions sent to the two voting addresses are matched
+        against stacker info read from the pox-3 
+        contract and event stream, over cycles 78 and 79. If the 
+        pox-3 data shows the address was stacking in a pool the amount
+        of stx locked is counted as the users vote.
+      </span>
+    </p>
+  </div>
+  <div class="grid grid-cols-6 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
       <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Height</a></div>

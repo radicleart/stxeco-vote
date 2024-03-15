@@ -78,7 +78,17 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </div>
 
 {#if showVotes}
-    {#key componentKey}
+<div class="mt-6 w-1/2">
+  <p>
+    <span class="text-sm">
+      Vote stacks transactions sent to the stx.eco DAO contract are 
+      counted - any stacks holder is able to vote with a voting power
+      up to the liquid balance of their account(s) at the stacks block height when
+      voting began.
+    </span>
+  </p>
+</div>
+  {#key componentKey}
     <VoteTransactions {votes}/>
     {/key}
   {/if}

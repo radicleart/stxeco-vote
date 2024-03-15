@@ -53,14 +53,34 @@ export async function findPoxEntriesByAddress(bitcoinAddress:string) {
   return res || [];
 }
 
+export async function findPoxEntriesByAddressAndCycle(bitcoinAddress:string,cycle:number) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/pox-entries/' + bitcoinAddress + '/' + cycle);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
+}
+
+export async function findRewardSlotsByAddress(bitcoinAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/reward-slot/' + bitcoinAddress);
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res || [];
+}
+
 export async function findPoolStackerEventsByStacker(stacksAddress:string) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/pool-stacker-events/' + stacksAddress);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/stacker-events-by-stacker/' + stacksAddress);
+  const response = await fetch(path);
+  return await response.json();
+}
+
+export async function findPoolStackerEventsByDelegator(stacksAddress:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/stacker-events-by-delegator/' + stacksAddress);
   const response = await fetch(path);
   return await response.json();
 }
 
 export async function findPoolStackerEventsByHashBytes(hashBytes:string, page:number, limit:number) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/solo-stacker-events/' + hashBytes + '/' + page + '/' + limit);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/stacker-events-by-hashbytes/' + hashBytes + '/' + page + '/' + limit);
   const response = await fetch(path);
   return await response.json();
 }

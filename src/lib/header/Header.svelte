@@ -4,7 +4,7 @@
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import { afterNavigate, goto } from "$app/navigation";
-	import { authenticate, fetchSbtcBalance, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
+	import { authenticate, fetchSbtcBalance, initApplication, loginStacks } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { getCurrentProposal, isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
@@ -58,7 +58,7 @@
 	const loginCallback = async () => {
 		await initApplication($sbtcConfig, true)
 		if (loggedIn() && !$sbtcConfig.authHeader) {
-			await authenticate($sbtcConfig)
+			//asigna: await authenticate($sbtcConfig)
 		}
 		await setAuthorisation($sbtcConfig.authHeader)
 		setTimeout(function() {
@@ -117,6 +117,7 @@
 			<div class="flex">
 				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
 				<!--
+				<NavLi nonActiveClass={getNavActiveClass('/stacker-info')}><a href={'/stacker-info/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
 					<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>

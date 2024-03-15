@@ -6,7 +6,7 @@
     import {tick, onMount} from 'svelte';
     import { CONFIG } from '$lib/config';
     import { PostConditionMode, contractPrincipalCV, falseCV, trueCV, uintCV } from '@stacks/transactions';
-    import { openContractCall } from '@stacks/connect';
+    import { openContractCall, showContractCall } from '@stacks/connect';
     import type { ProposalEvent } from '$types/stxeco.type';
     import { sbtcConfig } from '$stores/stores';
     import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
@@ -48,7 +48,7 @@
         const amountUSTX = ChainUtils.toOnChainAmount(amount)
         const amountCV = uintCV(amountUSTX)
         const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
-        await openContractCall({
+        await showContractCall({
             network: getStacksNetwork(),
             postConditions: [],
             postConditionMode: PostConditionMode.Deny,

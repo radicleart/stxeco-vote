@@ -97,7 +97,7 @@
 		<div class="grid grid-cols-3 w-full justify-evenly border-t border-gray-300 py-3 mt-3">
 			<div>Type</div>
 			<div>STX</div>
-			<div>For/Against</div>
+			<div>For</div>
 		</div>
 		{#each votes as vote}
 		<div class="text-xs grid grid-cols-3 w-full justify-evenly ">
@@ -109,6 +109,33 @@
 	</div>
 </div>
 {/if}
+{/if}
+{#if stackerEventEntries && stackerEventEntries.length > 0}
+<div class="flex flex-col w-full my-8 ">
+    <div class="flex flex-col gap-y-2 bg-warning-01">
+		<h1 class="text-2xl">Voting data</h1>
+		<div class="grid grid-cols-3 w-full justify-evenly border-t border-gray-300 py-3 mt-3">
+			<div>Type</div>
+			<div>STX</div>
+			<div>For</div>
+		</div>
+		{#each stackerEventEntries as vote}
+		{#if vote.event === 'stack-stx'}
+		<div class="text-xs grid grid-cols-3 w-full justify-evenly ">
+			<div class="">{vote.event}</div>
+			<div class="">{fmtNumber(Number(fmtMicroToStx(vote.data.lockAmount)))}</div>
+			<div class="">{'-'}</div>
+		  </div>
+		  {:else}
+		<div class="text-xs grid grid-cols-3 w-full justify-evenly ">
+			<div class="">{vote.event}</div>
+			<div class="">{(vote.amount) ? fmtNumber(Number(fmtMicroToStx(vote.amount))) : '-'}</div>
+			<div class="">{vote.for}</div>
+		  </div>
+		  {/if}
+		{/each}
+	</div>
+</div>
 {/if}
 {#if poxEntries}
 <div class="flex flex-col w-full my-8 ">

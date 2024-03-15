@@ -247,6 +247,8 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
   }
 }
 export async function fetchUserBalances(adrds:AddressObject) {
+  if (!adrds.cardinal) adrds.cardinal = 'unknown'
+  if (!adrds.ordinal) adrds.ordinal = 'unknown'
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/balances/' + adrds.stxAddress + '/' + adrds.cardinal + '/' + adrds.ordinal);
   const response = await fetch(path);
   if (response.status !== 200) {

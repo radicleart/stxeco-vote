@@ -1,11 +1,10 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import { parseDepositPayload, type AddressMempoolObject, type PayloadType, type SbtcClarityEvent, getAddressFromOutScript, parseWithdrawPayload, MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET } from 'sbtc-bridge-lib'
-import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { hash160 } from '@stacks/transactions';
 import { hashSha256Sync } from '@stacks/encryption';
+import type { AddressMempoolObject, SbtcClarityEvent } from 'sbtc-bridge-lib';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900

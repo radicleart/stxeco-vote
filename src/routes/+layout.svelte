@@ -82,7 +82,7 @@
 
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
 		if (loggedIn() && !$sbtcConfig.authHeader) {
-			await authenticate($sbtcConfig)
+			//asigna: await authenticate($sbtcConfig)
 		}
 		setAuthorisation($sbtcConfig.authHeader)
 		inited = true;
@@ -112,7 +112,7 @@
 				//conf.poxInfo = poxInfo
 				return conf;
 			});
-		}, 20000)
+		}, 120000)
 	}
 
 	onMount(async () => {
