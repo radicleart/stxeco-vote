@@ -4,7 +4,7 @@
 
 Information on the SIP 21 Nakamoto upgrade voting.
 
-### Voting End Points
+### Voting end points
 
 Api end points for reading voting information:
 
@@ -32,27 +32,26 @@ with solo stacker votes is more nuanced - see below for more info.
 
 We need to address this in future votes e.g. by improving messaging and additional UI/UX checks.
 
-Finally, large stake holders wish to preserve their privacy and ask for some voting information
+Finally, large stake holders who wish to preserve their privacy ask for some voting information
 to be obfuscated. This runs contrary to the stx.eco principle of maximising openness
 and transparency. This is an area for further investigation where technologies like zero knowledge
 may be of service.
 
-## Pool Stacker Voting
+## Pool stacker voting
+
+Votes were counted as the average of the pool stackers stacked STX over cycle 78 and 79 as per the SIP.
 
 Pool stacker votes were counted by indexing the pox-3 pox tables and event streams,
 matching stacking events against vote transactions. The results were sampled and double
 checked against Ortega datasets.
 
-Votes were counted as the average of the pool stackers stacked STX over cycle 78 and 79 as per the SIP.
-
-## Solo Stacker Voting
-
-Some votes were not backed by PoX data and so did not contribute to the results. Most of these
-look like to have been transactions sent in error possibly out of enthusiasm some were not
-included for reason below.
+## Solo stacker voting
 
 Votes were counted as the average of the solo stackers stacked STX over cycle 78 and 79 as per the SIP.
 
+Some votes were not backed by PoX data and so did not contribute to the results. Most of these
+look like to have been transactions sent in error possibly out of enthusiasm some were not
+included for reasons discussed below.
 
 ### Pool operator votes
 
@@ -78,10 +77,10 @@ At least one voting address was identified as a multisig. The vote was not inclu
 because no link to pox data could be found. Constituent addresses of the multisig and
 transactions which funded the voting transaction were considered.
 
-## Non Stacker Voting
+## Non stacker voting
 
-Votes are controlled by the DAO contract. Counts are read from the contract. Individual
-vote transaction are read from contract event stream and double checked against directly
+Votes are controlled by the DAO contract and the counts are read directly from the contract. Individual
+vote transactions were also read from contract event stream and double checked against directly
 querying the stacks database. The SQL to fetch non stacker data (c/o Justin @ [Ortega](https://app.ortege.ai/))
 
 ```sql
