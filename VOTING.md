@@ -82,29 +82,5 @@ transactions which funded the voting transaction were considered.
 ## Non stacker voting
 
 Votes are controlled by the DAO contract and the counts are read directly from the contract. Individual
-vote transactions were also read from contract event stream and double checked against directly
-querying the stacks database. The SQL to fetch non stacker data (c/o Justin @ [Ortega](https://app.ortege.ai/))
-
-```sql
-SELECT 
-  hash,
-  sender_address,
-  to_timestamp(block_timestamp) AS tx_timestamp,
-  contract_call.function_name,
-  -- Use try_cast to attempt to convert the substring to DOUBLE and divide by 1e6.
-  -- If the conversion fails, NULL is returned.
-  CASE 
-    WHEN size(contract_call.function_args) > 0 
-    THEN try_cast(substr(contract_call.function_args[0].repr, 2) AS DOUBLE) / 1e6
-    ELSE NULL 
-  END AS amount,
-  -- Safe extraction of the second element's name value if present.
-  CASE 
-    WHEN size(contract_call.function_args) > 1 
-    THEN contract_call.function_args[1].name 
-    ELSE NULL 
-  END AS second_arg_name
-FROM db_stacks.tbl_prod_br_transactions
-WHERE contract_call.contract_id = 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bde007-snapshot-proposal-voting'
-AND tx_status = 'success';
-```
+vote transactions were also read from contract event stream and double checked against data
+mined by [Ortega](https://app.ortege.ai/) thanks to c/o Justin @ Ortege

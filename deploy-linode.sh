@@ -2,16 +2,14 @@
 set -e;
 
 export DEPLOYMENT=$1
-export PORT=7019
+export PORT=22
 
 PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
-export SERVER=chomsky.brightblock.org
+export SERVER=spinoza.brightblock.org
 export BUILDER=build
-if [ "$DEPLOYMENT" == "mainnet" ]; then
-  SERVER=spinoza.brightblock.org;
-  BUILDER=build
-  PORT=22
+if [ "$DEPLOYMENT" == "testnet" ]; then
+  SERVER=leibniz.brightblock.org;
 fi
 
 printf "\n-----------------------------------------------------------------------------------------------------\n";

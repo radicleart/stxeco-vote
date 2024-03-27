@@ -115,14 +115,15 @@
 			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end md:text-sand-700 py-2.5 px-2"
 		>
 			<div class="flex">
-				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
 				<!--
+				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/stacker-info')}><a href={'/stacker-info/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
-					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
-					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
-					<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
-					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
-					<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
 				-->
 			</div>
 			</NavUl>
