@@ -12,9 +12,11 @@ const SHARED_DEVENV_CONFIG = {
     VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'bde004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
     VITE_SBTC_CONTRACT_ID: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asset-3',
+    VITE_POX4_CONTRACT_ID: 'ST000000000000000000002AMW42H.pox-4',
     VITE_BRIDGE_WS: 'ws://45.79.130.153:3999',
+    VITE_REVEALER_API: 'https://testnet.bridge.sbtc.tech/revealer-api/v1',
     VITE_BRIDGE_API: 'https://devnet.uasu.finance/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'https://devnet.uasu.finance/bridge-api/v1',
+    VITE_POX4_API: 'https://devnet.uasu.finance/bridge-api/v4',
     VITE_STACKS_API_HIRO: 'https://api.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
     VITE_STACKS_API: 'https://devnet-stacks.uasu.finance',
@@ -34,7 +36,6 @@ const SHARED_DEVENV_CONFIG = {
         'bde008-flexible-funded-submission-1',
         'bde009-governance-token-sale'
     ]
-      
 }
 
 const TESTNET_CONFIG = {
@@ -52,12 +53,14 @@ const TESTNET_CONFIG = {
     VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'bde004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
     VITE_SBTC_CONTRACT_ID: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.asset-3',
+    VITE_POX4_CONTRACT_ID: 'ST000000000000000000002AMW42H.pox-4',
+    VITE_REVEALER_API: 'https://testnet.bridge.sbtc.tech/revealer-api/v1',
     VITE_BRIDGE_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
+    VITE_POX4_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v4',
     VITE_STACKS_API_HIRO: 'https://api.testnet.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
-    VITE_STACKS_API: 'https://leibniz.brightblock.org',
-    VITE_STACKS_WS: 'ws://spinoza.brightblock.org',
+    VITE_STACKS_API: 'https://api.testnet.hiro.so',
+    VITE_STACKS_WS: 'ws://api.testnet.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
@@ -90,8 +93,10 @@ const MAINNET_CONFIG = {
     VITE_DOA_EMERGENCY_EXECUTE_EXTENSION: 'bde004-emergency-execute',
     VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
     VITE_SBTC_CONTRACT_ID: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN.asset',
+    VITE_POX4_CONTRACT_ID: 'SP000000000000000000002Q6VF78.pox-4',
     VITE_BRIDGE_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
-    VITE_CLARITYLAB_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
+    VITE_REVEALER_API: 'https://mainnet.bridge.sbtc.tech/revealer-api/v1',
+    VITE_POX4_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v4',
     VITE_STACKS_API_HIRO: 'https://api.hiro.so',
     VITE_STACKS_API_HIRO_WS: 'wss://api.hiro.so',
     VITE_STACKS_API: 'https://leibniz.brightblock.org',
@@ -113,7 +118,7 @@ const MAINNET_CONFIG = {
     ]
 }
 
-export let CONFIG = MAINNET_CONFIG;
+export let CONFIG = TESTNET_CONFIG;
 
 export function setConfig(network:string) {
     const mode = import.meta.env.MODE
@@ -121,17 +126,19 @@ export function setConfig(network:string) {
 
     if (mode === 'shared-devenv') {
         CONFIG = SHARED_DEVENV_CONFIG;
-        return;
+    } else if (mode === 'linode-nakamoto') {
+        CONFIG.VITE_BRIDGE_API = 'https://nakamoto.bridge.sbtc.tech/bridge-api/v1';
+        CONFIG.VITE_POX4_API = 'https://nakamoto.bridge.sbtc.tech/bridge-api/v4';
+        CONFIG.VITE_STACKS_API = 'https://api.nakamoto.testnet.hiro.so';
     } else if (mode === 'local-testnet') {
-        CONFIG = TESTNET_CONFIG;
         CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
-        CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
-        return;
+        CONFIG.VITE_POX4_API = 'http://localhost:3010/bridge-api/v4';
+    } else if (mode === 'local-nakamoto') {
+        CONFIG.VITE_ENVIRONMENT = 'nakamoto'
+        CONFIG.VITE_POX4_API = 'http://localhost:3010/bridge-api/v4';
     } else if (mode === 'local-mainnet') {
-        CONFIG = MAINNET_CONFIG;
         CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
-        CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
-        return;
+        CONFIG.VITE_POX4_API = 'http://localhost:3010/bridge-api/v4';
     }
 
     if (network === 'testnet') {
@@ -140,14 +147,15 @@ export function setConfig(network:string) {
         CONFIG = MAINNET_CONFIG;
     }
 }
+
 export function setConfigByUrl(search:URLSearchParams, hostname:string) {
-    let network = 'mainnet'
-    if (hostname === 'stx.eco') {
+    let network = 'testnet'
+    if (hostname === 'stx.eco' || hostname === 'nakamoto.stx.eco') {
         setConfig(network)
         return
     }
     if (search.has('chain')) {
-        network = search.get('chain') || 'mainnet'
+        network = search.get('chain') || 'testnet'
     }
     setConfig(network)
 }
@@ -164,7 +172,7 @@ export function setConfig(network:string) {
     } else if (mode === 'local-testnet') {
         CONFIG = TESTNET_CONFIG;
         CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
-        CONFIG.VITE_CLARITYLAB_API = 'http://localhost:3010/bridge-api/v1';
+        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
         return;
     } else if (mode === 'devenv'  || mode === 'dev' || mode === 'development') {
         CONFIG = DEVNET_CONFIG;

@@ -177,7 +177,11 @@ export function getNet() {
   //if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
 }
 export function explorerAddressUrl(addr:string) {
-	return CONFIG.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + CONFIG.VITE_NETWORK;
+  let url = CONFIG.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + CONFIG.VITE_NETWORK;
+  if (CONFIG.VITE_ENVIRONMENT === 'nakamoto') {
+    url += '&api=https://api.nakamoto.testnet.hiro.so'
+  }
+	return url
 }
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
@@ -204,6 +208,11 @@ export function fmtAmount(amount:number, currency:string) {
   }
 }
 
+export function fmtNumberStacksFloor(amount:number|undefined) {
+  if (!amount || amount === 0) return 0;
+  return fmtNumber(Math.floor(Number(fmtMicroToStx(amount))))
+}
+
 export function fmtNumber(amount:number|undefined) {
   if (amount === 0) return 0;
   if (amount) return new Intl.NumberFormat().format(amount);
@@ -213,6 +222,12 @@ export function truncate(stringy?:string, amount?:number) {
   if (!stringy) return '?';
   if (!amount) amount = 4;
   return stringy.substring(0, amount) + '...' + stringy.substring(stringy.length - amount);
+}
+
+export function truncateEnd(stringy?:string, amount?:number) {
+  if (!stringy) return '?';
+  if (!amount) amount = 4;
+  return '..' + stringy.substring(stringy.length - amount);
 }
 
 const priv = secp.utils.randomPrivateKey()

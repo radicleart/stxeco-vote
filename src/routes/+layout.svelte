@@ -19,6 +19,8 @@
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/sbtc_admin';
 	import { getPoxInfo } from '$lib/pox_api';
+	import PoxBanner from '$lib/components/dashboard/common/InsightsBanner.svelte';
+	import { aggregateDelegationData } from '$lib/pox4_api';
 
 	const unsubscribe1 = sbtcConfig.subscribe(() => {});
 	const unsubscribe2 = stacksStore.subscribe(() => {});
@@ -29,11 +31,11 @@
 
 	let componentKey = 0;
 	let componentKey1 = 0;
-	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'mainnet')
+	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'testnet')
 	setConfigByUrl($page.url.searchParams, $page.url.hostname);
 	if (!isLegal(location.href)) {
 		//componentKey++;
-		goto('/' + '?chain=mainnet')
+		goto('/' + '?chain=testnet')
 	}
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
@@ -70,11 +72,19 @@
 
 	const initApp = async () => {
 		const stacksInfo = await fetchStacksInfo();
+		const poxInfo = await getPoxInfo()
 		const daoProposals = await getDaoProposals()
 		let currentProposal = await getCurrentProposal()
+		
+		let aggDelegationData:Array<any> = await aggregateDelegationData()
+	  	stacksStore.update(conf => {
+			conf.aggDelegationData = aggDelegationData
+			return conf
+	  	})
 
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo
+			conf.poxInfo = poxInfo
 			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;
@@ -88,10 +98,8 @@
 		inited = true;
 
 		const soloPoolData = await getPoolAndSoloAddresses()
-		const poxInfo = await getPoxInfo()
 
 		sbtcConfig.update((conf) => {
-			conf.poxInfo = poxInfo
 			conf.soloPoolData = soloPoolData
 			return conf;
 		});
@@ -145,7 +153,7 @@
 	<div class="bg-white min-h-screen relative">
 		{#if inited}
 		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
-			<div class="mx-auto px-6 relative">
+		<div class="mx-auto px-6 relative">
 				<InFlightTransaction />
 				{#key componentKey1}
 					<slot></slot>

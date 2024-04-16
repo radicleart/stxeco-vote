@@ -15,9 +15,9 @@ function createStore() {
     subscribe,
 
     async init(stxAddress:string|undefined) {
-      let url = CONFIG.VITE_CLARITYLAB_API + '/daoapi/v2/dao-data';
+      let url = CONFIG.VITE_BRIDGE_API + '/daoapi/v2/dao-data';
       if (stxAddress) {
-        url = CONFIG.VITE_CLARITYLAB_API + '/daoapi/v2/dao-data/' + stxAddress
+        url = CONFIG.VITE_BRIDGE_API + '/daoapi/v2/dao-data/' + stxAddress
       }
       const res = await fetch(url);
       const daoData = await res.json();

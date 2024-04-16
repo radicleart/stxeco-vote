@@ -9,7 +9,6 @@ import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$li
 import { isCoordinator } from '$lib/sbtc_admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
-	import { ArrowUpDownSolid } from 'flowbite-svelte-icons';
 
 export let item:VoteEvent;
 
@@ -94,7 +93,7 @@ onMount(async () => {
   <div class="">{@html ChainUtils.fromOnChainAmount(item.amount)}</div>
   <div class={(checkBlockHeight()) ? 'text-base' : 'text-danger-500'}>{fmtNumber(item.burnBlockHeight || 0)}</div>
   <div class="py-1">{@html (item.for) ? '<span class="bg-success-300 text-success-800 py-2 px-3  border-success-500 rounded-2xl">Yes</span>' : '<span class="bg-danger-300 text-danger-100 py-2 px-3  border-danger-500 rounded-2xl">No</span>'}</div>
-  <div class="w-full justify-end  text-[#131416]/[0.64]">{#if coordinator}<a href={'/stacker-info/' + item.voter} target="_blank">more</a>{/if}</div>
+  <div class="w-full justify-end  text-[#131416]/[0.64]">{#if coordinator}<a href={'/dashboard/address-lookup/' + item.voter} target="_blank">more</a>{/if}</div>
 </div>
 
 {#if expanded && events}
@@ -102,10 +101,10 @@ onMount(async () => {
   <p>Entries from pox-3 event stream</p>
   {#each events as entry}
   <div class="text-xs grid grid-cols-7 w-full justify-evenly ">
-    <div class="break-words col-span-2">{#if coordinator}<a href={'/stacker-info/' + entry.stacker} target="_blank">{entry.stacker}</a>{/if}</div>
+    <div class="break-words col-span-2">{#if coordinator}<a href={'/dashboard/address-lookup/' + entry.stacker} target="_blank">{entry.stacker}</a>{/if}</div>
     <div class="col-span-1">{entry.event}</div>
     {#if entry.event === 'delegate-stx'}
-    <div class="col-span-2">Delegator: {#if coordinator}<a href={'/stacker-info/' + entry.data.delegator} target="_blank">{truncate(entry.data.delegator)}</a>{/if}</div>
+    <div class="col-span-2">Delegator: {#if coordinator}<a href={'/dashboard/address-lookup/' + entry.data.delegator} target="_blank">{truncate(entry.data.delegator)}</a>{/if}</div>
     <div class="">Amt: {entry.data.amountUstx}</div>
     <div class="">Unlck: {entry.data.unlockBurnHeight}</div>
     {:else}

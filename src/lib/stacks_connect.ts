@@ -30,6 +30,14 @@ export const revealPayment = 10001
 export function getStacksNetwork() {
 	const network = CONFIG.VITE_NETWORK;
 	let stxNetwork:StacksMainnet|StacksTestnet;
+	/**
+	if (CONFIG.VITE_ENVIRONMENT === 'nakamoto') {
+		stxNetwork = new StacksTestnet({
+			url: 'https://api.nakamoto.testnet.hiro.so',
+		});
+		return stxNetwork
+	 }
+	  */
 	if (network === 'devnet') stxNetwork = new StacksMocknet();
 	else if (network === 'testnet') stxNetwork = new StacksTestnet();
 	else if (network === 'mainnet') stxNetwork = new StacksMainnet();

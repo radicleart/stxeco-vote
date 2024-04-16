@@ -1,7 +1,14 @@
 <script lang="ts">
 	import ProposalStageUpdate from "$lib/components/all-voters/ProposalStageUpdate.svelte";
+	import StackingFeatureChoice from "$lib/components/dashboard/common/StackingFeatureChoice.svelte";
+	import StackingMenu from "$lib/components/dashboard/common/StackingMenu.svelte";
+	import StackingHighlights from "$lib/components/dashboard/insights/StackingHighlights.svelte";
 	import { CONFIG } from "$lib/config";
 	import { sbtcConfig } from "$stores/stores";
+	import { onMount } from "svelte";
+
+	let nakamotoMode = true;
+	
 
 	let votingOptions = [
 		{
@@ -28,6 +35,12 @@
 	]
 
 	let currentContract = ($sbtcConfig.currentProposal) ? $sbtcConfig.currentProposal?.contractId : CONFIG.VITE_DOA_PROPOSAL
+
+	onMount(async () => {
+    try {
+    } catch (err) {
+    }
+  })
 </script>
 
 <svelte:head>
@@ -35,7 +48,16 @@
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-<div class="py-12 rounded-2xl sm:rounded-none">
+{#if nakamotoMode}
+<div class="py-6 rounded-2xl sm:rounded-none">
+	<div class="py-4 mx-auto max-w-7xl md:px-6">
+		<StackingMenu method={1}/>
+		<StackingHighlights />
+		<!--<StackingFeatureChoice />-->
+	</div>
+</div>
+{:else}
+<div class="py-6 rounded-2xl sm:rounded-none">
 	<div class="py-4 mx-auto max-w-7xl md:px-6">
 		<div class="relative">
 			<div class="bg-[#0A0A0B] relative sm:max-w-[50%] rounded-t-xl px-12 pt-16 pb-16 sm:pb-32 z-[1]">
@@ -351,3 +373,4 @@
 		</div>
   	</div>
 </div>
+{/if}

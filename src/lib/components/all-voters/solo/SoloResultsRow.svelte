@@ -90,7 +90,7 @@ onMount(async () => {
   <p>Entries from pox reward data map for cycles 78 and 79</p>
   {#each entries as entry}
   <div class="text-xs grid grid-cols-6 w-full justify-evenly ">
-    <div class="break-words col-span-2"><a href={'/stacker-info/' + entry.stacker} target="_blank">{entry.stacker}</a></div>
+    <div class="break-words col-span-2"><a href={'/dashboard/address-lookup/' + entry.stacker} target="_blank">{entry.stacker}</a></div>
     <div class="">Stacked: {fmtNumber(Math.floor(Number(fmtMicroToStx(entry.totalUstx))))}</div>
     <div class="col-span-1">Cycle: {entry.cycle}</div>
     <div class="col-span-1">Index: {entry.index}</div>
@@ -104,7 +104,7 @@ onMount(async () => {
   <p>Entries from pox-3 event stream</p>
   {#each events as entry}
   <div class="text-xs grid grid-cols-6 w-full justify-evenly ">
-    <div class="break-words col-span-2"><a href={'/stacker-info/' + entry.stacker} target="_blank">{entry.stacker}</a></div>
+    <div class="break-words col-span-2"><a href={'/dashboard/address-lookup/' + entry.stacker} target="_blank">{entry.stacker}</a></div>
     <div class="">Bal.: {@html ChainUtils.fromOnChainAmount(entry.balance)}</div>
     <div class="col-span-1">lockAmount: {fmtNumber(Math.floor(Number(fmtMicroToStx(entry.data.lockAmount))))}</div>
     <div class="col-span-1">event: {entry.event}</div>

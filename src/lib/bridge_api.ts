@@ -7,7 +7,7 @@ let authHeader:any;
 export async function setAuthorisation(auth:any) {
   authHeader = auth
 }
-function headers() {
+export function headers() {
   if (authHeader) {
     return { 'Content-Type': 'application/json', 'Authorization': JSON.stringify(authHeader) }
   }

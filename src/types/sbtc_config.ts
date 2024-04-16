@@ -2,6 +2,7 @@ import type { SbtcContractDataType, AddressObject, ExchangeRate, AuthorisationDa
 import type { DaoData, GovernanceData, ProposalEvent } from './stxeco.type';
 import type { SoloPoolData } from './stxeco_stacker_type';
 import type { PoxInfo } from './pox_types';
+import type { VerifySignerKey } from './signer_types';
 
 export type SbtcConfig = {
   daoData?: DaoData;
@@ -17,6 +18,7 @@ export type SbtcConfig = {
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataType;
   poxInfo:PoxInfo,
+  signerSignature: VerifySignerKey;
   stacksInfo: {
     burn_block_height: number;
     server_version: string;

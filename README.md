@@ -66,3 +66,33 @@ This is referred to generally as "snapshot" voting.
 
 For SIP 21 Nakamoto Upgrade to pass 66% of all liquid STX committed by voting
 must in favour of the proposal.
+
+## Commands for running nodes
+
+Change the paths to suit specific setup
+
+```bash
+alias sn-psql='sudo -u postgres psql'
+alias sn-postgres-docker='docker run -d --rm --name postgres --net=stacks-blockchain -e POSTGRES_PASSWORD=postgres -v /mnt/bitcoin-testnet/stacks-testnet/postgres/postgresql/15/main:/var/lib/postgresql/data -p 5432:5432 postgres:alpine'
+alias sn-run-cd='cd /mnt/bitcoin-testnet/stacks-testnet/stacks-core'
+
+alias sn-run-node='cd /mnt/bitcoin-testnet/stacks-testnet/stacks-core && nohup cargo run --bin stacks-node -- start --config /mnt/bitcoin-testnet/stacks-testnet/stacks-core/testnet/stacks-node/conf/testnet-signer-conf.toml  >> /mnt/bitcoin-testnet/stacks-testnet/logs/stacks-node.log &'
+alias sn-run-signer='cd /mnt/bitcoin-testnet/stacks-testnet/stacks-core && nohup cargo run --bin stacks-signer run --config /mnt/bitcoin-testnet/stacks-testnet/stacks-core/testnet/stacks-node/conf/signer-config.toml  >> /mnt/bitcoin-testnet/stacks-testnet/logs/signer-binary.log &'
+alias sn-run-api='cd /mnt/bitcoin-testnet/stacks-testnet/stacks-blockchain-api && nohup node ./lib/index.js >> /mnt/bitcoin-testnet/stacks-testnet/logs/stacks-api.log &'
+
+alias sn-stop-node='sudo kill $(ps -ef | grep "stacks-node start --config" | grep -v grep | awk {`print $2`})'
+alias sn-stop-signer='sudo kill $(ps -ef | grep "stacks-signer" | grep -v grep | awk {`print $2`})'
+alias sn-stop-api='sudo kill $(ps -ef | grep "lib/index.js" | grep -v grep | awk {print $2})'
+
+alias sn-check-node='ps -ef | grep "stacks-node start --config" | grep -v grep'
+alias sn-check-api='ps -ef | grep "lib/index.js" | grep -v grep'
+alias sn-check-signer='ps -ef | grep "stacks-signer" | grep -v grep'
+
+alias sn-tail-node='tail -f -n 50 /mnt/bitcoin-testnet/stacks-testnet/logs/stacks-node.log'
+alias sn-tail-api='tail -f -n 50 /mnt/bitcoin-testnet/stacks-testnet/logs/stacks-api.log'
+alias sn-tail-signer='tail -f -n 50 /mnt/bitcoin-testnet/stacks-testnet/logs/signer-binary.log'
+
+alias sn-run-api-docker='docker run -d --rm --name stacks-blockchain --net=stacks-blockchain -v /mnt/bitcoin-testnet/stacks-testnet:/root/stacks-node/data -v $(pwd)/config:/src/stacks-node -p 20443:20443 -p 20444:20444 blockstack/stacks-blockchain /bin/stacks-node start --config /src/stacks-node/Config.toml'
+#alias sn-run-api-docker='docker run -d --rm --name stacks-blockchain-api --net=stacks-blockchain --env-file $(pwd)/.env -v $(pwd)/bns:/bns-data -p 3700:3700 -p 3999:3999 blockstack/stacks-blockchain-api'
+alias sn-run-api-docker='docker run -d --rm --name stacks-blockchain-api --network host --env-file $(pwd)/.env -v $(pwd)/bns:/bns-data -p 3700:3700 -p 3999:3999 blockstack/stacks-blockchain-api'
+```

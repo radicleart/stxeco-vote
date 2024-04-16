@@ -26,7 +26,7 @@ const ChainUtils = {
     return response.json();
   },  
   postToDaoApi: async (path:string, data:unknown) => {
-    const url = CONFIG.VITE_CLARITYLAB_API + '/daoapi' + path;
+    const url = CONFIG.VITE_BRIDGE_API + '/daoapi' + path;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,7 +35,7 @@ const ChainUtils = {
     return response.json();
   },  
   postToApi: async (path:string, data:unknown) => {
-    const url = CONFIG.VITE_CLARITYLAB_API + path;
+    const url = CONFIG.VITE_BRIDGE_API + path;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -44,7 +44,7 @@ const ChainUtils = {
     return response.json();
   },  
   updateVoters: async () => {
-    const url = CONFIG.VITE_CLARITYLAB_API + '/daoapi/v2/contract/events/recent';
+    const url = CONFIG.VITE_BRIDGE_API + '/daoapi/v2/contract/events/recent';
     const response = await fetch(url);
     return response.json();
   },
