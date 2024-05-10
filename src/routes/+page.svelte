@@ -7,7 +7,7 @@
 	import { sbtcConfig } from "$stores/stores";
 	import { onMount } from "svelte";
 
-	let nakamotoMode = true;
+	let nakamotoMode = false;
 	
 
 	let votingOptions = [

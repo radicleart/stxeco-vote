@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import InsightsBanner from '$lib/components/dashboard/common/InsightsBanner.svelte';
+	import { CONFIG } from '$lib/config';
+	import { sbtcConfig } from '$stores/stores';
 
 	export let method:number;
+	const threshold = $sbtcConfig.poxInfo.min_amount_ustx
 
 	const showMethodSwitcher = () => {
 		//return proposal.stage === ProposalStage.ACTIVE && $page.route.id?.indexOf('/results') === -1
@@ -28,7 +31,7 @@
 				</div>
 				<div class="mt-3">
 					<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-						NETWORK: PUBLIC TESTNET
+						NETWORK: {CONFIG.VITE_NETWORK.toUpperCase()}
 					</p>
 				</div>
 			</div>

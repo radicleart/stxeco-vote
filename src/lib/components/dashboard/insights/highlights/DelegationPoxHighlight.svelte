@@ -19,12 +19,12 @@
 
 	const signersCount = () => {
 		const solo = aggDelegationData.result3.find((o:any) => o._id.event === 'stack-stx')
-		return aggDelegationData.result2.length + solo.count
+		return (solo && aggDelegationData.result2) ? aggDelegationData.result2.length + solo.count : 0
 	}
 
 	const signersSoloCount = () => {
 		const solo = aggDelegationData.result3.find((o:any) => o._id.event === 'stack-stx')
-		return solo.count
+		return solo?.count || 0
 	}
 
 	const signersPoolCount = () => {

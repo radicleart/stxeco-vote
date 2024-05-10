@@ -31,11 +31,11 @@
 
 	let componentKey = 0;
 	let componentKey1 = 0;
-	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'testnet')
-	setConfigByUrl($page.url.searchParams, $page.url.hostname);
+	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'mainnet')
+	setConfigByUrl($page.url.searchParams);
 	if (!isLegal(location.href)) {
 		//componentKey++;
-		goto('/' + '?chain=testnet')
+		goto('/' + '?chain=mainnet')
 	}
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
@@ -75,13 +75,6 @@
 		const poxInfo = await getPoxInfo()
 		const daoProposals = await getDaoProposals()
 		let currentProposal = await getCurrentProposal()
-		
-		let aggDelegationData:Array<any> = await aggregateDelegationData()
-	  	stacksStore.update(conf => {
-			conf.aggDelegationData = aggDelegationData
-			return conf
-	  	})
-
 		sbtcConfig.update((conf) => {
 			conf.stacksInfo = stacksInfo
 			conf.poxInfo = poxInfo
@@ -89,13 +82,19 @@
 			conf.currentProposal = currentProposal
 			return conf;
 		});
+		
+		inited = true;
+		let aggDelegationData:Array<any> = await aggregateDelegationData()
+	  	stacksStore.update(conf => {
+			conf.aggDelegationData = aggDelegationData
+			return conf
+	  	})
 
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
 		if (loggedIn() && !$sbtcConfig.authHeader) {
 			//asigna: await authenticate($sbtcConfig)
 		}
 		setAuthorisation($sbtcConfig.authHeader)
-		inited = true;
 
 		const soloPoolData = await getPoolAndSoloAddresses()
 

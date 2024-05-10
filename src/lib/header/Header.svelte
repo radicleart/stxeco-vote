@@ -114,13 +114,13 @@
 			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end md:text-sand-700 py-2.5 px-2"
 		>
 			<div class="flex">
+				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href={'/insights'}>Insights</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dashboard/stacking')}><a href={'/dashboard/stacking'}>Stackers</a></NavLi>
 				{#if $page.url.hostname.indexOf('do not display these links right now!') > -1}
+				<NavLi nonActiveClass={getNavActiveClass('/dashboard/stacking')}><a href={'/dashboard/stacking'}>Stackers</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dashboard/address-lookup')}><a href={'/dashboard/address-lookup'}>Address lookup</a></NavLi>
 				{/if}
 				<!--
-				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dashboard/address-lookup')}><a href={'/dashboard/address-lookup/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>

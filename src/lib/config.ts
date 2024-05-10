@@ -124,6 +124,12 @@ export function setConfig(network:string) {
     const mode = import.meta.env.MODE
     console.log('mode: ' + mode)
 
+    if (network === 'testnet') {
+        CONFIG = TESTNET_CONFIG;
+    } else {
+        CONFIG = MAINNET_CONFIG;
+    }
+
     if (mode === 'shared-devenv') {
         CONFIG = SHARED_DEVENV_CONFIG;
     } else if (mode === 'linode-nakamoto') {
@@ -141,21 +147,12 @@ export function setConfig(network:string) {
         CONFIG.VITE_POX4_API = 'http://localhost:3010/bridge-api/v4';
     }
 
-    if (network === 'testnet') {
-        CONFIG = TESTNET_CONFIG;
-    } else {
-        CONFIG = MAINNET_CONFIG;
-    }
 }
 
-export function setConfigByUrl(search:URLSearchParams, hostname:string) {
-    let network = 'testnet'
-    if (hostname === 'stx.eco' || hostname === 'nakamoto.stx.eco') {
-        setConfig(network)
-        return
-    }
+export function setConfigByUrl(search:URLSearchParams) {
+    let network = 'mainnet'
     if (search.has('chain')) {
-        network = search.get('chain') || 'testnet'
+        network = search.get('chain') || 'mainnet'
     }
     setConfig(network)
 }

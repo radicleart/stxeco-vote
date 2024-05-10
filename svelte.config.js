@@ -12,6 +12,7 @@ const config = {
 			allow: ['..']
 		}
 	},
+	base: '.',
 	preprocess: [
 		vitePreprocess(),
 		preprocess({

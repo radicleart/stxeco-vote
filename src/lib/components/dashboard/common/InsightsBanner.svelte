@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { sbtcConfig } from '$stores/stores';
-	import { afterNavigate, goto } from "$app/navigation";
+	import { afterNavigate } from "$app/navigation";
 	import { fmtNumber } from 'sbtc-bridge-lib';
-	import { fmtMicroToStx, fmtNumberStacksFloor } from '$lib/utils';
-	import { stacksStore } from '$stores/stacksStore';
-	import { onMount } from 'svelte';
+	import { fmtMicroToStx } from '$lib/utils';
 
 	const threshold = $sbtcConfig.poxInfo.min_amount_ustx
 	const cycle = $sbtcConfig.poxInfo.current_cycle
