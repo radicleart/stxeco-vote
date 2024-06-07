@@ -30,7 +30,6 @@ export type SbtcConfig = {
 export type SbtcUserSettingI = {
   executiveTeamMember: boolean;
   govTokens?: GovernanceData;
-  useOpDrop: boolean;
   debugMode: boolean;
   testAddress?: string;
   currency: {

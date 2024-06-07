@@ -470,3 +470,24 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	sbtcConfig.update(() => conf);
 
 }
+
+function defaultSettings():SbtcUserSettingI {
+	return {
+		debugMode: false,
+		executiveTeamMember: false,
+		currency: {
+		  cryptoFirst: true,
+		  myFiatCurrency: {
+			_id: '',
+			currency: 'USD',
+			fifteen: 0,
+			last: 0,
+			buy: 0,
+			sell: 0,
+			symbol: 'USD',
+			name: 'BTCUSD'			  
+		  },
+		  denomination: 'USD',
+		}
+	}
+}

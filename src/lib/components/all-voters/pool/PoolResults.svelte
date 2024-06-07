@@ -12,6 +12,7 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import { Tooltip } from 'flowbite-svelte';
 	import { CONFIG } from '$lib/config';
 	import { isCoordinator } from '$lib/sbtc_admin';
+	import { csvMaker } from '$lib/utils';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -31,6 +32,19 @@ const reorder = (sf:string) => {
     sortField = sf;
     sortDir = (sortDir === '-') ? '' : '-';
     componentKey++;
+}
+
+const download = () => {
+  const csvVotes = []
+  for (const vote of votes) {
+    csvVotes.push({
+      voter: vote.voter,
+      txid: vote.submitTxId,
+      for: vote.for,
+      power: vote.amount
+    })
+  }
+  csvMaker(csvVotes, 'nakamoto-pool-votes.csv')
 }
 
 const fetchTransactions = async () => {
@@ -141,7 +155,9 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Height</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
-      <div>&nbsp;</div>
+      <div>
+        <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download() }>to csv</a>
+      </div>
     </div>
     {#key componentKey}
     {#each sortedEvents as item}

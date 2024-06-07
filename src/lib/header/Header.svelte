@@ -116,6 +116,7 @@
 			<div class="flex">
 				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href={'/insights'}>Insights</a></NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href={'/sip'}>SIP Process</a></NavLi>
 				{#if $page.url.hostname.indexOf('do not display these links right now!') > -1}
 				<NavLi nonActiveClass={getNavActiveClass('/dashboard/stacking')}><a href={'/dashboard/stacking'}>Stackers</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/dashboard/address-lookup')}><a href={'/dashboard/address-lookup'}>Address lookup</a></NavLi>

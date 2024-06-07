@@ -12,6 +12,7 @@ import SoloResultsRow from './SoloResultsRow.svelte';
 	import { Tooltip } from 'flowbite-svelte';
 	import { isCoordinator } from '$lib/sbtc_admin';
 	import type { ResultsSummary } from '$types/pox_types';
+	import { csvMaker, downloadCsv } from '$lib/utils';
 
 export let proposal:ProposalEvent;
 export let summary:ResultsSummary;
@@ -37,6 +38,19 @@ let inited = false;
 let inFavour = 0;
 let winning = 'danger';
 
+const download = () => {
+  const csvVotes = []
+  for (const vote of votes) {
+    csvVotes.push({
+      voter: vote.voter,
+      txid: vote.submitTxId,
+      for: vote.for,
+      power: vote.amount
+    })
+  }
+  csvMaker(csvVotes, 'nakamoto-solo-votes.csv')
+}
+
 const reorder = (sf:string) => {
     sortField = sf;
     sortDir = (sortDir === '-') ? '' : '-';
@@ -59,11 +73,6 @@ const fetchTransactions = async () => {
     }
   }
   showVotes = true
-}
-
-const openAddressLookup = () => {
-  showAddressLookup = !showAddressLookup
-  showVotes = false
 }
 
 const analysisMode = () => {
@@ -169,7 +178,9 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('amount')}>Power</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('burnBlockHeight')}>Height</a></div>
       <div><a href="/" class="pointer" on:click|preventDefault={() => reorder('for')}>For/Against</a></div>
-      <div>&nbsp;</div>
+      <div>
+        <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download() }>to csv</a>
+      </div>
     </div>
     {#key componentKey}
     {#each sortedEvents as item}

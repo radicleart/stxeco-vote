@@ -4,7 +4,7 @@ import { CONFIG } from "$lib/config";
 	import { isCoordinator } from "$lib/sbtc_admin";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import DaoUtils from "$lib/service/DaoUtils";
-	import { explorerTxUrl, truncate } from "$lib/utils";
+	import { csvMaker, explorerTxUrl, truncate } from "$lib/utils";
 	import { sbtcConfig } from "$stores/stores";
 	import type { VoteEvent } from "$types/stxeco.type";
 	import { onMount } from "svelte";
@@ -16,6 +16,19 @@ import { CONFIG } from "$lib/config";
 	let componentKey = 0;
 	let sortDir = '';
 	let sortField = 'voter';
+
+	const download = () => {
+		const csvVotes = []
+		for (const vote of votes) {
+			csvVotes.push({
+			voter: vote.voter,
+			txid: vote.submitTxId,
+			for: vote.for,
+			power: vote.amount
+			})
+		}
+		csvMaker(csvVotes, 'nakamoto-dao-votes.csv')
+	}
 
 	const getAmount = (vote:VoteEvent):number => {
 		if (vote.event === 'pool-event') {
@@ -38,6 +51,10 @@ import { CONFIG } from "$lib/config";
 
 	$: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
+
+<div>
+	<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download() }>to csv</a>
+  </div>
 
 <div class="grid grid-cols-4 w-full justify-evenly mt-5  border-b border-gray-300 pb-3 mb-3">
     <div class="col-span-2"><a href="/" class="pointer w-1/2" on:click|preventDefault={() => reorder('voter')}>Voter</a></div>
