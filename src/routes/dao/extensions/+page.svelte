@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Modal from '$lib/components/shared/Modal.svelte';
-    import ClaritySytaxHighlighter from '$lib/components/shared/ClaritySytaxHighlighter.svelte';
+    import Modal from '$lib/ui/Modal.svelte';
+    import ClaritySytaxHighlighter from '$lib/ui/ClaritySytaxHighlighter.svelte';
     import type { ExtensionType } from "$types/stxeco.type";
     import DaoUtils from '$lib/service/DaoUtils';
     import { ArrowDownCircle, ArrowUpCircle, Icon } from 'svelte-hero-icons';

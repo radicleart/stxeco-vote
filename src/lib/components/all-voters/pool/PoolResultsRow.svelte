@@ -8,7 +8,7 @@ import { findPoolStackerEventsByStacker } from '$lib/dao_api';
 import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$lib/utils';
 import { isCoordinator } from '$lib/sbtc_admin';
 	import { Icon } from 'svelte-hero-icons';
-	import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
+	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 
 export let item:VoteEvent;
 

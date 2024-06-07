@@ -2,7 +2,7 @@
 	import { fmtNumber } from '$lib/utils';
 	import { sbtcConfig } from '$stores/stores';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
-	import Countdown from '../shared/Countdown.svelte';
+	import Countdown from '../../ui/Countdown.svelte';
 	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import { onDestroy, onMount } from 'svelte';
 	import DaoUtils from '$lib/service/DaoUtils';

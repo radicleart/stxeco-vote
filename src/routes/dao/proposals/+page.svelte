@@ -13,8 +13,8 @@
 	import ProposalClosedRow from '$lib/components/dao/proposals/rows/ProposalClosedRow.svelte';
 	import ProposalActiveRow from '$lib/components/dao/proposals/rows/ProposalActiveRow.svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 
   // fetch/hydrate data from local storage
   let inited = false;

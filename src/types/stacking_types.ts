@@ -13,6 +13,7 @@ export type StackerStats = {
     stackerEventsAsPoxAddress?:Array<PoolStackerEvent>;
 }
 
+
 export type StackerInfo = {
     stacksAddress: string;
     stacker?: Stacker,

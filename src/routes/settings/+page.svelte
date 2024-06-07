@@ -13,7 +13,6 @@
 
 	const toggleSettings = (arg:string) => {
 		const conf:SbtcConfig = $sbtcConfig;
-		if (arg === 'txmode') conf.userSettings.useOpDrop = !conf.userSettings.useOpDrop;
 		if (arg === 'debug') conf.userSettings.debugMode = !conf.userSettings.debugMode;
 		if (arg === 'cryptoFirst') conf.userSettings.currency.cryptoFirst = !conf.userSettings.currency.cryptoFirst;
 		sbtcConfig.update(() => conf);
@@ -22,7 +21,6 @@
 	onMount(async () => {
 		if (typeof $sbtcConfig.userSettings === 'undefined') {
 			$sbtcConfig.userSettings = {
-				useOpDrop: false,
 				debugMode: false,
         executiveTeamMember: false,
 				currency: {
@@ -71,31 +69,6 @@
 
         <div class="border-b border-gray-900/50 pt-6 pb-8">
           <Addresses />
-        </div>
-
-        <div class="border-b border-gray-900/50 pt-6 pb-8">
-          <h2 class="text-2xl mb-2">Transaction mode</h2>
-          <div class="bg-gray-1000 flex items-center gap-2">
-            <p class="text-base text-white">
-              You are currently using:
-            </p>
-            <div class="w-1/4 text-white flex items-center gap-2">
-              <span class="inline-flex bg-black rounded-xl text-white px-4 py-1">
-                {#if $sbtcConfig.userSettings?.useOpDrop}OP_DROP{:else}OP_RETURN{/if}
-              </span>
-              <div id="po-opdrop">
-                <Icon src="{InformationCircle}" class="text-white w-6 h-6" mini aria-hidden="true" />
-              </div>
-            </div>
-          </div>
-          <div class="mt-4 text-warning-300">
-            Note: the OP_DROP protocol is not supported in the Developer Release.
-          </div>
-          <div class="mt-4">
-            <Button on:click={() => toggleSettings('txmode')} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-            Switch to {#if $sbtcConfig.userSettings?.useOpDrop}OP_RETURN{:else}OP_DROP{/if}
-            </Button>
-          </div>
         </div>
 
         <div class="py-6">

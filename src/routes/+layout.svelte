@@ -3,7 +3,7 @@
 	import "../index.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
+	import { initApplication, isLegal, loggedIn, loginStacksFromHeader } from "$lib/stacks_connect";
 	import { CONFIG, setConfigByUrl } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
@@ -12,14 +12,13 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
-	import { fetchStacksInfo, getBalanceAtHeight, setAuthorisation } from '$lib/bridge_api';
+	import { fetchStacksInfo, setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/sbtc_admin';
 	import { getPoxInfo } from '$lib/pox_api';
-	import PoxBanner from '$lib/components/dashboard/common/InsightsBanner.svelte';
 	import { aggregateDelegationData } from '$lib/pox4_api';
 
 	const unsubscribe1 = sbtcConfig.subscribe(() => {});

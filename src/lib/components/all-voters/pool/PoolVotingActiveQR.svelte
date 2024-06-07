@@ -6,7 +6,7 @@ import { sbtcConfig } from '$stores/stores';
 import type { ProposalEvent } from '$types/stxeco.type';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
-import NakamotoResultsBackground from '$lib/components/shared/NakamotoResultsBackground.svelte';
+import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
 	import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
 
 export let proposal: ProposalEvent;

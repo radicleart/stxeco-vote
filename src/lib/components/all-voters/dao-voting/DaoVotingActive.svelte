@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getBalanceAtHeight } from "$lib/bridge_api";
-	import Banner from "$lib/components/shared/Banner.svelte";
-	import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
-	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
+	import Banner from "$lib/ui/Banner.svelte";
+	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
+	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import { CONFIG } from "$lib/config";
 	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";

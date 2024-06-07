@@ -6,7 +6,7 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { fetchSbtcBalance } from '$lib/stacks_connect'
-	import Banner from '$lib/components/shared/Banner.svelte';
+	import Banner from '$lib/ui/Banner.svelte';
 
 	let mode = import.meta.env.MODE
     //if (!mode) mode = 'testnet'

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { sbtcConfig } from '$stores/stores';
-	import Banner from '../shared/Banner.svelte';
+	import Banner from '../../ui/Banner.svelte';
 	import { explorerTxUrl } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { getTransaction } from '$lib/sbtc_admin';

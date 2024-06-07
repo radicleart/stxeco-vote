@@ -13,7 +13,7 @@
 	import Proposed from './Proposed.svelte';
 	import Placeholder from './Placeholder.svelte';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
-	import Countdown from '../shared/Countdown.svelte';
+	import Countdown from '../../ui/Countdown.svelte';
 
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;

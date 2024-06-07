@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Banner from "$lib/components/shared/Banner.svelte";
-import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
-	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
+	import Banner from "$lib/ui/Banner.svelte";
+import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
+	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import type { ProposalEvent } from "$types/stxeco.type";
 	import PoolVotingActiveQr from "./PoolVotingActiveQR.svelte";
 

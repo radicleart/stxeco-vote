@@ -8,7 +8,7 @@ import { sbtcConfig } from "$stores/stores";
 import { CONFIG } from "$lib/config";
 import bns from '$lib/assets/NFT-blank-orange.png'
 import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
-import Banner from "$lib/components/shared/Banner.svelte";
+import Banner from "$lib/ui/Banner.svelte";
 	import BnsCanvas from "./BnsCanvas.svelte";
 
 const voted = true;

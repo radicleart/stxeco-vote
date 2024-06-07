@@ -14,31 +14,12 @@
 	import { page } from '$app/stores';
 
 	const dispatch = createEventDispatcher();
-	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
-	let showBitcoin = true
 
 	const doLogin = async () => {
 		if (loggedIn()) doLogout()
 		else {
 			await loginStacks(loginCallback);
 		}
-	}
-
-	const switchNetwork = async () => {
-		let net = CONFIG.VITE_NETWORK;
-		if (net === 'devnet') return
-		if (net === 'mainnet') net = 'testnet';
-		else net = 'mainnet'
-		setConfig(net);
-		await fetchSbtcBalance($sbtcConfig, true);
-		const url = new URL(location.href);
-		if (import.meta.env.MODE === 'simnet') {
-			url.searchParams.set('chain', 'testnet');
-		} else {
-			url.searchParams.set('chain', net);
-		}
-		//await dispatch('network_switch_event')
-		window.location.href = url.origin + '?chain=' + net //.assign(url.search);
 	}
 
 	let componentKey = 0;
@@ -115,21 +96,9 @@
 		>
 			<div class="flex">
 				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href={'/insights'}>Insights</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href={'/sip'}>SIP Process</a></NavLi>
-				{#if $page.url.hostname.indexOf('do not display these links right now!') > -1}
-				<NavLi nonActiveClass={getNavActiveClass('/dashboard/stacking')}><a href={'/dashboard/stacking'}>Stackers</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dashboard/address-lookup')}><a href={'/dashboard/address-lookup'}>Address lookup</a></NavLi>
-				{/if}
-				<!--
-				<NavLi nonActiveClass={getNavActiveClass('/badge')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/badge?method=1'}>Claim badge</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dashboard/address-lookup')}><a href={'/dashboard/address-lookup/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}>Stacking Info</a></NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href="/dao/proposals">Proposals</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals/propose')} href="/dao/proposals/propose">Propose</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals')} href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '?method=1'}>Vote</NavLi>
-				<NavLi nonActiveClass={getNavActiveClass('/dao/proposals') + ' bg-gray-100 opacity-80  ' }><a class="opacity-100 text-gray-900" href="/"  on:click|preventDefault={() => switchNetwork()}> {CONFIG.VITE_NETWORK}</a></NavLi>
-				-->
+				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href="https://stx.eco/insights/">Insights</a></NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/sip')}><a href={'/sip'}>SIP Process</a></NavLi>
+				<!--<NavLi nonActiveClass={getNavActiveClass('/launcher')}><a href={'https://stx.eco/launcher'}>DAO Launcher</a></NavLi>-->
 			</div>
 			</NavUl>
 			<NavUl

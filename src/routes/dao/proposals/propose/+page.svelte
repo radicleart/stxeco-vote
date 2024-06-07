@@ -6,9 +6,9 @@
 	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
-	import Banner from '$lib/components/shared/Banner.svelte';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import Banner from '$lib/ui/Banner.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 
     const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
     let contractId = $sbtcConfig.currentProposal.contractId || undefined;

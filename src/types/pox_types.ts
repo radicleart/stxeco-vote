@@ -1,18 +1,5 @@
 import type { ProposalData, VoteEvent } from "./stxeco.type";
 
-export type StackerStats = {
-    address: string;
-    addressType: string;
-    cycle: number,
-    stackerInfo?: Array<StackerInfo>,
-    rewardSlots?: Array<any>,
-    poxEntries: Array<PoxEntry>;
-    votes: Array<VoteEvent>,
-    stackerEvents:Array<PoolStackerEvent>;
-    stackerEventsAsDelegator?:Array<PoolStackerEvent>;
-    stackerEventsAsPoxAddress?:Array<PoolStackerEvent>;
-}
-
 export type StackerInfo = {
     stacksAddress: string;
     stacker?: Stacker,

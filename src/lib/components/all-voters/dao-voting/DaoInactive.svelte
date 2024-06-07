@@ -5,8 +5,8 @@
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 	import { CONFIG } from '$lib/config';
 	import { explorerTxUrl } from '$lib/utils';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { getStacksNetwork } from '$lib/stacks_connect';
 
 	export let proposal: ProposalEvent;

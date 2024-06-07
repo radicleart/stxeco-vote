@@ -1,6 +1,6 @@
 <script lang="ts">
-	import NakamotoBackground from "../shared/NakamotoBackground.svelte";
-	import NakamotoShield from "../shared/NakamotoShield.svelte";
+	import NakamotoBackground from "../../ui/NakamotoBackground.svelte";
+	import NakamotoShield from "../../ui/NakamotoShield.svelte";
 </script>
 
 <div class="mt-8 inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">

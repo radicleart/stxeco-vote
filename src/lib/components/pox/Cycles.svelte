@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tabs, TabItem } from "flowbite-svelte";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
-	import Countdown from "../shared/Countdown.svelte";
+	import Countdown from "../../ui/Countdown.svelte";
 	import type { PoxInfo } from "$types/pox_types";
 	import { sbtcConfig } from "$stores/stores";
 	import { isCoordinator } from "$lib/sbtc_admin";

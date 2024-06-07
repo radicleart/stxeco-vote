@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-  import Banner from '$lib/components/shared/Banner.svelte';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+  import Banner from '$lib/ui/Banner.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { getPoxInfo } from '$lib/pox_api';
 	import type { PoxEntry, PoxInfo } from '$types/pox_types';
 	import Cycles from "$lib/components/pox/Cycles.svelte";

@@ -1,5 +1,5 @@
 <script>
-  import LogoStacks from '../components/shared/LogoStacks.svelte';
+  import LogoStacks from '../ui/LogoStacks.svelte';
 </script>
 
 <div class="px-6 mx-auto">

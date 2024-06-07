@@ -1,8 +1,8 @@
 <script lang="ts">
 import tick from '$lib/assets/tick.png'
 import cross from '$lib/assets/cross.png'
-	import NakamotoBackground from '../shared/NakamotoBackground.svelte';
-	import NakamotoResultsBackground from '../shared/NakamotoResultsBackground.svelte';
+	import NakamotoBackground from '../../ui/NakamotoBackground.svelte';
+	import NakamotoResultsBackground from '../../ui/NakamotoResultsBackground.svelte';
 	import { fmtMicroToStx, fmtNumber } from '$lib/utils';
 
 export let accountsFor = 0;

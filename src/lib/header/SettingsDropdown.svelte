@@ -6,7 +6,6 @@
 	onMount(async () => {
 		if (typeof $sbtcConfig.userSettings === 'undefined') {
 			$sbtcConfig.userSettings = {
-				useOpDrop: false,
 				debugMode: false,
 				executiveTeamMember: true,
 				currency: {

@@ -10,7 +10,7 @@
     import type { ProposalEvent } from '$types/stxeco.type';
     import { sbtcConfig } from '$stores/stores';
     import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
-	import Banner from '$lib/components/shared/Banner.svelte';
+	import Banner from '$lib/ui/Banner.svelte';
 
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;

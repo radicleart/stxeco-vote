@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Banner from "$lib/components/shared/Banner.svelte";
-	import NakamotoBackground from "$lib/components/shared/NakamotoBackground.svelte";
-	import NakamotoShield from "$lib/components/shared/NakamotoShield.svelte";
+	import Banner from "$lib/ui/Banner.svelte";
+	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
+	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import { CONFIG } from "$lib/config";
 	import { isLeather, loggedIn } from "$lib/stacks_connect";
 	import { sbtcConfig } from "$stores/stores";

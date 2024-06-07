@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, ClipboardDocument, ArrowRight } from "svelte-hero-icons"
-	import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
-	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
-	import StacksIcon from '$lib/components/shared/StacksIcon.svelte';
+	import LogoSBTC from '$lib/ui/LogoSBTC.svelte';
+	import LogoBitcoin from '$lib/ui/LogoBitcoin.svelte';
+	import StacksIcon from '$lib/ui/StacksIcon.svelte';
 	import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 	import { loggedIn, makeFlash } from "$lib/stacks_connect";
 	import { CONFIG } from '$lib/config';

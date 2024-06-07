@@ -18,8 +18,8 @@
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
 	import { isCoordinator } from '$lib/sbtc_admin';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import type { ResultsSummary } from '$types/pox_types';
 
 	let summary:ResultsSummary;

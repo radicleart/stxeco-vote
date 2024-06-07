@@ -9,8 +9,8 @@
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import VoteAnalysis from '$lib/components/all-voters/analysis/VoteAnalysis.svelte';
 	import type { ProposalEvent } from '$types/stxeco.type';
 	import StackerEvents from '$lib/components/all-voters/analysis/StackerEvents.svelte';

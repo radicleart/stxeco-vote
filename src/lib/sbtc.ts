@@ -61,7 +61,6 @@ export function openWebSocket() {
 export const defaultSbtcConfig:SbtcConfig = {
   loggedIn: false,
   userSettings: {
-    useOpDrop: false,
     debugMode: false,
     currency: {
       cryptoFirst: false,

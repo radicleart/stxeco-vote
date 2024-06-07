@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NakamotoResultsBackground from "../shared/NakamotoResultsBackground.svelte";
+	import NakamotoResultsBackground from "../../ui/NakamotoResultsBackground.svelte";
 	import tick from '$lib/assets/tick.png'
 	import cross from '$lib/assets/cross.png'
 	import { sbtcConfig } from "$stores/stores";

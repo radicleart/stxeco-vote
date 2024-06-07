@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import Invoice from './Invoice.svelte';
   import { sbtcConfig } from '$stores/stores';
-	import NakamotoResultsBackground from '$lib/components/shared/NakamotoResultsBackground.svelte';
+	import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
 
   let yesAddress:string;
   let noAddress:string;

@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import type { ProposalData, ProposalEvent, VoteEvent } from '$types/stxeco.type';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 
 	export let proposal: ProposalEvent;
 

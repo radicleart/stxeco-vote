@@ -16,8 +16,8 @@
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import Proposed from '$lib/components/all-voters/Proposed.svelte';
 	import Holding from '$lib/components/all-voters/Holding.svelte';
-	import NakamotoBackground from '$lib/components/shared/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/components/shared/NakamotoShield.svelte';
+	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
+	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import { isCoordinator } from '$lib/sbtc_admin';
