@@ -23,7 +23,7 @@ export default defineConfig({
 			$lib: resolve("src/lib"),
 			$components: resolve("src/lib/components"),
 			$stores: resolve("src/stores"),
-			$types: resolve("src/types"),
+			$types: resolve("src/types")
 		}
 	},
 	build: {

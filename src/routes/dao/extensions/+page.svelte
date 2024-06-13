@@ -1,12 +1,12 @@
 <script lang="ts">
     import Modal from '$lib/ui/Modal.svelte';
     import ClaritySytaxHighlighter from '$lib/ui/ClaritySytaxHighlighter.svelte';
-    import type { ExtensionType } from "$types/stxeco.type";
     import DaoUtils from '$lib/service/DaoUtils';
     import { ArrowDownCircle, ArrowUpCircle, Icon } from 'svelte-hero-icons';
     import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
 	  import { CONFIG } from '$lib/config';
 	import ExtensionChecker from '$lib/components/dao/ExtensionChecker.svelte';
+	import type { ExtensionType } from '@mijoco/stxeco_types';
     
     let item:ExtensionType;
     let componentKey = 0;

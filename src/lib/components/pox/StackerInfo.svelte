@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
-	import { sbtcConfig } from "$stores/stores";
+	import { sessionStore } from "$stores/stores";
 	import { CONFIG } from "$lib/config";
 	import { getPoxInfoByRewardSlot, getPoxInfoByStacker } from "$lib/pox_api";
 	import type { PoxEntry, PoxInfo, StackerInfo } from "$types/pox_types";
@@ -11,7 +11,7 @@
 	export let poxInfo:PoxInfo;
 	export let poxEntry:PoxEntry|undefined;
 
-	let stxAddress:string = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
+	let stxAddress:string = $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress;
 	let stackerInfo:StackerInfo;
 	let cycle = poxInfo.reward_cycle_id;
 	let lockPeriod:{value:number};

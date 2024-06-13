@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { fmtMicroToStx } from 'sbtc-bridge-lib';
-	import type { ProposalEvent } from '$types/stxeco.type';
+	import { fmtMicroToStx } from "$lib/utils";
+	import type { ProposalEvent } from "@mijoco/stxeco_types";
+
 
     export let event:ProposalEvent;
 

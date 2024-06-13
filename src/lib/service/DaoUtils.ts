@@ -1,8 +1,8 @@
 import { CONFIG } from "$lib/config";
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
-import { getProposalFromContractId } from "$lib/sbtc_admin";
-import { sbtcConfig } from "$stores/stores";
-import { type ExtensionType, type ProposalEvent, ProposalStage, type ProposalData } from "../../types/stxeco.type";
+import { getProposalFromContractId } from "$lib/admin";
+import { daoStore } from "$stores/stores_dao";
+import { ProposalStage, type ExtensionType, type ProposalEvent } from "@mijoco/stxeco_types";
 
 const DaoUtils = {
 
@@ -19,7 +19,7 @@ const DaoUtils = {
         const submissionContractId = CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION
         event = await getProposalFromContractId(submissionContractId, proposalContractId)
         if (event && event.contractId && event.proposalMeta) {
-          sbtcConfig.update((conf) => {
+          daoStore.update((conf) => {
             if (!conf.proposals) conf.proposals = []
             if (event) conf.proposals.push(event)
             return conf;

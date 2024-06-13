@@ -4,7 +4,6 @@ import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { hash160 } from '@stacks/transactions';
 import { hashSha256Sync } from '@stacks/encryption';
-import type { AddressMempoolObject, SbtcClarityEvent } from 'sbtc-bridge-lib';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900

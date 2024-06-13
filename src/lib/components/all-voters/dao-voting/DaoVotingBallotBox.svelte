@@ -7,16 +7,18 @@
     import { CONFIG } from '$lib/config';
     import { PostConditionMode, contractPrincipalCV, falseCV, trueCV, uintCV } from '@stacks/transactions';
     import { openContractCall, showContractCall } from '@stacks/connect';
-    import type { ProposalEvent } from '$types/stxeco.type';
-    import { sbtcConfig } from '$stores/stores';
-    import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
+    import { sessionStore } from '$stores/stores';
 	import Banner from '$lib/ui/Banner.svelte';
+	import type { ProposalEvent } from '@mijoco/stxeco_types';
+	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
+	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+	import { getConfig } from '$stores/store_helpers';
 
     export let proposal: ProposalEvent;
     export let balanceAtHeight:number = 0;
 
-    const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-		const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+    const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+		const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 
     let errorMessage:string|undefined;
@@ -27,7 +29,7 @@
     $: amount = balanceAtHeight;
     const castVote = async (vfor:boolean) => {
         const deployer = CONFIG.VITE_DOA_DEPLOYER;
-        if (!loggedIn()) {
+        if (!isLoggedIn()) {
           errorMessage = 'Please connect your wallet to vote';
           return;
         }
@@ -49,7 +51,7 @@
         const amountCV = uintCV(amountUSTX)
         const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
         await showContractCall({
-            network: getStacksNetwork(),
+            network: getStacksNetwork(getConfig().VITE_NETWORK),
             postConditions: [],
             postConditionMode: PostConditionMode.Deny,
             contractAddress: deployer,
@@ -91,10 +93,10 @@
 		    if (txIdObj) {
           const potentialTxId = (JSON.parse(txIdObj)).txId
           const tx = await lookupTransaction(potentialTxId);
-          if (tx && tx.tx_status === 'pending' && tx.sender_address === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+          if (tx && tx.tx_status === 'pending' && tx.sender_address === $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress) {
             txId = potentialTxId
           } else {
-            if (tx.sender_address === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+            if (tx.sender_address === $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress) {
               localStorage.removeItem('VOTED_TXID_3');
             }
           }

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, CheckCircle } from "svelte-hero-icons"
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import Preamble from './Preamble.svelte';
 	import { page } from '$app/stores';
 	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
 
 	export let proposal:ProposalEvent;
 	export let method:number;

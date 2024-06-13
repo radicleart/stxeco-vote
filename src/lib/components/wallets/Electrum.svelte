@@ -4,10 +4,10 @@ import electrum1 from '$lib/assets/wallets/electrum1.png';
 import electrum2 from '$lib/assets/wallets/electrum2.png';
 import electrum3 from '$lib/assets/wallets/electrum3.png';
 import { explorerBtcAddressUrl } from "$lib/utils";
-import { sbtcConfig } from '$stores/stores';
+import { sessionStore } from '$stores/stores';
 
 const network = CONFIG.VITE_NETWORK;
-const from = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+const from = $sessionStore.keySets[CONFIG.VITE_NETWORK].cardinal
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(from!)
 }

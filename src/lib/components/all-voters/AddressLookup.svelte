@@ -3,7 +3,7 @@
 	import { fmtMicroToStx, fmtNumber, getAddressFromHashBytes, getHashBytesFromAddress, truncate } from "$lib/utils";
 	import { findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, getVoterEvents } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
-	import type { VoteEvent } from "$types/stxeco.type";
+	import type { VoteEvent } from "@mijoco/stxeco_types";
 
 	export let walletAddress:string;
 	export let lookupMode:boolean;

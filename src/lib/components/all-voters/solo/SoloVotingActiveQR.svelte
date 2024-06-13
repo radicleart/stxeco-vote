@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Invoice from './Invoice.svelte';
-  import { sbtcConfig } from '$stores/stores';
 	import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
+	import { daoStore } from '$stores/stores_dao';
 
   let yesAddress:string;
   let noAddress:string;
@@ -11,7 +11,7 @@
 
 
   onMount(async () => {
-    addresses = $sbtcConfig.soloPoolData?.soloAddresses!
+    addresses = $daoStore.soloPoolData?.soloAddresses!
     yesAddress = addresses.yAddress as string
     noAddress = addresses.nAddress as string
     inited = true

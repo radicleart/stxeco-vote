@@ -1,19 +1,19 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import type { VoteEvent } from '$types/stxeco.type';
 import ChainUtils from '$lib/service/ChainUtils';
-import { sbtcConfig } from '$stores/stores';
+import { sessionStore } from '$stores/stores';
 import { CONFIG } from '$lib/config';
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolStackerEventsByDelegator, findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, findPoxEntriesByAddressAndCycle } from '$lib/dao_api';
 	import { explorerBtcTxUrl, fmtMicroToStx, fmtNumber, getHashBytesFromAddress, truncate } from '$lib/utils';
-	import { isCoordinator } from '$lib/sbtc_admin';
+	import { isCoordinator } from '$lib/admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
+	import type { VoteEvent } from '@mijoco/stxeco_types';
 
 export let item:VoteEvent;
 let expanded = false;
 let inited = false;
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
 let coordinator = isCoordinator(account.stxAddress);
 let entries: Array<any>;
 let events: Array<any>;

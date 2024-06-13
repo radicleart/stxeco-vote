@@ -1,17 +1,16 @@
 <script lang="ts">
-	import { getBalanceAtHeight } from "$lib/bridge_api";
 	import Banner from "$lib/ui/Banner.svelte";
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import { CONFIG } from "$lib/config";
 	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
-	import { loggedIn } from "$lib/stacks_connect";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
-	import { sbtcConfig } from "$stores/stores";
-  import { ProposalStage, type ProposalEvent } from "$types/stxeco.type";
+	import { sessionStore } from "$stores/stores";
 	import BallotBox from "./DaoVotingBallotBox.svelte";
 	import { onMount } from 'svelte';
+	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+	import { ProposalStage, type ProposalEvent } from "@mijoco/stxeco_types";
 
   export let proposal: ProposalEvent;
 	export let adjustBal:number
@@ -22,7 +21,7 @@
   let inited = false;
 
 	onMount(async () => {
-      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
+      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)
       if (daoVotes && daoVotes.length > 0) {
         daoVotes.forEach((o:any) => {
           if (o) votes.push(o)
@@ -56,7 +55,7 @@
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>
-          {#if !loggedIn()}
+          {#if !isLoggedIn()}
           <p>Connect your wallet to vote!</p>
           {/if}
         </div>
@@ -74,7 +73,7 @@
           {/if}
         </div>
         {:else}
-          {#if voted === 0 && loggedIn()}
+          {#if voted === 0 && isLoggedIn()}
           <div class="mb-3 max-w-xl">
             <Banner bannerType={'danger'} message={'Account not eligible to vote. Your balance when voting began (at block ' + fmtNumber(proposal.proposalData.startBlockHeight) + ') was 0 STX.'} />
           </div>

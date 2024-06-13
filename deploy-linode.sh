@@ -6,10 +6,10 @@ export PORT=22
 
 PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
-export SERVER=spinoza.brightblock.org
+export SERVER=leibniz.brightblock.org
 export BUILDER=build
-if [ "$DEPLOYMENT" == "testnet" ]; then
-  SERVER=leibniz.brightblock.org;
+if [ "$DEPLOYMENT" == "mainnet" ]; then
+  SERVER=spinoza.brightblock.org;
 fi
 
 printf "\n-----------------------------------------------------------------------------------------------------\n";

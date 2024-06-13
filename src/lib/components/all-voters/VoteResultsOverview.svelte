@@ -2,10 +2,10 @@
 	import NakamotoResultsBackground from "../../ui/NakamotoResultsBackground.svelte";
 	import tick from '$lib/assets/tick.png'
 	import cross from '$lib/assets/cross.png'
-	import { sbtcConfig } from "$stores/stores";
+	import { sessionStore } from "$stores/stores";
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 	import { onMount } from "svelte";
-	import type { ResultsSummary } from "$types/pox_types";
+	import type { ResultsSummary } from "@mijoco/stxeco_types";
 
 	export let approved = false;
 	export let summary:ResultsSummary;
@@ -17,7 +17,7 @@
 	let daoAccountsAgainst = 0
 
 	const blockSinceEnd = () => {
-		return $sbtcConfig.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
+		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	onMount(async () => {

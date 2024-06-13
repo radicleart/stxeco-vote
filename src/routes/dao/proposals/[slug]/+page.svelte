@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Skeleton } from 'flowbite-svelte';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
 	import { CONFIG } from '$lib/config';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import { getBalanceAtHeight } from '$lib/bridge_api';
+	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
 	import Funding from '$lib/components/all-voters/Funding.svelte';
 	import DaoInactive from '$lib/components/all-voters/dao-voting/DaoInactive.svelte';
-	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import SoloVotingActive from '$lib/components/all-voters/solo/SoloVotingActive.svelte';
 	import PoolVotingActive from '$lib/components/all-voters/pool/PoolVotingActive.svelte';
 	import DaoVotingActive from '$lib/components/all-voters/dao-voting/DaoVotingActive.svelte';
@@ -20,7 +19,10 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-	import { isCoordinator } from '$lib/sbtc_admin';
+	import { isCoordinator } from '$lib/admin';
+	import { daoStore } from '$stores/stores_dao';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { getConfig } from '$stores/store_helpers';
 
 	let method:number = -1;
 	let errorReason:string|undefined;
@@ -32,27 +34,27 @@
 
 	onMount(async () => {
 		method = Number($page.url.searchParams.get('method')) || 3
-		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
+		let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			//activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 		} else {
 			proposalNotFound = true
 		}
 
-		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
 			//proposalNotFound = true
 			//activeFlag = false
 		}
 
 		try {
-			const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
-			balanceAtHeight = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxBalance;
+			balanceAtHeight = $sessionStore.keySets[CONFIG.VITE_NETWORK].stxBalance;
 			errorReason = e.message;
 		}
 		inited = true;
@@ -92,7 +94,7 @@
 			{:else if method === 2}
 				<PoolVotingActive {proposal} />
 			{:else if method === 3}
-				{#if $sbtcConfig.stacksInfo?.stacks_tip_height >= proposal.proposalData.startBlockHeight}
+				{#if $sessionStore.stacksInfo?.stacks_tip_height >= proposal.proposalData.startBlockHeight}
 				<DaoVotingActive {proposal} adjustBal={balanceAtHeight} />
 				{:else}
 				<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">

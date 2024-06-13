@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import type { ExchangeRate } from 'sbtc-bridge-lib';
 
 	onMount(async () => {
-		if (typeof $sbtcConfig.userSettings === 'undefined') {
-			$sbtcConfig.userSettings = {
+		if (typeof sessionStore.userSettings === 'undefined') {
+			sessionStore.userSettings = {
 				debugMode: false,
 				executiveTeamMember: true,
 				currency: {
@@ -15,14 +15,14 @@
 				}
 			}
 		}
-		if (typeof $sbtcConfig.userSettings.currency === 'undefined') {
-			$sbtcConfig.userSettings.currency = {
+		if (typeof sessionStore.userSettings.currency === 'undefined') {
+			sessionStore.userSettings.currency = {
 				cryptoFirst: false,
 				myFiatCurrency: { currency: 'USD' } as ExchangeRate,
 				denomination: 'bitcoin'
 			}
 		}
-		sbtcConfig.update(() => $sbtcConfig);
+		sessionStore.update(() => sessionStore);
 	})
 </script>
 <a href="/settings" class="block w-full md:inline-flex bg-primary-02 p-px rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">

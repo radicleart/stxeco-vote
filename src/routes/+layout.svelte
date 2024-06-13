@@ -3,29 +3,25 @@
 	import "../index.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, isLegal, loggedIn, loginStacksFromHeader } from "$lib/stacks_connect";
+	import { initApplication, isLegal } from "$lib/stacks_connect";
+	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account'
 	import { CONFIG, setConfigByUrl } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
-	import { sbtcConfig } from '$stores/stores'
-	import type { SbtcConfig } from '$types/sbtc_config'
-	import { defaultSbtcConfig } from '$lib/sbtc';
+	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
-	import { fetchStacksInfo, setAuthorisation } from '$lib/bridge_api';
-	import type { AddressObject } from 'sbtc-bridge-lib';
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
-	import { connectToStacks, stacksStore, subscribeBlockUpdates } from '$stores/stacksStore';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
-	import { getCurrentProposal } from '$lib/sbtc_admin';
-	import { getPoxInfo } from '$lib/pox_api';
-	import { aggregateDelegationData } from '$lib/pox4_api';
+	import { getCurrentProposal } from '$lib/admin';
+	import type { AddressObject } from '@mijoco/stxeco_types';
+	import { daoStore } from '$stores/stores_dao';
+	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
+	import { getConfig } from '$stores/store_helpers';
 
-	const unsubscribe1 = sbtcConfig.subscribe(() => {});
-	const unsubscribe2 = stacksStore.subscribe(() => {});
+	const unsubscribe1 = $sessionStore.subscribe(() => {});
 	onDestroy(async () => {
 		unsubscribe1()
-		unsubscribe2()
 	})
 
 	let componentKey = 0;
@@ -70,37 +66,19 @@
 	}
 
 	const initApp = async () => {
-		const stacksInfo = await fetchStacksInfo();
-		const poxInfo = await getPoxInfo()
+		await initApplication($sessionStore.userSettings);
+
+		const soloPoolData = await getPoolAndSoloAddresses()
 		const daoProposals = await getDaoProposals()
 		let currentProposal = await getCurrentProposal()
-		sbtcConfig.update((conf) => {
-			conf.stacksInfo = stacksInfo
-			conf.poxInfo = poxInfo
+		daoStore.update((conf) => {
+			conf.soloPoolData = soloPoolData
 			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;
 		});
-		
+
 		inited = true;
-		let aggDelegationData:Array<any> = await aggregateDelegationData()
-	  	stacksStore.update(conf => {
-			conf.aggDelegationData = aggDelegationData
-			return conf
-	  	})
-
-		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
-		if (loggedIn() && !$sbtcConfig.authHeader) {
-			//asigna: await authenticate($sbtcConfig)
-		}
-		setAuthorisation($sbtcConfig.authHeader)
-
-		const soloPoolData = await getPoolAndSoloAddresses()
-
-		sbtcConfig.update((conf) => {
-			conf.soloPoolData = soloPoolData
-			return conf;
-		});
 	}
 
 	let timer:any;
@@ -111,9 +89,8 @@
 
 	const startTimer = () => {
 		timer = setInterval(async () => {
-			const stacksInfo = await fetchStacksInfo();
-			//const poxInfo = await getPoxInfo()
-			sbtcConfig.update((conf) => {
+			const stacksInfo = await fetchStacksInfo(getConfig().VITE_STACKS_API);
+			sessionStore.update((conf) => {
 				conf.stacksInfo = stacksInfo
 				//conf.poxInfo = poxInfo
 				return conf;
@@ -123,7 +100,7 @@
 
 	onMount(async () => {
 		try {
-			const conf = $sbtcConfig;
+			const conf = $sessionStore;
 			if (!conf.keySets) {
 				if (CONFIG.VITE_NETWORK === 'testnet') {
 					conf.keySets = { 'testnet': {} as AddressObject };
@@ -133,14 +110,14 @@
 					conf.keySets = { 'mainnet': {} as AddressObject };
 				}
 				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
-				sbtcConfig.update(() => conf);
+				sessionStore.update(() => conf);
 			}
 
 			await initApp();
 			inited = true;
 
-			await connectToStacks();
-			subscribeBlockUpdates();
+			//await connectToStacks();
+			//subscribeBlockUpdates();
 			startTimer();
 		} catch (err) {
 			errorReason = COMMS_ERROR

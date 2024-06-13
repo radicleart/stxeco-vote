@@ -5,10 +5,10 @@ import bitcoincore2 from '$lib/assets/wallets/bitcoincore2.png';
 import bitcoincore3 from '$lib/assets/wallets/bitcoincore3.png';
 import bitcoincore4 from '$lib/assets/wallets/bitcoincore4.png';
 import { explorerBtcAddressUrl } from "$lib/utils";
-import { sbtcConfig } from '$stores/stores';
+import { sessionStore } from '$stores/stores';
 
 const network = CONFIG.VITE_NETWORK;
-const from = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
+const from = $sessionStore.keySets[CONFIG.VITE_NETWORK].cardinal;
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(from!)
 }

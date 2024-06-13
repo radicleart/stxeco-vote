@@ -2,9 +2,7 @@
   import { onMount } from 'svelte';
   import { Skeleton, Tabs, TabItem } from 'flowbite-svelte';
   import { COMMS_ERROR } from '$lib/utils.js'
-  import { sbtcConfig } from '$stores/stores';
-	import ProposalRow from '$lib/components/dao/proposals/rows/ProposalActiveRow.svelte';
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
+  import { sessionStore } from '$stores/stores';
 	import ProposalFundingHeader from '$lib/components/dao/proposals/rows/ProposalFundingHeader.svelte';
 	import ProposalVotingHeader from '$lib/components/dao/proposals/rows/ProposalVotingHeader.svelte';
 	import ProposalFundingRow from '$lib/components/dao/proposals/rows/ProposalFundingRow.svelte';
@@ -15,6 +13,8 @@
 	import DaoUtils from '$lib/service/DaoUtils';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
+	import { daoStore } from '$stores/stores_dao';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
 
   // fetch/hydrate data from local storage
   let inited = false;
@@ -25,14 +25,14 @@
   let tabStatus = 'funding'
   onMount(async () => {
     try {
-      for (const prop of $sbtcConfig.proposals!) {
-        const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-			  const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+      for (const prop of $daoStore.proposals!) {
+        const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			  const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 			  DaoUtils.setStatus(3, burnHeight, stacksTipHeight, prop);
       }
-      funding = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PARTIAL_FUNDING || o.stage === ProposalStage.UNFUNDED)
-      open = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED || o.stage === ProposalStage.ACTIVE)
-      closed = $sbtcConfig.proposals?.filter((o) => o.stage === ProposalStage.INACTIVE || o.stage === ProposalStage.CONCLUDED)
+      funding = $daoStore.proposals?.filter((o:any) => o.stage === ProposalStage.PARTIAL_FUNDING || o.stage === ProposalStage.UNFUNDED)
+      open = $daoStore.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED || o.stage === ProposalStage.ACTIVE)
+      closed = $daoStore.proposals?.filter((o) => o.stage === ProposalStage.INACTIVE || o.stage === ProposalStage.CONCLUDED)
       if ($page.url.searchParams.has('status')) tabStatus = $page.url.searchParams.get('status') || 'funding'
       inited = true;
     } catch (err) {

@@ -3,15 +3,16 @@ import { page } from '$app/stores';
 import { CONFIG } from '$lib/config';
 import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 import { openContractCall } from '@stacks/connect';
-	import { sbtcConfig } from '$stores/stores';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
+	import { sessionStore } from '$stores/stores';
+	import { isExecutiveTeamMember } from '$lib/admin';
 	import { onMount } from 'svelte';
+	import type { InFlight, ProposalEvent } from '@mijoco/stxeco_types';
+	import type { DaoStore, SessionStore } from '$types/local_types';
+	import { daoStore } from '$stores/stores_dao';
 
 export let proposal:ProposalEvent;
 
-const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+const stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 
 const submit = async () => {
 	const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
@@ -24,8 +25,8 @@ const submit = async () => {
 		functionName: 'emergency-propose',
 		functionArgs: functionArgs,
 		onFinish: data => {
-			sbtcConfig.update((conf:SbtcConfig) => {
-				if (!conf.daoData) conf.daoData = {} as DaoData;
+			daoStore.update((conf:DaoStore) => {
+				if (!conf.daoData) conf.daoData = {} as InFlight;
 				conf.daoData.inFlight = {
 					name: 'Emergency signal',
 					txid: data.txId
@@ -42,7 +43,7 @@ const submit = async () => {
 $: executiveTeamMember = false
 
 onMount(async () => {
-	executiveTeamMember = (await isExecutiveTeamMember($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)).executiveTeamMember
+	executiveTeamMember = (await isExecutiveTeamMember(sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)).executiveTeamMember
 })
 
 </script>

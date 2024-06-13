@@ -1,5 +1,5 @@
 <script lang="ts">
-import { sbtcConfig } from '$stores/stores'
+import { sessionStore } from '$stores/stores'
 import { CONFIG } from '$lib/config';
 import { goto } from "$app/navigation";
 import Button from '$lib/components/shared/Button.svelte';
@@ -22,13 +22,8 @@ const launchApp = () => {
           <p class="mb-2">We are testing and mainnet s not yet supported.</p>
           <p class="mb-2">Please use the settings menu to switch to testnet.</p>
         {:else}
-          {#if !$sbtcConfig?.sbtcContractData?.sbtcWalletAddress}
-            <p class="mb-2">The sBTC wallet is undefined in the sBTC Contract.</p>
-            <p class="mb-2">The Bridge is waiting for configuration data to be setup.</p>
-          {:else}
-            <p class="mb-2">Temporarily problems connecting to the bridge.</p>
-            <p class="mb-2">Please try later.</p>
-          {/if}
+          <p class="mb-2">Temporarily problems connecting to the bridge.</p>
+          <p class="mb-2">Please try later.</p>
         {/if}
         <p class="mb-2">For more info about the sBTC Bridge, check <a class={'text-warning-500'} href="/faq">the FAQ page.</a></p>
       </div>

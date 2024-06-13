@@ -3,14 +3,13 @@
   import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { getPoxInfo } from '$lib/pox_api';
-	import type { PoxEntry, PoxInfo } from '$types/pox_types';
 	import Cycles from "$lib/components/pox/Cycles.svelte";
 	import { onMount } from 'svelte';
 	import RewardSlots from '$lib/components/pox/RewardSlots.svelte';
 	import PoxEntries from '$lib/components/pox/PoxEntries.svelte';
 	import StackerInfo from '$lib/components/pox/StackerInfo.svelte';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
+	import type { PoxEntry, PoxInfo } from '@mijoco/stxeco_types';
 
   let poxInfo:PoxInfo;
   let poxEntry:PoxEntry;
@@ -26,7 +25,7 @@
   }
 
   onMount(async () => {
-    poxInfo = $sbtcConfig.poxInfo;
+    poxInfo = $sessionStore.poxInfo;
   })
 
 </script>

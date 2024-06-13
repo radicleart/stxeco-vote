@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import { Tabs, TabItem } from 'flowbite-svelte';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
 	import { CONFIG } from '$lib/config';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import { getBalanceAtHeight } from '$lib/bridge_api';
+	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolVotes, getSummary } from '$lib/dao_api';
-	import { ProposalStage, type ProposalEvent, type VoteEvent } from '$types/stxeco.type';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
 	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
@@ -17,10 +16,11 @@
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { isCoordinator } from '$lib/sbtc_admin';
+	import { isCoordinator } from '$lib/admin';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import type { ResultsSummary } from '$types/pox_types';
+	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stxeco_types';
+	import { daoStore } from '$stores/stores_dao';
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
@@ -47,19 +47,19 @@
 	}
 
 	const blockSinceEnd = () => {
-		return $sbtcConfig.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
+		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	const isApproved = () => {
-		approved = $sbtcConfig.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
+		approved = $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	const voteConcluded = () => {
 		if (!proposal || !proposal.proposalData) return false
-		if (isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) return true
+		if (isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)) return true
 		if (method === 3) return proposal.stage === ProposalStage.CONCLUDED
 		else {
-			return $sbtcConfig.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
+			return $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
 		}
 	}
 
@@ -87,11 +87,11 @@
 
 	onMount(async () => {
 		method = Number($page.url.searchParams.get('method')) || 3
-		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
+		let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $page.params.slug);
 		if (event) {
 			proposal = event;
-			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			const results = await findPoolVotes()
 			//poolVotes = results.poolVotes
@@ -108,14 +108,14 @@
 		}
 
 		try {
-			const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
 			balanceAtHeight = 0;
 			errorReason = e.message;
 		}
 
-		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
 			proposalNotFound = true
 			activeFlag = false
 		}

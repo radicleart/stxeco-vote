@@ -2,7 +2,7 @@
 	import ProposalStageUpdate from "$lib/components/all-voters/ProposalStageUpdate.svelte";
 	import PageIntro from "$lib/ui/PageIntro.svelte";
 	import { CONFIG } from "$lib/config";
-	import { sbtcConfig } from "$stores/stores";
+	import { sessionStore } from "$stores/stores";
 	import { onMount } from "svelte";
 	
 	let message = 'STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes';
@@ -31,7 +31,7 @@
 		},
 	]
 
-	let currentContract = ($sbtcConfig.currentProposal) ? $sbtcConfig.currentProposal?.contractId : CONFIG.VITE_DOA_PROPOSAL
+	let currentContract = (sessionStore.currentProposal) ? sessionStore.currentProposal?.contractId : CONFIG.VITE_DOA_PROPOSAL
 
 	onMount(async () => {
     try {

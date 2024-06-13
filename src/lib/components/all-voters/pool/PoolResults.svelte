@@ -1,18 +1,17 @@
 <script lang="ts">
 import DaoUtils from '$lib/service/DaoUtils';
 import { onMount } from 'svelte';
-import { sbtcConfig } from '$stores/stores';
-import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
+import { sessionStore } from '$stores/stores';
 import VoteResultsRow from '../VoteResultsRow.svelte';
-	import type { ResultsSummary } from '$types/pox_types';
 	import { findPoolVotes } from '$lib/dao_api';
 	import PoolResultsRow from './PoolResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
 	import { CONFIG } from '$lib/config';
-	import { isCoordinator } from '$lib/sbtc_admin';
+	import { isCoordinator } from '$lib/admin';
 	import { csvMaker } from '$lib/utils';
+	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stxeco_types';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -20,7 +19,7 @@ export let proposal:ProposalEvent;
 let votes: Array<VoteEvent> = []
 let allVotes: Array<VoteEvent> = []
 let includeZeros = false;
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
 let coordinator = isCoordinator(account.stxAddress);
 
 let showVotes = false;
@@ -108,8 +107,8 @@ const analysisMode = () => {
 }
 
 onMount(async () => {
-  const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+  const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+	const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 
   includeZeros = true // double negative here!
@@ -166,6 +165,6 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
     {/key}
   {/if}
   {#if showAddressLookup}
-  <AddressLookup lookupMode={true} walletAddress={$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress}/>
+  <AddressLookup lookupMode={true} walletAddress={sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress}/>
   {/if}
 {/if}

@@ -2,21 +2,20 @@
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte'
 	import { createEventDispatcher } from "svelte";
 	import Brand from './Brand.svelte'
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { afterNavigate, goto } from "$app/navigation";
-	import { fetchSbtcBalance, initApplication, loginStacks } from '$lib/stacks_connect'
-	import { logUserOut, loggedIn } from '$lib/stacks_connect'
-	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
-	import { CONFIG, setConfig } from '$lib/config';
-	import { fmtNumber, type AddressObject } from 'sbtc-bridge-lib';
-	import { setAuthorisation } from '$lib/bridge_api';
-	import { page } from '$app/stores';
+	import type { AddressObject } from '@mijoco/stxeco_types';
+	import { fmtNumber } from '$lib/utils';
+	import { isLoggedIn, logUserOut, loginStacks } from '@mijoco/stx_helpers/dist/account';
+	import { initApplication } from '$lib/stacks_connect';
+	import { getConfig } from '$stores/store_helpers';
+	import { daoStore } from '$stores/stores_dao';
 
 	const dispatch = createEventDispatcher();
 
 	const doLogin = async () => {
-		if (loggedIn()) doLogout()
+		if (isLoggedIn()) doLogout()
 		else {
 			await loginStacks(loginCallback);
 		}
@@ -28,19 +27,15 @@
 	})
 
 	$: getStacksHeight = () => {
-		return (($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.stacks_tip_height) : ' ');
+		return (($sessionStore.stacksInfo) ? fmtNumber($sessionStore.stacksInfo.stacks_tip_height) : ' ');
  	}
 
 	$: getBitcoinHeight = () => {
-		return (($sbtcConfig.stacksInfo) ? fmtNumber($sbtcConfig.stacksInfo.burn_block_height) : ' ')
+		return (($sessionStore.stacksInfo) ? fmtNumber($sessionStore.stacksInfo.burn_block_height) : ' ')
  	}
 
 	const loginCallback = async () => {
-		await initApplication($sbtcConfig, true)
-		if (loggedIn() && !$sbtcConfig.authHeader) {
-			//asigna: await authenticate($sbtcConfig)
-		}
-		await setAuthorisation($sbtcConfig.authHeader)
+		await initApplication($sessionStore.userSettings)
 		setTimeout(function() {
 			dispatch('login_event');
 			componentKey++;
@@ -49,9 +44,7 @@
 
 	const doLogout = async () => {
 		logUserOut();
-		$sbtcConfig.authHeader = undefined
-		$sbtcConfig.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
-		await sbtcConfig.update(() => $sbtcConfig)
+		$sessionStore.keySets[getConfig().VITE_NETWORK] = {} as AddressObject;
 		dispatch('login_event');
 		setTimeout(function() {
 			componentKey++;
@@ -78,7 +71,7 @@
 
 	{#key componentKey}
   	<div class="hidden md:flex md:gap-2 md:order-3">
-			{#if loggedIn()}
+			{#if isLoggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
 				<button class="font-mono uppercase inline-flex items-center bg-[#131416] px-4 py-2 text-sm  text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0" on:keydown on:click={doLogin}>
@@ -95,7 +88,7 @@
 			ulClass="dark:bg-white dark:md:bg-white md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:!md:space-x-4 sm:justify-end md:text-sand-700 py-2.5 px-2"
 		>
 			<div class="flex">
-				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $sbtcConfig.currentProposal.contractId + '/results?method=1'}>Results</a></NavLi>
+				<NavLi nonActiveClass={getNavActiveClass('/results')}><a href={'/dao/proposals/' + $daoStore.currentProposal?.contractId + '/results?method=1'}>Results</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/insights')}><a href="https://stx.eco/insights/">Insights</a></NavLi>
 				<NavLi nonActiveClass={getNavActiveClass('/sip')}><a href={'/sip'}>SIP Process</a></NavLi>
 				<!--<NavLi nonActiveClass={getNavActiveClass('/launcher')}><a href={'https://stx.eco/launcher'}>DAO Launcher</a></NavLi>-->
@@ -123,7 +116,7 @@
 			</li>
 
 			<NavLi nonActiveClass="md:hidden" class="-ml-2 -mr-3">
-				{#if loggedIn()}
+				{#if isLoggedIn()}
 					<AccountDropdown on:init_logout={() => doLogout()}/>
 				{:else}
 					<button id="connect-wallet" class="block w-full items-center gap-x-1.5 px-4 py-2 bg-[#131416] text-white rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#131416]" on:keydown on:click={doLogin}>

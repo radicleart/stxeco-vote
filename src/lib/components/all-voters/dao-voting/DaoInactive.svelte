@@ -1,24 +1,25 @@
 <script lang="ts">
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 	import { CONFIG } from '$lib/config';
 	import { explorerTxUrl } from '$lib/utils';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { getStacksNetwork } from '$lib/stacks_connect';
+	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+	import { getConfig } from '$stores/store_helpers';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
 
 	export let proposal: ProposalEvent;
 	export let method = 1
-	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 	let txId:string|undefined;
 
 	const concludeVote = async () => {
     const deployer = CONFIG.VITE_DOA_DEPLOYER;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     await openContractCall({
-		network: getStacksNetwork(),
+		network: getStacksNetwork(getConfig().VITE_NETWORK),
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,

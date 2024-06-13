@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { truncate } from 'sbtc-bridge-lib';
-	import type { ProposalEvent } from '$types/stxeco.type';
 
     export let event:ProposalEvent;
 

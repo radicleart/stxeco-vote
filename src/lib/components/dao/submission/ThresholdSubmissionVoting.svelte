@@ -4,13 +4,13 @@
 		import { CONFIG } from '$lib/config';
 	import { PostConditionMode, contractPrincipalCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
-	import { sbtcConfig } from '$stores/stores';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
+	import { sessionStore } from '$stores/stores';
+	import type { SessionStore } from '$types/sbtc_config';
+	import type { InFlight, ProposalEvent } from '$types/stxeco.type';
 	
 	export let proposal:ProposalEvent;
 	
-	const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	const stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 	let minStartHeight = 100 //Number($settings.daoProperties?.find((o) => o.id === 'minimum-proposal-start-delay')?.value) + 1 || 0;
 	let maxStartHeight = 200 //Number($settings.daoProperties?.find((o) => o.id === 'maximum-proposal-start-delay')?.value) || 100;
 	const startHeightMessage = 'Currently at block ' + stacksTipHeight + '. Earliest start for voting is block ' + (stacksTipHeight + minStartHeight) + ' ~ ' + (minStartHeight / 144).toFixed(2) + ' days and latest is ' + (stacksTipHeight + maxStartHeight) + ' ~ ' + (maxStartHeight / 144).toFixed(2) + ' days.';
@@ -34,8 +34,8 @@
 			functionName: 'propose',
 			functionArgs: functionArgs,
 			onFinish: data => {
-				sbtcConfig.update((conf:SbtcConfig) => {
-					if (!conf.daoData) conf.daoData = {} as DaoData;
+				sessionStore.update((conf:SessionStore) => {
+					if (!conf.daoData) conf.daoData = {} as InFlight;
 					conf.daoData.inFlight = {
 						name: 'Propose',
 						txid: data.txId

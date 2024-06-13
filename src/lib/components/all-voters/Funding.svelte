@@ -1,24 +1,26 @@
 <script lang="ts">
 	import { CONFIG } from '$lib/config';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { FungibleConditionCode, PostConditionMode, contractPrincipalCV, makeStandardSTXPostCondition, someCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
-	import type { FundingData, ProposalEvent } from '$types/stxeco.type';
-	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
 	import { onMount } from 'svelte';
-	import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
 	import { goto } from '$app/navigation';
-	import { processProposalContracts } from '$lib/sbtc_admin';
+	import { processProposalContracts } from '$lib/admin';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Proposed from './Proposed.svelte';
 	import Placeholder from './Placeholder.svelte';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import Countdown from '../../ui/Countdown.svelte';
+	import type { FundingData, ProposalEvent } from '@mijoco/stxeco_types';
+	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+	import { getConfig } from '$stores/store_helpers';
+	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
+	import { fmtMicroToStx, fmtNumber } from '$lib/utils';
 
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;
 	let inited = false;
-	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK]
+	const account = $sessionStore.keySets[CONFIG.VITE_NETWORK]
 
 	let amount = 500000;
 	let txId: string|undefined;
@@ -54,7 +56,7 @@
 		const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
 		let functionArgs = [proposalCV, amountCV, customMajorityCV];
 		await openContractCall({
-			network: getStacksNetwork(),
+			network: getStacksNetwork(getConfig().VITE_NETWORK),
 			postConditions: getSTXMintPostConds(amount),
 			postConditionMode: PostConditionMode.Deny,
 			contractAddress: 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z',
@@ -73,7 +75,7 @@
 	}
 
 	const submitFlexible = async () => {
-        if (!loggedIn()) {
+        if (!isLoggedIn()) {
           errorMessage = 'Please connect your wallet to vote';
           return;
         }
@@ -105,7 +107,7 @@
 		const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
 		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, amountCV, customMajorityCV];
 		await openContractCall({
-			network: getStacksNetwork(),
+			network: getStacksNetwork(getConfig().VITE_NETWORK),
 			postConditions: getSTXMintPostConds(amount),
 			postConditionMode: PostConditionMode.Deny,
 			contractAddress: CONFIG.VITE_DOA_DEPLOYER,
@@ -124,12 +126,12 @@
 	}
 
 	onMount(async () => {
-		paramStartDelay = Math.floor( 0.83 * (NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height));
+		paramStartDelay = Math.floor( 0.83 * (NAKAMOTO_VOTE_START_HEIGHT - $sessionStore.stacksInfo.burn_block_height));
 		const processResult = await processProposalContracts(proposal.contractId)
 		const refreshedProposal = processResult.find((o:ProposalEvent) =>  o.contractId === proposal.contractId )
 		if (refreshedProposal) proposal = refreshedProposal;
-		const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-		const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+		const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+		const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 		fundingData = proposal.funding;
 		if (!fundingData) {

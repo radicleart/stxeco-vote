@@ -2,12 +2,15 @@
 import { onMount } from 'svelte';
 import { CONFIG } from '$lib/config';
 import Invoice from './Invoice.svelte';
-import { sbtcConfig } from '$stores/stores';
-import type { ProposalEvent } from '$types/stxeco.type';
+import { sessionStore } from '$stores/stores';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
 import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
-	import { getStacksNetwork, loggedIn } from '$lib/stacks_connect';
+	import type { ProposalEvent } from '@mijoco/stxeco_types';
+	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
+	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+	import { getConfig } from '$stores/store_helpers';
+	import { daoStore } from '$stores/stores_dao';
 
 export let proposal: ProposalEvent;
 
@@ -20,14 +23,14 @@ let vforCurrent: boolean;
 let inited = false;
 
 const castVote = async (vfor:boolean) => {
-  if (!loggedIn()) {
+  if (!isLoggedIn()) {
     vforCurrent = vfor
     errorMessage = 'Please connect your wallet to vote';
     return;
   }
   await openSTXTransfer({
     amount: '1',
-    network: getStacksNetwork(),
+    network: getStacksNetwork(getConfig().VITE_NETWORK),
     recipient: (vfor) ? yesAddress : noAddress,
       onFinish: data => {
         txId = data.txId
@@ -43,8 +46,8 @@ const castVote = async (vfor:boolean) => {
 }
 
 onMount(async () => {
-  const addresses = $sbtcConfig.soloPoolData?.poolAddresses!
-  let locked = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.locked
+  const addresses = $daoStore.soloPoolData?.poolAddresses!
+  let locked = $sessionStore.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.locked
   locked = Number(locked)
   if (locked && locked > 0) showStxTransfer = true
 

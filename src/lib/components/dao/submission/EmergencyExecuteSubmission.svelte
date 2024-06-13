@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { CONFIG } from '$lib/config';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
-	import { sbtcConfig } from '$stores/stores';
+	import { isExecutiveTeamMember } from '$lib/admin';
+	import { sessionStore } from '$stores/stores';
 	import type { ProposalEvent } from '$types/stxeco.type';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
@@ -34,7 +34,7 @@
     });
   }
 
-  const executiveTeamMember = isExecutiveTeamMember($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
+  const executiveTeamMember = isExecutiveTeamMember(sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)
   const canVote = !proposal.executedAt && executiveTeamMember // && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
   $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
 </script>

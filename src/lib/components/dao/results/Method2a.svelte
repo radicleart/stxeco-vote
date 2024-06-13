@@ -3,12 +3,12 @@ import DaoUtils from '$lib/service/DaoUtils';
 import ChainUtils from '$lib/service/ChainUtils';
 import FormatUtils from '$lib/service/FormatUtils';
 import { onMount } from 'svelte';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
 	import { ArrowDown, ArrowUp, Icon } from 'svelte-hero-icons';
 	import { CaretLeftOutline, CaretRightOutline } from 'flowbite-svelte-icons';
 
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
 
 export let method2a:any;
 

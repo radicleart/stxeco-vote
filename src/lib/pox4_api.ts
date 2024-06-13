@@ -44,13 +44,6 @@ export async function findPoolStackerEventsByHashBytes(hashBytes:string, page:nu
   return await response.json();
 }
 
-export async function getPoxInfo() {
-  const path = addNetSelector(CONFIG.VITE_POX4_API + '/pox/info');
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
 export async function getPoxInfoByRewardSlot(btcAddress:string, cycle:number, stxAddress:string) {
   const path = addNetSelector(CONFIG.VITE_POX4_API + '/pox/solo-stacker/' + btcAddress + '/' + cycle + '/' + stxAddress);
   const response = await fetch(path);
