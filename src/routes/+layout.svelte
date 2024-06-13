@@ -6,20 +6,20 @@
 	import { initApplication, isLegal } from "$lib/stacks_connect";
 	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account'
 	import { CONFIG, setConfigByUrl } from '$lib/config';
-	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
-	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/admin';
-	import type { AddressObject } from '@mijoco/stxeco_types';
+	import type { AddressObject } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
+	import { page } from '$app/stores';
+	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 
-	const unsubscribe1 = $sessionStore.subscribe(() => {});
+	const unsubscribe1 = sessionStore.subscribe(() => {});
 	onDestroy(async () => {
 		unsubscribe1()
 	})

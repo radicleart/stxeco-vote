@@ -1,6 +1,6 @@
 import { persisted } from 'svelte-local-storage-store'
 import type { DaoStore } from '$types/local_types';
-import type { SoloPoolData } from '@mijoco/stxeco_types';
+import type { SoloPoolData } from '@mijoco/stx_helpers/dist/index';
 
 /** Store for your data. 
 This assumes the data you're pulling back will be an array.

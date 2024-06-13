@@ -6,7 +6,7 @@ import { sessionStore } from '$stores/stores';
 import { openSTXTransfer } from '@stacks/connect';
 import { goto } from '$app/navigation';
 import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
-	import type { ProposalEvent } from '@mijoco/stxeco_types';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';

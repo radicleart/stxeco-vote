@@ -10,7 +10,7 @@ import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import VoteTransactions from '../VoteTransactions.svelte';
-	import type { ProposalEvent, ResultsSummary } from '@mijoco/stxeco_types';
+	import type { ProposalEvent, ResultsSummary } from '@mijoco/stx_helpers/dist/index';
 
 const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
 

@@ -4,7 +4,7 @@
 	import Preamble from './Preamble.svelte';
 	import { page } from '$app/stores';
 	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal:ProposalEvent;
 	export let method:number;

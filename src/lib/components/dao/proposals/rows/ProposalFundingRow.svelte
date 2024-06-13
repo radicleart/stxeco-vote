@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fmtMicroToStx } from "$lib/utils";
-	import type { ProposalEvent } from "@mijoco/stxeco_types";
+	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 
 
     export let event:ProposalEvent;

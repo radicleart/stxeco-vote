@@ -11,7 +11,7 @@
 	import Placeholder from './Placeholder.svelte';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import Countdown from '../../ui/Countdown.svelte';
-	import type { FundingData, ProposalEvent } from '@mijoco/stxeco_types';
+	import type { FundingData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';

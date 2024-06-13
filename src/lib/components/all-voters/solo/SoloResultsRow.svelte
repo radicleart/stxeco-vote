@@ -8,7 +8,7 @@ import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolStacker
 	import { isCoordinator } from '$lib/admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
-	import type { VoteEvent } from '@mijoco/stxeco_types';
+	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';
 
 export let item:VoteEvent;
 let expanded = false;

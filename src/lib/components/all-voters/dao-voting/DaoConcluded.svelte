@@ -3,7 +3,7 @@
 	import { sessionStore } from '$stores/stores';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import type { ProposalData, ProposalEvent } from '@mijoco/stxeco_types';
+	import type { ProposalData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal: ProposalEvent;
 

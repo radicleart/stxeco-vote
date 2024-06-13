@@ -5,7 +5,7 @@
 	import { sessionStore } from "$stores/stores";
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 	import { onMount } from "svelte";
-	import type { ResultsSummary } from "@mijoco/stxeco_types";
+	import type { ResultsSummary } from "@mijoco/stx_helpers/dist/index";
 
 	export let approved = false;
 	export let summary:ResultsSummary;

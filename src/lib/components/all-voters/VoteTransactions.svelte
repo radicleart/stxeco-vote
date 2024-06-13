@@ -8,7 +8,7 @@ import { CONFIG } from "$lib/config";
 	import { sessionStore } from "$stores/stores";
 	import { onMount } from "svelte";
 	import { ArrowUpRight, Icon } from "svelte-hero-icons";
-	import type { VoteEvent } from "@mijoco/stxeco_types";
+	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
 
 	export let votes: Array<VoteEvent> = []
 	const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];

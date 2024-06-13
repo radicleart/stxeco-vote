@@ -6,7 +6,7 @@
     import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
 	  import { CONFIG } from '$lib/config';
 	import ExtensionChecker from '$lib/components/dao/ExtensionChecker.svelte';
-	import type { ExtensionType } from '@mijoco/stxeco_types';
+	import type { ExtensionType } from '@mijoco/stx_helpers/dist/index';
     
     let item:ExtensionType;
     let componentKey = 0;

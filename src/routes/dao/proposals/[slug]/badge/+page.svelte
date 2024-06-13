@@ -8,7 +8,7 @@ import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import Placeholder from "$lib/components/all-voters/Placeholder.svelte";
 	import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
-	import type { ProposalEvent } from "@mijoco/stxeco_types";
+	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 	import { goto } from "$app/navigation";
 	import { daoStore } from "$stores/stores_dao";
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";

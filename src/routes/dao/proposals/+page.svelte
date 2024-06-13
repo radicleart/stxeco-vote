@@ -14,7 +14,7 @@
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { daoStore } from '$stores/stores_dao';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
   // fetch/hydrate data from local storage
   let inited = false;

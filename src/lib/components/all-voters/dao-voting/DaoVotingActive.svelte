@@ -10,7 +10,7 @@
 	import BallotBox from "./DaoVotingBallotBox.svelte";
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
-	import { ProposalStage, type ProposalEvent } from "@mijoco/stxeco_types";
+	import { ProposalStage, type ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 
   export let proposal: ProposalEvent;
 	export let adjustBal:number

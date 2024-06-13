@@ -11,7 +11,7 @@ import SoloResultsRow from './SoloResultsRow.svelte';
 	import { Tooltip } from 'flowbite-svelte';
 	import { isCoordinator } from '$lib/admin';
 	import { csvMaker, downloadCsv } from '$lib/utils';
-	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stxeco_types';
+	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stx_helpers/dist/index';
 
 export let proposal:ProposalEvent;
 export let summary:ResultsSummary;

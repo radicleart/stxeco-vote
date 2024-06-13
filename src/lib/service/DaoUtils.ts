@@ -2,7 +2,7 @@ import { CONFIG } from "$lib/config";
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 import { getProposalFromContractId } from "$lib/admin";
 import { daoStore } from "$stores/stores_dao";
-import { ProposalStage, type ExtensionType, type ProposalEvent } from "@mijoco/stxeco_types";
+import { ProposalStage, type ExtensionType, type ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 
 const DaoUtils = {
 

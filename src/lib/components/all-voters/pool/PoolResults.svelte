@@ -11,7 +11,7 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import { CONFIG } from '$lib/config';
 	import { isCoordinator } from '$lib/admin';
 	import { csvMaker } from '$lib/utils';
-	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stxeco_types';
+	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stx_helpers/dist/index';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;

@@ -6,7 +6,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { daoStore } from '$stores/stores_dao';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal:ProposalEvent|undefined;
 	export let method:number;

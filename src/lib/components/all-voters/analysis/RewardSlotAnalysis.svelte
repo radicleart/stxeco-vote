@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getRewardSlots } from "$lib/pox_api";
 	import DaoUtils from "$lib/service/DaoUtils";
-	import type { AddressRewardSlot } from "@mijoco/stxeco_types";
+	import type { AddressRewardSlot } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
 
 	export let rewardSlots: Array<AddressRewardSlot> = []

@@ -8,7 +8,7 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal: ProposalEvent;
 	export let method = 1

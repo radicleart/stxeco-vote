@@ -1,5 +1,5 @@
 import { persisted } from 'svelte-local-storage-store'
-import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stxeco_types';
+import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stx_helpers/dist/index';
 import type { SessionStore } from '$types/local_types';
 
 /** Store for your data. 

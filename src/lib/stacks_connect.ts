@@ -4,7 +4,7 @@ import { c32address, c32addressDecode } from 'c32check';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { isExecutiveTeamMember } from './admin';
-import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stxeco_types';
+import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stx_helpers/dist/index';
 import { getStacksBalances, fetchExchangeRates, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 import { getConfig, getSession } from '$stores/store_helpers';
 import type { SessionStore } from '$types/local_types';

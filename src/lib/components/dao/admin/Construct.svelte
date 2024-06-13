@@ -4,7 +4,7 @@
 	import { sessionStore } from '$stores/stores';
 	import { daoStore } from '$stores/stores_dao';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
-	import type { ExtensionType } from '@mijoco/stxeco_types';
+	import type { ExtensionType } from '@mijoco/stx_helpers/dist/index';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 

@@ -21,7 +21,7 @@
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import { isCoordinator } from '$lib/admin';
 	import { daoStore } from '$stores/stores_dao';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 
 	let method:number = -1;

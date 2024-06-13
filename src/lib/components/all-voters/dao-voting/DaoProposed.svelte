@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { sessionStore } from '$stores/stores';
-	import type { ProposalEvent } from '@mijoco/stxeco_types';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposalEvent: ProposalEvent;
 	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;

@@ -2,7 +2,7 @@
 	import { sessionStore } from '$stores/stores';
 	import { onMount } from 'svelte';
 	import Holding from './Holding.svelte';
-	import type { ProposalEvent } from '@mijoco/stxeco_types';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { fmtNumber } from '$lib/utils';
 
 	export let proposal:ProposalEvent;

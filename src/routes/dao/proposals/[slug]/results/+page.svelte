@@ -19,7 +19,7 @@
 	import { isCoordinator } from '$lib/admin';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stxeco_types';
+	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 
 	let summary:ResultsSummary;

@@ -2,7 +2,7 @@ import { PostConditionMode, uintCV, bufferCV, type ListCV, contractPrincipalCV }
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV';
 import { hex } from '@scure/base';
 import { CONFIG } from '$lib/config';
-import type { GovernanceData, ProposalEvent } from '@mijoco/stxeco_types';
+import type { GovernanceData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 import { showContractCall } from '@stacks/connect';
 import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 import { getConfig } from '$stores/store_helpers';

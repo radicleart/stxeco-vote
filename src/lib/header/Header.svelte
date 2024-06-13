@@ -5,7 +5,7 @@
 	import { sessionStore } from '$stores/stores';
 	import { afterNavigate, goto } from "$app/navigation";
 	import AccountDropdown from './AccountDropdown.svelte'
-	import type { AddressObject } from '@mijoco/stxeco_types';
+	import type { AddressObject } from '@mijoco/stx_helpers/dist/index';
 	import { fmtNumber } from '$lib/utils';
 	import { isLoggedIn, logUserOut, loginStacks } from '@mijoco/stx_helpers/dist/account';
 	import { initApplication } from '$lib/stacks_connect';

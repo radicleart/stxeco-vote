@@ -15,7 +15,7 @@
 	import StackerContractInfo from '$lib/components/all-voters/analysis/StackerContractInfo.svelte';
 	import RewardSlotAnalysis from '$lib/components/all-voters/analysis/RewardSlotAnalysis.svelte';
 	import { fmtMicroToStx, fmtNumber } from '$lib/utils';
-	import type { ProposalEvent, StackerStats } from '@mijoco/stxeco_types';
+	import type { ProposalEvent, StackerStats } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 
