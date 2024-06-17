@@ -72,12 +72,12 @@ export async function getProposalFromContractId(submissionContractId:string, pro
 }
 
 export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiveTeamMember:boolean}> {
-  //return (stxAddress && stxAddress === CONFIG.VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
+  return (stxAddress && stxAddress === CONFIG.VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
 
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/is-executive-team-member/${stxAddress}`;
-  const response = await fetch(path);
-  const res = await response.json();
-  return res;
+  //const path = `${getConfig().VITE_BRIDGE_API}/dao/is-executive-team-member/${stxAddress}`;
+  //const response = await fetch(path);
+  //const res = await response.json();
+  //return res;
 }
 
 export async function isExtension(extensionAddress:string):Promise<{result:boolean}> {

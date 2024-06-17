@@ -1,9 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
 	import "../index.css";
-	import Header from "$lib/header/Header.svelte";
-	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, isLegal } from "$lib/stacks_connect";
+	import { Footer } from "@mijoco/stx_components";
+	import { initAddresses, initApplication, isLegal } from "$lib/stacks_connect";
 	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account'
 	import { CONFIG, setConfigByUrl } from '$lib/config';
 	import { onMount, onDestroy } from 'svelte';
@@ -18,14 +17,20 @@
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
+	import { configStore } from '$stores/stores_config';
+	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
+	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
+	const unsubscribe2 = daoStore.subscribe(() => {});
+	const unsubscribe3 = configStore.subscribe(() => {});
 	onDestroy(async () => {
 		unsubscribe1()
+		unsubscribe2()
+		unsubscribe3()
 	})
 
 	let componentKey = 0;
-	let componentKey1 = 0;
 	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'mainnet')
 	setConfigByUrl($page.url.searchParams);
 	if (!isLegal(location.href)) {
@@ -54,18 +59,8 @@
 		const res = await loginStacksFromHeader(document)
 	}
 
-	const loginEvent = () => {
-		componentKey++;
-		componentKey1++;
-	}
-
-	const networkSwitchEvent = async () => {
-		await initApp()
-		componentKey++;
-		componentKey1++;
-	}
-
 	const initApp = async () => {
+		await initAddresses();
 		await initApplication($sessionStore.userSettings);
 
 		const soloPoolData = await getPoolAndSoloAddresses()
@@ -100,18 +95,6 @@
 
 	onMount(async () => {
 		try {
-			const conf = $sessionStore;
-			if (!conf.keySets) {
-				if (CONFIG.VITE_NETWORK === 'testnet') {
-					conf.keySets = { 'testnet': {} as AddressObject };
-				} else if (CONFIG.VITE_NETWORK === 'devnet') {
-					conf.keySets = { 'testnet': {} as AddressObject };
-				} else {
-					conf.keySets = { 'mainnet': {} as AddressObject };
-				}
-				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
-				sessionStore.update(() => conf);
-			}
 
 			await initApp();
 			inited = true;
@@ -126,14 +109,20 @@
 	})
 </script>
 	<div class="bg-white min-h-screen relative">
-		{#if inited}
-		<Header on:login_event={loginEvent} on:network_switch_event={networkSwitchEvent}/>
+		<HeaderFromComponents />
 		<div class="mx-auto px-6 relative">
-				<InFlightTransaction />
-				{#key componentKey1}
+			{#if inited}
+			<InFlightTransaction />
+				{#key componentKey}
 					<slot></slot>
 				{/key}
+				{:else}
+				<div class="py-4 mx-auto max-w-7xl md:px-6">
+					<div class="flex flex-col w-full my-8">
+						<Placeholder />
+					</div>
+				</div>
+				{/if}
 			</div>
 		<Footer />
-		{/if}
 	</div>

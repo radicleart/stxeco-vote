@@ -30,7 +30,7 @@ export interface Config {
 }
   
 export const config: { [key: string]: Config } = {
-    "local": {
+    "testnet": {
         VITE_API_BACKEND: '',
         VITE_API_STXECO: '',
         VITE_ENVIRONMENT: 'testnet',
@@ -69,8 +69,8 @@ export const config: { [key: string]: Config } = {
             'bde008-funded-proposal-submission',
             'bde009-governance-token-sale'
         ]
-        },
-    "production": {
+    },
+    "mainnet": {
         VITE_API_BACKEND: '',
         VITE_API_STXECO: '',
         VITE_ENVIRONMENT: 'mainnet',
@@ -92,7 +92,7 @@ export const config: { [key: string]: Config } = {
         VITE_POX4_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v4',
         VITE_STACKS_API_HIRO: 'https://api.hiro.so',
         VITE_STACKS_API_HIRO_WS: 'wss://api.hiro.so',
-        VITE_STACKS_API: 'https://leibniz.brightblock.org',
+        VITE_STACKS_API: 'https://api.hiro.so',
         VITE_STACKS_WS: 'ws://spinoza.brightblock.org',
         VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
         VITE_BSTREAM_EXPLORER: 'https://mempool.space',
