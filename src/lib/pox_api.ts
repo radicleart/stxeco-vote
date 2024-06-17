@@ -1,4 +1,5 @@
 import { CONFIG } from '$lib/config';
+import type { PoxEntry } from '@mijoco/stx_helpers/dist';
 import { addNetSelector, extractResponse } from './dao_api';
 
 

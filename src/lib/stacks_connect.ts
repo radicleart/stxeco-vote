@@ -1,6 +1,5 @@
 
 import { CONFIG } from '$lib/config';
-import { c32address, c32addressDecode } from 'c32check';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { isExecutiveTeamMember } from './admin';
@@ -20,55 +19,6 @@ export const webWalletNeeded = false;
 export const minimumDeposit = 10000
 export const revealPayment = 10001
 
-export function decodeStacksAddress(stxAddress:string) {
-	if (!stxAddress) throw new Error('Needs a stacks address');
-	const decoded = c32addressDecode(stxAddress)
-	return decoded
-}
-  
-export function encodeStacksAddress (network:string, b160Address:string) {
-	let version = 26
-	if (network === 'mainnet') version = 22
-	const address = c32address(version, b160Address) // 22 for mainnet
-	return address
-}
-
-export async function fetchSbtcBalance (conf:SessionStore, fromLogin:boolean|undefined) {
-	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
-	if (!fromLogin && localKs	&& localKs.stxAddress && localKs.cardinal) { // && sessionStacks === localKs.stxAddress) {
-		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, localKs)
-		sessionStore.update(() => conf);
-		return conf;
-	} else {
-		await addresses(async function(addr:AddressObject) {
-			if (addr) {
-				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, addr)
-				sessionStore.update(() => conf);
-			}
-			return conf;
-		});
-	}
-}
-async function getBalances(contractId:string, addressObject:AddressObject):Promise<AddressObject> {
-	let result:AddressObject;
-	const tempSegwit0 = addressObject.btcPubkeySegwit0
-	const tempSegwit1 = addressObject.btcPubkeySegwit1
-	try {
-		result = await getBitcoinBalances(getConfig().VITE_BRIDGE_API, addressObject.stxAddress, addressObject.cardinal, addressObject.ordinal);
-		try {
-			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[contractId + '::sbtc'].balance)
-		} catch (err) {
-			result.sBTCBalance = 0
-		}
-	} catch(err) {
-		result = addressObject;
-		console.log('Network down...');
-	}
-	if (!result.sBTCBalance) result.sBTCBalance = 0
-	result.btcPubkeySegwit0 = tempSegwit0
-	result.btcPubkeySegwit1 = tempSegwit1
-	return result;
-}
 function getStacksAddress() {
 	if (isLoggedIn()) {
 		const userData = userSession.loadUserData();
@@ -108,7 +58,7 @@ export function isLeather() {
 async function addresses(callback:any):Promise<AddressObject|undefined> {
 	if (!isLoggedIn()) return {} as AddressObject;
 	const userData = userSession.loadUserData();
-	const network = CONFIG.VITE_NETWORK;
+	const network = getConfig().VITE_NETWORK
 	//let something = hashP2WPKH(payload.public_keys[0])
 	const stxAddress = getStacksAddress();
 	let ordinal = 'unknown'
@@ -188,7 +138,7 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	} catch(err:any) {
 		console.log('addresses: ', err)
 		let myType = BitcoinNetworkType.Testnet
-		if (getStacksNetwork(getConfig().VITE_NETWORK).isMainnet()) myType = BitcoinNetworkType.Mainnet
+		if (getStacksNetwork(network).isMainnet()) myType = BitcoinNetworkType.Mainnet
 		const getAddressOptions:GetAddressOptions = {
 			payload: {
 				purposes: [AddressPurpose.Ordinals, AddressPurpose.Payment],
@@ -261,28 +211,6 @@ export function isLegal(routeId:string):boolean {
 	}
 }
 
-const FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
-
-export function verifyStacksPricipal(stacksAddress?:string) {
-	if (!stacksAddress) {
-	  throw new Error('Address not found');
-	} else if (FORMAT.test(stacksAddress)) {
-	  throw new Error('please remove white space / special characters');
-	}
-	try {
-	  const decoded = decodeStacksAddress(stacksAddress.split('.')[0]);
-	  if ((CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') && decoded[0] !== 26) {
-		throw new Error('Please enter a valid stacks blockchain testnet address');
-	  }
-	  if (CONFIG.VITE_NETWORK === 'mainnet' && decoded[0] !== 22) {
-		throw new Error('Please enter a valid stacks blockchain mainnet address');
-	  }
-	  return stacksAddress;
-	  } catch (err:any) {
-		  throw new Error('Invalid stacks principal - please enter a valid ' + CONFIG.VITE_NETWORK + ' account or contract principal.');
-	  }
-}
-
 export function verifyAmount(amount:number, balance:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
@@ -303,15 +231,34 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 	}
 }
 
+export async function initAddresses() {
+	const network = getConfig().VITE_NETWORK
+	sessionStore.update((conf:SessionStore) => {
+		if (!conf.keySets || !conf.keySets[network]) {
+			if (network === 'testnet') {
+				conf.keySets = { 'testnet': {} as AddressObject };
+			} else if (network === 'devnet') {
+				conf.keySets = { 'testnet': {} as AddressObject };
+			} else {
+				conf.keySets = { 'mainnet': {} as AddressObject };
+			}
+			conf.keySets[network] = {} as AddressObject;
+		}
+		return conf;
+	});
+}
+
 export async function initApplication(userSettings?:SbtcUserSettingI) {
+	const network = getConfig().VITE_NETWORK
+	const stacksApi = getConfig().VITE_STACKS_API
+	const ecoApi = getConfig().VITE_REVEALER_API
 	try {
 		if (!userSettings) userSettings = {} as SbtcUserSettingI;
-		const stacksInfo = await fetchStacksInfo(getConfig().VITE_STACKS_API) || {} as StacksInfo;
-		const poxInfo = await getPoxInfo(getConfig().VITE_STACKS_API)
-		const exchangeRates = await fetchExchangeRates(getConfig().VITE_STACKS_API);
+		const stacksInfo = await fetchStacksInfo(stacksApi) || {} as StacksInfo;
+		const poxInfo = await getPoxInfo(stacksApi)
+		const exchangeRates = await fetchExchangeRates(ecoApi);
 		const settings = userSettings || defaultSettings()
 		const rateNow = exchangeRates?.find((o:any) => o.currency === 'USD') || {currency: 'USD'} as ExchangeRate;
-		
 		
 		settings.currency = {
 			myFiatCurrency: rateNow || defaultExchangeRate(),
@@ -319,12 +266,16 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 			denomination: 'USD'
 		}
 		let balances:any;
+		let networkAddresses:any;
 		const ss = getSession()
-		if (isLoggedIn() && ss.keySets[getConfig().VITE_NETWORK].stxAddress ) {
+		if (isLoggedIn() && !ss.keySets[network].stxAddress ) {
+			networkAddresses = await addresses(function() {
+				console.log('in callback')
+			})
+			ss.keySets[network] = networkAddresses
 			const emTeamMam = await isExecutiveTeamMember(ss.keySets[CONFIG.VITE_NETWORK].stxAddress);
-			userSettings.executiveTeamMember = false;
-			emTeamMam.executiveTeamMember
-				balances = await getStacksBalances(getConfig().VITE_STACKS_API, ss.keySets[getConfig().VITE_NETWORK].stxAddress)
+			emTeamMam.executiveTeamMember = emTeamMam?.executiveTeamMember || false
+			balances = await getStacksBalances(stacksApi, ss.keySets[network].stxAddress)
 		}
 	
 		sessionStore.update((conf:SessionStore) => {
@@ -332,10 +283,10 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 			conf.poxInfo = poxInfo
 			conf.balances = balances
 			conf.loggedIn = userSession.isUserSignedIn();
-			if (!conf.keySets || !conf.keySets[getConfig().VITE_NETWORK]) {
-				if (getConfig().VITE_NETWORK === 'testnet') {
+			if (!conf.keySets || !conf.keySets[network]) {
+				if (network === 'testnet') {
 					conf.keySets = { 'testnet': {} as AddressObject };
-				} else if (getConfig().VITE_NETWORK === 'regtest') {
+				} else if (network === 'regtest') {
 					conf.keySets = { 'regtest': {} as AddressObject };
 				} else {
 					conf.keySets = { 'mainnet': {} as AddressObject };
@@ -350,8 +301,8 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 			conf.stacksInfo = {} as StacksInfo
 			conf.poxInfo = {} as PoxInfo
 			conf.loggedIn = userSession.isUserSignedIn();
-			if (!conf.keySets || !conf.keySets[getConfig().VITE_NETWORK]) {
-				if (getConfig().VITE_NETWORK === 'testnet'|| getConfig().VITE_NETWORK === 'regtest') {
+			if (!conf.keySets || !conf.keySets[network]) {
+				if (network === 'testnet'|| network === 'regtest') {
 					conf.keySets = { 'testnet': {} as AddressObject };
 				} else {
 					conf.keySets = { 'mainnet': {} as AddressObject };

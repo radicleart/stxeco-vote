@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { config } from '$lib/config';
 
-const initialConfig = config.local;
+const initialConfig = config.mainnet;
 
 export const configStore = writable(initialConfig);
 

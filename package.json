@@ -52,7 +52,7 @@
 	"type": "module",
 	"dependencies": {
 		"@mijoco/stx_components": "^0.0.3",
-		"@mijoco/stx_helpers": "^0.0.4",
+		"@mijoco/stx_helpers": "^0.0.6",
 		"@mijoco/stxeco_types": "^1.0.3",
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
