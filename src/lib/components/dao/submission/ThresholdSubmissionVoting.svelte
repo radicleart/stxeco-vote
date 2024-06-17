@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import RangeSlider from "svelte-range-slider-pips";
-		import { CONFIG } from '$lib/config';
 	import { PostConditionMode, contractPrincipalCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
 	import { sessionStore } from '$stores/stores';
-	import type { SessionStore } from '$types/sbtc_config';
-	import type { InFlight, ProposalEvent } from '$types/stxeco.type';
+	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers';
+	import { getConfig } from '$stores/store_helpers';
+	import type { DaoStore, SessionStore } from '$types/local_types';
+	import { daoStore } from '$stores/stores_dao';
 	
 	export let proposal:ProposalEvent;
 	
@@ -29,14 +30,14 @@
 		await openContractCall({
 			postConditions: [],
 			postConditionMode: PostConditionMode.Deny,
-			contractAddress: CONFIG.VITE_DOA_DEPLOYER,
+			contractAddress: getConfig().VITE_DOA_DEPLOYER,
 			contractName: 'ede002-threshold-proposal-submission',
 			functionName: 'propose',
 			functionArgs: functionArgs,
 			onFinish: data => {
-				sessionStore.update((conf:SessionStore) => {
+				daoStore.update((conf:DaoStore) => {
 					if (!conf.daoData) conf.daoData = {} as InFlight;
-					conf.daoData.inFlight = {
+					conf.daoData = {
 						name: 'Propose',
 						txid: data.txId
 					}

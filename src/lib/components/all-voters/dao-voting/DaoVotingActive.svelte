@@ -2,7 +2,7 @@
 	import Banner from "$lib/ui/Banner.svelte";
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import { CONFIG } from "$lib/config";
+	import { getConfig } from "$stores/store_helpers";
 	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
@@ -21,7 +21,7 @@
   let inited = false;
 
 	onMount(async () => {
-      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)
+      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
       if (daoVotes && daoVotes.length > 0) {
         daoVotes.forEach((o:any) => {
           if (o) votes.push(o)

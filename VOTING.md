@@ -8,10 +8,10 @@ Information on the SIP 21 Nakamoto upgrade voting.
 
 Api end points for reading voting information:
 
-- [summary](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/results/summary)
-- [solo votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/votes-solo)
-- [pool votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/votes-pool)
-- [dao votes](https://mainnet.bridge.sbtc.tech/bridge-api/v1/dao/results/non-stackers)
+- [summary](/bridge-api/v1/dao/results/summary)
+- [solo votes](/bridge-api/v1/dao/votes-solo)
+- [pool votes](/bridge-api/v1/dao/votes-pool)
+- [dao votes](/bridge-api/v1/dao/results/non-stackers)
 
 The stx.eco application provides results and more in depth stacking information per address;
 

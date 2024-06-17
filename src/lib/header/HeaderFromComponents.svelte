@@ -17,11 +17,9 @@
 
 
 	let headerLinks = []
-	const local = $page.url.hostname === 'localhost'
-
-	headerLinks.push(getRouterInfo('voting', local))
-	headerLinks.push(getRouterInfo('insights', local))
-	headerLinks.push(getRouterInfo('launcher', local))
+	headerLinks.push(getRouterInfo('/voting'))
+	headerLinks.push(getRouterInfo('/insights'))
+	headerLinks.push(getRouterInfo('/dao-launcher'))
 
 	const loginEvent = async (e?:any) => {
 		console.log('update for login', e.target)
@@ -44,4 +42,6 @@
 
 </script>
 
+{#if headerLinks && headerLinks.length === 3}
 <Header {headerLinks} {loggedIn} {heights} {account} {balances} on:do_login={loginEvent} on:do_logout={logoutEvent} on:do_copy={copyEvent} on:switch_network={networkSwitchEvent}/>
+{/if}

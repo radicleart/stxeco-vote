@@ -2,7 +2,7 @@
 	import Banner from "$lib/ui/Banner.svelte";
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import { CONFIG } from "$lib/config";
+	import { getConfig } from "$stores/store_helpers";
 	import { isLeather } from "$lib/stacks_connect";
 	import { sessionStore } from "$stores/stores";
 	import { BitcoinNetworkType, sendBtcTransaction, type Recipient } from "sats-connect";
@@ -28,7 +28,7 @@
     window.btc?.request('sendTransfer', {
               address: (vfor) ? addresses.yAddress : addresses.nAddress,
               amount: 6000,
-              network: CONFIG.VITE_NETWORK,
+              network: getConfig().VITE_NETWORK,
             })
             .then((resp: any) => {
               console.log({ sucesss: resp });
@@ -46,10 +46,10 @@
     const sendBtcOptions = {
       payload: {
         network: {
-          type: (CONFIG.VITE_NETWORK === 'mainnet') ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet,
+          type: (getConfig().VITE_NETWORK === 'mainnet') ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet,
         },
         recipients: [recipients],
-        senderAddress: $sessionStore.keySets[CONFIG.VITE_NETWORK].cardinal,
+        senderAddress: $sessionStore.keySets[getConfig().VITE_NETWORK].cardinal,
       },
       onFinish: (response: any) => {
         alert(response);

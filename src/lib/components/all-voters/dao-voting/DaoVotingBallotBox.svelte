@@ -4,7 +4,6 @@
     import { goto } from "$app/navigation";
     import FormatUtils from '$lib/service/FormatUtils';
     import {tick, onMount} from 'svelte';
-    import { CONFIG } from '$lib/config';
     import { PostConditionMode, contractPrincipalCV, falseCV, trueCV, uintCV } from '@stacks/transactions';
     import { openContractCall, showContractCall } from '@stacks/connect';
     import { sessionStore } from '$stores/stores';
@@ -24,11 +23,11 @@
     let errorMessage:string|undefined;
     let txId: string;
     let canVote = true;
-    $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+    $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
 
     $: amount = balanceAtHeight;
     const castVote = async (vfor:boolean) => {
-        const deployer = CONFIG.VITE_DOA_DEPLOYER;
+        const deployer = getConfig().VITE_DOA_DEPLOYER;
         if (!isLoggedIn()) {
           errorMessage = 'Please connect your wallet to vote';
           return;
@@ -77,7 +76,7 @@
       canVote = false;
     }
     const lookupTransaction = async (txId:string) => {
-      const url = CONFIG.VITE_STACKS_API_HIRO + '/extended/v1/tx/' + txId;
+      const url = getConfig().VITE_STACKS_API_HIRO + '/extended/v1/tx/' + txId;
       try {
         const response = await fetch(url);
         const val = await response.json();
@@ -93,10 +92,10 @@
 		    if (txIdObj) {
           const potentialTxId = (JSON.parse(txIdObj)).txId
           const tx = await lookupTransaction(potentialTxId);
-          if (tx && tx.tx_status === 'pending' && tx.sender_address === $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+          if (tx && tx.tx_status === 'pending' && tx.sender_address === $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress) {
             txId = potentialTxId
           } else {
-            if (tx.sender_address === $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress) {
+            if (tx.sender_address === $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress) {
               localStorage.removeItem('VOTED_TXID_3');
             }
           }

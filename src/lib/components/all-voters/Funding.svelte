@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { CONFIG } from '$lib/config';
 	import { sessionStore } from '$stores/stores';
 	import { FungibleConditionCode, PostConditionMode, contractPrincipalCV, makeStandardSTXPostCondition, someCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
@@ -20,7 +19,7 @@
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;
 	let inited = false;
-	const account = $sessionStore.keySets[CONFIG.VITE_NETWORK]
+	const account = $sessionStore.keySets[getConfig().VITE_NETWORK]
 
 	let amount = 500000;
 	let txId: string|undefined;
@@ -110,8 +109,8 @@
 			network: getStacksNetwork(getConfig().VITE_NETWORK),
 			postConditions: getSTXMintPostConds(amount),
 			postConditionMode: PostConditionMode.Deny,
-			contractAddress: CONFIG.VITE_DOA_DEPLOYER,
-			contractName: CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION,
+			contractAddress: getConfig().VITE_DOA_DEPLOYER,
+			contractName: getConfig().VITE_DOA_FUNDED_SUBMISSION_EXTENSION,
 			functionName: 'fund',
 			functionArgs: functionArgs,
 			onFinish: async (data) => {
@@ -146,7 +145,7 @@
 		inited = true
 	})
 
-	$: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+	$: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
 </script>
 
 {#if inited}

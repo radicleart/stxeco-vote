@@ -1,4 +1,4 @@
-import { CONFIG } from "$lib/config";
+import { getConfig } from "$stores/store_helpers";
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 import { getProposalFromContractId } from "$lib/admin";
 import { daoStore } from "$stores/stores_dao";
@@ -16,7 +16,7 @@ const DaoUtils = {
         }
       }
       if (!event) {
-        const submissionContractId = CONFIG.VITE_DOA_DEPLOYER + '.' + CONFIG.VITE_DOA_FUNDED_SUBMISSION_EXTENSION
+        const submissionContractId = getConfig().VITE_DOA_DEPLOYER + '.' + getConfig().VITE_DOA_FUNDED_SUBMISSION_EXTENSION
         event = await getProposalFromContractId(submissionContractId, proposalContractId)
         if (event && event.contractId && event.proposalMeta) {
           daoStore.update((conf) => {
@@ -69,16 +69,16 @@ const DaoUtils = {
 
 
 
-      if (proposal.votingContract.indexOf(CONFIG.VITE_DOA_PROPOSAL_VOTING_EXTENSION) > -1) {
+      if (proposal.votingContract.indexOf(getConfig().VITE_DOA_PROPOSAL_VOTING_EXTENSION) > -1) {
         proposal.status = { name: 'submitted', color: 'primary-500', colorCode: 'primary-500' };
         if (stacksTipHeight < proposal.proposalData.startBlockHeight) {
           proposal.status = { name: 'commencing soon', color: 'warning-500', colorCode: 'warning-500' };
         } else {
           proposal.status = { name: 'voting', color: 'warning-500', colorCode: 'warning-500' };
         }
-      } else if (proposal.votingContract.indexOf(CONFIG.VITE_DOA_SNAPSHOT_VOTING_EXTENSION) > -1) {
+      } else if (proposal.votingContract.indexOf(getConfig().VITE_DOA_SNAPSHOT_VOTING_EXTENSION) > -1) {
         proposal.status = { name: 'voting', color: 'warning-500', colorCode: 'warning-500' };
-      } else if (proposal.votingContract.indexOf(CONFIG.VITE_DOA_EMERGENCY_EXECUTE_EXTENSION) > -1) {
+      } else if (proposal.votingContract.indexOf(getConfig().VITE_DOA_EMERGENCY_EXECUTE_EXTENSION) > -1) {
         proposal.status = { name: 'voting', color: 'warning-500', colorCode: 'warning-500' };
       }
       if (proposal.proposalData.concluded) {
@@ -91,35 +91,6 @@ const DaoUtils = {
     return status;
   },
 
-  getMetaData: function (source:string) {
-    // const preamble:Array<string> = [];
-    let lines = source.split('\n');
-    lines = lines?.filter((l) => l.startsWith(';;')) || []
-    const proposalMeta = { dao: '', title: '', author: '', synopsis: '', description: '', };
-    lines.forEach((l) => {
-      l = l.replace(/;;/, "");
-      if (l.indexOf('DAO:') > -1) proposalMeta.dao = l.split('DAO:')[1];
-      else if (l.indexOf('Title:') > -1) proposalMeta.title = l.split('Title:')[1];
-      else if (l.indexOf('Author:') > -1) proposalMeta.author = l.split('Author:')[1];
-      //else if (l.indexOf('Synopsis:') > -1) proposalMeta.synopsis = l.split('Synopsis:')[1];
-      else if (l.indexOf('Description:') > -1) proposalMeta.description = l.split('Description:')[1];
-      else {
-        proposalMeta.description += ' ' + l;
-      }
-    })
-    let alt = source.split('Synopsis:')[1] || '';
-    let alt1 = alt.split('Description:')[0];
-    proposalMeta.synopsis = alt1.replaceAll(';;', '');
-    if (source.indexOf('Author(s):') > -1) {
-      alt = source.split('Author(s):')[1] || '';
-      alt1 = alt.split('Synopsis:')[0];
-      proposalMeta.author = alt1.replaceAll(';;', '');
-    }
-    proposalMeta.description = proposalMeta.description.replace('The upgrade is designed', '<br/><br/>The upgrade is designed');
-    proposalMeta.description = proposalMeta.description.replace('Should this upgrade pass', '<br/><br/>Should this upgrade pass');
-    return proposalMeta;
-  },
-  
   sortProposals: function (proposals: ProposalEvent[]|undefined, asc:boolean, sortField:string) {
     if (!proposals) return []
     proposals = proposals.sort(function compare (a:ProposalEvent, b:ProposalEvent) {

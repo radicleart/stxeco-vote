@@ -4,15 +4,15 @@ import DaoUtils from '$lib/service/DaoUtils';
 import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
 import FormatUtils from '$lib/service/FormatUtils';
-import { CONFIG } from '$lib/config';
 import { sessionStore } from '$stores/stores';
 import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import VoteTransactions from '../VoteTransactions.svelte';
 	import type { ProposalEvent, ResultsSummary } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
-const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;

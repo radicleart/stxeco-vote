@@ -8,10 +8,10 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
-	import { CONFIG } from '$lib/config';
 	import { isCoordinator } from '$lib/admin';
 	import { csvMaker } from '$lib/utils';
 	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -19,7 +19,7 @@ export let proposal:ProposalEvent;
 let votes: Array<VoteEvent> = []
 let allVotes: Array<VoteEvent> = []
 let includeZeros = false;
-const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 let coordinator = isCoordinator(account.stxAddress);
 
 let showVotes = false;
@@ -165,6 +165,6 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
     {/key}
   {/if}
   {#if showAddressLookup}
-  <AddressLookup lookupMode={true} walletAddress={sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress}/>
+  <AddressLookup lookupMode={true} walletAddress={sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress}/>
   {/if}
 {/if}

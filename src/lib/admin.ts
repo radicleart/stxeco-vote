@@ -1,7 +1,6 @@
 import { PostConditionMode, uintCV, bufferCV, type ListCV, contractPrincipalCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV';
 import { hex } from '@scure/base';
-import { CONFIG } from '$lib/config';
 import type { GovernanceData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 import { showContractCall } from '@stacks/connect';
 import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
@@ -72,7 +71,7 @@ export async function getProposalFromContractId(submissionContractId:string, pro
 }
 
 export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiveTeamMember:boolean}> {
-  return (stxAddress && stxAddress === CONFIG.VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
+  return (stxAddress && stxAddress === getConfig().VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
 
   //const path = `${getConfig().VITE_BRIDGE_API}/dao/is-executive-team-member/${stxAddress}`;
   //const response = await fetch(path);
@@ -109,7 +108,7 @@ export async function getCurrentProposal():Promise<any> {
   if (!res) {
     res = {
       configId: 1,
-      contractId: CONFIG.VITE_DOA_PROPOSAL
+      contractId: getConfig().VITE_DOA_PROPOSAL
     }
   }
 
@@ -124,7 +123,7 @@ export async function processProposalContracts(contractIds:string):Promise<any> 
 }
 
 export async function getTransaction(tx:string):Promise<any> {
-  const url = CONFIG.VITE_STACKS_API + '/extended/v1/tx/' + tx
+  const url = getConfig().VITE_STACKS_API + '/extended/v1/tx/' + tx
   let val;
   try {
       const response = await fetch(url)

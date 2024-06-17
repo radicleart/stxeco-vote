@@ -2,7 +2,6 @@
 	import { sessionStore } from '$stores/stores';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
-	import { CONFIG } from '$lib/config';
 	import { explorerTxUrl } from '$lib/utils';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
@@ -16,7 +15,7 @@
 	let txId:string|undefined;
 
 	const concludeVote = async () => {
-    const deployer = CONFIG.VITE_DOA_DEPLOYER;
+    const deployer = getConfig().VITE_DOA_DEPLOYER;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     await openContractCall({
 		network: getStacksNetwork(getConfig().VITE_NETWORK),

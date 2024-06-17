@@ -20,4 +20,10 @@ export type DaoStore = {
   currentProposal?: {configId:string, contractId:string}
 };
 
+export type HeaderLink = {
+  name: string; 
+  href: string; 
+  display: string; 
+  target: string; 
+}
 

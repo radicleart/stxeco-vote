@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-import { CONFIG } from "$lib/config";
 	import { isCoordinator } from "$lib/admin";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import DaoUtils from "$lib/service/DaoUtils";
@@ -9,9 +8,10 @@ import { CONFIG } from "$lib/config";
 	import { onMount } from "svelte";
 	import { ArrowUpRight, Icon } from "svelte-hero-icons";
 	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
+	import { getConfig } from "$stores/store_helpers";
 
 	export let votes: Array<VoteEvent> = []
-	const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
+	const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 	let coordinator = isCoordinator(account.stxAddress);
 	let componentKey = 0;
 	let sortDir = '';

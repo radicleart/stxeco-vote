@@ -2,18 +2,18 @@
 import { onMount } from 'svelte';
 import ChainUtils from '$lib/service/ChainUtils';
 import { sessionStore } from '$stores/stores';
-import { CONFIG } from '$lib/config';
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolStackerEventsByDelegator, findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, findPoxEntriesByAddressAndCycle } from '$lib/dao_api';
 	import { explorerBtcTxUrl, fmtMicroToStx, fmtNumber, getHashBytesFromAddress, truncate } from '$lib/utils';
 	import { isCoordinator } from '$lib/admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
 export let item:VoteEvent;
 let expanded = false;
 let inited = false;
-const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 let coordinator = isCoordinator(account.stxAddress);
 let entries: Array<any>;
 let events: Array<any>;

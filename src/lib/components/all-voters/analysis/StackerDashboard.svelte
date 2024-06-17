@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { sessionStore } from '$stores/stores';
-	import { CONFIG } from '$lib/config';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight, getStackerInfo } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
@@ -60,7 +59,7 @@
 		} 
 
 		try {
-			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
 			balanceAtHeight = 0;

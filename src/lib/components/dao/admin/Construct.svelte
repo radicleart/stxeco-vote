@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { CONFIG } from '$lib/config';
 	import { getConfig } from '$stores/store_helpers';
 	import { sessionStore } from '$stores/stores';
 	import { daoStore } from '$stores/stores_dao';
@@ -11,7 +10,7 @@
     let txId: string;
 
     const constructDao = async () => {
-      const deployer = CONFIG.VITE_DOA_DEPLOYER;
+      const deployer = getConfig().VITE_DOA_DEPLOYER;
       const bootstrap = contractPrincipalCV(deployer, 'bdp000-bootstrap')
       // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
       await openContractCall({
@@ -19,7 +18,7 @@
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,
-        contractName: CONFIG.VITE_DOA,
+        contractName: getConfig().VITE_DOA,
         functionName: 'construct',
         functionArgs: [bootstrap],
         onFinish: data => {
@@ -33,8 +32,8 @@
 
     }
 
-    $: constructed = $daoStore.extensions?.filter((o:ExtensionType) => o.valid).length > 0 || false;
-    $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+    $: constructed = ($daoStore?.extensions?.filter((o:ExtensionType) => o.valid)?.length || 0) > 0 || false;
+    $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
     </script>
 
     <svelte:head>

@@ -1,7 +1,6 @@
 <script lang="ts">
 import DaoUtils from '$lib/service/DaoUtils';
 import { onMount } from 'svelte';
-import { CONFIG } from '$lib/config';
 import { sessionStore } from '$stores/stores';
 import VoteResultsRow from '../VoteResultsRow.svelte';
 import { findSoloVotes } from '$lib/dao_api';
@@ -12,6 +11,7 @@ import SoloResultsRow from './SoloResultsRow.svelte';
 	import { isCoordinator } from '$lib/admin';
 	import { csvMaker, downloadCsv } from '$lib/utils';
 	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
 export let proposal:ProposalEvent;
 export let summary:ResultsSummary;
@@ -125,7 +125,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
-    {#if isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)}
+    {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => analysisMode() }>
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="analysis-label" />
     </a>
@@ -188,6 +188,6 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
     {/key}
   {/if}
   {#if showAddressLookup}
-  <AddressLookup lookupMode={true} walletAddress={$sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress}/>
+  <AddressLookup lookupMode={true} walletAddress={$sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress}/>
   {/if}
 {/if}

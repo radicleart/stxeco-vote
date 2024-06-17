@@ -1,5 +1,4 @@
 
-import { CONFIG } from '$lib/config';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { isExecutiveTeamMember } from './admin';
@@ -10,7 +9,6 @@ import type { SessionStore } from '$types/local_types';
 import { sessionStore } from '$stores/stores';
 import { AppConfig, UserSession } from '@stacks/auth';
 import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
-import { getBitcoinBalances } from '@mijoco/stx_helpers/dist/custom-node';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -22,7 +20,7 @@ export const revealPayment = 10001
 function getStacksAddress() {
 	if (isLoggedIn()) {
 		const userData = userSession.loadUserData();
-		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		const stxAddress = (getConfig().VITE_NETWORK === 'testnet' || getConfig().VITE_NETWORK === 'devnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 		return stxAddress
 	}
 	return
@@ -251,7 +249,7 @@ export async function initAddresses() {
 export async function initApplication(userSettings?:SbtcUserSettingI) {
 	const network = getConfig().VITE_NETWORK
 	const stacksApi = getConfig().VITE_STACKS_API
-	const ecoApi = getConfig().VITE_REVEALER_API
+	const ecoApi = getConfig().VITE_BRIDGE_API
 	try {
 		if (!userSettings) userSettings = {} as SbtcUserSettingI;
 		const stacksInfo = await fetchStacksInfo(stacksApi) || {} as StacksInfo;
@@ -268,34 +266,42 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 		let balances:any;
 		let networkAddresses:any;
 		const ss = getSession()
-		if (isLoggedIn() && !ss.keySets[network].stxAddress ) {
-			networkAddresses = await addresses(function() {
-				console.log('in callback')
-			})
-			ss.keySets[network] = networkAddresses
-			const emTeamMam = await isExecutiveTeamMember(ss.keySets[CONFIG.VITE_NETWORK].stxAddress);
-			emTeamMam.executiveTeamMember = emTeamMam?.executiveTeamMember || false
-			balances = await getStacksBalances(stacksApi, ss.keySets[network].stxAddress)
-		}
-	
 		sessionStore.update((conf:SessionStore) => {
 			conf.stacksInfo = stacksInfo
 			conf.poxInfo = poxInfo
-			conf.balances = balances
 			conf.loggedIn = userSession.isUserSignedIn();
-			if (!conf.keySets || !conf.keySets[network]) {
-				if (network === 'testnet') {
-					conf.keySets = { 'testnet': {} as AddressObject };
-				} else if (network === 'regtest') {
-					conf.keySets = { 'regtest': {} as AddressObject };
-				} else {
-					conf.keySets = { 'mainnet': {} as AddressObject };
-				}
-			}
 			conf.exchangeRates = exchangeRates || [] as Array<ExchangeRate>;
 			conf.userSettings = settings
 			return conf;
 		});
+
+		if (isLoggedIn() && !ss.keySets[network].stxAddress ) {
+			ss.keySets[network] = networkAddresses
+			networkAddresses = await addresses(async function(obj:AddressObject) {
+				console.log('in callback')
+				ss.keySets[getConfig().VITE_NETWORK] = obj
+				const emTeamMam = await isExecutiveTeamMember(ss.keySets[getConfig().VITE_NETWORK].stxAddress);
+				settings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
+				balances = await getStacksBalances(stacksApi, ss.keySets[network].stxAddress)
+					sessionStore.update((conf:SessionStore) => {
+					conf.balances = balances
+					conf.loggedIn = userSession.isUserSignedIn();
+					if (!conf.keySets || !conf.keySets[network]) {
+						if (network === 'testnet') {
+							conf.keySets = { 'testnet': {} as AddressObject };
+						} else if (network === 'regtest') {
+							conf.keySets = { 'regtest': {} as AddressObject };
+						} else {
+							conf.keySets = { 'mainnet': {} as AddressObject };
+						}
+					}
+					conf.exchangeRates = exchangeRates || [] as Array<ExchangeRate>;
+					conf.userSettings = settings
+					return conf;
+				});
+			})
+		}
+	
 	} catch (err:any) {
 		sessionStorage.update((conf:SessionStore) => {
 			conf.stacksInfo = {} as StacksInfo

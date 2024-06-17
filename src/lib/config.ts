@@ -1,3 +1,5 @@
+import { switchConfig } from "$stores/stores_config";
+import type { HeaderLink } from "$types/local_types";
 
 export interface Config {
     VITE_ENVIRONMENT:string;
@@ -17,7 +19,6 @@ export interface Config {
     VITE_SBTC_CONTRACT_ID: string;
     VITE_POX4_CONTRACT_ID: string;
     VITE_BRIDGE_API: string;
-    VITE_REVEALER_API: string;
     VITE_POX4_API: string;
     VITE_STACKS_API_HIRO: string;
     VITE_STACKS_API_HIRO_WS: string;
@@ -26,7 +27,8 @@ export interface Config {
     VITE_STACKS_EXPLORER: string;
     VITE_BSTREAM_EXPLORER: string;
     VITE_MEMPOOL_EXPLORER: string;
-    VITE_EXTENSIONS: Array<string>
+    VITE_EXTENSIONS: Array<string>;
+    VITE_HEADER_LINKS: Array<HeaderLink>;
 }
   
 export const config: { [key: string]: Config } = {
@@ -47,9 +49,8 @@ export const config: { [key: string]: Config } = {
         VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
         VITE_SBTC_CONTRACT_ID: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.asset-3',
         VITE_POX4_CONTRACT_ID: 'ST000000000000000000002AMW42H.pox-4',
-        VITE_REVEALER_API: 'https://testnet.bridge.sbtc.tech/revealer-api/v1',
-        VITE_BRIDGE_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
-        VITE_POX4_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v4',
+        VITE_BRIDGE_API: 'https://testnet.stx.eco/bridge-api/v1',
+        VITE_POX4_API: 'https://testnet.stx.eco/bridge-api/v4',
         VITE_STACKS_API_HIRO: 'https://api.testnet.hiro.so',
         VITE_STACKS_API_HIRO_WS: 'wss://api.testnet.hiro.so',
         VITE_STACKS_API: 'https://api.testnet.hiro.so',
@@ -68,6 +69,12 @@ export const config: { [key: string]: Config } = {
             'bde007-snapshot-proposal-voting', 
             'bde008-funded-proposal-submission',
             'bde009-governance-token-sale'
+        ],
+        VITE_HEADER_LINKS: [
+            {name: '/voting', href: 'http://localhost:8080', display: 'Voting', target:'_self'},
+            {name: '/insights', href: 'http://localhost:8082/insights', display: 'Insights', target:'_self'},
+            {name: '/dao-launcher', href: '/launcher/dao-launcher', display: 'DAO Launcher', target:'_self'},
+            {name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
         ]
     },
     "mainnet": {
@@ -87,9 +94,8 @@ export const config: { [key: string]: Config } = {
         VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
         VITE_SBTC_CONTRACT_ID: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN.asset',
         VITE_POX4_CONTRACT_ID: 'SP000000000000000000002Q6VF78.pox-4',
-        VITE_BRIDGE_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
-        VITE_REVEALER_API: 'https://mainnet.bridge.sbtc.tech/revealer-api/v1',
-        VITE_POX4_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v4',
+        VITE_BRIDGE_API: 'https://stx.eco/bridge-api/v1',
+        VITE_POX4_API: 'https://stx.eco/bridge-api/v4',
         VITE_STACKS_API_HIRO: 'https://api.hiro.so',
         VITE_STACKS_API_HIRO_WS: 'wss://api.hiro.so',
         VITE_STACKS_API: 'https://api.hiro.so',
@@ -108,59 +114,13 @@ export const config: { [key: string]: Config } = {
             'bde007-snapshot-proposal-voting', 
             'bde008-funded-proposal-submission',
             'bde009-governance-token-sale'
+        ],
+        VITE_HEADER_LINKS: [
+            {name: '/voting', href: 'https://stx.eco', display: 'Voting', target:'_self'},
+            {name: '/insights', href: 'https://stx.eco/insights', display: 'Insights', target:'_self'},
+            {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO Launcher', target:'_self'},
+            {name: '/shop-front', href: 'https://stx.eco/shop-front', display: 'Shop Front', target:'_self'},
         ]
+
     }
 };
-
-export let CONFIG = config['production'];
-
-export function setConfig(network:string) {
-    const mode = import.meta.env.MODE
-    console.log('mode: ' + mode)
-
-    if (network === 'testnet') {
-        CONFIG = config['production'];
-    } else {
-        CONFIG = config['production'];
-    }
-}
-
-export function setConfigByUrl(search:URLSearchParams) {
-    let network = 'mainnet'
-    if (search.has('chain')) {
-        network = search.get('chain') || 'mainnet'
-    }
-    setConfig(network)
-}
-/**
-export function setConfig(network:string) {
-    const mode = import.meta.env.MODE
-    console.log('mode: ' + mode)
-    if (mode === 'shared-devenv') {
-        CONFIG = SHARED_DEVENV_CONFIG;
-        return;
-    } else if (mode === 'shared-devenv-local') {
-        CONFIG = SHARED_DEVENV_LOCAL_CONFIG;
-        return;
-    } else if (mode === 'local-testnet') {
-        CONFIG = TESTNET_CONFIG;
-        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
-        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
-        return;
-    } else if (mode === 'devenv'  || mode === 'dev' || mode === 'development') {
-        CONFIG = DEVNET_CONFIG;
-        return;
-    }
-
-    if (!network || network.length === 0 || network.indexOf('chain=') === -1) {
-        network = 'testnet'
-        CONFIG = TESTNET_CONFIG;
-    } else if (network.indexOf('mainnet') > -1) {
-        network = 'mainnet'
-        CONFIG = MAINNET_CONFIG;
-    } else {
-        network = 'testnet'
-        CONFIG = TESTNET_CONFIG;
-    }
-}
- */

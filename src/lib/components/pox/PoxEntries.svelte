@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
 	import { sessionStore } from "$stores/stores";
-	import { CONFIG } from "$lib/config";
+	import { getConfig } from "$stores/store_helpers";
 	import { getPoxEntriesByCycle } from "$lib/pox_api";
 	import type { PoxEntry, PoxInfo, RewardSlot } from "$types/pox_types";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
@@ -10,7 +10,7 @@
 
 	export let poxInfo:PoxInfo;
 
-	let stxAddress:string = $sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress;
+	let stxAddress:string = $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress;
 	let poxEntries:Array<PoxEntry>;
 	let cycle = poxInfo.reward_cycle_id;
 

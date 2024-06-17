@@ -3,7 +3,6 @@
 	import { Tabs, TabItem } from 'flowbite-svelte';
 	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
-	import { CONFIG } from '$lib/config';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
@@ -21,11 +20,10 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
+	import { getConfig } from '$stores/store_helpers';
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
-	let componentKey:number = 0;
-	let poolVotes:Array<VoteEvent>;
 	let method:number = -1;
 	let errorReason:string|undefined;
 	let proposal:ProposalEvent;
@@ -56,7 +54,7 @@
 
 	const voteConcluded = () => {
 		if (!proposal || !proposal.proposalData) return false
-		if (isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)) return true
+		if (isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)) return true
 		if (method === 3) return proposal.stage === ProposalStage.CONCLUDED
 		else {
 			return $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
@@ -108,14 +106,14 @@
 		}
 
 		try {
-			const response = await getBalanceAtHeight($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
 			balanceAtHeight = 0;
 			errorReason = e.message;
 		}
 
-		if (CONFIG.VITE_NETWORK === 'mainnet' && !isCoordinator($sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)) {
+		if (getConfig().VITE_NETWORK === 'mainnet' && !isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)) {
 			proposalNotFound = true
 			activeFlag = false
 		}

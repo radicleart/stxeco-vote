@@ -1,6 +1,5 @@
 <script lang="ts">
 import { page } from '$app/stores';
-import { CONFIG } from '$lib/config';
 import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 import { openContractCall } from '@stacks/connect';
 	import { sessionStore } from '$stores/stores';
@@ -9,6 +8,7 @@ import { openContractCall } from '@stacks/connect';
 	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import type { DaoStore, SessionStore } from '$types/local_types';
 	import { daoStore } from '$stores/stores_dao';
+	import { getConfig } from '$stores/store_helpers';
 
 export let proposal:ProposalEvent;
 
@@ -20,14 +20,14 @@ const submit = async () => {
 	await openContractCall({
 		postConditions: [],
 		postConditionMode: PostConditionMode.Deny,
-		contractAddress: CONFIG.VITE_DOA_DEPLOYER,
+		contractAddress: getConfig().VITE_DOA_DEPLOYER,
 		contractName: 'ede004-emergency-proposals',
 		functionName: 'emergency-propose',
 		functionArgs: functionArgs,
 		onFinish: data => {
 			daoStore.update((conf:DaoStore) => {
 				if (!conf.daoData) conf.daoData = {} as InFlight;
-				conf.daoData.inFlight = {
+				conf.daoData = {
 					name: 'Emergency signal',
 					txid: data.txId
 				}
@@ -43,7 +43,7 @@ const submit = async () => {
 $: executiveTeamMember = false
 
 onMount(async () => {
-	executiveTeamMember = (await isExecutiveTeamMember(sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)).executiveTeamMember
+	executiveTeamMember = (await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)).executiveTeamMember
 })
 
 </script>

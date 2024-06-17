@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { CONFIG } from '$lib/config';
 	import { isExecutiveTeamMember } from '$lib/admin';
 	import { sessionStore } from '$stores/stores';
-	import type { ProposalEvent } from '$types/stxeco.type';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
+	import type { ProposalEvent } from '@mijoco/stx_helpers';
+	import { getConfig } from '$stores/store_helpers';
 
 
   let txId: string;
@@ -15,7 +15,7 @@
   $: buttonLabel = (txId) ? "Tx Sent": "SUPPORT PROPOSAL";
 
   const signalSupport = async () => {
-    const deployer = CONFIG.VITE_DOA_DEPLOYER;
+    const deployer = getConfig().VITE_DOA_DEPLOYER;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     await openContractCall({
       postConditions: [],
@@ -34,9 +34,9 @@
     });
   }
 
-  const executiveTeamMember = isExecutiveTeamMember(sessionStore.keySets[CONFIG.VITE_NETWORK].stxAddress)
+  const executiveTeamMember = isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
   const canVote = !proposal.executedAt && executiveTeamMember // && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
-  $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+  $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
 </script>
 
 <section>

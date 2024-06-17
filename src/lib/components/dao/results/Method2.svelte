@@ -4,11 +4,11 @@ import ChainUtils from '$lib/service/ChainUtils';
 import FormatUtils from '$lib/service/FormatUtils';
 import { onMount } from 'svelte';
 	import { sessionStore } from '$stores/stores';
-	import { CONFIG } from '$lib/config';
 	import { ArrowDown, ArrowUp, Icon } from 'svelte-hero-icons';
 	import { CaretDownOutline, CaretUpOutline } from 'flowbite-svelte-icons';
+	import { getConfig } from '$stores/store_helpers';
 
-const account = $sessionStore.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 
 export let method2:any;
 

@@ -3,23 +3,22 @@
 	import "../index.css";
 	import { Footer } from "@mijoco/stx_components";
 	import { initAddresses, initApplication, isLegal } from "$lib/stacks_connect";
-	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account'
-	import { CONFIG, setConfigByUrl } from '$lib/config';
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/admin';
-	import type { AddressObject } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
-	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
-	import { configStore } from '$stores/stores_config';
+	import { configStore, setConfigByUrl } from '$stores/stores_config';
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
+	import type { DaoStore } from '$types/local_types';
+	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
+	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
 	const unsubscribe2 = daoStore.subscribe(() => {});
@@ -44,13 +43,9 @@
 			return;
 		}
 		if (!nav.to?.url.searchParams?.has('chain') && $page.url.hostname === 'localhost') {
-			nav.to?.url.searchParams.set('chain', CONFIG.VITE_NETWORK)
+			nav.to?.url.searchParams.set('chain', getConfig().VITE_NETWORK)
 		}
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
-	})
-	afterNavigate((nav) => {
-		//componentKey++;
-		console.debug('afterNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
 	let inited = false;
 	let errorReason:string|undefined;
@@ -66,14 +61,12 @@
 		const soloPoolData = await getPoolAndSoloAddresses()
 		const daoProposals = await getDaoProposals()
 		let currentProposal = await getCurrentProposal()
-		daoStore.update((conf) => {
+		daoStore.update((conf:DaoStore) => {
 			conf.soloPoolData = soloPoolData
 			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;
 		});
-
-		inited = true;
 	}
 
 	let timer:any;

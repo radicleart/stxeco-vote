@@ -1,24 +1,19 @@
-import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { hash160 } from '@stacks/transactions';
 import { hashSha256Sync } from '@stacks/encryption';
+import { getConfig } from '$stores/store_helpers';
+import type { AddressMempoolObject, SbtcClarityEvent } from '@mijoco/stx_helpers';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
 export const xsbp = 700
 
-export function getRouterInfo(routeId:string, local:boolean) {
-	if (routeId === 'voting') {
-		return {name: '/voting', href: (local) ? 'http://localhost:8080' : 'https://stx.eco', display: 'Voting', target:'_self'}
-	} else if (routeId === 'insights') {
-		return {name: '/insights', href: (local) ? 'http://localhost:8082/insights' : 'https://stx.eco/insights', display: 'Insights', target:'_self'}
-	} else if (routeId === 'launcher') {
-		return {name: '/dao-launcher', href: (local) ? '/launcher/dao-launcher' : 'https://stx.eco/launcher', display: 'DAO Launcher', target:'_self'}
-	} else if (routeId === 'shop') {
-		return {name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
-	}
+export function getRouterInfo(routeId:string) {
+  const links = getConfig().VITE_HEADER_LINKS;
+  const link = links.find((o) => routeId === o.name)
+  return link;
 }
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -48,7 +43,7 @@ const ADDRESS_VERSION_NATIVE_P2WSH = new Uint8Array([5])
 const ADDRESS_VERSION_NATIVE_P2TR = new Uint8Array([6])
 
 export function getAddressFromHashBytes(hashBytes:string, version:string) {
-  const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
+  const net = (getConfig().VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
   if (!version.startsWith('0x')) version = '0x' + version
   if (!hashBytes.startsWith('0x')) hashBytes = '0x' + hashBytes
   let btcAddr:string|undefined;
@@ -77,7 +72,7 @@ export function getAddressFromHashBytes(hashBytes:string, version:string) {
 }
 
 export function getHashBytesFromAddress(address:string):{version:string, hashBytes:string }|undefined {
-  const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
+  const net = (getConfig().VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
   let outScript:any;
   try {
     const addr:any = btc.Address(net);
@@ -150,7 +145,7 @@ export function tsToDate(updated:number|undefined) {
 }
 
 export function isSupported(address:string) {
-  const network = CONFIG.VITE_NETWORK;
+  const network = getConfig().VITE_NETWORK;
   const msg = 'Please enter a valid ' + network + ' bitcoin address.'
   if (!address || address.length < 10) {
     throw new Error(msg);
@@ -182,14 +177,14 @@ export function isSupported(address:string) {
 }
 
 export function getNet() {
-  return (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
+  return (getConfig().VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
   //if (network === 'litecoin') return { pubKeyHash: 0x30, scriptHash: 0x32 };
   //if (network === 'testnet') return { bech32: 'tb', pubKeyHash: 0x6f, scriptHash: 0xc4 };
   //if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
 }
 export function explorerAddressUrl(addr:string) {
-  let url = CONFIG.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + CONFIG.VITE_NETWORK;
-  if (CONFIG.VITE_ENVIRONMENT === 'nakamoto') {
+  let url = getConfig().VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + getConfig().VITE_NETWORK;
+  if (getConfig().VITE_ENVIRONMENT === 'nakamoto') {
     url += '&api=https://api.nakamoto.testnet.hiro.so'
   }
 	return url
@@ -197,15 +192,15 @@ export function explorerAddressUrl(addr:string) {
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
   if (txid.startsWith('0x')) txid = txid.split('x')[1]
-	return CONFIG.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
+	return getConfig().VITE_BSTREAM_EXPLORER + '/tx/' + txid;
 }
 
 export function explorerBtcAddressUrl(address:string|undefined) {
   if (!address) return ''
-	return CONFIG.VITE_BSTREAM_EXPLORER + '/address/' + address;
+	return getConfig().VITE_BSTREAM_EXPLORER + '/address/' + address;
 }
 export function explorerTxUrl(txid:string) {
-	return CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + CONFIG.VITE_NETWORK;
+	return getConfig().VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + getConfig().VITE_NETWORK;
 }
 
 export function bitcoinBalanceFromMempool(addressMempoolObject:AddressMempoolObject|undefined) {

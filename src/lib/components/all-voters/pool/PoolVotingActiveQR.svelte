@@ -1,6 +1,5 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { CONFIG } from '$lib/config';
 import Invoice from './Invoice.svelte';
 import { sessionStore } from '$stores/stores';
 import { openSTXTransfer } from '@stacks/connect';
@@ -47,7 +46,7 @@ const castVote = async (vfor:boolean) => {
 
 onMount(async () => {
   const addresses = $daoStore.soloPoolData?.poolAddresses!
-  let locked = $sessionStore.keySets[CONFIG.VITE_NETWORK].stacksTokenInfo?.stx?.locked
+  let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].stacksTokenInfo?.stx?.locked
   locked = Number(locked)
   if (locked && locked > 0) showStxTransfer = true
 
