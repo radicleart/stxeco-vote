@@ -1,11 +1,11 @@
 <script lang="ts">
-	import '../app.postcss';
-	import "../index.css";
-	import { Footer } from "@mijoco/stx_components";
+	//import '../app.postcss';
+	import "../app.css";
+	import { Footer, Header } from "@mijoco/stx_components";
 	import { initAddresses, initApplication, isLegal } from "$lib/stacks_connect";
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
-	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
+	import { COMMS_ERROR, getRouterInfo, getRouterInfo1, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/admin';
@@ -17,7 +17,7 @@
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import type { DaoStore } from '$types/local_types';
-	import { loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
+	import { isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
@@ -28,6 +28,45 @@
 		unsubscribe2()
 		unsubscribe3()
 	})
+
+
+	let loggedIn = isLoggedIn();
+	let heights: {stacksHeight:string; bitcoinHeight:string} = {stacksHeight:'0', bitcoinHeight:'0'};
+	let account = {stxAddress:'string', cardinal:'string',ordinal:'string',bnsNameInfo: {names: ['mikey']}};
+	let balances = {sbtcBalance:'102',cardinalBalance:'10',ordinalBalance:'7',stacksBalance:'5'}
+	
+	let headerLinks =[]
+	const local = $page.url.hostname === 'localhost'
+
+	headerLinks.push(getRouterInfo1('voting', local))
+	headerLinks.push(getRouterInfo1('insights', local))
+	headerLinks.push(getRouterInfo1('launcher', local))
+	const loginEvent = async (e?:any) => {
+		console.log('update for login', e.target)
+		await loginStacks(function() {
+			console.log('update for login')
+			loggedIn = isLoggedIn();
+		})
+	}
+
+	const logoutEvent = () => {
+		logUserOut();
+		loggedIn = isLoggedIn();
+	}
+
+	const networkSwitchEvent = async () => {
+		await initApp()
+		componentKey++;
+	}
+
+	const copyEvent = async () => {
+		await initApp()
+		componentKey++;
+	}
+
+
+	
+
 
 	let componentKey = 0;
 	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'mainnet')
@@ -102,7 +141,7 @@
 	})
 </script>
 	<div class="bg-white min-h-screen relative">
-		<HeaderFromComponents />
+		<Header {headerLinks} {loggedIn} {heights} {account} {balances} on:do_login={loginEvent} on:do_logout={logoutEvent} on:do_copy={copyEvent} on:switch_network={networkSwitchEvent}/>
 		<div class="mx-auto px-6 relative">
 			{#if inited}
 			<InFlightTransaction />
