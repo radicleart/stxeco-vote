@@ -1,8 +1,8 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte';
-import type { ExtensionType } from "$types/stxeco.type";
 import arr from '$lib/assets/png-assets/stx_eco_directional_arrow.png'
-	import { CONFIG } from '$lib/config';
+	import type { ExtensionType } from '@mijoco/stx_helpers';
+	import { getConfig } from '$stores/store_helpers';
 
 let dispatch = createEventDispatcher();
 
@@ -18,7 +18,7 @@ const openExtensionChecker = () => {
 	dispatch('openExtensionChecker', extension)
 }
 const explorerUrl = () => {
-	return CONFIG.VITE_STACKS_EXPLORER + '/txid/' + extension.contractId + '?chain=' + CONFIG.VITE_NETWORK;
+	return getConfig().VITE_STACKS_EXPLORER + '/txid/' + extension.contractId + '?chain=' + getConfig().VITE_NETWORK;
 }
 const statusStyle = () => {
     let clazzes = 'border-top: 1pt solid ' + status.colorCode + '; border-left: 1pt solid ' + status.colorCode + '; border-right: 1pt solid ' + status.colorCode + ';';

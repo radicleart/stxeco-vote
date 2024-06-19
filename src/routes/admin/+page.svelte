@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Construct from '$lib/components/dao/admin/Construct.svelte';
-	import { CONFIG } from '$lib/config';
+	import { getConfig } from '$stores/store_helpers';
 
 </script>
 
@@ -12,7 +12,7 @@
 					<div>
 						<div>
 							<h1 class="text-info"><span class="strokeme-info">DAO</span> for Bitcoin</h1>
-							<h6>{CONFIG.VITE_DOA_DEPLOYER + '.' +  CONFIG.VITE_DOA}</h6>
+							<h6>{getConfig().VITE_DOA_DEPLOYER + '.' +  getConfig().VITE_DOA}</h6>
 						</div>
  					</div>
 					<div>

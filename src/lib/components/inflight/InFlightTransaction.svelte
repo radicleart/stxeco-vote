@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import Banner from '../../ui/Banner.svelte';
 	import { explorerTxUrl } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { getTransaction } from '$lib/sbtc_admin';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import type { DaoData } from '$types/stxeco.type';
+	import { getTransaction } from '$lib/admin';
 
 	let status:string = 'pending';
     const getMessage = (inFlight:any) => {
@@ -13,15 +11,15 @@
 	}
 
 	onMount(async () => {
-		if ($sbtcConfig.daoData?.inFlight) {
-			const txid  = $sbtcConfig.daoData?.inFlight.txid
+		if (sessionStore.daoData?.inFlight) {
+			const txid  = $sessionStore.daoData?.inFlight.txid
 			if (typeof txid === 'string') {
 				const myint = setInterval(async () => {
 					const tx = await getTransaction(txid)
 					status = tx.tx_status
 					if (tx.tx_status === 'success') {
-						sbtcConfig.update((conf:SbtcConfig) => {
-							if (!conf.daoData) conf.daoData = {} as DaoData;
+						sessionStore.update((conf:SessionStore) => {
+							if (!conf.daoData) conf.daoData = {} as InFlight;
 							conf.daoData.inFlight = undefined
 							return conf;
 						})
@@ -34,11 +32,11 @@
 
 </script>
 
-{#if $sbtcConfig.daoData?.inFlight}
+{#if sessionStore.daoData?.inFlight}
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	<div class="flex flex-col w-full my-8">
   <div class={' text-gray-1000 '}>
-	<Banner message={getMessage($sbtcConfig.daoData?.inFlight)} bannerType={'info'}/>
+	<Banner message={getMessage(sessionStore.daoData?.inFlight)} bannerType={'info'}/>
 </div>
 </div>
 </div>

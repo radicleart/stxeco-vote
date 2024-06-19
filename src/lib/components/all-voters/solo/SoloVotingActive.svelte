@@ -2,16 +2,18 @@
 	import Banner from "$lib/ui/Banner.svelte";
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import { CONFIG } from "$lib/config";
-	import { isLeather, loggedIn } from "$lib/stacks_connect";
-	import { sbtcConfig } from "$stores/stores";
+	import { getConfig } from "$stores/store_helpers";
+	import { isLeather } from "$lib/stacks_connect";
+	import { sessionStore } from "$stores/stores";
 	import { BitcoinNetworkType, sendBtcTransaction, type Recipient } from "sats-connect";
 	import SoloVotingActiveQr from "./SoloVotingActiveQR.svelte";
+	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+	import { daoStore } from "$stores/stores_dao";
 
-  const addresses = $sbtcConfig.soloPoolData?.soloAddresses!
+  const addresses = $daoStore.soloPoolData?.soloAddresses!
 
   const castVote = async (vfor:boolean) => {
-  if (!loggedIn()) {
+  if (!isLoggedIn()) {
     errorMessage = 'Please connect your wallet to vote';
     return;
   }
@@ -26,7 +28,7 @@
     window.btc?.request('sendTransfer', {
               address: (vfor) ? addresses.yAddress : addresses.nAddress,
               amount: 6000,
-              network: CONFIG.VITE_NETWORK,
+              network: getConfig().VITE_NETWORK,
             })
             .then((resp: any) => {
               console.log({ sucesss: resp });
@@ -44,10 +46,10 @@
     const sendBtcOptions = {
       payload: {
         network: {
-          type: (CONFIG.VITE_NETWORK === 'mainnet') ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet,
+          type: (getConfig().VITE_NETWORK === 'mainnet') ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet,
         },
         recipients: [recipients],
-        senderAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal,
+        senderAddress: $sessionStore.keySets[getConfig().VITE_NETWORK].cardinal,
       },
       onFinish: (response: any) => {
         alert(response);

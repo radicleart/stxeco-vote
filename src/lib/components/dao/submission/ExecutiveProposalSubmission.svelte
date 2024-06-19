@@ -1,17 +1,18 @@
 <script lang="ts">
 import { page } from '$app/stores';
-import { CONFIG } from '$lib/config';
 import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 import { openContractCall } from '@stacks/connect';
-	import { sbtcConfig } from '$stores/stores';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import { isExecutiveTeamMember } from '$lib/sbtc_admin';
+	import { sessionStore } from '$stores/stores';
+	import { isExecutiveTeamMember } from '$lib/admin';
 	import { onMount } from 'svelte';
+	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { DaoStore, SessionStore } from '$types/local_types';
+	import { daoStore } from '$stores/stores_dao';
+	import { getConfig } from '$stores/store_helpers';
 
 export let proposal:ProposalEvent;
 
-const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+const stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 
 const submit = async () => {
 	const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
@@ -19,14 +20,14 @@ const submit = async () => {
 	await openContractCall({
 		postConditions: [],
 		postConditionMode: PostConditionMode.Deny,
-		contractAddress: CONFIG.VITE_DOA_DEPLOYER,
+		contractAddress: getConfig().VITE_DOA_DEPLOYER,
 		contractName: 'ede004-emergency-proposals',
 		functionName: 'emergency-propose',
 		functionArgs: functionArgs,
 		onFinish: data => {
-			sbtcConfig.update((conf:SbtcConfig) => {
-				if (!conf.daoData) conf.daoData = {} as DaoData;
-				conf.daoData.inFlight = {
+			daoStore.update((conf:DaoStore) => {
+				if (!conf.daoData) conf.daoData = {} as InFlight;
+				conf.daoData = {
 					name: 'Emergency signal',
 					txid: data.txId
 				}
@@ -42,7 +43,7 @@ const submit = async () => {
 $: executiveTeamMember = false
 
 onMount(async () => {
-	executiveTeamMember = (await isExecutiveTeamMember($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)).executiveTeamMember
+	executiveTeamMember = (await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)).executiveTeamMember
 })
 
 </script>

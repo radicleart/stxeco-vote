@@ -1,17 +1,18 @@
 <script lang="ts">
   import ProposalDeploymentForm from '$lib/components/dao/deployment/ProposalDeploymentForm.svelte';
-	import { sbtcConfig } from '$stores/stores';
-	import { CONFIG } from '$lib/config';
+	import { sessionStore } from '$stores/stores';
 	import { openContractDeploy } from '@stacks/connect';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import { processProposalContracts, setCurrentProposal } from '$lib/sbtc_admin';
+	import { processProposalContracts, setCurrentProposal } from '$lib/admin';
 	import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
+	import { daoStore } from '$stores/stores_dao';
+	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { DaoStore, SessionStore } from '$types/local_types';
+	import { getConfig } from '$stores/store_helpers';
 
-    const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
-    let contractId = $sbtcConfig.currentProposal.contractId || undefined;
+    const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
+    let contractId = $daoStore.currentProposal?.contractId || undefined;
     let processResult:any;
 
     let showRulesModal:boolean;
@@ -25,7 +26,7 @@
 
     let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
     if (!canSubmit) {
-      canSubmit = account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
+      canSubmit = account.stxAddress === getConfig().VITE_DOA_DEPLOYER;
     }
     let showNoop = false;
     let showFromFile = true;
@@ -36,7 +37,7 @@
     ;; Synopsis: <synopsis>
     ;; Description: <description>
 
-    (impl-trait '${CONFIG.VITE_DOA_DEPLOYER}.proposal-trait.proposal-trait)
+    (impl-trait '${getConfig().VITE_DOA_DEPLOYER}.proposal-trait.proposal-trait)
 
     (define-public (execute (sender principal))
             (ok true)
@@ -91,8 +92,8 @@
         codeBody: replacedSource,
         contractName: contractName,
         onFinish: data => {
-          sbtcConfig.update((conf:SbtcConfig) => {
-            if (!conf.daoData) conf.daoData = {} as DaoData;
+          daoStore.update((conf:DaoStore) => {
+            if (!conf.daoData) conf.daoData = {} as InFlight;
               conf.daoData.inFlight = {
               name: 'Deploy',
               txid: data.txId
@@ -107,8 +108,8 @@
     }
 
     $: newSource = replacedSource;
-    $: newSourceValid = replacedSource.indexOf(CONFIG.VITE_DOA_DEPLOYER + '.proposal-trait.proposal-trait') > -1 || account.stxAddress === CONFIG.VITE_DOA_DEPLOYER;
-    $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+    $: newSourceValid = replacedSource.indexOf(getConfig().VITE_DOA_DEPLOYER + '.proposal-trait.proposal-trait') > -1 || account.stxAddress === getConfig().VITE_DOA_DEPLOYER;
+    $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
     </script>
 
 <svelte:head>

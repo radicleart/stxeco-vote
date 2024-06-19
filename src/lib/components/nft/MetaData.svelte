@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
 	//const { deserializeCV, cvToJSON } = require("@stacks/transactions");
-	import { deserializeCV, cvToJSON } from "micro-stacks/clarity";
+
 	import ChainUtils from '$lib/service/ChainUtils';
 	import bnsJpg from '$lib/assets/bns.jpg'
 	import questionmark from '$lib/assets/questionmark.png'
+	import { cvToJSON, deserializeCV } from "@stacks/transactions";
 	const dispatch = createEventDispatcher();
 
 	export let item:any;

@@ -1,23 +1,24 @@
 <script lang="ts">
-	import { CONFIG } from '$lib/config';
-    import settings from '$lib/settings'
-	import { getStacksNetwork } from '$lib/stacks_connect';
-	import type { ExtensionType } from '$types/stxeco.type';
+	import { getConfig } from '$stores/store_helpers';
+	import { sessionStore } from '$stores/stores';
+	import { daoStore } from '$stores/stores_dao';
+	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+	import type { ExtensionType } from '@mijoco/stx_helpers/dist/index';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 
     let txId: string;
 
     const constructDao = async () => {
-      const deployer = CONFIG.VITE_DOA_DEPLOYER;
+      const deployer = getConfig().VITE_DOA_DEPLOYER;
       const bootstrap = contractPrincipalCV(deployer, 'bdp000-bootstrap')
       // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
       await openContractCall({
-        network: getStacksNetwork(),
+        network: getStacksNetwork(getConfig().VITE_NETWORK),
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,
-        contractName: CONFIG.VITE_DOA,
+        contractName: getConfig().VITE_DOA,
         functionName: 'construct',
         functionArgs: [bootstrap],
         onFinish: data => {
@@ -31,8 +32,8 @@
 
     }
 
-    $: constructed = $settings.extensions?.filter((o:ExtensionType) => o.valid).length > 0 || false;
-    $: explorerUrl = CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + CONFIG.VITE_NETWORK;
+    $: constructed = ($daoStore?.extensions?.filter((o:ExtensionType) => o.valid)?.length || 0) > 0 || false;
+    $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
     </script>
 
     <svelte:head>
@@ -59,6 +60,3 @@
       </div>
       {/if}
     </section>
-
-    <style>
-    </style>

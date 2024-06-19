@@ -2,24 +2,25 @@
 import { page } from "$app/stores";
 import { onMount } from 'svelte';
 import DaoUtils from '$lib/service/DaoUtils';
-import { sbtcConfig } from "$stores/stores";
-import { loggedIn } from "$lib/stacks_connect";
-import { goto } from "$app/navigation";
-import type { ProposalEvent } from "$types/stxeco.type";
+import { sessionStore } from "$stores/stores";
 import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import Placeholder from "$lib/components/all-voters/Placeholder.svelte";
 	import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
+	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
+	import { goto } from "$app/navigation";
+	import { daoStore } from "$stores/stores_dao";
+	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
 
 let proposal:ProposalEvent;
 let inited = false;
 onMount(async () => {
-  let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $page.params.slug);
+  let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $page.params.slug);
   if (event) {
     proposal = event;
-    const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-		const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+    const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+		const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
     console.log(event)
   } else {
@@ -42,7 +43,7 @@ onMount(async () => {
     {/if}
     <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-        {#if loggedIn()}
+        {#if isLoggedIn()}
         <div class="flex flex-col gap-y-2 bg-warning-01">
           <div class="flex flex-col gap-y-5 bg-warning-01">
             <h1 class="text-4xl">Thank you for your vote!</h1>

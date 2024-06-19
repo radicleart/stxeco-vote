@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-import { CONFIG } from "$lib/config";
-	import { isCoordinator } from "$lib/sbtc_admin";
+	import { isCoordinator } from "$lib/admin";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import DaoUtils from "$lib/service/DaoUtils";
 	import { csvMaker, explorerTxUrl, truncate } from "$lib/utils";
-	import { sbtcConfig } from "$stores/stores";
-	import type { VoteEvent } from "$types/stxeco.type";
+	import { sessionStore } from "$stores/stores";
 	import { onMount } from "svelte";
 	import { ArrowUpRight, Icon } from "svelte-hero-icons";
+	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
+	import { getConfig } from "$stores/store_helpers";
 
 	export let votes: Array<VoteEvent> = []
-	const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+	const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 	let coordinator = isCoordinator(account.stxAddress);
 	let componentKey = 0;
 	let sortDir = '';

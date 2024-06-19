@@ -1,7 +1,7 @@
 <script lang="ts">
 import ChainUtils from '$lib/service/ChainUtils';
 import FormatUtils from '$lib/service/FormatUtils';
-	import type { ProposalEvent } from '$types/stxeco.type';
+	import type { ProposalEvent } from '@mijoco/stx_helpers';
 
 export let totalAccountsFor:any;
 export let totalAccountsAgainst:any;

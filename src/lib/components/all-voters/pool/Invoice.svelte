@@ -2,11 +2,9 @@
   import { onMount, tick } from "svelte";
   import QrCode from "svelte-qrcode"
   import { Icon, ClipboardDocument } from "svelte-hero-icons"
-  import { explorerAddressUrl, fmtSatoshiToBitcoin } from '$lib/utils'
+  import { explorerAddressUrl, fmtMicroToStx, fmtSatoshiToBitcoin } from '$lib/utils'
   import LinkToExplorer from '$lib/ui/LinkToExplorer.svelte';
   import { makeFlash } from "$lib/stacks_connect";
-  import { explorerBtcAddressUrl } from '$lib/utils'
-	import { fmtMicroToStx } from "sbtc-bridge-lib";
 
   export let address:string;
   export let voteFor = false;

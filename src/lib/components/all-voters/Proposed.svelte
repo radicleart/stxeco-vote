@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { sbtcConfig } from '$stores/stores';
-	import { fmtMicroToStx, fmtNumber } from 'sbtc-bridge-lib';
+	import { sessionStore } from '$stores/stores';
 	import { onMount } from 'svelte';
-	import type { ProposalEvent } from '$types/stxeco.type';
 	import Holding from './Holding.svelte';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import { fmtNumber } from '$lib/utils';
 
 	export let proposal:ProposalEvent;
-	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 	let startHeightMessage:string;
 	let durationMessage:string;
 

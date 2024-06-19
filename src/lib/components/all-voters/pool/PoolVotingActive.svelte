@@ -2,7 +2,7 @@
 	import Banner from "$lib/ui/Banner.svelte";
 import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import type { ProposalEvent } from "$types/stxeco.type";
+	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 	import PoolVotingActiveQr from "./PoolVotingActiveQR.svelte";
 
   export let proposal: ProposalEvent;

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { sbtcConfig } from '$stores/stores';
-	import type { ProposalEvent } from '$types/stxeco.type';
+	import { sessionStore } from '$stores/stores';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposalEvent: ProposalEvent;
-	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 
 	onMount(async () => {
 	});

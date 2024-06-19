@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { sbtcConfig } from '$stores/stores';
-	import { page } from '$app/stores';
-	import { CONFIG } from '$lib/config';
+	import { sessionStore } from '$stores/stores';
 	import DaoUtils from '$lib/service/DaoUtils';
-	import { getBalanceAtHeight } from '$lib/bridge_api';
+	import { getBalanceAtHeight, getStackerInfo } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
@@ -12,13 +10,13 @@
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import VoteAnalysis from '$lib/components/all-voters/analysis/VoteAnalysis.svelte';
-	import type { ProposalEvent } from '$types/stxeco.type';
 	import StackerEvents from '$lib/components/all-voters/analysis/StackerEvents.svelte';
-	import { getPoxInfo, getStackerInfo, getStackerInfoLatest } from '$lib/pox_api';
 	import StackerContractInfo from '$lib/components/all-voters/analysis/StackerContractInfo.svelte';
-	import type { StackerStats } from '$types/pox_types';
 	import RewardSlotAnalysis from '$lib/components/all-voters/analysis/RewardSlotAnalysis.svelte';
 	import { fmtMicroToStx, fmtNumber } from '$lib/utils';
+	import type { ProposalEvent, StackerStats } from '@mijoco/stx_helpers/dist/index';
+	import { daoStore } from '$stores/stores_dao';
+	import { getConfig } from '$stores/store_helpers';
 
 	export let address:string;
 	export let cycle:number;
@@ -38,21 +36,21 @@
 	let showStackerEvents = false;
 
 	const blockSinceEnd = () => {
-		return $sbtcConfig.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
+		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	const isApproved = () => {
-		approved = $sbtcConfig.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
+		approved = $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	onMount(async () => {
-		info = await getStackerInfo(address, cycle)
+		info = await getStackerInfo(getConfig().VITE_BRIDGE_API, address, cycle)
 
-		let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $sbtcConfig.currentProposal.contractId);
+		let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $daoStore.currentProposal?.contractId || '');
 		if (event) {
 			proposal = event;
-			const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-			const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+			const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 			DaoUtils.setStatus(1, burnHeight, stacksTipHeight, proposal);
 			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
 			isApproved()
@@ -61,7 +59,7 @@
 		} 
 
 		try {
-			const response = await getBalanceAtHeight($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
 			balanceAtHeight = 0;
@@ -194,7 +192,7 @@
 			</div>
 			{#if showRewardSlots}
 			<div>
-				<p class="">Entries from pox data map for cycle {$sbtcConfig.poxInfo.current_cycle.id}</p>
+				<p class="">Entries from pox data map for cycle {$sessionStore.poxInfo.current_cycle.id}</p>
 				<RewardSlotAnalysis rewardSlots={info.rewardSlots} {address} />
 			</div>
 			{/if}

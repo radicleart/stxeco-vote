@@ -1,20 +1,20 @@
 <script lang="ts">
 import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
-import { CONFIG } from '$lib/config';
-import { sbtcConfig } from '$stores/stores';
-import type { VoteEvent } from '$types/stxeco.type';
+import { sessionStore } from '$stores/stores';
 import { findPoolStackerEventsByStacker } from '$lib/dao_api';
 import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$lib/utils';
-import { isCoordinator } from '$lib/sbtc_admin';
+import { isCoordinator } from '$lib/admin';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
+	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
 export let item:VoteEvent;
 
 let expanded = false;
 let inited = false;
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 let coordinator = isCoordinator(account.stxAddress);
 let events: Array<any>;
 

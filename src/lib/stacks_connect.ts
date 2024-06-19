@@ -1,113 +1,37 @@
 
-import { CONFIG } from '$lib/config';
-import { c32address, c32addressDecode } from 'c32check';
-import { sbtcConfig } from '$stores/stores'
-import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_api'
-import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
-import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType, tsToDate } from 'sbtc-bridge-lib' 
-import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
-import { defaultSbtcConfig } from '$lib/sbtc';
-import { hex } from '@scure/base';
-import type { ExchangeRate } from 'sbtc-bridge-lib';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
-import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
-import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
-import { isExecutiveTeamMember } from './sbtc_admin';
+import { isExecutiveTeamMember } from './admin';
+import { getWalletBalances, type AddressObject, type ExchangeRate, type PoxInfo, type SbtcUserSettingI, type StacksInfo } from '@mijoco/stx_helpers/dist/index';
+import { getTokenBalances, fetchExchangeRates, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+import { getConfig, getSession } from '$stores/store_helpers';
+import type { SessionStore } from '$types/local_types';
+import { sessionStore } from '$stores/stores';
+import { AppConfig, UserSession } from '@stacks/auth';
+import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
-const authMessage = 'Please sign authentication'
-let userMessage:string;
-let provider:StacksProvider;
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
 export const revealPayment = 10001
 
-export function getStacksNetwork() {
-	const network = CONFIG.VITE_NETWORK;
-	let stxNetwork:StacksMainnet|StacksTestnet;
-	/**
-	if (CONFIG.VITE_ENVIRONMENT === 'nakamoto') {
-		stxNetwork = new StacksTestnet({
-			url: 'https://api.nakamoto.testnet.hiro.so',
-		});
-		return stxNetwork
-	 }
-	  */
-	if (network === 'devnet') stxNetwork = new StacksMocknet();
-	else if (network === 'testnet') stxNetwork = new StacksTestnet();
-	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
-	else stxNetwork = new StacksMocknet();
-	return stxNetwork;
-}
-
-export function decodeStacksAddress(stxAddress:string) {
-	if (!stxAddress) throw new Error('Needs a stacks address');
-	const decoded = c32addressDecode(stxAddress)
-	return decoded
-}
-  
-export function encodeStacksAddress (network:string, b160Address:string) {
-	let version = 26
-	if (network === 'mainnet') version = 22
-	const address = c32address(version, b160Address) // 22 for mainnet
-	return address
-}
-
-export async function fetchSbtcBalance (conf:SbtcConfig, fromLogin:boolean|undefined) {
-	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
-	if (!fromLogin && localKs	&& localKs.stxAddress && localKs.cardinal) { // && sessionStacks === localKs.stxAddress) {
-		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, localKs)
-		sbtcConfig.update(() => conf);
-		return conf;
-	} else {
-		await addresses(async function(addr:AddressObject) {
-			if (addr) {
-				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(CONFIG.VITE_SBTC_CONTRACT_ID, addr)
-				sbtcConfig.update(() => conf);
-			}
-			return conf;
-		});
-	}
-}
-async function getBalances(contractId:string, addressObject:AddressObject):Promise<AddressObject> {
-	let result:AddressObject;
-	const tempSegwit0 = addressObject.btcPubkeySegwit0
-	const tempSegwit1 = addressObject.btcPubkeySegwit1
-	try {
-		result = await fetchUserBalances(addressObject);
-		try {
-			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[contractId + '::sbtc'].balance)
-		} catch (err) {
-			result.sBTCBalance = 0
-		}
-	} catch(err) {
-		result = addressObject;
-		console.log('Network down...');
-	}
-	if (!result.sBTCBalance) result.sBTCBalance = 0
-	result.btcPubkeySegwit0 = tempSegwit0
-	result.btcPubkeySegwit1 = tempSegwit1
-	return result;
-}
 function getStacksAddress() {
-	if (loggedIn()) {
+	if (isLoggedIn()) {
 		const userData = userSession.loadUserData();
-		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		const stxAddress = (getConfig().VITE_NETWORK === 'testnet' || getConfig().VITE_NETWORK === 'devnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 		return stxAddress
 	}
 	return
 }
 
 function getProvider() {
-	if (!provider) provider = getStacksProvider()
-	const prod = (provider.getProductInfo) ? provider.getProductInfo() : undefined;
-	if (!prod) throw new Error('Provider not found')
-	return prod
+	return {name: 'leather'}
+	//if (!provider) provider = getStacksProvider()
+	//const prod = (provider.getProductInfo) ? provider.getProductInfo() : undefined;
+	//if (!prod) throw new Error('Provider not found')
+	//return prod
 }
 
 export function isXverse() {
@@ -130,9 +54,9 @@ export function isLeather() {
 }
 
 async function addresses(callback:any):Promise<AddressObject|undefined> {
-	if (!loggedIn()) return {} as AddressObject;
+	if (!isLoggedIn()) return {} as AddressObject;
 	const userData = userSession.loadUserData();
-	const network = CONFIG.VITE_NETWORK;
+	const network = getConfig().VITE_NETWORK
 	//let something = hashP2WPKH(payload.public_keys[0])
 	const stxAddress = getStacksAddress();
 	let ordinal = 'unknown'
@@ -212,7 +136,7 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	} catch(err:any) {
 		console.log('addresses: ', err)
 		let myType = BitcoinNetworkType.Testnet
-		if (getStacksNetwork().isMainnet()) myType = BitcoinNetworkType.Mainnet
+		if (getStacksNetwork(network).isMainnet()) myType = BitcoinNetworkType.Mainnet
 		const getAddressOptions:GetAddressOptions = {
 			payload: {
 				purposes: [AddressPurpose.Ordinals, AddressPurpose.Payment],
@@ -285,126 +209,6 @@ export function isLegal(routeId:string):boolean {
 	}
 }
 
-export function loggedIn():boolean {
-	try {
-		return userSession.isUserSignedIn()
-	} catch (err) {
-		return false
-	}
-}
-
-export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
-	userMessage = authMessage + ' ' + Math.floor( Math.random() * 1000000);
-	userMessage = userMessage + ' on ' + tsToDate(new Date().getTime());
-	await signMessage(async function(sigData:SignatureData, message:string) {
-		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
-		if (verified) {
-		  console.log('sig verififed')
-		}
-	    const msgHash = hashMessage(message);
-    	//const stxAddresses = await getStacksAddressFromSignature(msgHash, sigData.signature );
-		const pubkey = publicKeyFromSignatureVrs(hex.encode(msgHash), { data: sigData.signature, type: StacksMessageType.MessageSignature })
-		console.log('pubkey:', pubkey)
-		//console.log('stxAddresses:', stxAddresses)
-		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
-
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
-		setAuthorisation($sbtcConfig.authHeader)
-		sbtcConfig.update(() => $sbtcConfig)
-		return sigData
-	}, userMessage)
-	return
-}
-
-export async function loginStacks(callback:any) {
-	try {
-		const provider = getProvider()
-		console.log('provider: ', provider)
-		if (!userSession.isUserSignedIn()) {
-			showConnect({
-				userSession,
-				appDetails: appDetails(),
-				onFinish: async (e:any) => {
-					console.log(e)
-					await callback(true);
-					window.location.reload()
-				},
-				onCancel: () => {
-					callback(false);
-				},
-			});
-		} else {
-			callback(true);
-		}
-	} catch (e) {
-		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
-		callback(false);
-	}
-}
-
-export function loginStacksFromHeader(document:any) {
-	const el = document.getElementById("connect-wallet")
-	if (el) return document.getElementById("connect-wallet").click();
-	else return false;
-}
-
-export async function signMessage(callback:any, message:string) {
-	await openSignatureRequestPopup({
-		message,
-		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
-		appDetails: appDetails(),
-		onFinish({ publicKey, signature }) {
-			let newSig = signature.substring(0, signature.length - 2);
-			const recByte = signature.substring(signature.length - 2);
-			newSig = recByte + newSig
-			const verified1 = verifyMessageSignature({ signature: newSig, message, publicKey });
-			if (!verified1) throw new Error('verifyMessageSignature - signature is not valid')
-			callback({ publicKey, signature: newSig }, message);
-		}
-	});
-}
-export async function signMessageForWithdraw(callback:any, message:string) {
-	await openSignatureRequestPopup({
-		message,
-		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
-		appDetails: appDetails(),
-		onFinish({ publicKey, signature }) {
-			//let newSig = signature.substring(0, signature.length - 2);
-			//const recByte = signature.substring(signature.length - 2);
-			//newSig = recByte + newSig
-			//const verified1 = verifyMessageSignature({ signature: newSig, message, publicKey });
-			//if (!verified1) throw new Error('verifyMessageSignature - signature is not valid')
-			callback({ publicKey, signature }, message);
-		}
-	});
-}
-
-export function logUserOut() {
-	return userSession.signUserOut();
-}
-
-const FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
-
-export function verifyStacksPricipal(stacksAddress?:string) {
-	if (!stacksAddress) {
-	  throw new Error('Address not found');
-	} else if (FORMAT.test(stacksAddress)) {
-	  throw new Error('please remove white space / special characters');
-	}
-	try {
-	  const decoded = decodeStacksAddress(stacksAddress.split('.')[0]);
-	  if ((CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') && decoded[0] !== 26) {
-		throw new Error('Please enter a valid stacks blockchain testnet address');
-	  }
-	  if (CONFIG.VITE_NETWORK === 'mainnet' && decoded[0] !== 22) {
-		throw new Error('Please enter a valid stacks blockchain mainnet address');
-	  }
-	  return stacksAddress;
-	  } catch (err:any) {
-		  throw new Error('Invalid stacks principal - please enter a valid ' + CONFIG.VITE_NETWORK + ' account or contract principal.');
-	  }
-}
-
 export function verifyAmount(amount:number, balance:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
@@ -424,51 +228,89 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 		throw new Error('No more then balance (less fee of ' + fee + ')');
 	}
 }
-  
-export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
-	if (!conf) conf = defaultSbtcConfig as SbtcConfig
-	let data = {} as any;
-	try {
-		data = await fetchUiInit();
-		if (data.sbtcContractData.sbtcWalletPublicKey) data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, data.sbtcContractData.sbtcWalletPublicKey);
-		conf.loggedIn = false;
-		if (userSession.isUserSignedIn()) {
-			await fetchSbtcBalance(conf, fromLogin);
-			const emTeamMam = await isExecutiveTeamMember(conf.keySets[CONFIG.VITE_NETWORK].stxAddress);
-			conf.userSettings.executiveTeamMember = false;emTeamMam.executiveTeamMember
-			conf.loggedIn = true;
-		}
-	} catch (err) {
-		data = {
-			sbtcContractData: {} as SbtcContractDataType
-		} as any; 
-	}
-	if (!conf.keySets) {
-		if (CONFIG.VITE_NETWORK === 'testnet'|| CONFIG.VITE_NETWORK === 'devnet') {
-			conf.keySets = { 'testnet': {} as AddressObject };
-		} else {
-			conf.keySets = { 'mainnet': {} as AddressObject };
-		}
-	}
-	try {
-		conf.exchangeRates = data.rates;
-		if (!conf.exchangeRates) throw new Error('no exchnage rates')
-		const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
-		const rateNow = conf.exchangeRates.find((o:any) => o.currency === currency)
-		if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
-		else conf.userSettings.currency.myFiatCurrency = (conf.exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
-	} catch (err) {
-		conf.exchangeRates = []
-		conf.userSettings.currency.myFiatCurrency = {} as ExchangeRate
-	}
-	conf.sbtcContractData = data.sbtcContractData;
-	conf.btcFeeRates = data.btcFeeRates;
-	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
-	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
-		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
-	}
-	sbtcConfig.update(() => conf);
 
+export async function initAddresses() {
+	const network = getConfig().VITE_NETWORK
+	sessionStore.update((conf:SessionStore) => {
+		if (!conf.keySets || !conf.keySets[network]) {
+			if (network === 'testnet') {
+				conf.keySets = { 'testnet': {} as AddressObject };
+			} else if (network === 'devnet') {
+				conf.keySets = { 'testnet': {} as AddressObject };
+			} else {
+				conf.keySets = { 'mainnet': {} as AddressObject };
+			}
+			conf.keySets[network] = {} as AddressObject;
+		}
+		return conf;
+	});
+}
+
+export async function initApplication(userSettings?:SbtcUserSettingI) {
+	const network = getConfig().VITE_NETWORK
+	const stacksApi = getConfig().VITE_STACKS_API
+	const ecoApi = getConfig().VITE_BRIDGE_API
+	try {
+		if (!userSettings) userSettings = {} as SbtcUserSettingI;
+		const stacksInfo = await fetchStacksInfo(stacksApi) || {} as StacksInfo;
+		const poxInfo = await getPoxInfo(stacksApi)
+		const exchangeRates = await fetchExchangeRates(ecoApi);
+		const settings = userSettings || defaultSettings()
+		const rateNow = exchangeRates?.find((o:any) => o.currency === 'USD') || {currency: 'USD'} as ExchangeRate;
+		
+		settings.currency = {
+			myFiatCurrency: rateNow || defaultExchangeRate(),
+			cryptoFirst: true,
+			denomination: 'USD'
+		}
+		const ss = getSession()
+		sessionStore.update((conf:SessionStore) => {
+			conf.stacksInfo = stacksInfo
+			conf.poxInfo = poxInfo
+			conf.loggedIn = userSession.isUserSignedIn();
+			conf.exchangeRates = exchangeRates || [] as Array<ExchangeRate>;
+			conf.userSettings = settings
+			return conf;
+		});
+
+		if (isLoggedIn() ) {
+			await addresses(async function(obj:AddressObject) {
+				console.log('in callback')
+				const emTeamMam = await isExecutiveTeamMember(obj.stxAddress);
+				settings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
+				
+				const contractId = getConfig().VITE_SBTC_CONTRACT_ID;
+				obj.tokenBalances = await getTokenBalances(stacksApi, obj.stxAddress)
+				obj.sBTCBalance = Number(obj.tokenBalances?.fungible_tokens[contractId + '::sbtc']?.balance || 0)
+				obj.walletBalances = await getWalletBalances(ecoApi, obj.stxAddress, ss.keySets[network].cardinal, ss.keySets[network].ordinal)
+
+				sessionStore.update((conf:SessionStore) => {
+					conf.loggedIn = userSession.isUserSignedIn();
+					conf.keySets[getConfig().VITE_NETWORK] = obj
+					conf.exchangeRates = exchangeRates || [] as Array<ExchangeRate>;
+					conf.userSettings = settings
+					return conf;
+				});
+			})
+		}
+	
+	} catch (err:any) {
+		sessionStorage.update((conf:SessionStore) => {
+			conf.stacksInfo = {} as StacksInfo
+			conf.poxInfo = {} as PoxInfo
+			conf.loggedIn = userSession.isUserSignedIn();
+			if (!conf.keySets || !conf.keySets[network]) {
+				if (network === 'testnet'|| network === 'regtest') {
+					conf.keySets = { 'testnet': {} as AddressObject };
+				} else {
+					conf.keySets = { 'mainnet': {} as AddressObject };
+				}
+			}
+			conf.exchangeRates = [] as Array<ExchangeRate>;
+			conf.userSettings = {} as SbtcUserSettingI
+			return conf;
+		});
+	}
 }
 
 function defaultSettings():SbtcUserSettingI {
@@ -477,17 +319,22 @@ function defaultSettings():SbtcUserSettingI {
 		executiveTeamMember: false,
 		currency: {
 		  cryptoFirst: true,
-		  myFiatCurrency: {
-			_id: '',
-			currency: 'USD',
-			fifteen: 0,
-			last: 0,
-			buy: 0,
-			sell: 0,
-			symbol: 'USD',
-			name: 'BTCUSD'			  
-		  },
+		  myFiatCurrency: defaultExchangeRate(),
 		  denomination: 'USD',
 		}
 	}
 }
+
+function defaultExchangeRate():ExchangeRate {
+	return {
+		_id: '',
+		currency: 'USD',
+		fifteen: 0,
+		last: 0,
+		buy: 0,
+		sell: 0,
+		symbol: 'USD',
+		name: 'BTCUSD'			  
+	}
+  }
+  

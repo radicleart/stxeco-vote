@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { sbtcConfig } from '$stores/stores';
-	import type { ProposalData, ProposalEvent, VoteEvent } from '$types/stxeco.type';
+	import { sessionStore } from '$stores/stores';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
+	import type { ProposalData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal: ProposalEvent;
 
 	let proposalData: ProposalData;
-	let stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 	let winning = 'danger';
 	let inFavour:number;
 

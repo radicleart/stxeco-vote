@@ -1,12 +1,12 @@
 <script lang="ts">
     import Modal from '$lib/ui/Modal.svelte';
     import ClaritySytaxHighlighter from '$lib/ui/ClaritySytaxHighlighter.svelte';
-    import type { ExtensionType } from "$types/stxeco.type";
     import DaoUtils from '$lib/service/DaoUtils';
     import { ArrowDownCircle, ArrowUpCircle, Icon } from 'svelte-hero-icons';
     import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
-	  import { CONFIG } from '$lib/config';
 	import ExtensionChecker from '$lib/components/dao/ExtensionChecker.svelte';
+	import type { ExtensionType } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
     
     let item:ExtensionType;
     let componentKey = 0;
@@ -35,8 +35,8 @@
         componentKey++;
     }
     const extensions:Array<ExtensionType> = [];
-    CONFIG.VITE_EXTENSIONS.forEach((key) => {
-        extensions.push({contractId: CONFIG.VITE_DOA_DEPLOYER + '.' + key, valid: true})
+    getConfig().VITE_EXTENSIONS.forEach((key) => {
+        extensions.push({contractId: getConfig().VITE_DOA_DEPLOYER + '.' + key, valid: true})
     })
 
     $: sortedProps = DaoUtils.sortExtensions(extensions, sortDir, sortField);

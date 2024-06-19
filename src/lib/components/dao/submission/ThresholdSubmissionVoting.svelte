@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import RangeSlider from "svelte-range-slider-pips";
-		import { CONFIG } from '$lib/config';
 	import { PostConditionMode, contractPrincipalCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
-	import { sbtcConfig } from '$stores/stores';
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import type { DaoData, ProposalEvent } from '$types/stxeco.type';
+	import { sessionStore } from '$stores/stores';
+	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers';
+	import { getConfig } from '$stores/store_helpers';
+	import type { DaoStore, SessionStore } from '$types/local_types';
+	import { daoStore } from '$stores/stores_dao';
 	
 	export let proposal:ProposalEvent;
 	
-	const stacksTipHeight = $sbtcConfig.stacksInfo.stacks_tip_height;
+	const stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
 	let minStartHeight = 100 //Number($settings.daoProperties?.find((o) => o.id === 'minimum-proposal-start-delay')?.value) + 1 || 0;
 	let maxStartHeight = 200 //Number($settings.daoProperties?.find((o) => o.id === 'maximum-proposal-start-delay')?.value) || 100;
 	const startHeightMessage = 'Currently at block ' + stacksTipHeight + '. Earliest start for voting is block ' + (stacksTipHeight + minStartHeight) + ' ~ ' + (minStartHeight / 144).toFixed(2) + ' days and latest is ' + (stacksTipHeight + maxStartHeight) + ' ~ ' + (maxStartHeight / 144).toFixed(2) + ' days.';
@@ -29,14 +30,14 @@
 		await openContractCall({
 			postConditions: [],
 			postConditionMode: PostConditionMode.Deny,
-			contractAddress: CONFIG.VITE_DOA_DEPLOYER,
+			contractAddress: getConfig().VITE_DOA_DEPLOYER,
 			contractName: 'ede002-threshold-proposal-submission',
 			functionName: 'propose',
 			functionArgs: functionArgs,
 			onFinish: data => {
-				sbtcConfig.update((conf:SbtcConfig) => {
-					if (!conf.daoData) conf.daoData = {} as DaoData;
-					conf.daoData.inFlight = {
+				daoStore.update((conf:DaoStore) => {
+					if (!conf.daoData) conf.daoData = {} as InFlight;
+					conf.daoData = {
 						name: 'Propose',
 						txid: data.txId
 					}

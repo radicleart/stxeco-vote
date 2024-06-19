@@ -4,16 +4,15 @@ import DaoUtils from '$lib/service/DaoUtils';
 import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
 import FormatUtils from '$lib/service/FormatUtils';
-import { CONFIG } from '$lib/config';
-import { sbtcConfig } from '$stores/stores';
-import type { ProposalEvent, VoteEvent } from '$types/stxeco.type';
+import { sessionStore } from '$stores/stores';
 import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
-	import type { ResultsSummary } from '$types/pox_types';
 	import AddressLookup from '../AddressLookup.svelte';
 	import VoteTransactions from '../VoteTransactions.svelte';
+	import type { ProposalEvent, ResultsSummary } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
-const account = $sbtcConfig.keySets[CONFIG.VITE_NETWORK];
+const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
 
 export let summary:ResultsSummary;
 export let proposal:ProposalEvent;
@@ -48,8 +47,8 @@ const fetchTransactions = async () => {
 let inFavour = 0;
 let winning = 'danger';
 onMount(async () => {
-  const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-	const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+  const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+	const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 	DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
   const votesFor = summary.summary.find((o) => o._id.event === 'vote' && o._id.for)
   const votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)

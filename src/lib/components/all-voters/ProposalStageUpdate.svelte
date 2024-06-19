@@ -1,38 +1,39 @@
 <script lang="ts">
 	import { fmtNumber } from '$lib/utils';
-	import { sbtcConfig } from '$stores/stores';
+	import { sessionStore } from '$stores/stores';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import Countdown from '../../ui/Countdown.svelte';
-	import { ProposalStage, type ProposalEvent } from '$types/stxeco.type';
 	import { onDestroy, onMount } from 'svelte';
 	import DaoUtils from '$lib/service/DaoUtils';
+	import { daoStore } from '$stores/stores_dao';
+	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposal:ProposalEvent|undefined;
 	export let method:number;
 
 	$: endBitcoinBlock = () => {
-		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_STOPS_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
+		return ($sessionStore.stacksInfo) ? NAKAMOTO_VOTE_STOPS_HEIGHT - $sessionStore.stacksInfo.burn_block_height : 0;
 	}
 
 	$: endStacksBlock = () => {
-		return ($sbtcConfig.stacksInfo && proposal) ? proposal.proposalData.endBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height : 0;
+		return ($sessionStore.stacksInfo && proposal) ? proposal.proposalData.endBlockHeight - $sessionStore.stacksInfo.stacks_tip_height : 0;
 	}
 
 	$: startsInBitcoinBlock = () => {
-		return ($sbtcConfig.stacksInfo) ? NAKAMOTO_VOTE_START_HEIGHT - $sbtcConfig.stacksInfo.burn_block_height : 0;
+		return ($sessionStore.stacksInfo) ? NAKAMOTO_VOTE_START_HEIGHT - $sessionStore.stacksInfo.burn_block_height : 0;
 	}
 
 	$: startsInStacksBlock = () => {
-		return ($sbtcConfig.stacksInfo && proposal) ? proposal.proposalData.startBlockHeight - $sbtcConfig.stacksInfo.stacks_tip_height : 0;
+		return ($sessionStore.stacksInfo && proposal) ? proposal.proposalData.startBlockHeight - $sessionStore.stacksInfo.stacks_tip_height : 0;
 	}
 
 	onMount(async () => {
 		if (!proposal) {
-			let event:ProposalEvent|undefined = await DaoUtils.getProposal($sbtcConfig.proposals, $sbtcConfig.currentProposal.contractId);
+			let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $daoStore.currentProposal?.contractId || '');
 			if (event) {
 				proposal = event;
-				const stacksTipHeight = $sbtcConfig.stacksInfo?.stacks_tip_height | 0;
-				const burnHeight = $sbtcConfig.stacksInfo?.burn_block_height | 0;
+				const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+				const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
 				DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
 			}
 		}
@@ -40,13 +41,13 @@
 
 </script>
 
-{#if proposal && $sbtcConfig.stacksInfo}
+{#if proposal && $sessionStore.stacksInfo}
 <div class="inline-block pt-2 pb-1 px-6 rounded-2xl border border-[#131416]/[12%]">
 	<div class="mb-1 flex items-center gap-2">
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
 		<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-			{#if method !== 3 && $sbtcConfig.stacksInfo.burn_block_height  >= NAKAMOTO_VOTE_START_HEIGHT }
-				{#if $sbtcConfig.stacksInfo.burn_block_height  < NAKAMOTO_VOTE_STOPS_HEIGHT}
+			{#if method !== 3 && $sessionStore.stacksInfo.burn_block_height  >= NAKAMOTO_VOTE_START_HEIGHT }
+				{#if $sessionStore.stacksInfo.burn_block_height  < NAKAMOTO_VOTE_STOPS_HEIGHT}
 				Vote in progress
 				{:else}
 				Voting closed
