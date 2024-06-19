@@ -9,6 +9,7 @@ export type SessionStore = {
   poxInfo:PoxInfo,
   exchangeRates: Array<ExchangeRate>
   stacksInfo: StacksInfo;
+  bitcoinBalances: any;
 };
 
 
@@ -20,10 +21,18 @@ export type DaoStore = {
   currentProposal?: {configId:string, contractId:string}
 };
 
+export type HeaderItem = {
+  name: string; 
+  href: string; 
+  display: string; 
+  target: string;
+}
+
 export type HeaderLink = {
   name: string; 
   href: string; 
   display: string; 
-  target: string; 
+  target: string;
+  items?: Array<HeaderItem>;
 }
 

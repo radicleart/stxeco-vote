@@ -49,8 +49,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@mijoco/stx_components": "^0.0.11",
-		"@mijoco/stx_helpers": "^0.0.8",
+		"@mijoco/stx_components": "^0.0.16",
+		"@mijoco/stx_helpers": "^0.1.0",
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
 		"@prismicio/client": "^7.5.0",

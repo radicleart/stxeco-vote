@@ -46,7 +46,7 @@ const castVote = async (vfor:boolean) => {
 
 onMount(async () => {
   const addresses = $daoStore.soloPoolData?.poolAddresses!
-  let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].stacksTokenInfo?.stx?.locked
+  let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].tokenBalances?.stx?.locked
   locked = Number(locked)
   if (locked && locked > 0) showStxTransfer = true
 

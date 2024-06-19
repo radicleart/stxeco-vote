@@ -15,17 +15,6 @@ export function getRouterInfo(routeId:string) {
   const link = links.find((o) => routeId === o.name)
   return link;
 }
-export function getRouterInfo1(routeId:string, local:boolean) {
-	if (routeId === 'voting') {
-		return {name: '/voting', href: (local) ? 'http://localhost:8080' : 'https://stx.eco', display: 'Voting', target:'_self'}
-	} else if (routeId === 'insights') {
-		return {name: '/insights', href: (local) ? 'http://localhost:8082/insights' : 'https://stx.eco/insights', display: 'Insights', target:'_self'}
-	} else if (routeId === 'launcher') {
-		return {name: '/dao-launcher', href: (local) ? '/launcher/dao-launcher' : 'https://stx.eco/launcher', display: 'DAO', target:'_self'}
-	} else if (routeId === 'shop') {
-		return {name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
-	}
-}
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -231,7 +220,7 @@ export function fmtNumberStacksFloor(amount:number|undefined) {
 }
 
 export function fmtNumber(amount:number|undefined) {
-  if (amount === 0) return 0;
+  if (amount === 0) return '0';
   if (amount) return new Intl.NumberFormat().format(amount);
 }
 

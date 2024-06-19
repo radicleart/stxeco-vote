@@ -72,9 +72,10 @@ export const config: { [key: string]: Config } = {
         ],
         VITE_HEADER_LINKS: [
             {name: '/voting', href: 'http://localhost:8080', display: 'Voting', target:'_self'},
-            {name: '/insights', href: 'http://localhost:8082/insights', display: 'Insights', target:'_self'},
-            {name: '/dao-launcher', href: '/launcher/dao-launcher', display: 'DAO Launcher', target:'_self'},
-            {name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
+            {name: '/sip', href: '/sip', display: 'Upcoming SIPs', target:'_self'},
+            //{name: '/insights', href: 'http://localhost:8082/insights', display: 'Insights', target:'_self'},
+            //{name: '/dao-launcher', href: '/launcher/dao-launcher', display: 'DAO Launcher', target:'_self'},
+            //{name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
         ]
     },
     "mainnet": {
@@ -116,11 +117,16 @@ export const config: { [key: string]: Config } = {
             'bde009-governance-token-sale'
         ],
         VITE_HEADER_LINKS: [
-            {name: '/voting', href: 'https://stx.eco', display: 'Voting', target:'_self'},
+            {name: '/voting', href: 'https://stx.eco', display: 'Past Votes', target:'_self',
+                items: [
+                    //{name: '/edp015-sip-activation', href: 'https://stx.eco/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation/results', display: 'SIP 015 Stacks 2.1 Upgrade', target:'_self'},
+                    {name: '/bdp001-sip-021-nakamoto', href: 'https://stx.eco/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/results?method=1', display: 'SIP 021 Nakamoto Upgrade', target:'_self'},
+                ]
+            },
+            {name: '/sip', href: '/sip', display: 'Upcoming Votes', target:'_self'},
             {name: '/insights', href: 'https://stx.eco/insights', display: 'Insights', target:'_self'},
             {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO', target:'_self'},
             {name: '/shop-front', href: 'https://stx.eco/shop-front', display: 'Shop Front', target:'_self'},
         ]
-
     }
 };

@@ -2,8 +2,8 @@
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { isExecutiveTeamMember } from './admin';
-import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stx_helpers/dist/index';
-import { getStacksBalances, fetchExchangeRates, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+import { getWalletBalances, type AddressObject, type ExchangeRate, type PoxInfo, type SbtcUserSettingI, type StacksInfo } from '@mijoco/stx_helpers/dist/index';
+import { getTokenBalances, fetchExchangeRates, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 import { getConfig, getSession } from '$stores/store_helpers';
 import type { SessionStore } from '$types/local_types';
 import { sessionStore } from '$stores/stores';
@@ -263,8 +263,6 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 			cryptoFirst: true,
 			denomination: 'USD'
 		}
-		let balances:any;
-		let networkAddresses:any;
 		const ss = getSession()
 		sessionStore.update((conf:SessionStore) => {
 			conf.stacksInfo = stacksInfo
@@ -275,26 +273,20 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 			return conf;
 		});
 
-		if (isLoggedIn() && !ss.keySets[network].stxAddress ) {
-			ss.keySets[network] = networkAddresses
-			networkAddresses = await addresses(async function(obj:AddressObject) {
+		if (isLoggedIn() ) {
+			await addresses(async function(obj:AddressObject) {
 				console.log('in callback')
-				ss.keySets[getConfig().VITE_NETWORK] = obj
-				const emTeamMam = await isExecutiveTeamMember(ss.keySets[getConfig().VITE_NETWORK].stxAddress);
+				const emTeamMam = await isExecutiveTeamMember(obj.stxAddress);
 				settings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
-				balances = await getStacksBalances(stacksApi, ss.keySets[network].stxAddress)
-					sessionStore.update((conf:SessionStore) => {
-					conf.balances = balances
+				
+				const contractId = getConfig().VITE_SBTC_CONTRACT_ID;
+				obj.tokenBalances = await getTokenBalances(stacksApi, obj.stxAddress)
+				obj.sBTCBalance = Number(obj.tokenBalances?.fungible_tokens[contractId + '::sbtc']?.balance || 0)
+				obj.walletBalances = await getWalletBalances(ecoApi, obj.stxAddress, ss.keySets[network].cardinal, ss.keySets[network].ordinal)
+
+				sessionStore.update((conf:SessionStore) => {
 					conf.loggedIn = userSession.isUserSignedIn();
-					if (!conf.keySets || !conf.keySets[network]) {
-						if (network === 'testnet') {
-							conf.keySets = { 'testnet': {} as AddressObject };
-						} else if (network === 'regtest') {
-							conf.keySets = { 'regtest': {} as AddressObject };
-						} else {
-							conf.keySets = { 'mainnet': {} as AddressObject };
-						}
-					}
+					conf.keySets[getConfig().VITE_NETWORK] = obj
 					conf.exchangeRates = exchangeRates || [] as Array<ExchangeRate>;
 					conf.userSettings = settings
 					return conf;

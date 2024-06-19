@@ -5,7 +5,7 @@
 	import { initAddresses, initApplication, isLegal } from "$lib/stacks_connect";
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
-	import { COMMS_ERROR, getRouterInfo, getRouterInfo1, tsToTime } from '$lib/utils.js'
+	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
 	import { getCurrentProposal } from '$lib/admin';
@@ -31,16 +31,7 @@
 
 
 	let loggedIn = isLoggedIn();
-	let heights: {stacksHeight:string; bitcoinHeight:string} = {stacksHeight:'0', bitcoinHeight:'0'};
-	let account = {stxAddress:'string', cardinal:'string',ordinal:'string',bnsNameInfo: {names: ['mikey']}};
-	let balances = {sbtcBalance:'102',cardinalBalance:'10',ordinalBalance:'7',stacksBalance:'5'}
 	
-	let headerLinks =[]
-	const local = $page.url.hostname === 'localhost'
-
-	headerLinks.push(getRouterInfo1('voting', local))
-	headerLinks.push(getRouterInfo1('insights', local))
-	headerLinks.push(getRouterInfo1('launcher', local))
 	const loginEvent = async (e?:any) => {
 		console.log('update for login', e.target)
 		await loginStacks(function() {
@@ -141,7 +132,7 @@
 	})
 </script>
 	<div class="bg-white min-h-screen relative">
-		<StxEcoHeader {headerLinks} {loggedIn} {heights} {account} {balances} on:do_login={loginEvent} on:do_logout={logoutEvent} on:do_copy={copyEvent} on:switch_network={networkSwitchEvent}/>
+		<HeaderFromComponents/>
 		<div class="mx-auto px-6 relative">
 			{#if inited}
 			<InFlightTransaction />
