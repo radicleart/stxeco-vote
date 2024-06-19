@@ -60,6 +60,3 @@
       </div>
       {/if}
     </section>
-
-    <style>
-    </style>

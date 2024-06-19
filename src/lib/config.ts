@@ -118,7 +118,7 @@ export const config: { [key: string]: Config } = {
         VITE_HEADER_LINKS: [
             {name: '/voting', href: 'https://stx.eco', display: 'Voting', target:'_self'},
             {name: '/insights', href: 'https://stx.eco/insights', display: 'Insights', target:'_self'},
-            {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO Launcher', target:'_self'},
+            {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO', target:'_self'},
             {name: '/shop-front', href: 'https://stx.eco/shop-front', display: 'Shop Front', target:'_self'},
         ]
 

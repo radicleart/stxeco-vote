@@ -21,7 +21,7 @@ export function getRouterInfo1(routeId:string, local:boolean) {
 	} else if (routeId === 'insights') {
 		return {name: '/insights', href: (local) ? 'http://localhost:8082/insights' : 'https://stx.eco/insights', display: 'Insights', target:'_self'}
 	} else if (routeId === 'launcher') {
-		return {name: '/dao-launcher', href: (local) ? '/launcher/dao-launcher' : 'https://stx.eco/launcher', display: 'DAO Launcher', target:'_self'}
+		return {name: '/dao-launcher', href: (local) ? '/launcher/dao-launcher' : 'https://stx.eco/launcher', display: 'DAO', target:'_self'}
 	} else if (routeId === 'shop') {
 		return {name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
 	}
