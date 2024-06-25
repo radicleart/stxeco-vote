@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isExtension } from '$lib/admin';
+	import { isExtension } from '$lib/proposals';
 	import { onMount } from 'svelte';
 
 	export let extension: string|undefined;

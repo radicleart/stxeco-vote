@@ -4,7 +4,7 @@
 	import { openContractCall } from '@stacks/connect';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { processProposalContracts } from '$lib/admin';
+	import { processProposalContracts } from '$lib/proposals';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Proposed from './Proposed.svelte';
 	import Placeholder from './Placeholder.svelte';

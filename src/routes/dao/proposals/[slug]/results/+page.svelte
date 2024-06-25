@@ -15,7 +15,7 @@
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { isCoordinator } from '$lib/admin';
+	import { isCoordinator } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stx_helpers/dist/index';

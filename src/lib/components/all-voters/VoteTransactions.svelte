@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { isCoordinator } from "$lib/admin";
+	import { isCoordinator } from "$lib/proposals";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import DaoUtils from "$lib/service/DaoUtils";
 	import { csvMaker, explorerTxUrl, truncate } from "$lib/utils";

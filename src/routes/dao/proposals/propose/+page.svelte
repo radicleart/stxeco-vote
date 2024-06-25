@@ -2,7 +2,7 @@
   import ProposalDeploymentForm from '$lib/components/dao/deployment/ProposalDeploymentForm.svelte';
 	import { sessionStore } from '$stores/stores';
 	import { openContractDeploy } from '@stacks/connect';
-	import { processProposalContracts, setCurrentProposal } from '$lib/admin';
+	import { processProposalContracts, setCurrentProposal } from '$lib/proposals';
 	import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';

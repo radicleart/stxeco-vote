@@ -4,7 +4,7 @@ import { onMount } from 'svelte';
 import { sessionStore } from '$stores/stores';
 import { findPoolStackerEventsByStacker } from '$lib/dao_api';
 import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$lib/utils';
-import { isCoordinator } from '$lib/admin';
+import { isCoordinator } from '$lib/proposals';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';

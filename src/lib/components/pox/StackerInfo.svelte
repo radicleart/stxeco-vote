@@ -2,9 +2,9 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import { sessionStore } from "$stores/stores";
 	import { getConfig } from "$stores/store_helpers";
-	import { getPoxInfoByRewardSlot, getPoxInfoByStacker } from "$lib/pox_api";
-	import type { PoxEntry, PoxInfo, StackerInfo } from "$types/pox_types";
+	import { getPoxInfoByStacker } from "$lib/pox_api";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
+	import type { PoxEntry, PoxInfo, StackerInfo } from "@mijoco/stx_helpers/dist/index";
 
 	const dispatch = createEventDispatcher();
 

@@ -3,7 +3,7 @@
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 	import Countdown from "../../ui/Countdown.svelte";
 	import { sessionStore } from "$stores/stores";
-	import { isCoordinator } from "$lib/admin";
+	import { isCoordinator } from "$lib/proposals";
 	import { getConfig } from "$stores/store_helpers";
 	import { syncPoxEntriesByCycle } from "$lib/pox_api";
 	import PoxEntries from "./PoxEntries.svelte";

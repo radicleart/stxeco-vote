@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { isExecutiveTeamMember } from '$lib/admin';
+	import { isExecutiveTeamMember } from '$lib/proposals';
 	import { sessionStore } from '$stores/stores';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { fmtMicroToStx, fmtNumber, getAddressFromHashBytes, getHashBytesFromAddress, truncate } from "$lib/utils";
+	import { fmtMicroToStx, fmtNumber, truncate } from "$lib/utils";
 	import { findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, getVoterEvents } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
+	import { getAddressFromHashBytes, getHashBytesFromAddress } from "@mijoco/btc_helpers/dist/index";
+	import { getConfig } from "$stores/store_helpers";
 
 	export let walletAddress:string;
 	export let lookupMode:boolean;
@@ -51,7 +53,7 @@
 
 	const getRewardAddress = (entry:any) => {
 		try {
-			return truncate(getAddressFromHashBytes(entry.data.poxAddr.hashBytes, entry.data.poxAddr.version), 10)
+			return truncate(getAddressFromHashBytes(getConfig().VITE_NETWORK, entry.data.poxAddr.hashBytes, entry.data.poxAddr.version), 10)
 		} catch (err:any) {
 			return '-'
 		}
@@ -64,7 +66,7 @@
 			stackerEventEntries = await findPoolStackerEventsByStacker(walletAddress);
 		} else {
 			poxEntries = await findPoxEntriesByAddress(walletAddress)
-			const poxAddr = getHashBytesFromAddress(walletAddress)
+			const poxAddr = getHashBytesFromAddress(getConfig().VITE_NETWORK, walletAddress)
 			if (poxAddr && poxAddr.hashBytes) soloEventEntries = await findPoolStackerEventsByHashBytes(poxAddr.hashBytes, 0, 20);
 		}
     }

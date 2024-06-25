@@ -1,7 +1,7 @@
 
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
-import { isExecutiveTeamMember } from './admin';
+import { isExecutiveTeamMember } from './proposals';
 import { getWalletBalances, type AddressObject, type ExchangeRate, type PoxInfo, type SbtcUserSettingI, type StacksInfo } from '@mijoco/stx_helpers/dist/index';
 import { getTokenBalances, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 import { getConfig, getSession } from '$stores/store_helpers';
@@ -316,6 +316,8 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 function defaultSettings():SbtcUserSettingI {
 	return {
 		debugMode: false,
+		useOpDrop: false,
+		peggingIn: false,
 		executiveTeamMember: false,
 		currency: {
 		  cryptoFirst: true,

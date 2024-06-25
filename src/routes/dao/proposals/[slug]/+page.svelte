@@ -18,7 +18,7 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-	import { isCoordinator } from '$lib/admin';
+	import { isCoordinator } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';

@@ -2,15 +2,6 @@ import type { PoxEntry } from '@mijoco/stx_helpers/dist';
 import { addNetSelector, extractResponse } from './dao_api';
 import { getConfig } from '$stores/store_helpers';
 
-
-
-export async function getPoxInfoByRewardSlot(btcAddress:string, cycle:number, stxAddress:string) {
-  const path = addNetSelector(getConfig().VITE_BRIDGE_API + '/pox/solo-stacker/' + btcAddress + '/' + cycle + '/' + stxAddress);
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
 export async function getPoxInfoByStacker(stxAddress:string, cycle:number) {
   const path = addNetSelector(getConfig().VITE_BRIDGE_API + '/pox/stacker/' + stxAddress + '/' + cycle);
   const response = await fetch(path);

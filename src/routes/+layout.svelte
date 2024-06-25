@@ -8,7 +8,7 @@
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
 	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
-	import { getCurrentProposal } from '$lib/admin';
+	import { getCurrentProposal } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';

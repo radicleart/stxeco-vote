@@ -4,7 +4,7 @@ import ChainUtils from '$lib/service/ChainUtils';
 import { sessionStore } from '$stores/stores';
 import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolStackerEventsByDelegator, findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, findPoxEntriesByAddressAndCycle } from '$lib/dao_api';
 	import { explorerBtcTxUrl, fmtMicroToStx, fmtNumber, getHashBytesFromAddress, truncate } from '$lib/utils';
-	import { isCoordinator } from '$lib/admin';
+	import { isCoordinator } from '$lib/proposals';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';

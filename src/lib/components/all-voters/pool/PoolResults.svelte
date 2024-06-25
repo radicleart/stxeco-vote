@@ -8,7 +8,7 @@ import VoteResultsRow from '../VoteResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
-	import { isCoordinator } from '$lib/admin';
+	import { isCoordinator } from '$lib/proposals';
 	import { csvMaker } from '$lib/utils';
 	import type { ProposalEvent, ResultsSummary, VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';

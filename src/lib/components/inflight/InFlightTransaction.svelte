@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { sessionStore } from '$stores/stores';
 	import Banner from '../../ui/Banner.svelte';
 	import { explorerTxUrl } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import { getTransaction } from '$lib/admin';
+	import type { DaoStore } from '$types/local_types';
+	import { daoStore } from '$stores/stores_dao';
+	import { getTransaction, type InFlight } from '@mijoco/stx_helpers/dist/index';
+	import { getConfig } from '$stores/store_helpers';
 
 	let status:string = 'pending';
     const getMessage = (inFlight:any) => {
@@ -11,16 +13,16 @@
 	}
 
 	onMount(async () => {
-		if (sessionStore.daoData?.inFlight) {
-			const txid  = $sessionStore.daoData?.inFlight.txid
+		if ($daoStore.daoData) {
+			const txid  = $daoStore.daoData?.txid
 			if (typeof txid === 'string') {
 				const myint = setInterval(async () => {
-					const tx = await getTransaction(txid)
+					const tx = await getTransaction(getConfig().VITE_STACKS_API, txid)
 					status = tx.tx_status
 					if (tx.tx_status === 'success') {
-						sessionStore.update((conf:SessionStore) => {
+						daoStore.update((conf:DaoStore) => {
 							if (!conf.daoData) conf.daoData = {} as InFlight;
-							conf.daoData.inFlight = undefined
+							conf.daoData = undefined
 							return conf;
 						})
 						clearInterval(myint)
@@ -32,11 +34,11 @@
 
 </script>
 
-{#if sessionStore.daoData?.inFlight}
+{#if $daoStore.daoData}
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 	<div class="flex flex-col w-full my-8">
   <div class={' text-gray-1000 '}>
-	<Banner message={getMessage(sessionStore.daoData?.inFlight)} bannerType={'info'}/>
+	<Banner message={getMessage($daoStore.daoData)} bannerType={'info'}/>
 </div>
 </div>
 </div>

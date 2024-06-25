@@ -3,7 +3,7 @@ import { page } from '$app/stores';
 import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
 import { openContractCall } from '@stacks/connect';
 	import { sessionStore } from '$stores/stores';
-	import { isExecutiveTeamMember } from '$lib/admin';
+	import { isExecutiveTeamMember } from '$lib/proposals';
 	import { onMount } from 'svelte';
 	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import type { DaoStore, SessionStore } from '$types/local_types';
