@@ -1,5 +1,23 @@
 import { getConfig } from '$stores/store_helpers';
 
+export async function getStackerInfo(api:string, address:string, cycle:number) {
+  const path = `${api}/pox/stacker-info/${address}/${cycle}`;
+  const response = await fetch(path);
+  const res = await response.json();
+  return res;
+}
+
+export async function fetchExchangeRates() {
+  const path = `${getConfig().VITE_BRIDGE_API}/btc/tx/rates`;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
 export async function extractResponse(response:any) {
   try {
     return await response.json();
@@ -130,4 +148,3 @@ export async function getVoterEvents(stxAddress:string) {
   const res = await extractResponse(response);
   return res;
 }
-

@@ -106,7 +106,7 @@
 		}
 
 		try {
-			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
 			balanceAtHeight = 0;

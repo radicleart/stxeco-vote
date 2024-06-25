@@ -50,10 +50,10 @@
 		}
 
 		try {
-			const response = await getBalanceAtHeight(getConfig().VITE_BRIDGE_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+			const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
 			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 		} catch (e:any) {
-			balanceAtHeight = $sessionStore.keySets[getConfig().VITE_NETWORK].stxBalance;
+			balanceAtHeight = $sessionStore.keySets[getConfig().VITE_NETWORK].stxBalance || 0;
 			errorReason = e.message;
 		}
 		inited = true;

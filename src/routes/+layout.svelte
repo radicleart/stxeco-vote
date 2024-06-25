@@ -12,7 +12,7 @@
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';
-	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import { configStore, setConfigByUrl } from '$stores/stores_config';
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
 	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';

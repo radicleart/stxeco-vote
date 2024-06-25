@@ -11,22 +11,8 @@ export async function getPoxInfoByRewardSlot(btcAddress:string, cycle:number, st
   return res;
 }
 
-export async function getRewardSlots(offset:number, limit:number, address:string) {
-  const path = addNetSelector(getConfig().VITE_BRIDGE_API + '/pox/reward-slots/' + address + '/' + offset + '/' + limit);
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
 export async function getPoxInfoByStacker(stxAddress:string, cycle:number) {
   const path = addNetSelector(getConfig().VITE_BRIDGE_API + '/pox/stacker/' + stxAddress + '/' + cycle);
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}
-
-export async function getPoxEntryByCycleAndIndex(cycle:number, index:number) {
-  const path = addNetSelector(getConfig().VITE_BRIDGE_API + '/pox/pox-entry/' + cycle + '/' + index);
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;

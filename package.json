@@ -2,10 +2,8 @@
 	"name": "stxeco-vote",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite dev --port=8080 --mode linode-mainnet",
-		"tst": "vite dev --port=8080 --mode linode-staging",
-		"lt": "vite dev --port=8080 --mode local-testnet",
-		"lm": "vite dev --port=8080 --mode local-mainnet",
+		"dev": "vite dev --port=8080 --mode devnet",
+		"lm": "vite dev --port=8080 --mode mainnet",
 		"build-stag": "vite build --mode linode-staging",
 		"build": "vite build",
 		"preview": "vite preview --host",
@@ -50,7 +48,7 @@
 	"type": "module",
 	"dependencies": {
 		"@mijoco/stx_components": "^0.0.16",
-		"@mijoco/stx_helpers": "^0.1.0",
+		"@mijoco/stx_helpers": "^0.2.3",
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
 		"@prismicio/client": "^7.5.0",

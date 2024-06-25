@@ -2,12 +2,12 @@
 	import { Tabs, TabItem } from "flowbite-svelte";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 	import Countdown from "../../ui/Countdown.svelte";
-	import type { PoxInfo } from "$types/pox_types";
 	import { sessionStore } from "$stores/stores";
 	import { isCoordinator } from "$lib/admin";
 	import { getConfig } from "$stores/store_helpers";
 	import { syncPoxEntriesByCycle } from "$lib/pox_api";
 	import PoxEntries from "./PoxEntries.svelte";
+	import type { PoxInfo } from "@mijoco/stx_helpers";
 
 	export let poxInfo:PoxInfo;
 	let showPoxEntries = false;
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			</div>
-			{#if isCoordinator(sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+			{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 			<div class="text-sm text-[#131416]/[0.64] flex justify-end gap-x-5">
 				<div class=""><a href="/" on:click|preventDefault={() => loadPoxEntries(poxInfo.current_cycle.id)}>index</a></div>
 			</div>
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 			</div>
-			{#if isCoordinator(sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+			{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 			<div class="text-sm text-[#131416]/[0.64] flex justify-end gap-x-5">
 				<div class=""><a href="/" on:click|preventDefault={() => loadPoxEntries(poxInfo.next_cycle.id)}>index</a></div>
 			</div>
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 			</div>
-			{#if isCoordinator(sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+			{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 			<div class="text-sm text-[#131416]/[0.64] flex justify-end gap-x-5">
 				<div class=""><a href="/" on:click|preventDefault={() => loadPoxEntries(poxInfo.next_cycle.id + 1)}>index</a></div>
 			</div>
@@ -113,13 +113,13 @@
 				{fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (3*2100))} in {fmtNumber(poxInfo.next_cycle.prepare_phase_start_block_height + (3*2100) - bitcoinTip)} blocks
 				<br/><span class="text-sm text-[#131416]/[0.64]"><Countdown scaleFactor={1} endBlock={poxInfo.next_cycle.prepare_phase_start_block_height - bitcoinTip + (3*2100)} /></span>
 				</div>
-				{#if isCoordinator(sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 				<div class="col-span-2"></div>
 				<div class="col-span-4"><a href="/" on:click|preventDefault={() => loadPoxEntries(poxInfo.next_cycle.id + 2)}>index pox entries</a></div>
 				{/if}
 			</div>
 			</div>
-			{#if isCoordinator(sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+			{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 			<div class="text-sm text-[#131416]/[0.64] flex justify-end gap-x-5">
 				<div class=""><a href="/" on:click|preventDefault={() => loadPoxEntries(poxInfo.next_cycle.id + 2)}>index</a></div>
 			</div>

@@ -3,12 +3,13 @@ import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { isExecutiveTeamMember } from './admin';
 import { getWalletBalances, type AddressObject, type ExchangeRate, type PoxInfo, type SbtcUserSettingI, type StacksInfo } from '@mijoco/stx_helpers/dist/index';
-import { getTokenBalances, fetchExchangeRates, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+import { getTokenBalances, fetchStacksInfo, getPoxInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 import { getConfig, getSession } from '$stores/store_helpers';
 import type { SessionStore } from '$types/local_types';
 import { sessionStore } from '$stores/stores';
 import { AppConfig, UserSession } from '@stacks/auth';
 import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
+import { fetchExchangeRates } from './dao_api';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -249,12 +250,11 @@ export async function initAddresses() {
 export async function initApplication(userSettings?:SbtcUserSettingI) {
 	const network = getConfig().VITE_NETWORK
 	const stacksApi = getConfig().VITE_STACKS_API
-	const ecoApi = getConfig().VITE_BRIDGE_API
 	try {
 		if (!userSettings) userSettings = {} as SbtcUserSettingI;
 		const stacksInfo = await fetchStacksInfo(stacksApi) || {} as StacksInfo;
 		const poxInfo = await getPoxInfo(stacksApi)
-		const exchangeRates = await fetchExchangeRates(ecoApi);
+		const exchangeRates = await fetchExchangeRates();
 		const settings = userSettings || defaultSettings()
 		const rateNow = exchangeRates?.find((o:any) => o.currency === 'USD') || {currency: 'USD'} as ExchangeRate;
 		
@@ -282,7 +282,7 @@ export async function initApplication(userSettings?:SbtcUserSettingI) {
 				const contractId = getConfig().VITE_SBTC_CONTRACT_ID;
 				obj.tokenBalances = await getTokenBalances(stacksApi, obj.stxAddress)
 				obj.sBTCBalance = Number(obj.tokenBalances?.fungible_tokens[contractId + '::sbtc']?.balance || 0)
-				obj.walletBalances = await getWalletBalances(ecoApi, obj.stxAddress, ss.keySets[network].cardinal, ss.keySets[network].ordinal)
+				obj.walletBalances = await getWalletBalances(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, obj.stxAddress, ss.keySets[network].cardinal, ss.keySets[network].ordinal)
 
 				sessionStore.update((conf:SessionStore) => {
 					conf.loggedIn = userSession.isUserSignedIn();

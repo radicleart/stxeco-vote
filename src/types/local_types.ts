@@ -9,7 +9,6 @@ export type SessionStore = {
   poxInfo:PoxInfo,
   exchangeRates: Array<ExchangeRate>
   stacksInfo: StacksInfo;
-  bitcoinBalances: any;
 };
 
 
@@ -35,4 +34,5 @@ export type HeaderLink = {
   target: string;
   items?: Array<HeaderItem>;
 }
+
 
