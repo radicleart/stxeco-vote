@@ -2,13 +2,14 @@
 import ChainUtils from '$lib/service/ChainUtils';
 import { onMount } from 'svelte';
 import { sessionStore } from '$stores/stores';
-import { findPoolStackerEventsByStacker } from '$lib/dao_api';
-import { explorerTxUrl, fmtNumber, getAddressFromHashBytes, truncate } from '$lib/utils';
 import { isCoordinator } from '$lib/proposals';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
+	import { explorerTxUrl, fmtNumber, truncate } from '$lib/utils';
+	import { getAddressFromHashBytes } from '@mijoco/btc_helpers/dist/index';
+	import { findPoolStackerEventsByStacker } from '$lib/pox_api';
 
 export let item:VoteEvent;
 
@@ -60,7 +61,7 @@ const getDelegator = (entry:any) => {
 
 const getRewardAddress = (entry:any) => {
   try {
-    return truncate(getAddressFromHashBytes(entry.data.poxAddr.hashBytes, entry.data.poxAddr.version), 10)
+    return truncate(getAddressFromHashBytes(getConfig().VITE_NETWORK, entry.data.poxAddr.hashBytes, entry.data.poxAddr.version), 10)
   } catch (err:any) {
     return '-'
   }

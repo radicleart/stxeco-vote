@@ -2,13 +2,15 @@
 import { onMount } from 'svelte';
 import ChainUtils from '$lib/service/ChainUtils';
 import { sessionStore } from '$stores/stores';
-import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolStackerEventsByDelegator, findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, findPoxEntriesByAddressAndCycle } from '$lib/dao_api';
-	import { explorerBtcTxUrl, fmtMicroToStx, fmtNumber, getHashBytesFromAddress, truncate } from '$lib/utils';
+import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
+	import { explorerBtcTxUrl, fmtMicroToStx, fmtNumber, truncate } from '$lib/utils';
 	import { isCoordinator } from '$lib/proposals';
 	import { Icon } from 'svelte-hero-icons';
 	import ArrowUpRight from '$lib/ui/ArrowUpRight.svelte';
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
+	import { findPoolStackerEventsByDelegator, findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddressAndCycle } from '$lib/pox_api';
+	import { getHashBytesFromAddress } from '@mijoco/btc_helpers/dist/index';
 
 export let item:VoteEvent;
 let expanded = false;
@@ -46,7 +48,7 @@ const fetchPoxData = async () => {
   entries = await findPoxEntriesByAddressAndCycle((item.voterProxy) ? item.voterProxy : item.voter, 78);
   entries = entries.concat(await findPoxEntriesByAddressAndCycle((item.voterProxy) ? item.voterProxy : item.voter, 79));
   //entries = await findPoolStackerEventsByStacker(item.voter);
-  const poxAddr = getHashBytesFromAddress(item.voter)
+  const poxAddr = getHashBytesFromAddress(getConfig().VITE_NETWORK, item.voter)
 	if (poxAddr && poxAddr.hashBytes) {
     events = await findPoolStackerEventsByHashBytes(poxAddr.hashBytes, 0, 20);
     if (item.poxStacker) {

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { fmtMicroToStx, fmtNumber, truncate } from "$lib/utils";
-	import { findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress, getVoterEvents } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
 	import { getAddressFromHashBytes, getHashBytesFromAddress } from "@mijoco/btc_helpers/dist/index";
 	import { getConfig } from "$stores/store_helpers";
+	import { getVoterEvents } from "$lib/dao_api";
+	import { findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress } from "$lib/pox_api";
 
 	export let walletAddress:string;
 	export let lookupMode:boolean;

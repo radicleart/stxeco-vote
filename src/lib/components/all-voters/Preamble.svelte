@@ -1,7 +1,7 @@
 <script lang="ts">
 import { explorerAddressUrl } from '$lib/utils';
 	import { getConfig } from '$stores/store_helpers';
-	import type { ProposalEvent } from '@mijoco/stx_helpers';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 export let proposal:ProposalEvent;
 const proposalMeta = proposal.proposalMeta;

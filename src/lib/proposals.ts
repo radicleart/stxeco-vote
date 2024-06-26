@@ -28,7 +28,7 @@ export function isCoordinator(address:string) {
 
 
 export async function getProposalFromContractId(submissionContractId:string, proposalContractId:string):Promise<ProposalEvent|undefined> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/get-proposal-from-contract-id/${submissionContractId}/${proposalContractId}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-proposal-from-contract-id/${submissionContractId}/${proposalContractId}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;
@@ -37,7 +37,7 @@ export async function getProposalFromContractId(submissionContractId:string, pro
 export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiveTeamMember:boolean}> {
   return (stxAddress && stxAddress === getConfig().VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
 
-  //const path = `${getConfig().VITE_BRIDGE_API}/dao/is-executive-team-member/${stxAddress}`;
+  //const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/is-executive-team-member/${stxAddress}`;
   //const response = await fetch(path);
   //const res = await response.json();
   //return res;
@@ -45,21 +45,21 @@ export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiv
 
 export async function isExtension(extensionAddress:string):Promise<{result:boolean}> {
   if (!extensionAddress) return {result:false}
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/is-extension/${extensionAddress}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/is-extension/${extensionAddress}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;
 }
 
 export async function setCurrentProposal(contractId:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/set-current-proposal/${contractId}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/set-current-proposal/${contractId}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;
 }
 
 export async function getCurrentProposal():Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/get-current-proposal`;
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-current-proposal`;
   const response = await fetch(path);
   let res = await response.json();
   if (!res) {
@@ -73,7 +73,7 @@ export async function getCurrentProposal():Promise<any> {
 }
 
 export async function processProposalContracts(contractIds:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/sync/proposal/${contractIds}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/sync/proposal/${contractIds}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;

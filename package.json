@@ -49,7 +49,7 @@
 	"dependencies": {
 		"@mijoco/btc_helpers": "^0.0.2",
 		"@mijoco/stx_components": "^0.0.16",
-		"@mijoco/stx_helpers": "^0.2.4",
+		"@mijoco/stx_helpers": "^0.2.5",
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
 		"@prismicio/client": "^7.5.0",
