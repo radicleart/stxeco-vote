@@ -6,7 +6,7 @@ import { openContractCall } from '@stacks/connect';
 	import { isExecutiveTeamMember } from '$lib/proposals';
 	import { onMount } from 'svelte';
 	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-	import type { DaoStore, SessionStore } from '$types/local_types';
+	import type { DaoStore, SessionStore } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 

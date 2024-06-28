@@ -1,5 +1,5 @@
 import { persisted } from 'svelte-local-storage-store'
-import type { DaoStore } from '$types/local_types';
+import type { DaoStore } from '@mijoco/stx_helpers/dist/index';
 import type { SoloPoolData } from '@mijoco/stx_helpers/dist/index';
 
 /** Store for your data. 

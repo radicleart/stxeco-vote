@@ -76,7 +76,7 @@
       canVote = false;
     }
     const lookupTransaction = async (txId:string) => {
-      const url = getConfig().VITE_STACKS_API_HIRO + '/extended/v1/tx/' + txId;
+      const url = getConfig().VITE_STACKS_API + '/extended/v1/tx/' + txId;
       try {
         const response = await fetch(url);
         const val = await response.json();

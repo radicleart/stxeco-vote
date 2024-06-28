@@ -17,11 +17,11 @@
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
-	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-	import { isCoordinator } from '$lib/proposals';
+	import { getCurrentProposalLink, isCoordinator } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
+	import { Placeholder } from '@mijoco/stx_components';
 
 	let method:number = -1;
 	let errorReason:string|undefined;
@@ -117,6 +117,6 @@
 		{/if}
 	{/if}
 	{:else}
-	<Placeholder />
+	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
 	{/if}
 </div>

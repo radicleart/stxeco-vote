@@ -8,7 +8,7 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { daoStore } from '$stores/stores_dao';
 	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-	import type { DaoStore, SessionStore } from '$types/local_types';
+	import type { DaoStore, SessionStore } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 
     const account = $sessionStore.keySets[getConfig().VITE_NETWORK];

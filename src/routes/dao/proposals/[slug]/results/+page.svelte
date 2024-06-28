@@ -12,15 +12,15 @@
 	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
 	import SoloResults from '$lib/components/all-voters/solo/SoloResults.svelte';
 	import { goto } from '$app/navigation';
-	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { isCoordinator } from '$lib/proposals';
+	import { getCurrentProposalLink, isCoordinator } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
+	import { Placeholder } from '@mijoco/stx_components';
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
@@ -214,7 +214,7 @@
 		{/if}
 
 	{:else}
-	<Placeholder />
+	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
 	{/if}
 
 </div>

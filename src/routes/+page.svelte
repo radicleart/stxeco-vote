@@ -56,8 +56,8 @@
 					<ProposalStageUpdate proposal={undefined} method={1} />
 					<!-- <span class="font-mono inline-block py-1 text-sm px-3 rounded-full text-[#131416]/[64%] uppercase tracking-wider border border-[#131416]/[12%]">Current proposal</span> -->
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
-						<a href="https://github.com/stacksgov/sips/blob/6d27e7cf706df5a367d8714e6037226d741630de/sips/sip-021/sip-021-nakamoto.md" class="py-2 px-4 rounded-md" target="_blank">
-							SIP-021 - Nakamoto Release
+						<a href={$daoStore.currentProposal?.linkAddress || '/'} class="py-2 px-4 rounded-md" target="_blank">
+							{$daoStore.currentProposal?.linkName || 'Coming soon'}
 							<svg class="inline w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
 								<path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>

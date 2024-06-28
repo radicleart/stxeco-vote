@@ -6,12 +6,13 @@ import { sessionStore } from "$stores/stores";
 import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import Placeholder from "$lib/components/all-voters/Placeholder.svelte";
-	import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
+import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
 	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
 	import { goto } from "$app/navigation";
 	import { daoStore } from "$stores/stores_dao";
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+	import { getCurrentProposalLink } from "$lib/proposals";
+	import { Placeholder } from "@mijoco/stx_components";
 
 let proposal:ProposalEvent;
 let inited = false;
@@ -66,5 +67,5 @@ onMount(async () => {
     </div>
   </div>
 {:else}
-  <Placeholder />
+<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
 {/if}

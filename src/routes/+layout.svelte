@@ -1,24 +1,22 @@
 <script lang="ts">
 	//import '../app.postcss';
 	import "../app.css";
-	import { StxEcoFooter, StxEcoHeader } from "@mijoco/stx_components";
-	import { initAddresses, initApplication, isLegal } from "$lib/stacks_connect";
+	import { Placeholder, StxEcoFooter, StxEcoHeader } from "@mijoco/stx_components";
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
-	import { getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
-	import { getCurrentProposal } from '$lib/proposals';
+	import { fetchExchangeRates, getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
+	import { getCurrentProposal, getCurrentProposalLink, isExecutiveTeamMember } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';
 	import { beforeNavigate, goto } from '$app/navigation';
 	import { configStore, setConfigByUrl } from '$stores/stores_config';
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
-	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
-	import type { DaoStore } from '$types/local_types';
-	import { isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
+	import { initAddresses, initApplication, isLegal, isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
+	import type { CurrentProposal, DaoStore } from "@mijoco/stx_helpers/dist/index";
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
 	const unsubscribe2 = daoStore.subscribe(() => {});
@@ -55,12 +53,7 @@
 		componentKey++;
 	}
 
-
-	
-
-
 	let componentKey = 0;
-	if (!$page.url.searchParams.has('chain')) $page.url.searchParams.set('chain', 'mainnet')
 	setConfigByUrl($page.url.searchParams);
 	if (!isLegal(location.href)) {
 		//componentKey++;
@@ -78,19 +71,25 @@
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
 	let inited = false;
-	let errorReason:string|undefined;
+	let holdingMessage = 'Waiting for voting information to load';
 
 	const login = async () => {
 		const res = await loginStacksFromHeader(document)
 	}
 
+	let link = {name: '', address: ''}
 	const initApp = async () => {
-		await initAddresses();
-		await initApplication($sessionStore.userSettings);
+		await initAddresses(getConfig().VITE_NETWORK, sessionStore);
+		const exchangeRates = await fetchExchangeRates();
+		await initApplication(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, getConfig().VITE_NETWORK, sessionStore, exchangeRates, getConfig().VITE_SBTC_CONTRACT_ID)
 
+		const emTeamMam = await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress);
+		$sessionStore.userSettings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
 		const soloPoolData = await getPoolAndSoloAddresses()
 		const daoProposals = await getDaoProposals()
-		let currentProposal = await getCurrentProposal()
+		let currentProposal:CurrentProposal = await getCurrentProposal()
+		link.address = currentProposal.linkAddress || ''
+		link.name = currentProposal.linkName || ''
 		daoStore.update((conf:DaoStore) => {
 			conf.soloPoolData = soloPoolData
 			conf.proposals = daoProposals
@@ -126,7 +125,7 @@
 			//subscribeBlockUpdates();
 			startTimer();
 		} catch (err) {
-			errorReason = COMMS_ERROR
+			holdingMessage = COMMS_ERROR
 			console.log(err)
 		}
 	})
@@ -136,16 +135,16 @@
 		<div class="mx-auto px-6 relative">
 			{#if inited}
 			<InFlightTransaction />
-				{#key componentKey}
-					<slot></slot>
-				{/key}
-				{:else}
-				<div class="py-4 mx-auto max-w-7xl md:px-6">
-					<div class="flex flex-col w-full my-8">
-						<Placeholder />
-					</div>
+			{#key componentKey}
+				<slot></slot>
+			{/key}
+			{:else}
+			<div class="py-4 mx-auto max-w-7xl md:px-6">
+				<div class="flex flex-col w-full my-8">
+					<Placeholder message={holdingMessage} link={getCurrentProposalLink()}/>
 				</div>
-				{/if}
 			</div>
+			{/if}
+		</div>
 		<StxEcoFooter />
 	</div>

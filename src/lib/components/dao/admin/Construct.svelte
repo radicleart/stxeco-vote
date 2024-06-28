@@ -28,8 +28,7 @@
         onCancel: () => {
           console.log('popup closed!');
         }
-    });
-
+      });
     }
 
     $: constructed = ($daoStore?.extensions?.filter((o:ExtensionType) => o.valid)?.length || 0) > 0 || false;

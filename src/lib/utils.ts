@@ -1,15 +1,19 @@
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { getConfig } from '$stores/store_helpers';
-import type { AddressMempoolObject, SbtcClarityEvent } from '@mijoco/stx_helpers';
+import type { AddressMempoolObject, SbtcClarityEvent } from '@mijoco/stx_helpers/dist/index';
+import type { HeaderLink } from "@mijoco/stx_helpers/dist/index";
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
 export const xsbp = 700
 
-export function getRouterInfo(routeId:string) {
-  const links = getConfig().VITE_HEADER_LINKS;
-  const link = links.find((o) => routeId === o.name)
+export function getRouterInfo(headerLinks:Array<HeaderLink>, routeId:string) {
+  const link = getConfig().VITE_HEADER_LINKS.find((o) => routeId === o.name)
+  if (link) {
+    link.href += '?chain=devnet'
+    headerLinks.push(link)
+  }
   return link;
 }
 
@@ -105,7 +109,7 @@ export function getNet() {
 }
 export function explorerAddressUrl(addr:string) {
   let url = getConfig().VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + getConfig().VITE_NETWORK;
-  if (getConfig().VITE_ENVIRONMENT === 'nakamoto') {
+  if (getConfig().VITE_NETWORK === 'nakamoto') {
     url += '&api=https://api.nakamoto.testnet.hiro.so'
   }
 	return url
@@ -113,12 +117,12 @@ export function explorerAddressUrl(addr:string) {
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
   if (txid.startsWith('0x')) txid = txid.split('x')[1]
-	return getConfig().VITE_BSTREAM_EXPLORER + '/tx/' + txid;
+	return getConfig().VITE_MEMPOOL_API + '/tx/' + txid;
 }
 
 export function explorerBtcAddressUrl(address:string|undefined) {
   if (!address) return ''
-	return getConfig().VITE_BSTREAM_EXPLORER + '/address/' + address;
+	return getConfig().VITE_MEMPOOL_API + '/address/' + address;
 }
 export function explorerTxUrl(txid:string) {
 	return getConfig().VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + getConfig().VITE_NETWORK;
@@ -136,7 +140,7 @@ export function fmtAmount(amount:number, currency:string) {
 }
 
 export function fmtNumberStacksFloor(amount:number|undefined) {
-  if (!amount || amount === 0) return 0;
+  if (!amount || amount === 0) return '0';
   return fmtNumber(Math.floor(Number(fmtMicroToStx(amount))))
 }
 

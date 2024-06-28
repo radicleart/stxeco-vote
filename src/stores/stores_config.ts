@@ -9,9 +9,9 @@ export function switchConfig(env:string) {
   configStore.set(config[env]);
 }
 export function setConfigByUrl(search:URLSearchParams) {
-  let network = 'mainnet'
-  if (search.has('chain')) {
-      network = search.get('chain') || 'mainnet'
+  let newNetwork = search.get('chain')
+  if (newNetwork) {
+    switchConfig(newNetwork)
   }
-  switchConfig(network)
+  //switchConfig(network)
 }

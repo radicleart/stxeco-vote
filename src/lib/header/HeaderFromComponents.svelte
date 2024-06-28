@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
-	import { fmtNumber, getRouterInfo } from '$lib/utils';
+	import { fmtNumber, fmtNumberStacksFloor, getRouterInfo } from '$lib/utils';
 	import { isLoggedIn, logUserOut, loginStacks } from '@mijoco/stx_helpers/dist/account';
 	import { StxEcoHeader } from "@mijoco/stx_components";
 	import { sessionStore } from "$stores/stores";
 	import { getConfig } from "$stores/store_helpers";
+	import { isCoordinator } from "$lib/proposals";
+	import type { HeaderLink } from "@mijoco/stx_helpers/dist/index";
 
 	const dispatch = createEventDispatcher();
+	let coordinator = isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK]?.stxAddress);
 
 	const keys = ($sessionStore.keySets) ? $sessionStore.keySets[getConfig().VITE_NETWORK] : undefined;
 	let loggedIn = isLoggedIn();
@@ -21,17 +24,20 @@
 		bnsNameInfo: keys?.bnsNameInfo
 	};
 	$: balances = {
-		sbtcBalance: (keys && keys.walletBalances && keys.sBTCBalance) ? fmtNumber(keys.sBTCBalance) : '0.0',
-		cardinalBalance: (keys && keys.walletBalances && keys.walletBalances.cardinal) ? fmtNumber(keys.walletBalances.cardinal.amount) : '0.0',
-		ordinalBalance: (keys && keys.walletBalances && keys.walletBalances.cardinal) ? fmtNumber(keys.walletBalances.ordinal.amount) : '0.0',
-		stacksBalance: (keys && keys.walletBalances && keys.walletBalances.cardinal) ? fmtNumber(keys.walletBalances.stacks.amount) : '0.0',
+		sbtcBalance: (keys && keys.walletBalances && keys.sBTCBalance) ? fmtNumber(keys.sBTCBalance) : '0',
+		cardinalBalance: (keys && keys.walletBalances && keys.walletBalances.cardinal) ? fmtNumber(keys.walletBalances.cardinal.amount) : '0',
+		ordinalBalance: (keys && keys.walletBalances && keys.walletBalances.ordinal) ? fmtNumber(keys.walletBalances.ordinal.amount) : '0',
+		stacksBalance: (keys && keys.walletBalances && keys.walletBalances.stacks) ? fmtNumberStacksFloor(keys.walletBalances.stacks.amount) : '0',
 	}
 
 
-	let headerLinks = []
-	headerLinks.push(getRouterInfo('/voting'))
-	headerLinks.push(getRouterInfo('/sip'))
-	//headerLinks.push(getRouterInfo('/dao-launcher'))
+	let headerLinks:Array<HeaderLink> = []
+	getRouterInfo(headerLinks, '/voting')
+	getRouterInfo(headerLinks, '/sip')
+	if (coordinator) {
+		getRouterInfo(headerLinks, '/dao-launcher')
+		getRouterInfo(headerLinks, '/proposals')
+	}
 
 	const loginEvent = async (e?:any) => {
 		console.log('update for login', e.target)

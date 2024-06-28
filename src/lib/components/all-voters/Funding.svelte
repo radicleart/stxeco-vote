@@ -4,10 +4,9 @@
 	import { openContractCall } from '@stacks/connect';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { processProposalContracts } from '$lib/proposals';
+	import { getCurrentProposalLink, processProposalContracts } from '$lib/proposals';
 	import DaoUtils from '$lib/service/DaoUtils';
 	import Proposed from './Proposed.svelte';
-	import Placeholder from './Placeholder.svelte';
 	import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from '$lib/dao_api';
 	import Countdown from '../../ui/Countdown.svelte';
 	import type { FundingData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
@@ -15,6 +14,7 @@
 	import { getConfig } from '$stores/store_helpers';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 	import { fmtMicroToStx, fmtNumber } from '$lib/utils';
+	import { Placeholder } from '@mijoco/stx_components';
 
 	export let proposal:ProposalEvent;
 	let errorMessage:string|undefined;
@@ -204,5 +204,5 @@
 <Proposed {proposal} />
 {/if}
 {:else}
-<Placeholder />
+<Placeholder message={'Vote info loading'}  link={getCurrentProposalLink()}/>
 {/if}

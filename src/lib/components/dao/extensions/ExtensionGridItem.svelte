@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte';
 import arr from '$lib/assets/png-assets/stx_eco_directional_arrow.png'
-	import type { ExtensionType } from '@mijoco/stx_helpers';
+	import type { ExtensionType } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 
 let dispatch = createEventDispatcher();

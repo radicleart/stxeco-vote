@@ -4,7 +4,7 @@
   import { Icon, ClipboardDocument } from "svelte-hero-icons"
   import { explorerAddressUrl, fmtMicroToStx, fmtSatoshiToBitcoin } from '$lib/utils'
   import LinkToExplorer from '$lib/ui/LinkToExplorer.svelte';
-  import { makeFlash } from "$lib/stacks_connect";
+	import { makeFlash } from "@mijoco/stx_helpers/dist/index";
 
   export let address:string;
   export let voteFor = false;

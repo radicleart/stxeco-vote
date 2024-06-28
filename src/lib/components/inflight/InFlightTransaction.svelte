@@ -2,7 +2,7 @@
 	import Banner from '../../ui/Banner.svelte';
 	import { explorerTxUrl } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import type { DaoStore } from '$types/local_types';
+	import type { DaoStore } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	import { getTransaction, type InFlight } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';

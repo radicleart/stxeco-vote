@@ -4,7 +4,7 @@
 	import { sessionStore } from '$stores/stores';
 	import { openContractCall } from '@stacks/connect';
 	import { PostConditionMode, contractPrincipalCV } from '@stacks/transactions';
-	import type { ProposalEvent } from '@mijoco/stx_helpers';
+	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 
 

@@ -1,5 +1,6 @@
-import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-import { getConfig } from '$stores/store_helpers';
+import { getStacksNetwork, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+import { getConfig, getDaoStore } from '$stores/store_helpers';
+import { AddressPurpose, BitcoinNetworkType, getAddress, type GetAddressOptions } from 'sats-connect';
 
 export const coordinators = [
 	{ stxAddress: 'SPSEBFRZZEZSHGRKRR1Z55RX5AWHER3CYM0H9BMW', btcAddress: '', }, // mitchel
@@ -22,11 +23,41 @@ export const coordinators = [
   { stxAddress: 'SPSEBFRZZEZSHGRKRR1Z55RX5AWHER3CYM0H9BMW', btcAddress: '', }, // mitchell
 ]
 
-export function isCoordinator(address:string) {
-	return address && coordinators.find((o) => o.stxAddress === address);
+export function isCoordinator(address:string|undefined) {
+  if (!address) return false
+	return coordinators.find((o) => o.stxAddress === address);
 }
 
+export async function getBitcoinAddressSatsConnect() {
+  let myType = BitcoinNetworkType.Testnet
+  if (getStacksNetwork(getConfig().VITE_NETWORK).isMainnet()) myType = BitcoinNetworkType.Mainnet
+  const getAddressOptions:GetAddressOptions = {
+    payload: {
+      purposes: [AddressPurpose.Ordinals, AddressPurpose.Payment],
+      message: 'Address for receiving Ordinals and payments',
+        network: {
+        type: myType
+      },
+    },
+    onFinish: (response:any) => {
+      console.log(response)
+      const obj = response.addresses;
+      return {
+        cardinal: obj.find((o:any) => o.purpose === 'payment').address,
+        ordinal: obj.find((o:any) => o.purpose === 'ordinals').address,
+        btcPubkeySegwit0: obj.find((o:any) => o.purpose === 'payment').publicKey,
+        btcPubkeySegwit1: obj.find((o:any) => o.purpose === 'ordinals').publicKey,
+        sBTCBalance: 0,
+        stxBalance: 0
+      };
+    },
+    onCancel: () => {
+      throw new Error('cancelled');
+    }
+  }
+  await getAddress(getAddressOptions);
 
+}
 export async function getProposalFromContractId(submissionContractId:string, proposalContractId:string):Promise<ProposalEvent|undefined> {
   const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-proposal-from-contract-id/${submissionContractId}/${proposalContractId}`;
   const response = await fetch(path);
@@ -49,6 +80,11 @@ export async function isExtension(extensionAddress:string):Promise<{result:boole
   const response = await fetch(path);
   const res = await response.json();
   return res;
+}
+
+export function getCurrentProposalLink():{ name:string, address:string} {
+  const ds = getDaoStore()
+  return { name: ds.currentProposal?.linkName || '', address: ds.currentProposal?.linkAddress || '' };
 }
 
 export async function setCurrentProposal(contractId:string):Promise<any> {

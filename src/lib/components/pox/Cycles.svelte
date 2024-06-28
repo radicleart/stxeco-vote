@@ -7,7 +7,7 @@
 	import { getConfig } from "$stores/store_helpers";
 	import { syncPoxEntriesByCycle } from "$lib/pox_api";
 	import PoxEntries from "./PoxEntries.svelte";
-	import type { PoxInfo } from "@mijoco/stx_helpers";
+	import type { PoxInfo } from "@mijoco/stx_helpers/dist/index";
 
 	export let poxInfo:PoxInfo;
 	let showPoxEntries = false;

@@ -3,11 +3,10 @@
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import { getConfig } from "$stores/store_helpers";
-	import { isLeather } from "$lib/stacks_connect";
 	import { sessionStore } from "$stores/stores";
 	import { BitcoinNetworkType, sendBtcTransaction, type Recipient } from "sats-connect";
 	import SoloVotingActiveQr from "./SoloVotingActiveQR.svelte";
-	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+	import { isLeather, isLoggedIn } from "@mijoco/stx_helpers/dist/account";
 	import { daoStore } from "$stores/stores_dao";
 
   const addresses = $daoStore.soloPoolData?.soloAddresses!

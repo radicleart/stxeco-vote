@@ -4,9 +4,9 @@
 	import { PostConditionMode, contractPrincipalCV, uintCV } from '@stacks/transactions';
 	import { openContractCall } from '@stacks/connect';
 	import { sessionStore } from '$stores/stores';
-	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers';
+	import type { InFlight, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
-	import type { DaoStore, SessionStore } from '$types/local_types';
+	import type { DaoStore, SessionStore } from '@mijoco/stx_helpers/dist/index';
 	import { daoStore } from '$stores/stores_dao';
 	
 	export let proposal:ProposalEvent;

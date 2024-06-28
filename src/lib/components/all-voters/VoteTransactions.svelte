@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import { isCoordinator } from "$lib/proposals";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import DaoUtils from "$lib/service/DaoUtils";
@@ -12,7 +11,6 @@
 
 	export let votes: Array<VoteEvent> = []
 	const account = $sessionStore.keySets[getConfig().VITE_NETWORK];
-	let coordinator = isCoordinator(account.stxAddress);
 	let componentKey = 0;
 	let sortDir = '';
 	let sortField = 'voter';

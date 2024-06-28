@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Placeholder from '$lib/components/all-voters/Placeholder.svelte';
   import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
@@ -10,6 +9,8 @@
 	import StackerInfo from '$lib/components/pox/StackerInfo.svelte';
 	import { sessionStore } from '$stores/stores';
 	import type { PoxEntry, PoxInfo } from '@mijoco/stx_helpers/dist/index';
+	import { getCurrentProposal, getCurrentProposalLink } from '$lib/proposals';
+	import { Placeholder } from '@mijoco/stx_components';
 
   let poxInfo:PoxInfo;
   let poxEntry:PoxEntry;
@@ -89,6 +90,6 @@
   </div>
   </div>
   {:else}
-    <Placeholder />
+  <Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
   {/if}
 </div>
