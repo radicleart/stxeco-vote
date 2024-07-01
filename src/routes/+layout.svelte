@@ -6,7 +6,7 @@
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
-	import { fetchExchangeRates, getDaoProposals, getPoolAndSoloAddresses } from '$lib/dao_api';
+	import { fetchExchangeRates, getDaoProposals, getPoolAndSoloAddresses, getTentativeProposals } from '$lib/dao_api';
 	import { getCurrentProposal, getCurrentProposalLink, isExecutiveTeamMember } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
@@ -16,7 +16,7 @@
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
 	import { initAddresses, initApplication, isLegal, isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
-	import type { CurrentProposal, DaoStore } from "@mijoco/stx_helpers/dist/index";
+	import type { CurrentProposal, DaoStore, TentativeProposal } from "@mijoco/stx_helpers/dist/index";
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
 	const unsubscribe2 = daoStore.subscribe(() => {});
@@ -86,12 +86,14 @@
 		const emTeamMam = await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress);
 		$sessionStore.userSettings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
 		const soloPoolData = await getPoolAndSoloAddresses()
+		const tentativeProposals:Array<TentativeProposal> = await getTentativeProposals()
 		const daoProposals = await getDaoProposals()
 		let currentProposal:CurrentProposal = await getCurrentProposal()
 		link.address = currentProposal.linkAddress || ''
 		link.name = currentProposal.linkName || ''
 		daoStore.update((conf:DaoStore) => {
 			conf.soloPoolData = soloPoolData
+			conf.tentativeProposals = tentativeProposals
 			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;

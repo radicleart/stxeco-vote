@@ -47,6 +47,13 @@ export async function getPoolAndSoloVotesByProposal(proposalCid:string) {
   return res;
 }
 
+export async function getTentativeProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/tentative-proposals`
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
 export async function getDaoProposals() {
   const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/proposals`
   const response = await fetch(path);
