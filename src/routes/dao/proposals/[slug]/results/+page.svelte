@@ -3,10 +3,9 @@
 	import { Tabs, TabItem } from 'flowbite-svelte';
 	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
-	import DaoUtils from '$lib/service/DaoUtils';
 	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import { NAKAMOTO_VOTE_STOPS_HEIGHT, findPoolVotes, getSummary } from '$lib/dao_api';
+	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getSummary } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
 	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
@@ -14,19 +13,19 @@
 	import { goto } from '$app/navigation';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { getCurrentProposalLink, isCoordinator } from '$lib/proposals';
+	import { getCurrentProposalLink, getProposalLatest, getProposalNotFoundLink, isPostVoting, isVoting } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { ProposalStage, type ProposalEvent, type ResultsSummary, type VoteEvent } from '@mijoco/stx_helpers/dist/index';
-	import { daoStore } from '$stores/stores_dao';
+	import { type ResultsSummary, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
+
+	let proposal:VotingEventProposeProposal|undefined;
 
 	let summary:ResultsSummary;
 	let uniqueAll:number = 0;
 	let method:number = -1;
 	let errorReason:string|undefined;
-	let proposal:ProposalEvent;
 	let balanceAtHeight:number = 0;
 	let proposalNotFound = false;
 	let activeFlag = false;
@@ -54,11 +53,7 @@
 
 	const voteConcluded = () => {
 		if (!proposal || !proposal.proposalData) return false
-		if (isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)) return true
-		if (method === 3) return proposal.stage === ProposalStage.CONCLUDED
-		else {
-			return $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
-		}
+		return isPostVoting(proposal)
 	}
 
 	const uniqueVotes = (summary:any) => {
@@ -85,39 +80,29 @@
 
 	onMount(async () => {
 		method = Number($page.url.searchParams.get('method')) || 3
-		let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $page.params.slug);
-		if (event) {
-			proposal = event;
-			const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
-			const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
-			DaoUtils.setStatus(method, burnHeight, stacksTipHeight, proposal);
-			const results = await findPoolVotes()
+		proposal = await getProposalLatest($page.params.slug)
+
+		if (proposal) {
+			const burnHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			//const results = await findPoolVotes()
 			//poolVotes = results.poolVotes
 			summary = await getSummary()
 			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			//poolVotes = allVotes.poolVotes || [];
 			//soloVotes = allVotes.soloVotes || [];
 			uniqueAll = uniqueVotes(summary);
-			activeFlag = proposal.proposalData && stacksTipHeight >= proposal.proposalData.startBlockHeight
+			activeFlag = proposal.proposalData && burnHeight >= proposal.proposalData.burnStartHeight
 			
 			isApproved()
-		} else {
-			proposalNotFound = true
+			try {
+				const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+				balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
+			} catch (e:any) {
+				balanceAtHeight = $sessionStore.keySets[getConfig().VITE_NETWORK].walletBalances?.stacks.amount || 0;
+				errorReason = e.message;
+			}
 		}
 
-		try {
-			const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
-			balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
-		} catch (e:any) {
-			balanceAtHeight = 0;
-			errorReason = e.message;
-		}
-
-		if (getConfig().VITE_NETWORK === 'mainnet' && !isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)) {
-			proposalNotFound = true
-			activeFlag = false
-		}
-		inited = true
 	})
 </script>
 
@@ -128,10 +113,10 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 
-	{#if inited}
+	{#if proposal}
 
-		<ProposalHeader {proposal} method={1} />
-		{#if voteConcluded()}
+	<ProposalHeader {proposal}/>
+	{#if voteConcluded()}
 		<div class="flex flex-col w-full my-8">
 			<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 			  	<div class="flex flex-col items-stretch justify-items-stretch">
@@ -150,30 +135,6 @@
 						</div>
 						{/if}
 					</div>
-					<!--
-					<div class="text-[#131416]/[0.44] self-baseline flex flex-col">
-						<div>
-							<button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">
-								Count details <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-									<path fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2Z" clip-rule="evenodd" />
-								</svg>
-							</button>
-							</div>
-						{#if showDetails}
-						<div>
-							<h1>Count Methodology</h1>
-							<div class="my-5 ">
-								<h2>Solo count</h2>
-								<p>Bitcoin transactions were read from the Bitcoin chain for each address.</p>
-								<p>The transactions were connected to pox entries.</p>
-								<ol>
-									<li>Vote transactions collected from bitcoin</li>
-								</ol>
-							</div>
-						</div>
-						{/if}
-					</div>
-					-->
 				</div>
 				<NakamotoBackground />
 				<NakamotoShield />
@@ -214,7 +175,11 @@
 		{/if}
 
 	{:else}
+	{#if proposalNotFound}
+	<Placeholder message={'Proposal could not be loaded'} link={getProposalNotFoundLink()}/>
+	{:else}
 	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
+	{/if}
 	{/if}
 
 </div>

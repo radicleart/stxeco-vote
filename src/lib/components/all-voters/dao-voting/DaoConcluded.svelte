@@ -3,22 +3,13 @@
 	import { sessionStore } from '$stores/stores';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import type { ProposalData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 
-	export let proposal: ProposalEvent;
+	export let proposal:VotingEventProposeProposal;
 
-	let proposalData: ProposalData;
-	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
-	let winning = 'danger';
-	let inFavour:number;
+	let burnHeight = $sessionStore.stacksInfo.burn_block_height;
 
 	onMount(async () => {
-		const pd = proposal.proposalData
-		inFavour = (pd && (pd.votesFor + pd.votesAgainst) > 0) ? Number(((pd.votesFor / (pd.votesFor + pd.votesAgainst)) * 100).toFixed(2)) : 0;
-		if (inFavour > 80) {
-			winning = 'success';
-		}
-		proposalData = pd
 	});
 </script>
 
@@ -37,10 +28,10 @@
 			<div class="flex flex-col gap-y-12">
 				<div class="flex flex-col">
 					<p class="text-2xl mb-5">Voting ended</p>
-					<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>
+					<p>Voting ended <strong>{burnHeight - proposal.proposalData.burnEndHeight} blocks ago</strong>.</p>
 				</div>
 
-				<p class="text-lg">Vote results can be found <a class="text-warning-900 underline" href={`/dao/proposals/${proposal.contractId}/results`}>here</a>.</p></div>
+				<p class="text-lg">Vote results can be found <a class="text-warning-900 underline" href={`/dao/proposals/${proposal.proposal}/results`}>here</a>.</p></div>
 			<NakamotoBackground />
 			<NakamotoShield />
 		</div>

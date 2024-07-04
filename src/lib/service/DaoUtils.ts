@@ -1,40 +1,10 @@
 import { getConfig } from "$stores/store_helpers";
-import { NAKAMOTO_VOTE_START_HEIGHT, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
-import { daoStore } from "$stores/stores_dao";
 import { ProposalStage, type ExtensionType, type ProposalEvent } from "@mijoco/stx_helpers/dist/index";
-import { getProposalFromContractId } from "$lib/proposals";
 
 const DaoUtils = {
 
-  getProposal: async (proposals:Array<ProposalEvent>|undefined, proposalContractId:string) => {
-		let event:ProposalEvent|undefined;
-    try {
-      if (proposals && proposals.length > 0) {
-        const index = proposals?.findIndex((o) => o.contractId === proposalContractId )
-        if (typeof index === 'number' && index > -1) {
-          event = proposals[index]
-        }
-      }
-      if (!event) {
-        const submissionContractId = getConfig().VITE_DOA_DEPLOYER + '.' + getConfig().VITE_DOA_FUNDED_SUBMISSION_EXTENSION
-        event = await getProposalFromContractId(submissionContractId, proposalContractId)
-        if (event && event.contractId && event.proposalMeta) {
-          daoStore.update((conf) => {
-            if (!conf.proposals) conf.proposals = []
-            if (event) conf.proposals.push(event)
-            return conf;
-          })
-        } else {
-          return
-        }
-      }
-    } catch (err:any) {
-      console.log('DaoUtils:getProposal ', err);
-    }
-    return event
-  },
 
-  setStatus: (method:number, burnHeight:number, stacksTipHeight:number, proposal:ProposalEvent) => {    
+  setStatus: (burnHeight:number, proposal:ProposalEvent) => {    
     proposal.status = { name: 'unkown', color: 'primary-500', colorCode: 'primary-500' };
     if (proposal && typeof proposal.executedAt === 'number' && proposal.executedAt > 0 && typeof proposal.signals?.signals === 'number' && proposal.signals?.signals > 0) {
       proposal.stage = ProposalStage.CONCLUDED
@@ -56,14 +26,9 @@ const DaoUtils = {
       if (fundingMet) proposal.stage = ProposalStage.PROPOSED
     } else {
       proposal.stage = ProposalStage.PROPOSED
-      if (method === 3 || proposal.contractId.indexOf('bdp001-sip-021-nakamoto') === -1) {
-        if (stacksTipHeight >= proposal.proposalData.startBlockHeight) proposal.stage = ProposalStage.ACTIVE
-        if (stacksTipHeight >= proposal.proposalData.endBlockHeight) proposal.stage = ProposalStage.INACTIVE
-      } else {
-        if (burnHeight >= NAKAMOTO_VOTE_START_HEIGHT) proposal.stage = ProposalStage.ACTIVE
-        if (burnHeight >= NAKAMOTO_VOTE_STOPS_HEIGHT) proposal.stage = ProposalStage.INACTIVE
-      }
-      if (burnHeight >= NAKAMOTO_VOTE_STOPS_HEIGHT && stacksTipHeight >= proposal.proposalData.endBlockHeight && proposal.proposalData.concluded) {
+      if (burnHeight >= proposal.proposalData.burnStartHeight) proposal.stage = ProposalStage.ACTIVE
+      if (burnHeight >= proposal.proposalData.burnEndHeight) proposal.stage = ProposalStage.INACTIVE
+      if (proposal.proposalData.concluded) {
         proposal.stage = ProposalStage.CONCLUDED
       }
 
@@ -71,7 +36,7 @@ const DaoUtils = {
 
       if (proposal.votingContract.indexOf(getConfig().VITE_DOA_PROPOSAL_VOTING_EXTENSION) > -1) {
         proposal.status = { name: 'submitted', color: 'primary-500', colorCode: 'primary-500' };
-        if (stacksTipHeight < proposal.proposalData.startBlockHeight) {
+        if (burnHeight < proposal.proposalData.burnStartHeight) {
           proposal.status = { name: 'commencing soon', color: 'warning-500', colorCode: 'warning-500' };
         } else {
           proposal.status = { name: 'voting', color: 'warning-500', colorCode: 'warning-500' };
@@ -84,7 +49,7 @@ const DaoUtils = {
       if (proposal.proposalData.concluded) {
         if (proposal.proposalData.passed) proposal.status = { name: 'passed', color: 'success-500', colorCode: 'success-500' };
         else proposal.status = { name: 'failed', color: 'danger-500', colorCode: 'error-500' };
-      } else if (stacksTipHeight > proposal.proposalData.endBlockHeight) {
+      } else if (burnHeight > proposal.proposalData.burnEndHeight) {
         proposal.status = { name: 'voting ended', color: 'warning-500', colorCode: 'warning-500' };
       }
     }

@@ -1,6 +1,5 @@
 import { persisted } from 'svelte-local-storage-store'
-import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, StacksInfo } from '@mijoco/stx_helpers/dist/index';
-import type { SessionStore } from '$types/local_types';
+import type { AddressObject, ExchangeRate, PoxInfo, SbtcUserSettingI, SessionStore, StacksInfo } from '@mijoco/stx_helpers/dist/index';
 
 /** Store for your data. 
 This assumes the data you're pulling back will be an array.

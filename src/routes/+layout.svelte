@@ -6,8 +6,8 @@
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
 	import InFlightTransaction from '$lib/components/inflight/InFlightTransaction.svelte';
-	import { fetchExchangeRates, getDaoProposals, getPoolAndSoloAddresses, getTentativeProposals } from '$lib/dao_api';
-	import { getCurrentProposal, getCurrentProposalLink, isExecutiveTeamMember } from '$lib/proposals';
+	import { fetchExchangeRates, getPoolAndSoloAddresses } from '$lib/dao_api';
+	import { getActiveProposals, getCurrentProposal, getCurrentProposalLink, getInactiveProposals, getTentativeProposals, isExecutiveTeamMember } from '$lib/proposals';
 	import { daoStore } from '$stores/stores_dao';
 	import { getConfig } from '$stores/store_helpers';
 	import { page } from '$app/stores';
@@ -86,15 +86,11 @@
 		const emTeamMam = await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress);
 		$sessionStore.userSettings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
 		const soloPoolData = await getPoolAndSoloAddresses()
-		const tentativeProposals:Array<TentativeProposal> = await getTentativeProposals()
-		const daoProposals = await getDaoProposals()
 		let currentProposal:CurrentProposal = await getCurrentProposal()
 		link.address = currentProposal.linkAddress || ''
 		link.name = currentProposal.linkName || ''
 		daoStore.update((conf:DaoStore) => {
 			conf.soloPoolData = soloPoolData
-			conf.tentativeProposals = tentativeProposals
-			conf.proposals = daoProposals
 			conf.currentProposal = currentProposal
 			return conf;
 		});

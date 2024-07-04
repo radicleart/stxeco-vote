@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Banner from "$lib/ui/Banner.svelte";
-import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
+  import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
-	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
+	import type { VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import PoolVotingActiveQr from "./PoolVotingActiveQR.svelte";
 
-  export let proposal: ProposalEvent;
+	export let proposal:VotingEventProposeProposal;
 
 </script>
 

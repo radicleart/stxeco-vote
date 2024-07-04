@@ -35,8 +35,9 @@
 	getRouterInfo(headerLinks, '/voting')
 	getRouterInfo(headerLinks, '/sip')
 	if (coordinator) {
-		getRouterInfo(headerLinks, '/dao-launcher')
-		getRouterInfo(headerLinks, '/proposals')
+		getRouterInfo(headerLinks, '/admin')
+		//getRouterInfo(headerLinks, '/dao-launcher')
+		//getRouterInfo(headerLinks, '/proposals')
 	}
 
 	const loginEvent = async (e?:any) => {

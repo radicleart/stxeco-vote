@@ -7,27 +7,17 @@ import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
-	import type { ProposalEvent } from "@mijoco/stx_helpers/dist/index";
-	import { goto } from "$app/navigation";
-	import { daoStore } from "$stores/stores_dao";
-	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
-	import { getCurrentProposalLink } from "$lib/proposals";
-	import { Placeholder } from "@mijoco/stx_components";
+import { ProposalStage, type VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
+import { goto } from "$app/navigation";
+import { daoStore } from "$stores/stores_dao";
+import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+import { getCurrentProposalLink, getProposalLatest, isVoting } from "$lib/proposals";
+import { Placeholder } from "@mijoco/stx_components";
 
-let proposal:ProposalEvent;
-let inited = false;
+let proposal:VotingEventProposeProposal|undefined;
+
 onMount(async () => {
-  let event:ProposalEvent|undefined = await DaoUtils.getProposal($daoStore.proposals, $page.params.slug);
-  if (event) {
-    proposal = event;
-    const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
-		const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
-		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
-    console.log(event)
-  } else {
-    goto('/')
-  }
-  inited = true
+	proposal = await getProposalLatest($page.params.slug)
 })
 </script>
 
@@ -37,11 +27,11 @@ onMount(async () => {
 	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
-{#if inited}
+{#if proposal}
   <div class="py-6 mx-auto max-w-7xl md:px-6">
-    {#if proposal}
-      <ProposalHeader {proposal} method={1} />
-    {/if}
+
+    <ProposalHeader {proposal}/>
+
     <div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
       <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
         {#if isLoggedIn()}

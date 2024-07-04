@@ -10,9 +10,10 @@
 	import BallotBox from "./DaoVotingBallotBox.svelte";
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
-	import { ProposalStage, type ProposalEvent } from "@mijoco/stx_helpers/dist/index";
+	import { ProposalStage, type VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
+	import { isVoting } from "$lib/proposals";
 
-  export let proposal: ProposalEvent;
+	export let proposal:VotingEventProposeProposal;
 	export let adjustBal:number
   const votes: any[] = []
   let voted = 0;
@@ -21,7 +22,7 @@
   let inited = false;
 
 	onMount(async () => {
-      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.contractId, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
+      const daoVotes = await getDaoVotesByProposalAndVoter(proposal.proposal, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
       if (daoVotes && daoVotes.length > 0) {
         daoVotes.forEach((o:any) => {
           if (o) votes.push(o)
@@ -68,14 +69,14 @@
 
         {#if balanceAtHeight > 0}
         <div>
-          {#if proposal && proposal.stage === ProposalStage.ACTIVE}
+          {#if isVoting(proposal)}
           <BallotBox {proposal} {balanceAtHeight}/>
           {/if}
         </div>
         {:else}
           {#if voted === 0 && isLoggedIn()}
           <div class="mb-3 max-w-xl">
-            <Banner bannerType={'danger'} message={'Account not eligible to vote. Your balance when voting began (at block ' + fmtNumber(proposal.proposalData.startBlockHeight) + ') was 0 STX.'} />
+            <Banner bannerType={'warning'} message={'Already voted or your snapshot balance when voting began (at block ' + fmtNumber(proposal.proposalData.startBlockHeight) + ') was 0 STX.'} />
           </div>
           {/if}
         {/if}

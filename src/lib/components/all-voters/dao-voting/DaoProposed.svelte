@@ -4,7 +4,7 @@
 	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
 
 	export let proposalEvent: ProposalEvent;
-	let stacksTipHeight = $sessionStore.stacksInfo.stacks_tip_height;
+	let tipHeight = $sessionStore.stacksInfo.burn_block_height;
 
 	onMount(async () => {
 	});
@@ -19,6 +19,6 @@
 </svelte:head>
 
 <div class="bg-white/5 rounded-md p-4 border border-gray-900 flex flex-col gap-y-6">
-	<p>Voting starts in {proposalEvent.proposalData.startBlockHeight - stacksTipHeight} blocks.</p>
+	<p>Voting starts in {proposalEvent.proposalData.burnStartHeight - tipHeight} blocks.</p>
 </div>
 

@@ -6,6 +6,7 @@ export interface Config {
     VITE_PUBLIC_APP_VERSION: string;
     VITE_NETWORK: string;
     VITE_DOA_DEPLOYER: string;
+    VITE_DAO_BASE_CONTRACTS: string;
     VITE_DOA: string;
     VITE_DOA_PROPOSAL: string;
     VITE_DOA_SNAPSHOT_VOTING_EXTENSION: string;
@@ -30,6 +31,7 @@ export const config: { [key: string]: Config } = {
         VITE_NETWORK: 'devnet',
         VITE_DOA_DEPLOYER: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
         VITE_DOA: 'bitcoin-dao',
+        VITE_DAO_BASE_CONTRACTS: 'bitcoin-dao',
         VITE_DOA_PROPOSAL: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.bdp001-sip-021-test-01',
         VITE_DOA_SNAPSHOT_VOTING_EXTENSION: 'bde007-snapshot-proposal-voting',
         VITE_DOA_PROPOSAL_VOTING_EXTENSION: 'bde007-snapshot-proposal-voting',
@@ -57,14 +59,17 @@ export const config: { [key: string]: Config } = {
         VITE_HEADER_LINKS: [
             {name: '/voting', href: '/', display: 'Voting', target:'_self',
                 items: [
-                    {name: '/bdp001-sip-021-nakamoto', href: '/dao/proposals/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.bdp001-sip-021-nakamoto/results?method=1', display: 'SIP 021 Nakamoto Upgrade', target:'_self'},
+                    {name: '/bdp001-sip-021-nakamoto', href: '/dao/proposals/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.bdp001-sip-021-nakamoto/results?method=1&chain=devnet', display: 'SIP 021 Nakamoto Upgrade', target:'_self'},
+                ]
+            },
+            {name: '/admin', href: '/admin', display: 'Admin', target:'_self',
+                items: [
+                    {name: '/proposals', href: '/dao/proposals?chain=devnet', display: 'Proposals', target:'_self'},
+                    {name: '/extensions', href: '/dao/extensions?chain=devnet', display: 'Extensions', target:'_self'},
+                    {name: '/dao-launcher', href: '/dao-launcher?chain=devnet', display: 'DAO Launcher', target:'_self'},
                 ]
             },
             {name: '/sip', href: '/sip', display: 'Upcoming SIPs', target:'_self'},
-            //{name: '/insights', href: 'http://localhost:8082/insights', display: 'Insights', target:'_self'},
-            {name: '/dao-launcher', href: 'http://localhost:8084/launcher/dao-launcher', display: 'DAO Launcher', target:'_self'},
-            {name: '/proposals', href: '/dao/proposals', display: 'Proposals', target:'_self'},
-            //{name: '/shop-front', href: 'http://localhost:8086/shop-front', display: 'Shop Front', target:'_self'}
         ]
     },
     "testnet": {
@@ -72,6 +77,7 @@ export const config: { [key: string]: Config } = {
         VITE_PUBLIC_APP_VERSION: '1.0.0',
         VITE_NETWORK: 'testnet',
         VITE_DOA_DEPLOYER: 'ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY',
+        VITE_DAO_BASE_CONTRACTS: 'bitcoin-dao,ecosystem-dao',
         VITE_DOA: 'bitcoin-dao',
         VITE_DOA_PROPOSAL: 'ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY.bdp001-sip-021-test-01',
         VITE_DOA_SNAPSHOT_VOTING_EXTENSION: 'bde007-snapshot-proposal-voting',
@@ -107,6 +113,7 @@ export const config: { [key: string]: Config } = {
         VITE_PUBLIC_APP_VERSION: '1.0.0',
         VITE_NETWORK: 'mainnet',
         VITE_DOA_DEPLOYER: 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z',
+        VITE_DAO_BASE_CONTRACTS: 'bitcoin-dao,ecosystem-dao',
         VITE_DOA: 'bitcoin-dao',
         VITE_DOA_PROPOSAL: 'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto',
         VITE_DOA_SNAPSHOT_VOTING_EXTENSION: 'bde007-snapshot-proposal-voting',

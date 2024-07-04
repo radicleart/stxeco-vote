@@ -51,7 +51,7 @@
 				{#if proposal.stage === ProposalStage.INACTIVE || proposal.stage === ProposalStage.CONCLUDED}
 					<div class="flex flex-col">
 						<p class="text-2xl mb-5">Voting ended</p>
-						<!--<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.endBlockHeight} blocks ago</strong>.</p>-->
+						<!--<p>Voting ended <strong>{stacksTipHeight - proposal.proposalData.burnEndHeight} blocks ago</strong>.</p>-->
 						<p>Votes are now being counted.</p>
 						<p>Vote results will be displayed as soon as the vote count is over.</p>
 						<p>Thank you for your patience.</p>

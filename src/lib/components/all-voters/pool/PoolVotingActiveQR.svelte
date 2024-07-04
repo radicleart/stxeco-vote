@@ -1,59 +1,59 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-import Invoice from './Invoice.svelte';
-import { sessionStore } from '$stores/stores';
-import { openSTXTransfer } from '@stacks/connect';
-import { goto } from '$app/navigation';
-import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
-	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+  import { onMount } from 'svelte';
+  import Invoice from './Invoice.svelte';
+  import { sessionStore } from '$stores/stores';
+  import { openSTXTransfer } from '@stacks/connect';
+  import { goto } from '$app/navigation';
+  import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import { daoStore } from '$stores/stores_dao';
+	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers';
 
-export let proposal: ProposalEvent;
+	export let proposal:VotingEventProposeProposal;
 
-let yesAddress:string;
-let noAddress:string;
-let showStxTransfer = false;
-let txId: string;
-let errorMessage: string|undefined;
-let vforCurrent: boolean;
-let inited = false;
+  let yesAddress:string;
+  let noAddress:string;
+  let showStxTransfer = false;
+  let txId: string;
+  let errorMessage: string|undefined;
+  let vforCurrent: boolean;
+  let inited = false;
 
-const castVote = async (vfor:boolean) => {
-  if (!isLoggedIn()) {
-    vforCurrent = vfor
-    errorMessage = 'Please connect your wallet to vote';
-    return;
+  const castVote = async (vfor:boolean) => {
+    if (!isLoggedIn()) {
+      vforCurrent = vfor
+      errorMessage = 'Please connect your wallet to vote';
+      return;
+    }
+    await openSTXTransfer({
+      amount: '1',
+      network: getStacksNetwork(getConfig().VITE_NETWORK),
+      recipient: (vfor) ? yesAddress : noAddress,
+        onFinish: data => {
+          txId = data.txId
+          console.log('finished contract call!', data);
+          localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.proposal));
+          localStorage.setItem('VOTED_TXID_2', txId);
+          goto(`/dao/proposals/${proposal.proposal}/badge`);
+        },
+        onCancel: () => {
+          console.log('popup closed!');
+        }
+    });
   }
-  await openSTXTransfer({
-    amount: '1',
-    network: getStacksNetwork(getConfig().VITE_NETWORK),
-    recipient: (vfor) ? yesAddress : noAddress,
-      onFinish: data => {
-        txId = data.txId
-        console.log('finished contract call!', data);
-        localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
-        localStorage.setItem('VOTED_TXID_2', txId);
-        goto(`/dao/proposals/${proposal.contractId}/badge`);
-      },
-      onCancel: () => {
-        console.log('popup closed!');
-      }
-  });
-}
 
-onMount(async () => {
-  const addresses = $daoStore.soloPoolData?.poolAddresses!
-  let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].tokenBalances?.stx?.locked
-  locked = Number(locked)
-  if (locked && locked > 0) showStxTransfer = true
+  onMount(async () => {
+    const addresses = $daoStore.soloPoolData?.poolAddresses!
+    let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].tokenBalances?.stx?.locked
+    locked = Number(locked)
+    if (locked && locked > 0) showStxTransfer = true
 
-  yesAddress = addresses.yAddress as string
-  noAddress = addresses.nAddress as string
-  inited = true
-})
+    yesAddress = addresses.yAddress as string
+    noAddress = addresses.nAddress as string
+    inited = true
+  })
 </script>
 {#if inited}
 

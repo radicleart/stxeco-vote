@@ -47,15 +47,34 @@ export async function getPoolAndSoloVotesByProposal(proposalCid:string) {
   return res;
 }
 
-export async function getTentativeProposals() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/tentative-proposals`
+export async function getBaseDaoEnabledExtensionEvents(daoContract:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-extensions/${daoContract}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
 }
 
-export async function getDaoProposals() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/proposals`
+export async function readBaseDaoEvents(daoContract:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/read-events-base-dao/${daoContract}`
+  try {
+    const response = await fetch(path);
+    const res = await extractResponse(response);
+    return res;
+  } catch(err:any) {
+    return
+  }
+}
+
+export async function readVotingContractEvents(votingContract:string|undefined) {
+  if (!votingContract) votingContract = `${getConfig().VITE_DOA_DEPLOYER}.${getConfig().VITE_DOA_PROPOSAL_VOTING_EXTENSION}`
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/read-events-voting-extension/${votingContract}`
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function getExtensions(daoContract:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-extensions/${daoContract}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;

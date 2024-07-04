@@ -108,11 +108,13 @@ export function getNet() {
   //if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
 }
 export function explorerAddressUrl(addr:string) {
-  let url = getConfig().VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + getConfig().VITE_NETWORK;
-  if (getConfig().VITE_NETWORK === 'nakamoto') {
-    url += '&api=https://api.nakamoto.testnet.hiro.so'
+  if (getConfig().VITE_NETWORK === 'devnet') {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${addr}?chain=testnet&api=http://localhost:3999`;
+  } else if (getConfig().VITE_NETWORK === 'testnet') {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${addr}?chain=testnet`;
+  } else {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${addr}?chain=mainnet`;
   }
-	return url
 }
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
@@ -125,7 +127,13 @@ export function explorerBtcAddressUrl(address:string|undefined) {
 	return getConfig().VITE_MEMPOOL_API + '/address/' + address;
 }
 export function explorerTxUrl(txid:string) {
-	return getConfig().VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + getConfig().VITE_NETWORK;
+  if (getConfig().VITE_NETWORK === 'devnet') {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${txid}?chain=testnet&api=http://localhost:3999`;
+  } else if (getConfig().VITE_NETWORK === 'testnet') {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${txid}?chain=testnet`;
+  } else {
+    return `${getConfig().VITE_STACKS_EXPLORER}/txid/${txid}?chain=mainnet`;
+  }
 }
 
 export function bitcoinBalanceFromMempool(addressMempoolObject:AddressMempoolObject|undefined) {

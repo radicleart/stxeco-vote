@@ -1,29 +1,25 @@
 <script lang="ts">
     import ChainUtils from '$lib/service/ChainUtils';
-    import DaoUtils from '$lib/service/DaoUtils';
     import { goto } from "$app/navigation";
     import FormatUtils from '$lib/service/FormatUtils';
-    import {tick, onMount} from 'svelte';
+    import { onMount } from 'svelte';
     import { PostConditionMode, contractPrincipalCV, falseCV, trueCV, uintCV } from '@stacks/transactions';
-    import { openContractCall, showContractCall } from '@stacks/connect';
+    import { showContractCall } from '@stacks/connect';
     import { sessionStore } from '$stores/stores';
-	import Banner from '$lib/ui/Banner.svelte';
-	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
-	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
-	import { getConfig } from '$stores/store_helpers';
+    import Banner from '$lib/ui/Banner.svelte';
+    import type { VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+    import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
+    import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+    import { getConfig } from '$stores/store_helpers';
+	import { explorerTxUrl } from '$lib/utils';
 
-    export let proposal: ProposalEvent;
+    export let proposal:VotingEventProposeProposal;
     export let balanceAtHeight:number = 0;
-
-    const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
-		const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
-		DaoUtils.setStatus(3, burnHeight, stacksTipHeight, proposal);
 
     let errorMessage:string|undefined;
     let txId: string;
     let canVote = true;
-    $: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
+    $: explorerUrl = explorerTxUrl(txId);
 
     $: amount = balanceAtHeight;
     const castVote = async (vfor:boolean) => {
@@ -48,7 +44,7 @@
         // const amountUSTX = ChainUtils.toOnChainAmount(amount)
         const amountUSTX = ChainUtils.toOnChainAmount(amount)
         const amountCV = uintCV(amountUSTX)
-        const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
+        const proposalCV = contractPrincipalCV(proposal.proposal.split('.')[0], proposal.proposal.split('.')[1])
         await showContractCall({
             network: getStacksNetwork(getConfig().VITE_NETWORK),
             postConditions: [],
@@ -61,9 +57,9 @@
               txId = data.txId
               console.log('finished contract call!', data);
               //ChainUtils.updateVoters();
-              localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
+              localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.proposal));
               localStorage.setItem('VOTED_TXID_3', JSON.stringify({txId}));
-              goto(`/dao/proposals/${proposal.contractId}/badge`);
+              goto(`/dao/proposals/${proposal.proposal}/badge`);
             },
             onCancel: () => {
               console.log('popup closed!');
@@ -71,7 +67,6 @@
         });
     }
 
-    //$: canVote = propStatus === 'voting' && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
     if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       canVote = false;
     }

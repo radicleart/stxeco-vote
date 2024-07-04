@@ -1,5 +1,5 @@
-import { getStacksNetwork, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-import { getConfig, getDaoStore } from '$stores/store_helpers';
+import { getStacksNetwork, type ProposalEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+import { getConfig, getDaoStore, getSession } from '$stores/store_helpers';
 import { AddressPurpose, BitcoinNetworkType, getAddress, type GetAddressOptions } from 'sats-connect';
 
 export const coordinators = [
@@ -58,12 +58,81 @@ export async function getBitcoinAddressSatsConnect() {
   await getAddress(getAddressOptions);
 
 }
-export async function getProposalFromContractId(submissionContractId:string, proposalContractId:string):Promise<ProposalEvent|undefined> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-proposal-from-contract-id/${submissionContractId}/${proposalContractId}`;
+
+export function isFunding() {
+  return false
+}
+
+export function isProposed(proposal:VotingEventProposeProposal) {
+  const sess = getSession();
+  return proposal.proposalData.burnStartHeight < sess.stacksInfo.burn_block_height
+}
+
+export function isVoting(proposal:VotingEventProposeProposal) {
+  const sess = getSession();
+  const res = sess.stacksInfo.burn_block_height >= proposal.proposalData.burnStartHeight;
+  return res && (sess.stacksInfo.burn_block_height < proposal.proposalData.burnEndHeight);
+}
+
+export function isConclusionPending(proposal:VotingEventProposeProposal) {
+  const sess = getSession();
+  const res =  proposal.proposalData.burnEndHeight <= sess.stacksInfo.burn_block_height;
+  return res && !proposal.proposalData.concluded
+}
+
+export function isPostVoting(proposal:VotingEventProposeProposal) {
+  const sess = getSession();
+  return proposal.proposalData.burnEndHeight >= sess.stacksInfo.burn_block_height;
+}
+
+export async function getTentativeProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals`
   const response = await fetch(path);
+  if (response.status === 404) return [];
   const res = await response.json();
   return res;
 }
+
+export async function getActiveProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getProposal(proposal:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getInactiveProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/inactive-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getProposalLatest(proposalContractId:string):Promise<VotingEventProposeProposal|undefined> {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-proposal/${proposalContractId}`;
+  const response = await fetch(path);
+  if (response.status === 404) return;
+  const res = await response.json();
+  return res;
+}
+
+export async function getBaseDaoExecutedProposalEvents(daoContract:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-executed-proposals/${daoContract}`
+  const response = await fetch(path);
+  if (response.status === 404) return;
+  const res = await response.json();
+  return res;
+}
+
 
 export async function isExecutiveTeamMember(stxAddress:string):Promise<{executiveTeamMember:boolean}> {
   return (stxAddress && stxAddress === getConfig().VITE_DOA_DEPLOYER) ? {executiveTeamMember:true} : {executiveTeamMember:false}
@@ -87,15 +156,20 @@ export function getCurrentProposalLink():{ name:string, address:string} {
   return { name: ds.currentProposal?.linkName || '', address: ds.currentProposal?.linkAddress || '' };
 }
 
+export function getProposalNotFoundLink():{ name:string, address:string} {
+  const ds = getDaoStore()
+  return { name: 'Proposal not found' || '', address: '' };
+}
+
 export async function setCurrentProposal(contractId:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/set-current-proposal/${contractId}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/set-current-proposal/${contractId}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;
 }
 
 export async function getCurrentProposal():Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/get-current-proposal`;
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-current-proposal`;
   const response = await fetch(path);
   let res = await response.json();
   if (!res) {
@@ -109,7 +183,7 @@ export async function getCurrentProposal():Promise<any> {
 }
 
 export async function processProposalContracts(contractIds:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/sync/proposal/${contractIds}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/sync/proposal/${contractIds}`;
   const response = await fetch(path);
   const res = await response.json();
   return res;

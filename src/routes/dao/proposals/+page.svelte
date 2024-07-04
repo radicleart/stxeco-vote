@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import { Skeleton, Tabs, TabItem } from 'flowbite-svelte';
   import { COMMS_ERROR } from '$lib/utils.js'
-  import { sessionStore } from '$stores/stores';
 	import ProposalFundingHeader from '$lib/components/dao/proposals/rows/ProposalFundingHeader.svelte';
 	import ProposalVotingHeader from '$lib/components/dao/proposals/rows/ProposalVotingHeader.svelte';
 	import ProposalFundingRow from '$lib/components/dao/proposals/rows/ProposalFundingRow.svelte';
@@ -14,25 +13,24 @@
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { daoStore } from '$stores/stores_dao';
-	import { ProposalStage, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import { ProposalStage, type ProposalEvent, type TentativeProposal } from '@mijoco/stx_helpers/dist/index';
+	import TentativeProposalHeader from '$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte';
+	import TentativeProposalRow from '$lib/components/dao/proposals/rows/TentativeProposalRow.svelte';
 
   // fetch/hydrate data from local storage
   let inited = false;
   let errorReason:string|undefined;
+  let tentative:Array<TentativeProposal>|undefined;
   let funding:Array<ProposalEvent>|undefined;
   let open:Array<ProposalEvent>|undefined;
   let closed:Array<ProposalEvent>|undefined;
-  let tabStatus = 'funding'
+  let tabStatus = 'tentative'
   onMount(async () => {
     try {
-      for (const prop of $daoStore.proposals!) {
-        const stacksTipHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
-			  const burnHeight = $sessionStore.stacksInfo?.burn_block_height | 0;
-			  DaoUtils.setStatus(3, burnHeight, stacksTipHeight, prop);
-      }
-      funding = $daoStore.proposals?.filter((o:any) => o.stage === ProposalStage.PARTIAL_FUNDING || o.stage === ProposalStage.UNFUNDED)
-      open = $daoStore.proposals?.filter((o) => o.stage === ProposalStage.PROPOSED || o.stage === ProposalStage.ACTIVE)
-      closed = $daoStore.proposals?.filter((o) => o.stage === ProposalStage.INACTIVE || o.stage === ProposalStage.CONCLUDED)
+      tentative = $daoStore.tentativeProposals
+      funding = $daoStore.inactiveProposals
+      open = $daoStore.activeProposals
+      closed = $daoStore.inactiveProposals
       if ($page.url.searchParams.has('status')) tabStatus = $page.url.searchParams.get('status') || 'funding'
       inited = true;
     } catch (err) {
@@ -53,8 +51,25 @@
         <div class="flex flex-col gap-y-2">
           <div class="mb-4">
             <h2 class="text-[#131416] text-2xl mb-3">Proposals</h2>
+            <p>Follow <a href="/dao/proposals/propose">instructions here to propose something</a></p>
           </div>
           <Tabs style="underline" contentClass="py-4">
+            <TabItem open={tabStatus === 'tentative'} on:click={() => goto('/dao/proposals?status=tentative')} title="Tentative">
+              {#if inited}
+              <div class="bg-white/5 rounded-md p-4">
+                {#if tentative && tentative.length > 0}
+                <TentativeProposalHeader/>
+                {#each tentative as event}
+                <TentativeProposalRow {event} />
+                {/each}
+                {:else}
+                None
+                {/if}
+              </div>
+              {:else}
+              <Skeleton size="md" />
+              {/if}
+            </TabItem>
             <TabItem open={tabStatus === 'funding'} on:click={() => goto('/dao/proposals?status=funding')} title="Funding">
               {#if inited}
               <div class="bg-white/5 rounded-md p-4">
