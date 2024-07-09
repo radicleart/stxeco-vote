@@ -11,11 +11,11 @@
 
 	const getLink = () => {
 		if (propType === 'active') {
-			return '/dao/proposals/' + contractId
+			return `/dao/proposals/${contractId}`
 		} else if (propType === 'tentative') {
-			return '/dao/tentative-proposals/' + contractId
+			return `/dao/tentative-proposals/${contractId}`
 		} else {
-			return '/dao/proposals/' + contractId
+			return `/dao/proposals/${contractId}/results`
 		}
 	}
 </script>
@@ -24,8 +24,8 @@
 	<!-- <NakamotoRelease/> --> 
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
-			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{title} <LinkInChainIcon /></a></h2>
-			<p class="text-lg text-[#605D5D]">{description}</p>
+			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html title} <LinkInChainIcon /></a></h2>
+			<p class="text-lg text-[#605D5D]">{@html description}</p>
 		</div>
 		{#if infoItems && infoItems.length > 0}
 		<div class="pt-4">

@@ -24,7 +24,6 @@ onMount(async () => {
     } catch (err:any) {
         console.error('error in countdown: ', err)
     }
-
 })
 
 </script>

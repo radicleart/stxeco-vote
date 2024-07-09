@@ -9,7 +9,7 @@
     import Banner from '$lib/ui/Banner.svelte';
     import type { VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
     import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
-    import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
+    import { getStacksNetwork, getTransaction } from '@mijoco/stx_helpers/dist/stacks-node';
     import { getConfig } from '$stores/store_helpers';
 	import { explorerTxUrl } from '$lib/utils';
 
@@ -71,14 +71,7 @@
       canVote = false;
     }
     const lookupTransaction = async (txId:string) => {
-      const url = getConfig().VITE_STACKS_API + '/extended/v1/tx/' + txId;
-      try {
-        const response = await fetch(url);
-        const val = await response.json();
-        return val;
-      } catch (err) {
-        console.log('callContractReadOnly4: ', err);
-      }
+      return await getTransaction(getConfig().VITE_STACKS_API, txId)
     }
 
     onMount(async () => {

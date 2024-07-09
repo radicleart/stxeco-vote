@@ -63,12 +63,12 @@
       return
     }
     if (votes.length === 0) {
-      allVotes = (await findSoloVotes()).soloVotes;
+      allVotes = (await findSoloVotes()).soloVotes || [];
       //if (newV) votes = newV.soloVotes.filter((o:VoteEvent) => o.amount > 0)
       if (includeZeros) {
         votes = allVotes
       } else {
-        votes = allVotes.filter((o:VoteEvent) => o.amount > 0)
+        votes = allVotes?.filter((o:VoteEvent) => o.amount > 0) || []
       }
     }
     showVotes = true
@@ -80,7 +80,7 @@
     if (includeZeros) {
         votes = allVotes
     } else {
-        votes = allVotes.filter((o:VoteEvent) => o.amount > 0)
+        votes = allVotes?.filter((o:VoteEvent) => o.amount > 0) || []
     }
     let votesFor = summary.summary.find((o:any) => o._id.event === 'solo-vote' && o._id.for);
     let votesAgn = summary.summary.find((o:any) => o._id.event === 'solo-vote' && !o._id.for);

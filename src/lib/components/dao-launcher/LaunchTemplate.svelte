@@ -7,14 +7,13 @@
 	import { deployer_roles, launchDao } from './dao_helper';
 	import { configStore } from '$stores/stores_config';
 	import { type DaoTemplate, type ExtensionType } from '@mijoco/stx_helpers/dist/dao';
-	import { getCurrentProposalLink } from '$lib/proposals';
+	import { getBaseDaoExecutedProposalEvents, getCurrentProposalLink } from '$lib/proposals';
 	import { Placeholder } from '@mijoco/stx_components';
 	import { getConfig } from '$stores/store_helpers';
 	import { daoStore } from '$stores/stores_dao';
 	import { contractPrincipalCV, PostConditionMode } from '@stacks/transactions';
 	import { fetchDataVar, getStacksNetwork, lookupContract } from '@mijoco/stx_helpers/dist/index';
 	import { openContractCall } from '@stacks/connect';
-	import { getBaseDaoExecutedProposalEvents } from '$lib/dao_api';
 
   let inited = false;
   let constructed = false

@@ -41,13 +41,16 @@ const headerStyle = () => {
 </script>
 
 <div class="col-span-4">
-		<a href="/" on:click|preventDefault={() => openExtensionChecker()}>{extension.extension}</a>
+		<a href="/" >{extension.extension}</a>
 	</div>
 <div class="col-span-1">
 		{extension.enabled}
 	</div>
 <div class="col-span-1">
-		<a class="pointer text-light" href="/" on:click|preventDefault={() => { openSesame() }}>Clarity</a>
-		<a class="pointer text-light" href={explorerUrl()} target="_blank">Explorer</a>
-	</div>
+	<!--<a class="pointer text-light" href="/" on:click|preventDefault={() => { openSesame() }}>Clarity</a>-->
+	<a class="pointer text-light" href={explorerUrl()} target="_blank">Explorer</a>
+	{#if extension.extension.indexOf('vot') > -1 || extension.extension.indexOf('bde001') > -1 || extension.extension.indexOf('ede005') > -1 || extension.extension.indexOf('bde007') > -1}
+	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => openExtensionChecker()}>Count</a>
+	{/if}
+</div>
 

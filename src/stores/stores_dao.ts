@@ -8,7 +8,6 @@ If it's going to be an object, default this to an empty object.
 **/
 export const daoStore = persisted('daoStore', {
     soloPoolData: {} as SoloPoolData,
-    currentProposal: undefined,
     activeProposals: [],
     inactiveProposals: [],
     tentativeProposals: [],

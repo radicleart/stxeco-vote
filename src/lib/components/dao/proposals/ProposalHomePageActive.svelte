@@ -25,8 +25,8 @@
 	<!-- <NakamotoRelease/> --> 
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
-			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{prop.proposalMeta.title} <LinkInChainIcon /></a></h2>
-			<p class="text-lg text-[#605D5D]">{prop.proposalMeta.description}</p>
+			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a></h2>
+			<p class="text-lg text-[#605D5D]">{@html prop.proposalMeta.description}</p>
 		</div>
 
 		<div class="flex justify-around">

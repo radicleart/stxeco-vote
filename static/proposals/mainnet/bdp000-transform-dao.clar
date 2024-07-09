@@ -1,10 +1,13 @@
-;; Title: BDP000 Bootstrap
+;; Title: BDP000 Manage DAO
 ;; Author: Mike Cohen
 ;; Synopsis:
-;; Boot proposal that sets the governance token, DAO parameters, and extensions, and
-;; mints the initial governance tokens.
+;; Reenables core executions and proposals.
 ;; Description:
-;; Bootstraps bitcoin-dao for stacks ecosystem voting.
+;; This proposal makes bitcoin DAO manageable for running stacks votes
+;; Public ability to make proposals is removed for now to prevent
+;; potential spam proposals from disrupting community votes. Core
+;; execution is reintroduced and the sunset period switched off to
+;; facilitate DAO management in the context of community voting.
 
 (impl-trait .proposal-trait.proposal-trait)
 

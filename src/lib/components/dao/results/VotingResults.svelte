@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { getProposalColor } from '$lib/proposals';
 import ChainUtils from '$lib/service/ChainUtils';
 import FormatUtils from '$lib/service/FormatUtils';
-	import type { ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 
 export let totalAccountsFor:any;
 export let totalAccountsAgainst:any;
-export let proposal:ProposalEvent;
+export let proposal:VotingEventProposeProposal;
 const inFavour = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
 let winning = 'danger';
 if (inFavour > 66) {
@@ -18,7 +19,7 @@ const vFr = (proposal.proposalData) ? FormatUtils.fmtNumber(Math.floor(ChainUtil
 </script>
 
 {#if proposal && proposal.proposalData}
-  <div class={'mt-5 row text-' + proposal.status?.color}>
+  <div class={'mt-5 row text-' + getProposalColor(proposal)}>
     <div class="col-md-6 col-sm-12 text-center mb-5">
       <h4 class="text-big text-center text-success">{vFr} <span class="text-white" style="font-size: 2.2rem;">YES ON NAK</span></h4>
       <h6 class="text-center text-success">from {totalAccountsFor} accounts</h6>

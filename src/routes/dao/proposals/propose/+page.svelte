@@ -5,14 +5,12 @@
 	import { processProposalContracts } from '$lib/proposals';
 	import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
-	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { daoStore } from '$stores/stores_dao';
-	import { lookupContract, type InFlight, type ProposalEvent } from '@mijoco/stx_helpers/dist/index';
-	import type { DaoStore, FundingData } from '@mijoco/stx_helpers/dist/index';
+	import { lookupContract, type InFlight } from '@mijoco/stx_helpers/dist/index';
+	import type { DaoStore, FundingData, VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import Funding from '$lib/components/dao-launcher/proposing/CoreSubmission.svelte';
 	import FundingSubmission from '$lib/components/dao-launcher/proposing/FundingSubmission.svelte';
 	import CoreSubmission from '$lib/components/dao-launcher/proposing/CoreSubmission.svelte';
 
@@ -69,7 +67,7 @@
             (ok true)
     )
     `
-    let newProposal:ProposalEvent;
+    let newProposal:VotingEventProposeProposal;
     let showDeployButton = false;
     let updated = false;
     let replacedSource = contractSource;
@@ -77,16 +75,16 @@
     const addNewPoll = (e: { detail:  { contractName: string; title: string; author: string; synopsis: string; description: string; }; }) => {
       contractName = e.detail.contractName;
       newProposal = {
-        proposalMeta: {title: e.detail.title, author: '', dao: 'Ecosystem', description: '', synopsis: '' },
+        proposalMeta: { title: e.detail.title, author: '', dao: 'Ecosystem', description: '', synopsis: '' },
         proposer: account.stxAddress,
-        funding: { funding: 0, parameters: { fundingCost: 0, proposalDuration: 0, proposalStartDelay: 0}},
+        funding: { funding: 0, parameters: { fundingCost: 0, proposalDuration: 0, proposalStartDelay: 0 } },
         status: { name: 'deploying', color: '', colorCode: '' },
         contractId: account.stxAddress + '.' + contractName,
         contract: {
           source: replacedSource,
           publish_height: 0
         }
-      } as ProposalEvent
+      } as unknown as VotingEventProposeProposal
       replacedSource = contractSource.replace('<title>', e.detail.title);
       replacedSource = replacedSource.replace('<author>', e.detail.author);
       replacedSource = replacedSource.replace('<synopsis>', e.detail.synopsis);
@@ -109,7 +107,7 @@
           source: replacedSource,
           publish_height: 0
         }
-      } as ProposalEvent
+      } as unknown as VotingEventProposeProposal
     }
 
     let txId: string;

@@ -5,8 +5,8 @@
 	import type { VoteEvent } from "@mijoco/stx_helpers/dist/index";
 	import { getAddressFromHashBytes, getHashBytesFromAddress } from "@mijoco/btc_helpers/dist/index";
 	import { getConfig } from "$stores/store_helpers";
-	import { getVoterEvents } from "$lib/dao_api";
 	import { findPoolStackerEventsByHashBytes, findPoolStackerEventsByStacker, findPoxEntriesByAddress } from "$lib/pox_api";
+	import { getDaoVotesByVoter } from "$lib/voting-non-stacker";
 
 	export let walletAddress:string;
 	export let lookupMode:boolean;
@@ -62,7 +62,7 @@
 	
     const processStackingHistory = async () => {
 		if (!walletAddress) return;
-		votes = await getVoterEvents(walletAddress);
+		votes = await getDaoVotesByVoter(walletAddress);
 		if (walletAddress.startsWith('S')) {
 			stackerEventEntries = await findPoolStackerEventsByStacker(walletAddress);
 		} else {

@@ -19,16 +19,18 @@
 	import { type ResultsSummary, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
+	import { getDaoSummary } from '$lib/voting-non-stacker';
+	import { fmtNumber } from '$lib/utils';
 
 	let proposal:VotingEventProposeProposal|undefined;
 
 	let summary:ResultsSummary;
+	let daoSummary:ResultsSummary;
 	let uniqueAll:number = 0;
+	let uniqueAccounts:number = 0;
 	let method:number = -1;
 	let errorReason:string|undefined;
 	let balanceAtHeight:number = 0;
-	let proposalNotFound = false;
-	let activeFlag = false;
 	let approved = false;
 	let inited = false;
 
@@ -44,7 +46,7 @@
 	}
 
 	const blockSinceEnd = () => {
-		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
+		return $sessionStore.stacksInfo?.burn_block_height - (proposal?.proposalData?.burnEndHeight || 0)
 	}
 
 	const isApproved = () => {
@@ -69,10 +71,13 @@
 		stxAgainst = votesAgn?.count || 0
 		stxPower += stxFor + stxAgainst
 
-		votesFor = summary.summary.find((o:any) => o._id.event === 'vote' && o._id.for)
-		votesAgn = summary.summary.find((o:any) => o._id.event === 'vote' && !o._id.for)
+		votesFor = daoSummary.summary.find((o:any) => o._id.event === 'vote' && o._id.for)
+		votesAgn = daoSummary.summary.find((o:any) => o._id.event === 'vote' && !o._id.for)
+		uniqueAccounts = summary.uniquePoolVoters + summary.uniqueSoloVoters + votesFor.count + votesAgn.count;
 		stxFor = votesFor?.count || 0
+		stxFor = daoSummary.proposalData.votesFor
 		stxAgainst = votesAgn?.count || 0
+		stxAgainst = daoSummary.proposalData.votesAgainst
 		stxPower += stxFor + stxAgainst
 
 		return stxPower
@@ -83,15 +88,15 @@
 		proposal = await getProposalLatest($page.params.slug)
 
 		if (proposal) {
-			const burnHeight = $sessionStore.stacksInfo?.stacks_tip_height | 0;
+			daoSummary = await getDaoSummary(proposal.proposal)
 			//const results = await findPoolVotes()
 			//poolVotes = results.poolVotes
-			summary = await getSummary()
+			summary = await getSummary(proposal.proposal)
+			summary.proposalData = proposal.proposalData
 			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
 			//poolVotes = allVotes.poolVotes || [];
 			//soloVotes = allVotes.soloVotes || [];
 			uniqueAll = uniqueVotes(summary);
-			activeFlag = proposal.proposalData && burnHeight >= proposal.proposalData.burnStartHeight
 			
 			isApproved()
 			try {
@@ -102,6 +107,7 @@
 				errorReason = e.message;
 			}
 		}
+		inited = true;
 
 	})
 </script>
@@ -113,25 +119,25 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 
-	{#if proposal}
+	{#if proposal && inited}
 
 	<ProposalHeader {proposal}/>
-	{#if voteConcluded()}
+	{#if voteConcluded() || isVoting(proposal)}
 		<div class="flex flex-col w-full my-8">
 			<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
 			  	<div class="flex flex-col items-stretch justify-items-stretch">
 					<div>
 						{#if blockSinceEnd() > 0}
 						<div class="mb-3 max-w-md">
-							<h2 class="text-[#131416] text-2xl mb-3">Voting ended</h2>
-						<p>Voting ended {blockSinceEnd()} blocks ago</p>
-						<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+							<h2 class="text-[#131416] text-2xl mb-3">Voting over</h2>
+							<p>Voting closed at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
+							<p>Close to {uniqueAccounts} unique addresses took part in the vote. Detailed results are displayed below.</p>
 						</div>
 						{:else}
 						<div class="mb-3 max-w-md">
 							<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
-							<p>Voting ends in {- blockSinceEnd()} blocks</p>
-							<p>{uniqueAll} unique addresses took part in the vote. Detailed results are displayed below.</p>
+							<p>Voting closes at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
+							<p>Close to {uniqueAccounts} unique addresses took part in the vote. Detailed results are displayed below.</p>
 						</div>
 						{/if}
 					</div>
@@ -142,7 +148,7 @@
 		</div>
 		  
 		<div id="tabs-header">
-			<VoteResultsOverview {approved} {summary} />
+			<VoteResultsOverview {approved} {summary} {daoSummary} />
 		</div>
 		<div >
 		<Tabs  style="underline" contentClass="py-4">
@@ -158,24 +164,22 @@
 					<PoolResults {proposal} {summary} />
 				</div>
             </TabItem>
+			{#if daoSummary}
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<DaoResults {proposal} {summary} />
+					<DaoResults {proposal} {daoSummary} />
 				</div>
             </TabItem>
+			{/if}
         </Tabs>
 		</div>
 		{:else}
-		<div class="flex flex-col w-full my-8 bg-[#F4F3F0] rounded-2xl">
-			<div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-				<HoldingResults />
-			</div>
-		</div>
+		<HoldingResults />
 		{/if}
 
 	{:else}
-	{#if proposalNotFound}
+	{#if !proposal}
 	<Placeholder message={'Proposal could not be loaded'} link={getProposalNotFoundLink()}/>
 	{:else}
 	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>

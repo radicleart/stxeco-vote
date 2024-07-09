@@ -21,6 +21,7 @@
 	let errorReason:string|undefined;
 	let proposal:VotingEventProposeProposal|undefined;
 	let balanceAtHeight:number = 0;
+	let inited = false;
 
 	const conclude = async() => {
 		if (proposal) {
@@ -40,6 +41,7 @@
 			balanceAtHeight = $sessionStore.keySets[getConfig().VITE_NETWORK].walletBalances?.stacks.amount || 0;
 			errorReason = e.message;
 		}
+		inited = true;
 	})
 </script>
 
@@ -50,7 +52,7 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 
-	{#if proposal}
+	{#if proposal && inited}
 	<ProposalHeader {proposal}/>
 
 		{#if isVoting(proposal)}

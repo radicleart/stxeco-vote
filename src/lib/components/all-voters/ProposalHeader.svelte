@@ -6,6 +6,7 @@
 	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
 	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { isVoting } from '$lib/proposals';
+	import { onMount } from 'svelte';
 
 	export let proposal:VotingEventProposeProposal;
 	let linkAddress = ''
@@ -21,6 +22,12 @@
 		sp.set('method', '' + newMethod)
 		location.assign($page.url.href)
 	}
+	onMount(async () => {
+		if ($page.url.searchParams.has('method')) {
+			method = Number($page.url.searchParams.get('method'))
+		}
+	})
+
 </script>
 
 <div class="sm:flex sm:items-start sm:justify-between mt-8">
@@ -48,7 +55,7 @@
 					</DropdownItem>
 					<DropdownItem defaultClass="relative hover:bg-sand-300/50 pl-12 pr-4 py-2 text-[#27282B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => switchMethod(3)}>
 						{#if method === 3}<Icon src="{CheckCircle}" mini class="absolute left-4 top-1/2 -translate-y-1/2 inline h-6 w-6 text-sand-800" aria-hidden="true" />{/if}
-						DAO Voting (Method 3)
+						Non stacker voting
 					</DropdownItem>
 			</Dropdown>
 		</div>

@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { getCurrentProposalLink } from '$lib/proposals';
 	import Countdown from '../../../ui/Countdown.svelte';
-	import type { FundingData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { FundingData } from '@mijoco/stx_helpers/dist/index';
 	import { fetchStacksInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';

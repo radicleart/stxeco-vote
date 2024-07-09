@@ -3,7 +3,6 @@
 	import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 	import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 	import { getConfig } from "$stores/store_helpers";
-	import { getDaoVotesByProposalAndVoter } from "$lib/dao_api";
 	import ChainUtils from "$lib/service/ChainUtils";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 	import { sessionStore } from "$stores/stores";
@@ -12,6 +11,7 @@
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
 	import { ProposalStage, type VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { isVoting } from "$lib/proposals";
+	import { getDaoVotesByProposalAndVoter } from "$lib/voting-non-stacker";
 
 	export let proposal:VotingEventProposeProposal;
 	export let adjustBal:number
@@ -52,7 +52,7 @@
     <div class="py-10 px-10 md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
       <div class="flex flex-col gap-y-2 bg-warning-01">
         <div class="mb-4">
-          <h2 class="text-[#131416] text-2xl mb-3">Voting as Non Stackers (Method 3)</h2>
+          <h2 class="text-[#131416] text-2xl mb-3">Voting for Non Stackers</h2>
         </div>
         <div class="mb-4 rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
           <p>Vote with your liquid STX balance using your Leather / Xverse wallet.</p>

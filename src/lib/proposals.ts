@@ -1,5 +1,5 @@
-import { getStacksNetwork, type ProposalEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
-import { getConfig, getDaoStore, getSession } from '$stores/store_helpers';
+import { getStacksNetwork, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+import { getConfig, getSession } from '$stores/store_helpers';
 import { AddressPurpose, BitcoinNetworkType, getAddress, type GetAddressOptions } from 'sats-connect';
 
 export const coordinators = [
@@ -63,9 +63,19 @@ export function isFunding() {
   return false
 }
 
+export function getProposalColor(proposal:VotingEventProposeProposal) {
+  if (isProposed(proposal)) {
+    return 'warning'
+  } else if (isVoting(proposal)) {
+    return 'green'
+  } else {
+    return 'danger'
+  }
+}
+
 export function isProposed(proposal:VotingEventProposeProposal) {
   const sess = getSession();
-  return proposal.proposalData.burnStartHeight < sess.stacksInfo.burn_block_height
+  return  sess.stacksInfo.burn_block_height < proposal.proposalData.burnStartHeight
 }
 
 export function isVoting(proposal:VotingEventProposeProposal) {
@@ -75,50 +85,51 @@ export function isVoting(proposal:VotingEventProposeProposal) {
 }
 
 export function isConclusionPending(proposal:VotingEventProposeProposal) {
-  const sess = getSession();
-  const res =  proposal.proposalData.burnEndHeight <= sess.stacksInfo.burn_block_height;
-  return res && !proposal.proposalData.concluded
+  return isPostVoting(proposal) && !proposal.proposalData.concluded
 }
 
 export function isPostVoting(proposal:VotingEventProposeProposal) {
   const sess = getSession();
-  return proposal.proposalData.burnEndHeight >= sess.stacksInfo.burn_block_height;
+  return sess.stacksInfo.burn_block_height >= proposal.proposalData.burnEndHeight;
 }
 
-export async function getTentativeProposals() {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals`
+export async function getFunding(submissionContract:string, proposalContract:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-funding/${submissionContract}/${proposalContract}`
   const response = await fetch(path);
   if (response.status === 404) return [];
   const res = await response.json();
   return res;
 }
 
-export async function getActiveProposals() {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`
+export async function getTentativeProposals(active:boolean) {
+  let path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals`
+  if (active) {
+    path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals?active=${active}`
+  }
   const response = await fetch(path);
   if (response.status === 404) return [];
   const res = await response.json();
   return res;
 }
 
-export async function getProposal(proposal:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`
+export async function getTentativeProposal(tag:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals/${tag}`
   const response = await fetch(path);
   if (response.status === 404) return [];
   const res = await response.json();
   return res;
 }
 
-export async function getInactiveProposals() {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/inactive-proposals`
+export async function getProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/all-proposals`
   const response = await fetch(path);
   if (response.status === 404) return [];
   const res = await response.json();
   return res;
 }
 
-export async function getProposalLatest(proposalContractId:string):Promise<VotingEventProposeProposal|undefined> {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-proposal/${proposalContractId}`;
+export async function getProposalLatest(proposal:string):Promise<VotingEventProposeProposal|undefined> {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-proposal/${proposal}`;
   const response = await fetch(path);
   if (response.status === 404) return;
   const res = await response.json();
@@ -152,34 +163,11 @@ export async function isExtension(extensionAddress:string):Promise<{result:boole
 }
 
 export function getCurrentProposalLink():{ name:string, address:string} {
-  const ds = getDaoStore()
-  return { name: ds.currentProposal?.linkName || '', address: ds.currentProposal?.linkAddress || '' };
+  return { name: getConfig().VITE_DOA_PROPOSAL.split('.')[1], address: `/dao/proposals/${getConfig().VITE_DOA_PROPOSAL}` };
 }
 
 export function getProposalNotFoundLink():{ name:string, address:string} {
-  const ds = getDaoStore()
-  return { name: 'Proposal not found' || '', address: '' };
-}
-
-export async function setCurrentProposal(contractId:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/set-current-proposal/${contractId}`;
-  const response = await fetch(path);
-  const res = await response.json();
-  return res;
-}
-
-export async function getCurrentProposal():Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-current-proposal`;
-  const response = await fetch(path);
-  let res = await response.json();
-  if (!res) {
-    res = {
-      configId: 1,
-      contractId: getConfig().VITE_DOA_PROPOSAL
-    }
-  }
-
-  return res;
+  return { name: 'Proposal not found' || '', address: '/' };
 }
 
 export async function processProposalContracts(contractIds:string):Promise<any> {

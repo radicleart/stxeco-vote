@@ -9,6 +9,7 @@
 
 	export let approved = false;
 	export let summary:ResultsSummary;
+	export let daoSummary:ResultsSummary;
 
 	let poolPercent= '0'
 	let soloPercent = '0'
@@ -37,8 +38,8 @@
 
 		soloPercent = ((stxFor / stxPower) * 100).toFixed(4)
 
-		votesFor = summary.summary.find((o) => o._id.event === 'vote' && o._id.for)
-		votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
+		votesFor = daoSummary.summary.find((o) => o._id.event === 'vote' && o._id.for)
+		votesAgn = daoSummary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
 		stxFor = votesFor?.total || 0
 		stxAgainst = votesAgn?.total || 0
 		stxPower = stxFor + stxAgainst
@@ -83,7 +84,7 @@
 	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
 		{#if approved}
 		<div class="flex justify-between mb-5">
-			<div><img alt="correct" src={cross}/></div>
+			<div><img alt="correct" src={tick}/></div>
 			<div><span class="text-4xl font-extrabold">YES</span></div>
 		</div>
 		<div class="flex justify-between">

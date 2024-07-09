@@ -1,6 +1,8 @@
 <script lang="ts">
+	import type { VotingEventProposeProposal } from "@mijoco/stx_helpers";
 
-    export let event:ProposalEvent;
+
+    export let event:VotingEventProposeProposal;
 
     const clazzes = 'border-b border-gray-1000 py-2 w-full grid grid-cols-3 lg:grid-cols-4 justify-between my-0 text-md'
 

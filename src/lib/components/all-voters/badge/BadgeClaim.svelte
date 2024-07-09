@@ -7,9 +7,10 @@ import DaoUtils from '$lib/service/DaoUtils';
 import { sessionStore } from "$stores/stores";
 import { getConfig } from "$stores/store_helpers";
 import bns from '$lib/assets/NFT-blank-orange.png'
-import { getDaoVotesByProposalAndVoter, getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
+import { getNftAssetClasses, getNftsbyPage } from "$lib/dao_api";
 import Banner from "$lib/ui/Banner.svelte";
 	import BnsCanvas from "./BnsCanvas.svelte";
+	import { getDaoVotesByProposalAndVoter } from "$lib/voting-non-stacker";
 
 const voted = true;
 const account = $sessionStore.keySets[getConfig().VITE_NETWORK];

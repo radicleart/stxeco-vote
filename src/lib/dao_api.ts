@@ -26,8 +26,8 @@ export async function fetchExchangeRates() {
   }
 }
 
-export async function getSummary() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/summary`
+export async function getSummary(proposal:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/stacker-voting/v1/results/summary/${proposal}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
@@ -63,14 +63,6 @@ export async function readBaseDaoEvents(daoContract:string) {
   } catch(err:any) {
     return
   }
-}
-
-export async function readVotingContractEvents(votingContract:string|undefined) {
-  if (!votingContract) votingContract = `${getConfig().VITE_DOA_DEPLOYER}.${getConfig().VITE_DOA_PROPOSAL_VOTING_EXTENSION}`
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/read-events-voting-extension/${votingContract}`
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
 }
 
 export async function getExtensions(daoContract:string) {
@@ -117,16 +109,3 @@ export async function getNftsbyPage(stxAddress:string, assetId:any, limit:number
   return res;
 }
 
-export async function getDaoVotesByProposalAndVoter(proposal:string, stxAddress:string) {
-  const url = `{getConfig().VITE_BRIDGE_API}/dao/v1/voter/events/${proposal}/${stxAddress}`;
-  const response = await fetch(url);
-  const res = await extractResponse(response);
-  return res;
-}
-
-export async function getVoterEvents(stxAddress:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/voter/events/${stxAddress}`;
-  const response = await fetch(path);
-  const res = await extractResponse(response);
-  return res;
-}

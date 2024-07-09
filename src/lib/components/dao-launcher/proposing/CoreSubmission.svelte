@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { getCurrentProposalLink } from '$lib/proposals';
 	import Countdown from '../../../ui/Countdown.svelte';
-	import type { FundingData, ProposalEvent } from '@mijoco/stx_helpers/dist/index';
+	import type { FundingData } from '@mijoco/stx_helpers/dist/index';
 	import { fetchStacksInfo, getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
@@ -20,6 +20,8 @@
 
 	let errorMessage:string|undefined;
 	let inited = false;
+	let burnHeightNow = 0
+	let componentKey = 0;
 	const account = $sessionStore.keySets[getConfig().VITE_NETWORK]
 
 	let amount = 500000;
@@ -84,20 +86,24 @@
 		});
 	}
 
+	const refreshClocks = () => {
+		componentKey++;
+	}
+
 	onMount(async () => {
 
 		const stacksInfo = await fetchStacksInfo(getConfig().VITE_STACKS_API);
-		const burnHeightNow = stacksInfo.burn_block_height
+		burnHeightNow = stacksInfo.burn_block_height
 
 		fundingMet = false;
 		proposalDuration = fundingData.parameters.proposalDuration
 		proposalStart = $sessionStore.stacksInfo.burn_block_height + 6
-		startHeightMessage = 'The earliest start for voting is in ' + (proposalStart) + ' bitcoin blocks at ' + (fmtNumber(burnHeightNow + proposalStart));
-		durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 		inited = true
 	})
 
 	$: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
+	$: startHeightMessage = 'The earliest start for voting is in ' + (proposalStart) + ' bitcoin blocks at ' + (fmtNumber(burnHeightNow + proposalStart));
+	$: durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 </script>
 
 {#if inited}
@@ -120,19 +126,20 @@
 		</div>
 		<form on:submit|preventDefault class="form-inline">
 			<div class="w-full flex flex-col gap-y-4">
+				{#key componentKey}
 				<div class="w-full">
 					<div class={'text-white bg-gray-500 readonly w-full text-xs py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 						{contractId}
 					</div>
 				</div>
 				<div class="w-full">
-					<label class="block" for="start-block">voting will begin after</label>
-					<input bind:value={proposalStart} type="number" id="start-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
-					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart} scaleFactor={1} /></span>
+					<label class="block" for="start-block">voting will begin at block</label>
+					<input on:change={() => refreshClocks()} bind:value={proposalStart} type="number" id="start-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
+					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart - burnHeightNow} scaleFactor={1} /></span>
 				</div>
 				<div class="w-full">
 					<label class="block" for="duration-block">voting open for minimum {proposalDuration} blocks</label>
-					<input bind:value={proposalDuration} type="number" id="duration-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
+					<input on:change={() => refreshClocks()} bind:value={proposalDuration} type="number" id="duration-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart + proposalDuration} scaleFactor={1} /></span>
 				</div>
 				<div class="w-full">
@@ -144,6 +151,7 @@
 						Submit proposal
 					  </button>
 				</div>
+				{/key}
 				{#if errorMessage}<div>{errorMessage}</div>{/if}
 			</div>
 		</form>

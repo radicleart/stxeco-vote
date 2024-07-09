@@ -13,24 +13,25 @@
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { daoStore } from '$stores/stores_dao';
-	import { ProposalStage, type ProposalEvent, type TentativeProposal } from '@mijoco/stx_helpers/dist/index';
+	import { type TentativeProposal, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import TentativeProposalHeader from '$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte';
 	import TentativeProposalRow from '$lib/components/dao/proposals/rows/TentativeProposalRow.svelte';
+	import { getProposals, getTentativeProposals } from '$lib/proposals';
 
   // fetch/hydrate data from local storage
   let inited = false;
   let errorReason:string|undefined;
   let tentative:Array<TentativeProposal>|undefined;
-  let funding:Array<ProposalEvent>|undefined;
-  let open:Array<ProposalEvent>|undefined;
-  let closed:Array<ProposalEvent>|undefined;
+  let funding:Array<VotingEventProposeProposal>|undefined;
+  let open:Array<VotingEventProposeProposal>|undefined;
+  let closed:Array<VotingEventProposeProposal>|undefined;
   let tabStatus = 'tentative'
   onMount(async () => {
     try {
-      tentative = $daoStore.tentativeProposals
-      funding = $daoStore.inactiveProposals
-      open = $daoStore.activeProposals
-      closed = $daoStore.inactiveProposals
+      const proposals:Array<VotingEventProposeProposal> = await getProposals();
+      tentative = await getTentativeProposals(false)
+      closed = proposals.filter((o) => o.proposalData.concluded)
+      open = proposals.filter((o) => !o.proposalData.concluded)
       if ($page.url.searchParams.has('status')) tabStatus = $page.url.searchParams.get('status') || 'funding'
       inited = true;
     } catch (err) {
@@ -61,22 +62,6 @@
                 <TentativeProposalHeader/>
                 {#each tentative as event}
                 <TentativeProposalRow {event} />
-                {/each}
-                {:else}
-                None
-                {/if}
-              </div>
-              {:else}
-              <Skeleton size="md" />
-              {/if}
-            </TabItem>
-            <TabItem open={tabStatus === 'funding'} on:click={() => goto('/dao/proposals?status=funding')} title="Funding">
-              {#if inited}
-              <div class="bg-white/5 rounded-md p-4">
-                {#if funding && funding.length > 0}
-                <ProposalFundingHeader/>
-                {#each funding as event}
-                <ProposalFundingRow {event} />
                 {/each}
                 {:else}
                 None

@@ -2,29 +2,48 @@
   import Modal from '$lib/ui/Modal.svelte';
   import ClaritySytaxHighlighter from '$lib/ui/ClaritySytaxHighlighter.svelte';
   import ExtensionGridItem from '$lib/components/dao-launcher/extensions/ExtensionGridItem.svelte'
-	import type { DaoEventEnableExtension } from '@mijoco/stx_helpers/dist/index';
+	import type { DaoEventEnableExtension, VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { onMount } from 'svelte';
-	import { getExtensions, readBaseDaoEvents, readVotingContractEvents } from '$lib/dao_api';
-	import { isCoordinator } from '$lib/proposals';
+	import { getExtensions, readBaseDaoEvents } from '$lib/dao_api';
+	import { getProposals, isCoordinator } from '$lib/proposals';
 	import { sessionStore } from '$stores/stores';
 	import CoreExecute from '$lib/components/dao-launcher/CoreExecute.svelte';
+	import Banner from '$lib/ui/Banner.svelte';
+	import { readVotingContractEvents } from '$lib/voting-non-stacker';
+	import ProposalGridItem from '$lib/components/dao-launcher/extensions/ProposalGridItem.svelte';
+	import { readPoolEvents, readSoloEvents } from '$lib/voting-stacker';
     
   const daoBaseContracts = getConfig().VITE_DAO_BASE_CONTRACTS.split(',') || [];
-  let thisBaseDao:string;
+  let thisBaseDao = 'bitcoin-dao';
   let extensions:Array<DaoEventEnableExtension> = [];
+  let proposals:Array<VotingEventProposeProposal> = [];
   let operation = 0
   let item:any;
   let sourceCode:string;
   let showModal = false
+  let message:string|undefined
   
   const openSourceModal = (evt:any) => {
     item = evt.detail;
     sourceCode = item.contract?.source;
   }
+  const syncSoloVotes = async (evt:any) => {
+    const proposal = evt.detail.proposal;
+    readSoloEvents(proposal)
+    message = 'Reading voting events for contract: ' + proposal
+  }
 
-  const extensionChecker = (evt:any) => {
-    item = evt.detail;
+  const syncPoolVotes = async (evt:any) => {
+    const proposal = evt.detail.proposal;
+    readPoolEvents(proposal)
+    message = 'Reading voting events for contract: ' + proposal
+  }
+
+  const extensionChecker = async (evt:any) => {
+    const votingContract = evt.detail.extension;
+    readVotingContractEvents(true, thisBaseDao, votingContract);
+    message = 'Reading voting events for contract: ' + votingContract
   }
 
   const readEvents = async () => {
@@ -32,14 +51,14 @@
     extensions = await getExtensions(`${getConfig().VITE_DOA_DEPLOYER}.${thisBaseDao}`)
     operation = 0
   }
-  const processProposals = async () => {
-    const processResult = await readVotingContractEvents(undefined)
-    operation = 0
+  const updateExtensions = async (e?:any) => {
+    extensions = await getExtensions(`${getConfig().VITE_DOA_DEPLOYER}.${thisBaseDao}`)
   }
 
 	onMount(async () => {
     try {
-      extensions = await getExtensions(`${getConfig().VITE_DOA_DEPLOYER}.${thisBaseDao}`)
+      await updateExtensions();
+      proposals = await getProposals()
     } catch (err) {
     }
   })
@@ -57,6 +76,7 @@
         </div>
     </Modal>
     
+
     <div class="py-6 mx-auto max-w-7xl md:px-6">
       <div class="flex flex-col w-full my-8">
         <div class="flex flex-col gap-y-4 w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden ">
@@ -69,32 +89,45 @@
           </p>
           {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
           <ul>
-            <li>process <a href="/" on:click|preventDefault={() => {readEvents()}}>extension</a> / <a href="/" on:click|preventDefault={() => {processProposals()}}>proposal</a> events</li>
-            <li><a href="/" on:click|preventDefault={() => {operation = 1}}>core team run</a></li>
+            <li>process <a href="/" on:click|preventDefault={() => {readEvents()}}>show extension</a></li>
+            <li><a href="/" on:click|preventDefault={() => {operation = 1}}>core team execute</a></li>
+            <li><a href="/" on:click|preventDefault={() => {operation = 2}}>show proposals</a></li>
             <li><a href="/dao/proposals/propose">make proposals</a></li>
           </ul>
           {/if}
 
+          {#if message}<div class="my-5"><Banner bannerType={'warning'} message={message}/></div>{/if}
   
-          {#if operation === 0}
 
             <div class="flex flex-col w-full text-base font-extralight mb-5">
               <label for="period">Select base dao</label>
-              <select class="text-black h-10 w-full px-3 border rounded-lg" bind:value={thisBaseDao}>
+              <select class="text-black h-10 w-full px-3 border rounded-lg" bind:value={thisBaseDao} on:change={(e) => updateExtensions(e)}>
                 {#each daoBaseContracts as baseDao}
-                  <option value={baseDao} selected={baseDao === thisBaseDao}>{baseDao}</option>
+                <option value={baseDao} selected={baseDao === thisBaseDao}>{baseDao}</option>
                 {/each}
               </select>
+            </div>
+            {#if operation === 0}
+            <div class="w-full justify-stretch border-b border-dashed">
+              Extensions for {thisBaseDao}
             </div>
             {#each extensions as extension}
               <div class="w-full grid grid-cols-6 justify-stretch"><ExtensionGridItem {extension} on:openExtensionChecker={extensionChecker} on:openSourceModal={openSourceModal}/></div>
             {/each}
 
             {:else if operation === 1}
-              <CoreExecute />
+            <CoreExecute />
+
+            {:else if operation === 2}
+            <div class="w-full justify-stretch border-b border-dashed">
+              Proposals for {thisBaseDao}
+            </div>
+            {#each proposals as proposal}
+              <div class="w-full grid grid-cols-6 justify-stretch"><ProposalGridItem {proposal} on:syncSolo={syncSoloVotes} on:syncPool={syncPoolVotes} /></div>
+            {/each}
             {/if}
 
-        </div>
+          </div>
         </div>
       </div>
 

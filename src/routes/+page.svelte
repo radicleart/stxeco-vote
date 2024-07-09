@@ -1,21 +1,21 @@
 <script lang="ts">
-	import VotingOptionBackground from "$lib/assets/home/VotingOptionBackground.svelte";
 	import ProposalStageCustom from "$lib/components/all-voters/ProposalStageCustom.svelte";
 	import ProposalHomePageActive from "$lib/components/dao/proposals/ProposalHomePageActive.svelte";
 	import ProposalHomePageEmptyItem from "$lib/components/dao/proposals/ProposalHomePageEmptyItem.svelte";
 	import ProposalHomePageListItem from "$lib/components/dao/proposals/ProposalHomePageListItem.svelte";
 	import TentativeProposalHeader from "$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte";
-	import { getActiveProposals, getInactiveProposals, getTentativeProposals } from "$lib/proposals";
+	import { getProposals, getTentativeProposals } from "$lib/proposals";
 	import PageIntro from "$lib/ui/PageIntro.svelte";
-	import { getConfig } from "$stores/store_helpers";
-	import { daoStore } from "$stores/stores_dao";
-	import type { VotingEventConcludeProposal, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
-	import { QuestionCircleOutline } from "flowbite-svelte-icons";
+	import type { VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
-	import { Icon, CheckCircle, PlusCircle } from "svelte-hero-icons"
+	import { Icon, MinusCircle, PlusCircle } from "svelte-hero-icons"
 	
 	let message = 'STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes';
+	let listingsMessages = ['stacks improvement proposals', 'all proposals']
+	let showAllProposals = false
+	let listingsMessage = listingsMessages[0]
 	let componentKey = 0;
+	let showInactiveProposals = true
 
 	let votingOptions = [
 		{
@@ -41,19 +41,21 @@
 		},
 	]
 
-	let currentContract = ($daoStore.currentProposal) ? $daoStore.currentProposal?.contractId : getConfig().VITE_DOA_PROPOSAL
 	let tentativeProposals:Array<TentativeProposalHeader>
 	let activeProposals:Array<VotingEventProposeProposal>
-	let inactiveProposals:Array<VotingEventConcludeProposal>
+	let inactiveProposals:Array<VotingEventProposeProposal>
 
-	const fetchInactive = async () => {
-		inactiveProposals = await getInactiveProposals()
+	const toggleListings = async () => {
+		showAllProposals = !showAllProposals
+		listingsMessage = (showAllProposals) ? listingsMessages[1] : listingsMessages[0]
 		componentKey++;
 	}
 
 	onMount(async () => {
-		tentativeProposals = await getTentativeProposals()
-		activeProposals = await getActiveProposals()
+		const proposals:Array<VotingEventProposeProposal> = await getProposals();
+		tentativeProposals = await getTentativeProposals(true)
+		inactiveProposals = proposals.filter((o) => o.proposalData.concluded)
+		activeProposals = proposals.filter((o) => !o.proposalData.concluded)
   	})
 </script>
 
@@ -69,9 +71,11 @@
     	<div>
 			<div class="space-y-6">
 
-				<ProposalStageCustom message={'stacks improvement proposals'} />
+				<ProposalStageCustom message={listingsMessage} on:toggle_proposal_listings={toggleListings}/>
 
-				{#if $daoStore.tentativeProposals && $daoStore.tentativeProposals.length > 0}
+				{#key componentKey}
+
+				{#if tentativeProposals && tentativeProposals.length > 0}
 				<div>
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
@@ -79,8 +83,8 @@
 						</a>
 					</h1>
 				</div>
-				{#each $daoStore.tentativeProposals as tProp }
-				<ProposalHomePageListItem propType={'tentative'} contractId={tProp.tag} title={tProp.proposalMeta.title} description={tProp.proposalMeta.description} infoItems={tProp.info || []} />
+				{#each tentativeProposals as prop }
+				<ProposalHomePageListItem propType={'tentative'} contractId={prop.tag} title={prop.proposalMeta.title} description={prop.proposalMeta.description} infoItems={prop.info || []} />
 				{/each}
 				{/if}
 
@@ -92,8 +96,8 @@
 					</h1>
 				</div>
 				{#if activeProposals && activeProposals.length > 0}
-				{#each activeProposals as aProp }
-				<ProposalHomePageActive prop={aProp} infoItems={[]} />
+				{#each activeProposals as prop }
+				{#if showAllProposals || prop.stackerData}<ProposalHomePageActive {prop} infoItems={[]} />{/if}
 				{/each}
 				{/if}
 				{#if !activeProposals || activeProposals.length === 0}
@@ -103,19 +107,20 @@
 				<div>
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
-							Past proposals <a href="/" class="text-bitcoinorange" on:click={() => fetchInactive()}><Icon class="inline-block" src={PlusCircle} width={30} height={30}/></a>
+							Past proposals 
+							<a href="/" class="text-bitcoinorange" on:click={() => showInactiveProposals = !showInactiveProposals}>{#if showInactiveProposals}<Icon class="inline-block" src={MinusCircle} width={30} height={30}/>{:else}<Icon class="inline-block" src={PlusCircle} width={30} height={30}/>{/if}</a>
 						</a>
 					</h1>
 				</div>
-				{#key componentKey}
-				{#if inactiveProposals && inactiveProposals.length > 0}
-				{#each inactiveProposals as aProp }
-				<ProposalHomePageListItem propType={'inactive'} contractId={aProp.proposal} title={aProp.proposalMeta.title} description={aProp.proposalMeta.description} infoItems={[]} />
+				{#if showInactiveProposals && inactiveProposals && inactiveProposals.length > 0}
+				{#each inactiveProposals as prop }
+				{#if prop.stackerData || showAllProposals}<ProposalHomePageListItem propType={'inactive'} contractId={prop.proposal} title={prop.proposalMeta.title} description={prop.proposalMeta.description} infoItems={[]} />{/if}
 				{/each}
 				{#if !inactiveProposals || inactiveProposals.length === 0}
 				<ProposalHomePageEmptyItem propType={'inactive'} />
 				{/if}
 				{/if}
+				
 				{/key}
 
 			</div>
@@ -123,13 +128,12 @@
 
 
 
-
-
+			<!--
 			<div class="space-y-6 mt-24">
 				<h2 class="text-[#0A0A0B] text-2xl sm:text-4xl mt-6">Cast your vote</h2>
 				<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
 					{#each votingOptions as opt}
-						<a href={`/dao/proposals/${currentContract}?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-transparent hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-6 transition duration-300 ease-in-out">
+						<a href={`/dao/proposals/?method=${opt.method}`} class="group flex flex-col overflow-hidden border border-transparent hover:border-[#FC6432] rounded-lg relative bg-[#E6E4E2] px-6 py-6 transition duration-300 ease-in-out">
 
 							<VotingOptionBackground />
 
@@ -148,6 +152,7 @@
 					{/each}
 				</div>
 			</div>
+			-->
 		</div>
   	</div>
 </div>

@@ -9,7 +9,7 @@
 	import StackerInfo from '$lib/components/pox/StackerInfo.svelte';
 	import { sessionStore } from '$stores/stores';
 	import type { PoxEntry, PoxInfo } from '@mijoco/stx_helpers/dist/index';
-	import { getCurrentProposal, getCurrentProposalLink } from '$lib/proposals';
+	import { getCurrentProposalLink } from '$lib/proposals';
 	import { Placeholder } from '@mijoco/stx_components';
 
   let poxInfo:PoxInfo;

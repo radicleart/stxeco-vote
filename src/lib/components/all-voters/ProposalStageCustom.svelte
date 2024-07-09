@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { fmtNumber } from '$lib/utils';
-	import { sessionStore } from '$stores/stores';
-	import Countdown from '../../ui/Countdown.svelte';
 	import { onMount } from 'svelte';
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
 
 	export let message:string;
+
+	const toggleProposals = () => {
+		dispatch("toggle_proposal_listings");
+	}
 
 	onMount(async () => {
 	})
@@ -15,7 +19,7 @@
 	<div class="mb-1 flex items-center gap-2">
 		<span class="w-2 h-2 rounded-full bg-bloodorange"></span>
 		<p class="font-mono text-xs uppercase tracking-wider text-bloodorange">
-			{message}
+			<a href="/" on:click={() => toggleProposals()} >{message}</a>
 		</p>
 	</div>
 </div>

@@ -69,7 +69,7 @@
 
     <div class="">
       <div class="mb-4">
-        <h2 class="text-[#131416] text-2xl mb-3">Voting as Solo Stackers (Method 1)</h2>
+        <h2 class="text-[#131416] text-2xl mb-3">Voting for Stackers</h2>
       </div>
       <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 max-w-xl">
         <p>Voters who are stacking on their own must send a dust amount of BTC (~6000 sats) from their PoX Bitcoin reward address to either:</p>

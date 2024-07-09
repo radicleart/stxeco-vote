@@ -1,14 +1,12 @@
 <script lang="ts">
   import DaoUtils from '$lib/service/DaoUtils';
   import { onMount } from 'svelte';
-  import { sessionStore } from '$stores/stores';
   import { findDaoVotes } from '$lib/dao_api';
 	import VoteResultsRow from '../VoteResultsRow.svelte';
 	import VoteTransactions from '../VoteTransactions.svelte';
 	import type { ResultsSummary, VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
-	import { getConfig } from '$stores/store_helpers';
 
-  export let summary:ResultsSummary;
+  export let daoSummary:ResultsSummary;
   export let proposal:VotingEventProposeProposal|undefined;
 
   let showVotes = false;
@@ -28,7 +26,7 @@
     }
     if (votes.length === 0) {
       const newV = await findDaoVotes();
-      if (newV) votes = newV.daoVotes
+      if (newV) votes = newV.daoVotes || []
     }
     showVotes = true
   }
@@ -36,19 +34,19 @@
   let inFavour = 0;
   let winning = 'danger';
   onMount(async () => {
-    const votesFor = summary.summary.find((o) => o._id.event === 'vote' && o._id.for)
-    const votesAgn = summary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
+    const votesFor = daoSummary.summary.find((o) => o._id.event === 'vote' && o._id.for)
+    const votesAgn = daoSummary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
     stxFor = votesFor?.total || 0
     stxAgainst = votesAgn?.total || 0
     accountsFor = votesFor?.count || 0
     accountsAgainst = votesAgn?.count || 0
 
-    stxFor = summary.proposalData.votesFor
-    stxAgainst = summary.proposalData.votesAgainst
+    stxFor = daoSummary.proposalData.votesFor
+    stxAgainst = daoSummary.proposalData.votesAgainst
 
 
     inFavour = (proposal?.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
-    if (inFavour > 80) {
+    if (inFavour > ((proposal?.proposalData?.customMajority || 0) / 100)) {
       winning = 'success';
     }
   })

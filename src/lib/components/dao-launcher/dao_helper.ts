@@ -18,14 +18,6 @@ export async function launchDao(template:DaoTemplate) {
   return await response.json();
 }
 
-export async function constructDao1(address:string) {
-  console.log(JSON.stringify(deployer_roles))
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/construct/${address}`;
-  const response = await fetch(path);
-  const res = await response.json();
-  return res;
-}
-
 export const deployer_roles = [
 	{
 		secret_key: '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601',
