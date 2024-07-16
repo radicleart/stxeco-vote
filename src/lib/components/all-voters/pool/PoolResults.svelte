@@ -14,7 +14,7 @@
 	import { getConfig } from '$stores/store_helpers';
 
   export let summary:ResultsSummary;
-  export let proposal:VotingEventProposeProposal|undefined;
+  export let proposal:VotingEventProposeProposal;
 
   let votes: Array<VoteEvent> = []
   let allVotes: Array<VoteEvent> = []
@@ -53,7 +53,7 @@
       return
     }
     if (votes.length === 0) {
-      allVotes = (await findPoolVotes()).poolVotes || [];
+      allVotes = (await findPoolVotes(proposal.proposal)).poolVotes || [];
       //if (newV) votes = newV.soloVotes.filter((o:VoteEvent) => o.amount > 0)
       if (includeZeros) {
         votes = allVotes
@@ -122,6 +122,7 @@
   Toggle between all votes and elligible votes - some pool and solo votes were submitted by non stackers.
 </Tooltip>
 
+<!--
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
@@ -132,7 +133,7 @@
     {/if}
   </div>
 </div>
-
+-->
   {#if showVotes}
 	<div class="mt-6 w-1/2">
     <p>

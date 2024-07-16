@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Dropdown, DropdownItem } from 'flowbite-svelte'
-	import { Icon, CheckCircle } from "svelte-hero-icons"
+	import { Icon, CheckCircle, Share } from "svelte-hero-icons"
 	import Preamble from './Preamble.svelte';
 	import { page } from '$app/stores';
 	import ProposalStageUpdate from './ProposalStageUpdate.svelte';
@@ -12,6 +12,10 @@
 	let linkAddress = ''
 	let linkName = ''
 	let method = 3
+	const tweetText = `Voting on proposal ${proposal.proposalMeta.title} to improve the Stacks Blockchain is under way at `;
+	const siteUrl = "https://stx.eco"; // Replace with your site's URL
+
+	const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText + siteUrl)}`;
 
 	let showDetails = false;
 	let dropdownOpen = false;
@@ -31,7 +35,10 @@
 </script>
 
 <div class="sm:flex sm:items-start sm:justify-between mt-8">
-	<ProposalStageUpdate {proposal} />
+	<div class="flex flex-col gap-y-4">
+		<ProposalStageUpdate {proposal} />
+	</div>
+	
 
 	{#if isVoting(proposal)}
 		<div class="mt-4 sm:mt-0">
@@ -62,15 +69,15 @@
 	{/if}
 </div>
 <div class="sm:flex sm:items-center sm:justify-between mt-6">
-	<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4">
+	<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 flex">
 		<a href={linkAddress || '/'} on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
 			{proposal.proposalMeta.title}
-			<svg class="inline" width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M34.8958 27.6042L37.5 25C40.9518 21.5482 40.9518 15.9518 37.5 12.5C34.0482 9.04822 28.4518 9.04822 25 12.5L22.3958 15.1042" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-				<path d="M15.1042 22.3958L12.5 25C9.04822 28.4518 9.04822 34.0482 12.5 37.5C15.9518 40.9518 21.5482 40.9518 25 37.5L27.6042 34.8958" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-				<path d="M29.6875 20.3125L20.3125 29.6875" stroke="#0A0A0B" stroke-width="3.125" stroke-linecap="round" stroke-linejoin="round"/>
-			</svg>
 		</a>
+		<a href={tweetUrl} target="_blank" class="mt-3">
+			<button style="display: flex; ">
+			  <Icon src={Share} width={30} height={30}/>
+			</button>
+		</a>	
 	</h1>
 
 	<button on:click={() => (showDetails = !showDetails)} class="text-sm font-mono uppercase inline-flex items-center bg-transparent gap-2 px-4 py-2  text-[#0A0A0B]/[0.64] rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">

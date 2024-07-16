@@ -2,7 +2,6 @@
   import ProposalDeploymentForm from '$lib/components/dao-launcher/proposing/deployment/ProposalDeploymentForm.svelte';
 	import { sessionStore } from '$stores/stores';
 	import { openContractDeploy } from '@stacks/connect';
-	import { processProposalContracts } from '$lib/proposals';
 	import Banner from '$lib/ui/Banner.svelte';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import { daoStore } from '$stores/stores_dao';
@@ -18,7 +17,6 @@
     let contractId:string|null;
     let fundingData:FundingData|undefined
     let contract:any|undefined;
-    let processResult:any;
     let fundedSubmission = true;
     const fundedSubmissionContractId = `${getConfig().VITE_DOA_DEPLOYER}.${getConfig().VITE_DOA_FUNDED_SUBMISSION_EXTENSION}`
     const coreSubmissionContractId = `${getConfig().VITE_DOA_DEPLOYER}.${'bde003-core-proposals'}`
@@ -32,7 +30,6 @@
       if (contractId) {
         contract = await lookupContract(getConfig().VITE_STACKS_API, contractId)
         if (contract && !contract.error) {
-          processResult = await processProposalContracts(contractId)
           fundingData = {
             funding: 0,
             parameters: {

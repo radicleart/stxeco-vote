@@ -48,7 +48,7 @@
 		}
 		//const amountUSTX = ChainUtils.toOnChainAmount(amount);
 		const amountCV = uintCV(amount);
-		const customMajorityCV = someCV(uintCV(6600));
+		const customMajorityCV = someCV(uintCV(7000));
 		const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = [proposalCV, amountCV, customMajorityCV];
 		await openContractCall({
@@ -97,7 +97,7 @@
 		const amountCV = uintCV(amount);
 		const paramStartDelayCV = uintCV(proposalStartDelay);
 		const paramDurationCV = uintCV(proposalDuration);
-		const customMajorityCV = someCV(uintCV(6600));
+		const customMajorityCV = someCV(uintCV(7000));
 		const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, amountCV, customMajorityCV];
 		await openContractCall({
@@ -187,5 +187,5 @@
 <Holding />
 {/if}
 {:else}
-<Placeholder message={'Vote info loading'}  link={getCurrentProposalLink()}/>
+<Placeholder message={'Vote info loading'}  link={getCurrentProposalLink('Not Found')}/>
 {/if}

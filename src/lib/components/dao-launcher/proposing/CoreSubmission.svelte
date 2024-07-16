@@ -22,9 +22,7 @@
 	let inited = false;
 	let burnHeightNow = 0
 	let componentKey = 0;
-	const account = $sessionStore.keySets[getConfig().VITE_NETWORK]
 
-	let amount = 500000;
 	let txId: string|undefined;
 
 	let fundingMet = false;
@@ -32,18 +30,6 @@
 	let proposalStart = 0
 	let startHeightMessage:string;
 	let durationMessage:string;
-
-	const getSTXMintPostConds = function (amt:number) {
-		const postConds = []
-		if (!account.stxAddress) return [];
-		const amount = amt; // ChainUtils.toOnChainAmount(amt, 0)
-		postConds.push(makeStandardSTXPostCondition(
-			account.stxAddress,
-			FungibleConditionCode.LessEqual,
-			amount
-		))
-		return postConds
-	}
 
 	const submitFlexible = async () => {
         if (!isLoggedIn()) {
@@ -58,15 +44,9 @@
           errorMessage = 'Duration maximum is 5000 blocks';
           return;
         }
-		if (amount < 500000) {
-			errorMessage = 'Half a STX required to fund';
-			return;
-		}
-		//const amountUSTX = ChainUtils.toOnChainAmount(amount);
-		const amountCV = uintCV(amount);
 		const paramStartDelayCV = uintCV(proposalStart);
 		const paramDurationCV = uintCV(proposalDuration);
-		const customMajorityCV = someCV(uintCV(6600));
+		const customMajorityCV = someCV(uintCV(7000));
 		const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, customMajorityCV]
 		await openContractCall({
@@ -142,10 +122,6 @@
 					<input on:change={() => refreshClocks()} bind:value={proposalDuration} type="number" id="duration-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
 					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart + proposalDuration} scaleFactor={1} /></span>
 				</div>
-				<div class="w-full">
-					<label class="block" for="Contribution">funding required is {fundingData.parameters.fundingCost} uSTX</label>
-					<input bind:value={amount} type="number" id="Contribution" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
-				</div>
 				<div>
 					<button on:click={() => {submitFlexible()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
 						Submit proposal
@@ -161,5 +137,5 @@
 <Holding />
 {/if}
 {:else}
-<Placeholder message={'Vote info loading'}  link={getCurrentProposalLink()}/>
+<Placeholder message={'Vote info loading'}  link={getCurrentProposalLink('Unknown')}/>
 {/if}

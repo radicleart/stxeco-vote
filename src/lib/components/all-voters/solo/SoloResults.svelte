@@ -6,14 +6,12 @@
   import { findSoloVotes } from '$lib/dao_api';
   import SoloResultsRow from './SoloResultsRow.svelte';
 	import AddressLookup from '../AddressLookup.svelte';
-	import { Icon, InformationCircle, MagnifyingGlassCircle } from 'svelte-hero-icons';
 	import { Tooltip } from 'flowbite-svelte';
-	import { isCoordinator } from '$lib/proposals';
 	import { csvMaker } from '$lib/utils';
 	import type { ResultsSummary, VoteEvent, VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 
-	export let proposal:VotingEventProposeProposal|undefined;
+	export let proposal:VotingEventProposeProposal;
   export let summary:ResultsSummary;
 
   let votes: Array<VoteEvent> = []
@@ -63,7 +61,7 @@
       return
     }
     if (votes.length === 0) {
-      allVotes = (await findSoloVotes()).soloVotes || [];
+      allVotes = (await findSoloVotes(proposal.proposal)).soloVotes || [];
       //if (newV) votes = newV.soloVotes.filter((o:VoteEvent) => o.amount > 0)
       if (includeZeros) {
         votes = allVotes
@@ -116,9 +114,10 @@
   <VoteResultsRow {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#analysis-label">
-    Toggle between all votes and elligible votes - some pool and solo votes were submitted by non stackers.
+    Toggle between all votes and eligible votes - some pool and solo votes were submitted by non stackers.
   </Tooltip>
   
+    <!--
 <div class="flex justify-between">
   <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => fetchTransactions() }>{#if !showVotes}Show{:else}Hide{/if} transaction details</a>
   <div class="flex gap-x-1 me-10">
@@ -127,13 +126,12 @@
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="analysis-label" />
     </a>
     {/if}
-    <!--
     <a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => openAddressLookup() }>
       <Icon src="{MagnifyingGlassCircle}" mini class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="search-label" />
     </a>
-    -->
   </div>
 </div>
+    -->
 
   {#if showVotes}
     <div class="grid grid-cols-6 w-full justify-evenly mt-6  border-b border-gray-300 pb-3 mb-3">

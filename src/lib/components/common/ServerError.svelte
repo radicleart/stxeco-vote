@@ -5,7 +5,7 @@ import Button from '$lib/ui/Button.svelte';
 	import { getConfig } from '$stores/store_helpers';
 
 const launchApp = () => {
-  goto('/?chain=' + getConfig().VITE_NETWORK)
+  goto('/')
 }
 </script>
 

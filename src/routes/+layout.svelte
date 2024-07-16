@@ -1,7 +1,7 @@
 <script lang="ts">
 	//import '../app.postcss';
 	import "../app.css";
-	import { Placeholder, StxEcoFooter, StxEcoHeader } from "@mijoco/stx_components";
+	import { Placeholder, StxEcoFooter } from "@mijoco/stx_components";
 	import { onMount, onDestroy } from 'svelte';
 	import { sessionStore } from '$stores/stores'
 	import { COMMS_ERROR, tsToTime } from '$lib/utils.js'
@@ -16,7 +16,7 @@
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
 	import { initAddresses, initApplication, isLegal, isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
-	import type { CurrentProposal, DaoStore, TentativeProposal } from "@mijoco/stx_helpers/dist/index";
+	import type { DaoStore } from "@mijoco/stx_helpers/dist/index";
 
 	const unsubscribe1 = sessionStore.subscribe(() => {});
 	const unsubscribe2 = daoStore.subscribe(() => {});
@@ -26,38 +26,12 @@
 		unsubscribe2()
 		unsubscribe3()
 	})
-
-
-	let loggedIn = isLoggedIn();
 	
-	const loginEvent = async (e?:any) => {
-		console.log('update for login', e.target)
-		await loginStacks(function() {
-			console.log('update for login')
-			loggedIn = isLoggedIn();
-		})
-	}
-
-	const logoutEvent = () => {
-		logUserOut();
-		loggedIn = isLoggedIn();
-	}
-
-	const networkSwitchEvent = async () => {
-		await initApp()
-		componentKey++;
-	}
-
-	const copyEvent = async () => {
-		await initApp()
-		componentKey++;
-	}
-
 	let componentKey = 0;
 	setConfigByUrl($page.url.searchParams);
 	if (!isLegal(location.href)) {
 		//componentKey++;
-		goto('/' + '?chain=mainnet')
+		goto('/')
 	}
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
@@ -77,17 +51,14 @@
 		const res = await loginStacksFromHeader(document)
 	}
 
-	let link = {name: '', address: ''}
 	const initApp = async () => {
 		await initAddresses(getConfig().VITE_NETWORK, sessionStore);
 		const exchangeRates = await fetchExchangeRates();
 		await initApplication(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, getConfig().VITE_NETWORK, sessionStore, exchangeRates, getConfig().VITE_SBTC_CONTRACT_ID)
-
+		componentKey++
 		const emTeamMam = await isExecutiveTeamMember($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress);
 		$sessionStore.userSettings.executiveTeamMember = emTeamMam?.executiveTeamMember || false
-		const soloPoolData = await getPoolAndSoloAddresses()
 		daoStore.update((conf:DaoStore) => {
-			conf.soloPoolData = soloPoolData
 			return conf;
 		});
 	}
@@ -124,9 +95,13 @@
 		}
 	})
 </script>
-	<div class="bg-white min-h-screen relative">
-		<HeaderFromComponents/>
-		<div class="mx-auto px-6 relative">
+	<div class="bg-white min-h-screen relative flex flex-col">
+		{#key componentKey}
+		{#if inited}
+		<div class="w-full"><HeaderFromComponents/></div>
+		{/if}
+		{/key}
+		<div class=" px-6 relative grow">
 			{#if inited}
 			<InFlightTransaction />
 			{#key componentKey}
@@ -135,10 +110,10 @@
 			{:else}
 			<div class="py-4 mx-auto max-w-7xl md:px-6">
 				<div class="flex flex-col w-full my-8">
-					<Placeholder message={holdingMessage} link={getCurrentProposalLink()}/>
+					<Placeholder message={holdingMessage} link={getCurrentProposalLink('Loading')}/>
 				</div>
 			</div>
 			{/if}
 		</div>
-		<StxEcoFooter />
+		<div class="w-full"><StxEcoFooter /></div>
 	</div>

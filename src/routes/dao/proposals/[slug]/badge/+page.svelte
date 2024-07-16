@@ -1,15 +1,11 @@
 <script lang="ts">
 import { page } from "$app/stores";
 import { onMount } from 'svelte';
-import DaoUtils from '$lib/service/DaoUtils';
-import { sessionStore } from "$stores/stores";
 import ProposalHeader from "$lib/components/all-voters/ProposalHeader.svelte";
 import NakamotoBackground from "$lib/ui/NakamotoBackground.svelte";
 import NakamotoShield from "$lib/ui/NakamotoShield.svelte";
 import BadgeClaim from "$lib/components/all-voters/badge/BadgeClaim.svelte";
-import { ProposalStage, type VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
-import { goto } from "$app/navigation";
-import { daoStore } from "$stores/stores_dao";
+import { type VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
 import { getCurrentProposalLink, getProposalLatest, isVoting } from "$lib/proposals";
 import { Placeholder } from "@mijoco/stx_components";
@@ -57,5 +53,5 @@ onMount(async () => {
     </div>
   </div>
 {:else}
-<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
+<Placeholder message={'Vote info loading'} link={getCurrentProposalLink($page.params.slug)}/>
 {/if}

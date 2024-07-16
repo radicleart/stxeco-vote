@@ -1,7 +1,7 @@
 import { getConfig } from "$stores/store_helpers";
 
 export async function getDaoVotesByProposalAndVoter(proposal:string, stxAddress:string) {
-  const url = `{getConfig().VITE_BRIDGE_API}/dao-voting/v1/votes/${proposal}/${stxAddress}`;
+  const url = `${getConfig().VITE_BRIDGE_API}/dao-voting/v1/votes/${proposal}/${stxAddress}`;
   const response = await fetch(url);
   if (response.status === 404) return [];
   const res = await response.json();

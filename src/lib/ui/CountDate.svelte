@@ -2,7 +2,8 @@
 import { DateTime, Duration } from 'luxon'
 	import { onMount } from 'svelte';
 
-export let endBlock = 0;
+    export let currentBlockHeight = 0;
+    export let blockHeight = 0;
 export let scaleFactor:number = 1;
 let end= DateTime.local();
 let now: any = DateTime.local();
@@ -29,7 +30,7 @@ onMount(async () => {
 </script>
 
 {#if display && endBlock > 0}
-<div class="inline-block">
+<div>
     {#if moreThanDay}
     ~ {display.toFormat("d ' days' h ' hrs' m ' mins' ss ' secs'")}
     {:else}

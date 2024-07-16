@@ -20,8 +20,8 @@
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
 	import { getDaoSummary } from '$lib/voting-non-stacker';
-	import { fmtMicroToStx, fmtNumber, fmtStxMicro } from '$lib/utils';
-	import type { UserData } from '@stacks/auth';
+	import { fmtNumber, fmtStxMicro } from '$lib/utils';
+	import { getStackerBitcoinTxs, getStackerStacksTxs } from '$lib/tally';
 
 	let proposal:VotingEventProposeProposal|undefined;
 
@@ -71,7 +71,7 @@
 			summary.uniquePoolVoters = sd.reportedResults.poolAddresses
 			summary.uniqueSoloVoters = sd.reportedResults.soloAddresses
 			votesFor.count =  sd.reportedResults.poolAddresses
-			votesFor.total =  fmtStxMicro(sd.reportedResults.poolFor || 0) 
+			votesFor.total =  fmtStxMicro(sd.reportedResults.poolFor || 0)
 			votesAgn.total =  fmtStxMicro(sd.reportedResults.poolAgainst || 0)
 		}
 		let stxFor = votesFor?.count || 0
@@ -112,6 +112,8 @@
 		proposal = await getProposalLatest($page.params.slug)
 
 		if (proposal) {
+			//const stacksTxs = await getStackerStacksTxs(proposal)
+			const bitcoinTxs = await getStackerBitcoinTxs(proposal)
 			daoSummary = await getDaoSummary(proposal.proposal)
 			//const results = await findPoolVotes()
 			//poolVotes = results.poolVotes

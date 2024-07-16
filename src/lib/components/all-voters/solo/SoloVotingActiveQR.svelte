@@ -2,18 +2,18 @@
   import { onMount } from 'svelte';
   import Invoice from './Invoice.svelte';
 	import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
-	import { daoStore } from '$stores/stores_dao';
+	import type { StackerProposalData } from '@mijoco/stx_helpers';
+
+  export let addresses:StackerProposalData;
 
   let yesAddress:string;
   let noAddress:string;
   let inited = false;
-  let addresses:any;
 
 
   onMount(async () => {
-    addresses = $daoStore.soloPoolData?.soloAddresses!
-    yesAddress = addresses.yAddress as string
-    noAddress = addresses.nAddress as string
+    yesAddress = addresses.bitcoinAddressYes as string
+    noAddress = addresses.bitcoinAddressNo as string
     inited = true
   })
 </script>

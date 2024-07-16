@@ -90,6 +90,6 @@
   </div>
   </div>
   {:else}
-  <Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
+  <Placeholder message={'Vote info loading'} link={getCurrentProposalLink('Not found')}/>
   {/if}
 </div>

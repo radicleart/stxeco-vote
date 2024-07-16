@@ -11,17 +11,24 @@
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import Holding from '$lib/components/all-voters/Holding.svelte';
 	import DaoConcluded from '$lib/components/all-voters/dao-voting/DaoConcluded.svelte';
-	import { getCurrentProposalLink, getProposalLatest, isConclusionPending, isCoordinator, isFunding, isProposed, isVoting } from '$lib/proposals';
+	import { getCurrentProposalLink, getProposalLatest, isConclusionPending, isCoordinator, isFunding, isProposedPreVoting, isVoting } from '$lib/proposals';
 	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
 	import { concludeVote } from '$lib/dao_actions';
+	import { goto } from '$app/navigation';
 
-	let method:number = -1;
+
+	let method:number = 2;
 	let errorReason:string|undefined;
 	let proposal:VotingEventProposeProposal|undefined;
 	let balanceAtHeight:number = 0;
 	let inited = false;
+
+	const switchVotingMethod = (e:any) => {
+
+		method = e.detail.method
+	}
 
 	const conclude = async() => {
 		if (proposal) {
@@ -30,8 +37,9 @@
 	}
 
 	onMount(async () => {
-		method = Number($page.url.searchParams.get('method')) || 3
+		method = Number($page.url.searchParams.get('method')) || 2
 		proposal = await getProposalLatest($page.params.slug)
+		if (!proposal) goto('/')
 		try {
 			if (proposal) {
 				const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
@@ -57,9 +65,9 @@
 
 		{#if isVoting(proposal)}
 			{#if method === 1}
-				<SoloVotingActive />
+				<SoloVotingActive {proposal} on:toggle_voting_method={switchVotingMethod}/>
 			{:else if method === 2}
-				<PoolVotingActive {proposal} />
+				<PoolVotingActive {proposal} on:toggle_voting_method={switchVotingMethod}/>
 			{:else if method === 3}
 				{#if $sessionStore.stacksInfo?.burn_block_height >= proposal.proposalData.burnStartHeight}
 				<DaoVotingActive {proposal} adjustBal={balanceAtHeight} />
@@ -75,7 +83,7 @@
 					<Skeleton size="md" />
 				</div>
 			{/if}
-		{:else if isProposed(proposal)}
+		{:else if isProposedPreVoting(proposal)}
 		<Holding />
 		{:else if isConclusionPending(proposal)}
 		<div class="flex justify-around">
@@ -85,6 +93,6 @@
 		<DaoConcluded {proposal}/>
 		{/if}
 	{:else}
-	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink()}/>
+	<Placeholder message={'Proposal not found'} link={getCurrentProposalLink($page.params.slug)}/>
 	{/if}
 </div>

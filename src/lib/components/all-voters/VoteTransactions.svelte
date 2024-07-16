@@ -62,7 +62,7 @@
 {#each sortedEvents as item}
 {#if getAmount(item) > 0}
 <div class="grid grid-cols-4 w-full justify-evenly">
-  <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-1/2 break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>
+  <div class={(item.voter === account.stxAddress) ? 'col-span-2 text-success w-full break-words' : 'col-span-2 break-words'} title={(item.voter === account.stxAddress) ? 'I voted!' : ''}>
 	<span class="">
 		<span class="pe-5 ">{item.voter}</span> 
 		<a title="Show in Explorer" href={explorerTxUrl(item.submitTxId)} target="_blank" class=" h-4 w-4 rounded-md bg-black inline-flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">

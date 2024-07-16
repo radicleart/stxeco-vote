@@ -1,6 +1,6 @@
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import { getConfig } from '$stores/store_helpers';
+import { getConfig, getSession } from '$stores/store_helpers';
 import type { AddressMempoolObject, SbtcClarityEvent } from '@mijoco/stx_helpers/dist/index';
 import type { HeaderLink } from "@mijoco/stx_helpers/dist/index";
 
@@ -8,10 +8,13 @@ export const COMMS_ERROR = 'Error communicating with the server. Please try late
 export const smbp = 900
 export const xsbp = 700
 
+export function getAddressId() {
+  return getSession().keySets[getConfig().VITE_NETWORK].stxAddress.substring(0,5)
+}
 export function getRouterInfo(headerLinks:Array<HeaderLink>, routeId:string) {
   const link = getConfig().VITE_HEADER_LINKS.find((o) => routeId === o.name)
   if (link) {
-    link.href += '?chain=devnet'
+    //link.href += '?chain=devnet'
     headerLinks.push(link)
   }
   return link;
@@ -53,6 +56,10 @@ export function userSatBtc(amount:number, denomination:string):number {
 
 export function fmtMicroToStx(amountStx:number) {
   return  (Math.round(amountStx) / stxPrecision).toFixed(6)
+}
+
+export function fmtStxMicro(amountStx:number) {
+  return  (Math.round(amountStx) * stxPrecision *stxPrecision) / stxPrecision
 }
 
 export function tsToTime(updated:number|undefined) {

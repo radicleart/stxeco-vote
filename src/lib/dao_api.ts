@@ -72,23 +72,23 @@ export async function getExtensions(daoContract:string) {
   return res;
 }
 
-export async function findDaoVotes() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/non-stackers`
+export async function findDaoVotes(proposalId:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao-voting/v1/proposal/votes/${proposalId}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res || [] ;
 }
 
-export async function findSoloVotes() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/solo-stackers`
+export async function findSoloVotes(proposalId:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/solo-stackers/${proposalId}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res || [];
 }
 
 
-export async function findPoolVotes() {
-  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/pool-stackers`
+export async function findPoolVotes(proposalId:string) {
+  const path = `${getConfig().VITE_BRIDGE_API}/dao/v1/results/pool-stackers/${proposalId}`
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res || [];

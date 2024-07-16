@@ -4,6 +4,7 @@
     import { createEventDispatcher } from "svelte";
     import bannerBlue from '$lib/assets/banner-blue.png'
     import bannerWhite from '$lib/assets/banner-white.png'
+	import { getAddressId } from "$lib/utils";
 
     const dispatch = createEventDispatcher();
     let downloaded = false;
@@ -36,7 +37,7 @@
         image.src = image1; //'data:image/png;base64,' + dataUrl.replace('data:', '').replace(/^.+,/, ''); //.split(';base64,')[1];
         document.querySelector('.icontainer')?.appendChild(image);
         //document.getElementById("dimage").src = rawDataUrl.split(';base64,')[1];
-        localStorage.removeItem('VOTED_FLAG');
+        localStorage.removeItem('VOTED_FLAG' + getAddressId());
       } catch (err) {}
     }
 

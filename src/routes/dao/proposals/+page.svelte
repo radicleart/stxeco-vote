@@ -2,21 +2,17 @@
   import { onMount } from 'svelte';
   import { Skeleton, Tabs, TabItem } from 'flowbite-svelte';
   import { COMMS_ERROR } from '$lib/utils.js'
-	import ProposalFundingHeader from '$lib/components/dao/proposals/rows/ProposalFundingHeader.svelte';
 	import ProposalVotingHeader from '$lib/components/dao/proposals/rows/ProposalVotingHeader.svelte';
-	import ProposalFundingRow from '$lib/components/dao/proposals/rows/ProposalFundingRow.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import ProposalClosedRow from '$lib/components/dao/proposals/rows/ProposalClosedRow.svelte';
 	import ProposalActiveRow from '$lib/components/dao/proposals/rows/ProposalActiveRow.svelte';
-	import DaoUtils from '$lib/service/DaoUtils';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { daoStore } from '$stores/stores_dao';
 	import { type TentativeProposal, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import TentativeProposalHeader from '$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte';
 	import TentativeProposalRow from '$lib/components/dao/proposals/rows/TentativeProposalRow.svelte';
-	import { getProposals, getTentativeProposals } from '$lib/proposals';
+	import { getAllProposals } from '$lib/proposals';
 
   // fetch/hydrate data from local storage
   let inited = false;
@@ -28,8 +24,7 @@
   let tabStatus = 'tentative'
   onMount(async () => {
     try {
-      const proposals:Array<VotingEventProposeProposal> = await getProposals();
-      tentative = await getTentativeProposals(false)
+      const proposals:Array<VotingEventProposeProposal> = await getAllProposals();
       closed = proposals.filter((o) => o.proposalData.concluded)
       open = proposals.filter((o) => !o.proposalData.concluded)
       if ($page.url.searchParams.has('status')) tabStatus = $page.url.searchParams.get('status') || 'funding'

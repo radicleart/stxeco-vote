@@ -12,8 +12,6 @@
 	const getLink = () => {
 		if (propType === 'active') {
 			return `/dao/proposals/${contractId}`
-		} else if (propType === 'tentative') {
-			return `/dao/tentative-proposals/${contractId}`
 		} else {
 			return `/dao/proposals/${contractId}/results`
 		}

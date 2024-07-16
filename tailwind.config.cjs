@@ -126,6 +126,7 @@ export default {
       "warning-01": "rgba(248, 246, 91, 0.40);",
       "primary-02": "linear-gradient(306.12deg, #f7b8a3 21.1%, #F4F3F0 84.08%)",
       "primary-01": "linear-gradient(180deg, #f5beab 8.49%, #F4F3F0 45.05%)",
+      "success-01": "linear-gradient(180deg, #1c671b 8.49%, #1c671b 45.05%, #1c671b 80.05%)",
       "sbtc-primary-01": "linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%)",
       "sbtc-primary-02": "linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%)",
       "sbtc-primary-03": "linear-gradient(126.12deg, #D1DAFA 11.8%, #7F97F1 72.43%)",

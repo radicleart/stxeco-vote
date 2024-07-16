@@ -7,11 +7,11 @@ import { createEventDispatcher } from 'svelte';
 let dispatch = createEventDispatcher();
 export let proposal:VotingEventProposeProposal;
 
-const sendSyncSoloEvent = () => {
-	dispatch('syncSolo', proposal)
+const sendSyncDaoEvent = () => {
+	dispatch('syncDao', proposal)
 }
-const sendSyncPoolEvent = () => {
-	dispatch('syncPool', proposal)
+const sendSyncStackerEvent = () => {
+	dispatch('syncStacker', proposal)
 }
 </script>
 
@@ -23,8 +23,7 @@ const sendSyncPoolEvent = () => {
 	</div>
 <div class="col-span-1">
 	<!--<a class="pointer text-light" href="/" on:click|preventDefault={() => { openSesame() }}>Clarity</a>-->
-	<a class="pointer text-light" href={explorerTxUrl(proposal.txId)} target="_blank">Explorer</a>
-	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncSoloEvent()}>Dao</a>
-	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncPoolEvent()}>Pool</a>
+	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncDaoEvent()}>Non Stackers</a>
+	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncStackerEvent()}>Stackers</a>
 </div>
 

@@ -6,13 +6,14 @@
 	import { getConfig } from '$stores/store_helpers';
 	import { onMount } from 'svelte';
 	import { getExtensions, readBaseDaoEvents } from '$lib/dao_api';
-	import { getProposals, isCoordinator } from '$lib/proposals';
+	import { getAllProposals, isCoordinator } from '$lib/proposals';
 	import { sessionStore } from '$stores/stores';
 	import CoreExecute from '$lib/components/dao-launcher/CoreExecute.svelte';
 	import Banner from '$lib/ui/Banner.svelte';
 	import { readVotingContractEvents } from '$lib/voting-non-stacker';
 	import ProposalGridItem from '$lib/components/dao-launcher/extensions/ProposalGridItem.svelte';
-	import { readPoolEvents, readSoloEvents } from '$lib/voting-stacker';
+	import BlockHeightConvertor from '$lib/components/dao-launcher/tools/BlockHeightConvertor.svelte';
+	import { readStackerEvents } from '$lib/voting-stacker';
     
   const daoBaseContracts = getConfig().VITE_DAO_BASE_CONTRACTS.split(',') || [];
   let thisBaseDao = 'bitcoin-dao';
@@ -28,25 +29,20 @@
     item = evt.detail;
     sourceCode = item.contract?.source;
   }
-  const syncSoloVotes = async (evt:any) => {
+  const syncStackerVotes = async (evt:any) => {
     const proposal = evt.detail.proposal;
-    readSoloEvents(proposal)
+    readStackerEvents(proposal)
     message = 'Reading voting events for contract: ' + proposal
   }
 
-  const syncPoolVotes = async (evt:any) => {
-    const proposal = evt.detail.proposal;
-    readPoolEvents(proposal)
-    message = 'Reading voting events for contract: ' + proposal
-  }
-
-  const extensionChecker = async (evt:any) => {
-    const votingContract = evt.detail.extension;
+  const syncDaoVotes = async (evt:any) => {
+    const votingContract = evt.detail.extension
+    if (!votingContract) return
     readVotingContractEvents(true, thisBaseDao, votingContract);
     message = 'Reading voting events for contract: ' + votingContract
   }
 
-  const readEvents = async () => {
+  const readDaoEvents = async () => {
     await readBaseDaoEvents(`${getConfig().VITE_DOA_DEPLOYER}.${thisBaseDao}`);
     extensions = await getExtensions(`${getConfig().VITE_DOA_DEPLOYER}.${thisBaseDao}`)
     operation = 0
@@ -58,7 +54,7 @@
 	onMount(async () => {
     try {
       await updateExtensions();
-      proposals = await getProposals()
+      proposals = await getAllProposals()
     } catch (err) {
     }
   })
@@ -83,15 +79,16 @@
           <h1 class=" text-2xl">DAO Extensions</h1>
           <p class="strapline">The toolkit of the DAO. The active extensions are the mechanics of the DAO. 
             They define how the internals work, governing everything from proposal submission to voting to governance
-            to treasury management. We name the extension contracts according to the convention EDEXXX where EDE 
-            stands for Ecosystem DAO Extension and XXX is the extension number 
+            to treasury management. We name the extension contracts according to the convention BDEXXX where BDE 
+            stands for Bitcoin DAO Extension and XXX is the extension number 
             
           </p>
           {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
           <ul>
-            <li>process <a href="/" on:click|preventDefault={() => {readEvents()}}>show extension</a></li>
+            <li><a href="/" on:click|preventDefault={() => {readDaoEvents()}}>read dao events</a></li>
             <li><a href="/" on:click|preventDefault={() => {operation = 1}}>core team execute</a></li>
             <li><a href="/" on:click|preventDefault={() => {operation = 2}}>show proposals</a></li>
+            <li><a href="/" on:click|preventDefault={() => {operation = 3}}>block height tool</a></li>
             <li><a href="/dao/proposals/propose">make proposals</a></li>
           </ul>
           {/if}
@@ -112,7 +109,7 @@
               Extensions for {thisBaseDao}
             </div>
             {#each extensions as extension}
-              <div class="w-full grid grid-cols-6 justify-stretch"><ExtensionGridItem {extension} on:openExtensionChecker={extensionChecker} on:openSourceModal={openSourceModal}/></div>
+              <div class="w-full grid grid-cols-6 justify-stretch"><ExtensionGridItem {extension} on:openExtensionChecker={syncDaoVotes} on:openSourceModal={openSourceModal}/></div>
             {/each}
 
             {:else if operation === 1}
@@ -123,8 +120,12 @@
               Proposals for {thisBaseDao}
             </div>
             {#each proposals as proposal}
-              <div class="w-full grid grid-cols-6 justify-stretch"><ProposalGridItem {proposal} on:syncSolo={syncSoloVotes} on:syncPool={syncPoolVotes} /></div>
+              <div class="w-full grid grid-cols-6 justify-stretch"><ProposalGridItem {proposal} on:syncStacker={syncStackerVotes} on:syncDao={syncDaoVotes} /></div>
             {/each}
+
+            {:else if operation === 3}
+            <BlockHeightConvertor />
+
             {/if}
 
           </div>

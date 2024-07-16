@@ -3,15 +3,15 @@
 	import tick from '$lib/assets/tick.png'
 	import cross from '$lib/assets/cross.png'
 	import { sessionStore } from "$stores/stores";
-	import { NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
+	import { getPoolAndSoloVotesByProposal, getSummary, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
+	import type { ResultsSummary, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
-	import type { ResultsSummary } from "@mijoco/stx_helpers/dist/index";
+	import { getDaoSummary } from "$lib/voting-non-stacker";
 
-	export let approved = false;
-	export let summary:ResultsSummary;
-	export let daoSummary:ResultsSummary;
-	export let poolVoting;;
-	export let soloVoting;;
+	export let proposal:VotingEventProposeProposal;
+	let approved = true;
+	let summary:ResultsSummary;
+	let daoSummary:ResultsSummary;
 
 	let poolPercent= '0'
 	let soloPercent = '0'
@@ -23,7 +23,7 @@
 		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
-	onMount(async () => {
+	const doCount = () => {
 		let votesFor = summary.summary.find((o) => o._id.event === 'pool-vote' && o._id.for)
 		let votesAgn = summary.summary.find((o) => o._id.event === 'pool-vote' && !o._id.for)
 		let stxFor = votesFor?.total || 0
@@ -47,47 +47,55 @@
 		stxPower = stxFor + stxAgainst
 		daoAccountsFor = votesFor?.count || 0
 		daoAccountsAgainst = votesAgn?.count || 0
-
 		daoPercent = ((stxFor / stxPower) * 100).toFixed(4)
+	}
+
+	onMount(async () => {
+		daoSummary = await getDaoSummary(proposal.proposal)
+		summary = await getSummary(proposal.proposal)
+		summary.proposalData = proposal.proposalData
+		const allVotes = await getPoolAndSoloVotesByProposal(proposal.proposal)
+		doCount()
 	})
+
 
 </script>
 
 <div class="mb-8 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0 align-top ">
-	<div class="p-8 stretch bg-[#121314] rounded-2xl self-start">
-	  	<h3 class="text-3xl text-white font-extralight">Vote results</h3>
+	<!--
+	<div class="p-8 stretch bg-[#1c671b] rounded-2xl self-start">
+	  	<h3 class="text-3xl text-white font-extralight">Vote passed</h3>
 	</div>
+	-->
 	{#if blockSinceEnd() > 0}
-	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
-		<div class="flex justify-between mb-5">
-			<div></div>
-			<div><span class="text-4xl font-extrabold"></span></div>
-		</div>
-		<div class="flex justify-between mb-5">
-			<div><span class="">Voting is in progress - official results will be available after voting ends</span></div>
-		</div>
-		{#if soloVoting}
-		<div class="flex justify-between mb-5">
+	<div class="p-8 bg-success-01 col-span-3 bg-[#1c671b] rounded-2xl border-error-600 relative">
+		
+		{#if soloPercent !== 'NaN'}
+		<div class="flex justify-between mb-5 text-white">
 			<div><span class="text-4xl font-extrabold">Solo Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{soloPercent} %</span></div>
 			<div>{#if Number(soloPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>
 		{/if}
-		{#if poolVoting}
-		<div class="flex justify-between mb-5">
+
+		{#if poolPercent !== 'NaN'}
+		<div class="flex justify-between mb-5 text-white">
 			<div><span class="text-4xl font-extrabold">Pool Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{poolPercent} %</span></div>
 			<div>{#if Number(poolPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>
 		{/if}
-		<div class="flex justify-between mb-2">
+
+		{#if daoPercent !== 'NaN'}
+		<div class="flex justify-between mb-2 text-white">
 			<div><span class="text-4xl font-extrabold">Non Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
 			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>
+		{/if}
 	</div>
 	{:else}
-	<div class="p-8 bg-primary-01 col-span-2 bg-[#F4F3F0] rounded-2xl border-error-600 relative">
+	<div class="p-8 bg-primary-01 col-span-2 bg-[#1c671b] rounded-2xl border-error-600 relative">
 		{#if approved}
 		<div class="flex justify-between mb-5">
 			<div><img alt="correct" src={tick}/></div>

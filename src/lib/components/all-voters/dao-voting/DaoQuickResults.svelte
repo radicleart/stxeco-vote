@@ -44,7 +44,6 @@
     stxFor = daoSummary.proposalData.votesFor
     stxAgainst = daoSummary.proposalData.votesAgainst
 
-
     inFavour = (proposal?.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
     if (inFavour > ((proposal?.proposalData?.customMajority || 0) / 100)) {
       winning = 'success';
@@ -71,7 +70,4 @@
     </span>
   </p>
 </div>
-  {#key componentKey}
-    <VoteTransactions {votes}/>
-    {/key}
-  {/if}
+{/if}

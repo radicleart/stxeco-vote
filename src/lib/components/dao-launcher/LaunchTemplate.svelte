@@ -10,9 +10,8 @@
 	import { getBaseDaoExecutedProposalEvents, getCurrentProposalLink } from '$lib/proposals';
 	import { Placeholder } from '@mijoco/stx_components';
 	import { getConfig } from '$stores/store_helpers';
-	import { daoStore } from '$stores/stores_dao';
 	import { contractPrincipalCV, PostConditionMode } from '@stacks/transactions';
-	import { fetchDataVar, getStacksNetwork, lookupContract } from '@mijoco/stx_helpers/dist/index';
+	import { getStacksNetwork, lookupContract } from '@mijoco/stx_helpers/dist/index';
 	import { openContractCall } from '@stacks/connect';
 
   let inited = false;
@@ -66,8 +65,6 @@
       }
     });
   }
-
-//$: constructed = ($daoStore?.extensions?.filter((o:ExtensionType) => o.valid)?.length || 0) > 0 || false;
 
   const launch = async () => {
     let key: keyof typeof template;

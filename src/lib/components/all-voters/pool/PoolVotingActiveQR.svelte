@@ -3,18 +3,16 @@
   import Invoice from './Invoice.svelte';
   import { sessionStore } from '$stores/stores';
   import { openSTXTransfer } from '@stacks/connect';
-  import { goto } from '$app/navigation';
   import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
-	import { daoStore } from '$stores/stores_dao';
 	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers';
+	import { getAddressId } from '$lib/utils';
 
 	export let proposal:VotingEventProposeProposal;
+  let stackerData = proposal.stackerData!
 
-  let yesAddress:string;
-  let noAddress:string;
   let showStxTransfer = false;
   let txId: string;
   let errorMessage: string|undefined;
@@ -30,13 +28,14 @@
     await openSTXTransfer({
       amount: '1',
       network: getStacksNetwork(getConfig().VITE_NETWORK),
-      recipient: (vfor) ? yesAddress : noAddress,
+      recipient: (vfor) ? stackerData.stacksAddressYes : stackerData.stacksAddressNo,
         onFinish: data => {
           txId = data.txId
           console.log('finished contract call!', data);
-          localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.proposal));
-          localStorage.setItem('VOTED_TXID_2', txId);
-          goto(`/dao/proposals/${proposal.proposal}/badge`);
+          localStorage.setItem('VOTED_FLAG' + getAddressId(), JSON.stringify(proposal.proposal));
+          localStorage.setItem('VOTED_TXID_2' + getAddressId(), txId);
+          window.location.reload()
+          //goto(`/dao/proposals/${proposal.proposal}/badge`);
         },
         onCancel: () => {
           console.log('popup closed!');
@@ -45,21 +44,18 @@
   }
 
   onMount(async () => {
-    const addresses = $daoStore.soloPoolData?.poolAddresses!
     let locked = $sessionStore.keySets[getConfig().VITE_NETWORK].tokenBalances?.stx?.locked
     locked = Number(locked)
     if (locked && locked > 0) showStxTransfer = true
 
-    yesAddress = addresses.yAddress as string
-    noAddress = addresses.nAddress as string
     inited = true
   })
 </script>
 {#if inited}
 
-{#if showStxTransfer}
+{#if !showStxTransfer}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
-    <Invoice address={yesAddress} voteFor={true} />
+    <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
     <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote yes
     </button>
@@ -71,7 +67,7 @@
   </div>
 
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
-    <Invoice address={noAddress} voteFor={false} />
+    <Invoice address={stackerData.stacksAddressNo} voteFor={false} />
     <button on:click={() => {castVote(false)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote no
     </button>
@@ -83,12 +79,12 @@
   </div>
 {:else}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
-    <Invoice address={yesAddress} voteFor={true} />
+    <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
     <NakamotoResultsBackground />
   </div>
 
   <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
-    <Invoice address={noAddress} voteFor={false} />
+    <Invoice address={stackerData.stacksAddressNo} voteFor={false} />
     <NakamotoResultsBackground />
   </div>
   {/if}

@@ -61,9 +61,10 @@
           {/if}
         </div>
     
+        {#if isLoggedIn()}
         {#if voted > 0}
         <div class="mb-3 max-w-xl">
-          <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.bdp001-sip-021-nakamoto/badge?method=3" >collect your badge here!</a>'} />
+          <Banner bannerType={'warning'} message={'Account has voted with ' + fmtMicroToStx(votedPower) + ' stx. <a href="/dao/proposals/' + proposal.proposal + '/badge?method=3" >collect your badge here!</a>'} />
         </div>
         {/if}
 
@@ -80,7 +81,8 @@
           </div>
           {/if}
         {/if}
-      </div>
+        {/if}
+        </div>
 
       <NakamotoBackground />
       <NakamotoShield />

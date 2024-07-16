@@ -11,7 +11,7 @@
     import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
     import { getStacksNetwork, getTransaction } from '@mijoco/stx_helpers/dist/stacks-node';
     import { getConfig } from '$stores/store_helpers';
-	import { explorerTxUrl } from '$lib/utils';
+	import { explorerTxUrl, getAddressId } from '$lib/utils';
 
     export let proposal:VotingEventProposeProposal;
     export let balanceAtHeight:number = 0;
@@ -55,11 +55,11 @@
             functionArgs: [amountCV, forCV, proposalCV],
             onFinish: data => {
               txId = data.txId
-              console.log('finished contract call!', data);
               //ChainUtils.updateVoters();
-              localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.proposal));
-              localStorage.setItem('VOTED_TXID_3', JSON.stringify({txId}));
-              goto(`/dao/proposals/${proposal.proposal}/badge`);
+              localStorage.setItem('VOTED_FLAG' + getAddressId(), JSON.stringify(proposal.proposal));
+              localStorage.setItem('VOTED_TXID_3' + getAddressId(), JSON.stringify({txId}));
+              //goto(`/dao/proposals/${proposal.proposal}/badge`);
+              window.location.reload()
             },
             onCancel: () => {
               console.log('popup closed!');
@@ -75,8 +75,8 @@
     }
 
     onMount(async () => {
-      if (localStorage.getItem('VOTED_TXID_3')) {
-		    const txIdObj = localStorage.getItem('VOTED_TXID_3');
+      if (localStorage.getItem('VOTED_TXID_3' + getAddressId())) {
+		    const txIdObj = localStorage.getItem('VOTED_TXID_3' + getAddressId());
 		    if (txIdObj) {
           const potentialTxId = (JSON.parse(txIdObj)).txId
           const tx = await lookupTransaction(potentialTxId);
@@ -84,7 +84,7 @@
             txId = potentialTxId
           } else {
             if (tx.sender_address === $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress) {
-              localStorage.removeItem('VOTED_TXID_3');
+              localStorage.removeItem('VOTED_TXID_3' + getAddressId());
             }
           }
         }

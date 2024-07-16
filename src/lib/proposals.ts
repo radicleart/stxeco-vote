@@ -1,4 +1,4 @@
-import { getStacksNetwork, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+import { getStacksNetwork, type TentativeProposal, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 import { getConfig, getSession } from '$stores/store_helpers';
 import { AddressPurpose, BitcoinNetworkType, getAddress, type GetAddressOptions } from 'sats-connect';
 
@@ -64,7 +64,7 @@ export function isFunding() {
 }
 
 export function getProposalColor(proposal:VotingEventProposeProposal) {
-  if (isProposed(proposal)) {
+  if (isProposedPreVoting(proposal)) {
     return 'warning'
   } else if (isVoting(proposal)) {
     return 'green'
@@ -73,15 +73,17 @@ export function getProposalColor(proposal:VotingEventProposeProposal) {
   }
 }
 
-export function isProposed(proposal:VotingEventProposeProposal) {
+export function isProposedPreVoting(proposal:VotingEventProposeProposal) {
   const sess = getSession();
-  return  sess.stacksInfo.burn_block_height < proposal.proposalData.burnStartHeight
+  const currentHeight = (proposal.submissionContract.indexOf('008') > -1) ? sess.stacksInfo.stacks_tip_height : sess.stacksInfo?.burn_block_height || 0
+  return  currentHeight < proposal.proposalData.burnStartHeight
 }
 
 export function isVoting(proposal:VotingEventProposeProposal) {
   const sess = getSession();
-  const res = sess.stacksInfo.burn_block_height >= proposal.proposalData.burnStartHeight;
-  return res && (sess.stacksInfo.burn_block_height < proposal.proposalData.burnEndHeight);
+  const currentHeight = (proposal.submissionContract.indexOf('008') > -1) ? sess.stacksInfo.stacks_tip_height : sess.stacksInfo?.burn_block_height || 0
+  const res = currentHeight >= proposal.proposalData.burnStartHeight;
+  return res && (currentHeight < proposal.proposalData.burnEndHeight);
 }
 
 export function isConclusionPending(proposal:VotingEventProposeProposal) {
@@ -90,7 +92,8 @@ export function isConclusionPending(proposal:VotingEventProposeProposal) {
 
 export function isPostVoting(proposal:VotingEventProposeProposal) {
   const sess = getSession();
-  return sess.stacksInfo.burn_block_height >= proposal.proposalData.burnEndHeight;
+  const currentHeight = (proposal.submissionContract.indexOf('008') > -1) ? sess.stacksInfo.stacks_tip_height : sess.stacksInfo?.burn_block_height || 0
+  return currentHeight >= proposal.proposalData.burnEndHeight;
 }
 
 export async function getFunding(submissionContract:string, proposalContract:string) {
@@ -101,27 +104,32 @@ export async function getFunding(submissionContract:string, proposalContract:str
   return res;
 }
 
-export async function getTentativeProposals(active:boolean) {
-  let path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals`
-  if (active) {
-    path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals?active=${active}`
-  }
-  const response = await fetch(path);
-  if (response.status === 404) return [];
-  const res = await response.json();
-  return res;
-}
-
-export async function getTentativeProposal(tag:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals/${tag}`
-  const response = await fetch(path);
-  if (response.status === 404) return [];
-  const res = await response.json();
-  return res;
-}
-
-export async function getProposals() {
+export async function getAllProposals() {
   const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/all-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getActiveProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getTentativeProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/tentative-proposals`
+  const response = await fetch(path);
+  if (response.status === 404) return [];
+  const res = await response.json();
+  return res;
+}
+
+export async function getConcludedProposals() {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/concluded-proposals`
   const response = await fetch(path);
   if (response.status === 404) return [];
   const res = await response.json();
@@ -130,6 +138,14 @@ export async function getProposals() {
 
 export async function getProposalLatest(proposal:string):Promise<VotingEventProposeProposal|undefined> {
   const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-proposal/${proposal}`;
+  const response = await fetch(path);
+  if (response.status === 404) return;
+  const res = await response.json();
+  return res;
+}
+
+export async function getTentativeProposal(proposalId:string):Promise<TentativeProposal|undefined> {
+  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-tentative-proposal/${proposalId}`;
   const response = await fetch(path);
   if (response.status === 404) return;
   const res = await response.json();
@@ -162,18 +178,11 @@ export async function isExtension(extensionAddress:string):Promise<{result:boole
   return res;
 }
 
-export function getCurrentProposalLink():{ name:string, address:string} {
-  return { name: getConfig().VITE_DOA_PROPOSAL.split('.')[1], address: `/dao/proposals/${getConfig().VITE_DOA_PROPOSAL}` };
+export function getCurrentProposalLink(name:string):{ name:string, address:string} {
+  return { name: 'Proposal is loading' || '', address: '/' };
 }
 
 export function getProposalNotFoundLink():{ name:string, address:string} {
   return { name: 'Proposal not found' || '', address: '/' };
-}
-
-export async function processProposalContracts(contractIds:string):Promise<any> {
-  const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/sync/proposal/${contractIds}`;
-  const response = await fetch(path);
-  const res = await response.json();
-  return res;
 }
 
