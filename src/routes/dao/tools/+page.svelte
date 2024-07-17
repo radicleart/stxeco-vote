@@ -14,14 +14,20 @@
     
   let proposals:Array<VotingEventProposeProposal> = [];
   let method = 1
-  let message:string|undefined
   let poxInfo:PoxInfo
+  let cycle = 0;
   
   const changeMethod = async (e:any, newMethod:number) => {
     	e.preventDefault();
 		method = newMethod
-		$page.url.searchParams.set('method', '' + method)
-		goto(`?${$page.url.searchParams.toString()}`);
+		$page.url.searchParams.set('tool', '' + method)
+
+    //const url = new URL($page.url);
+    // Set the new query parameter
+    //url.searchParams.set('tool', method + '');
+    history.pushState({}, '', $page.url);
+
+		//goto(`?${$page.url.searchParams.toString()}`);
 		const getMeTo = document.getElementById("tabs-header");
 		await tick();
   		if (getMeTo) getMeTo.scrollTo({behavior: 'smooth'});
@@ -29,6 +35,8 @@
 	}
 
 	onMount(async () => {
+    if ($page.url.searchParams.has('tool')) method = Number($page.url.searchParams.get('tool'))
+    if ($page.url.searchParams.has('cycle')) cycle = Number($page.url.searchParams.get('cycle'))
     proposals = await getAllProposals()
     poxInfo = await getPoxInfo(getConfig().VITE_STACKS_API)
   })
@@ -49,25 +57,26 @@
         <Tabs  style="underline" contentClass="mb-0 pb-0 border-b-none">
 
           <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
-              open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="block height tool" >
+              open={method === 1} on:click={(e) => changeMethod(e, 1)} title="block height tool" >
             <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
               <BlockHeightConvertor />
             </div>
           </TabItem>
-    
+          {#if poxInfo}
           <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
-              open={method === 2} on:keyup={(e) => changeMethod(e, 2)} title="reward cycles" >
+              open={method === 2} on:click={(e) => changeMethod(e, 2)} title="reward cycles" >
             <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
-              <RewardCycleConvertor {poxInfo} />
+              <RewardCycleConvertor {poxInfo} {cycle}/>
             </div>
           </TabItem>
       
           <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
-            open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="epochs" >
+            open={method === 3} on:click={(e) => changeMethod(e, 3)} title="epochs" >
             <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
               <EpochsAndVersions {poxInfo} />
             </div>
         </TabItem>
+        {/if}
       </Tabs>
 
 </div>

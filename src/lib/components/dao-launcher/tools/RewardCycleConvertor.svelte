@@ -1,26 +1,26 @@
 <script lang="ts">
 	import { fmtNumber } from "$lib/utils";
-import { getConfig } from "$stores/store_helpers";
+  import { getConfig } from "$stores/store_helpers";
 	import { sessionStore } from "$stores/stores";
 	import { fetchBlockAtHeight } from "@mijoco/btc_helpers/dist/index";
+	import type { PoxCycleInfo, PoxInfo } from "@mijoco/stx_helpers/dist/pox_types";
+	import { getPoxCycleInfoRelative } from "@mijoco/stx_helpers/dist/pox/index";
 	import { onMount } from "svelte";
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
-	import EpochsAndVersions from "./EpochsAndVersions.svelte";
-	import type { PoxCycleInfo, PoxInfo } from "@mijoco/stx_helpers/dist/pox_types";
-	import { getPoxInfo } from "@mijoco/stx_helpers/dist/index";
-	import { getPoxCycleInfo } from "@mijoco/stx_helpers/dist/pox/index";
+	import { page } from "$app/stores";
 
   export let poxInfo:PoxInfo
+  export let cycle:number
 
   let currentBurnHeight:number = $sessionStore.stacksInfo.burn_block_height;
   let currentBlock:any;
-  let poxInfoCycle:PoxCycleInfo|undefined;
+  let poxInfoCycle:PoxCycleInfo;
 
-  export let cycle = 0
   let newCycle:number = cycle;
 
   const fetchCycle = async () => {
-    poxInfoCycle = undefined
+    $page.url.searchParams.set('cycle', '' + newCycle)
+    history.pushState({}, '', $page.url);
     poxInfoCycle = await getPoxCycleInfoRelative(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, getConfig().VITE_POX_CONTRACT_ID, newCycle, currentBurnHeight)
   }
 
@@ -37,11 +37,10 @@ import { getConfig } from "$stores/store_helpers";
 
 
 	onMount(async () => {
-    cycle = poxInfo.reward_cycle_id;
+    cycle = (cycle > 0) ? cycle : poxInfo.reward_cycle_id;
     newCycle = cycle;
     currentBlock = await fetchBlockAtHeight(getConfig().VITE_MEMPOOL_API, $sessionStore.stacksInfo.burn_block_height)
     await fetchCycle()
-
   })
 </script>
 

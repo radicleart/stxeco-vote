@@ -25,7 +25,8 @@ export const coordinators = [
 
 export function isCoordinator(address:string|undefined) {
   if (!address) return false
-	return coordinators.find((o) => o.stxAddress === address);
+	const index = coordinators.findIndex((o) => o.stxAddress === address);
+  return index > -1
 }
 
 export async function getBitcoinAddressSatsConnect() {
@@ -136,10 +137,10 @@ export async function getConcludedProposals() {
   return res;
 }
 
-export async function getProposalLatest(proposal:string):Promise<VotingEventProposeProposal|undefined> {
+export async function getProposalLatest(proposal:string):Promise<VotingEventProposeProposal> {
   const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/get-proposal/${proposal}`;
   const response = await fetch(path);
-  if (response.status === 404) return;
+  if (response.status === 404) throw new Error('not found ' + proposal);
   const res = await response.json();
   return res;
 }

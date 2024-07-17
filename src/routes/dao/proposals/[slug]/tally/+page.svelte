@@ -1,59 +1,43 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
-	import { Tabs, TabItem } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
-	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
-	import ChainUtils from '$lib/service/ChainUtils';
 	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getSummary } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
-	import DaoResults from '$lib/components/all-voters/dao-voting/DaoResults.svelte';
-	import PoolResults from '$lib/components/all-voters/pool/PoolResults.svelte';
-	import SoloResults from '$lib/components/all-voters/solo/SoloResults.svelte';
 	import { goto } from '$app/navigation';
 	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { getCurrentProposalLink, getProposalLatest, getProposalNotFoundLink, isPostVoting, isVoting } from '$lib/proposals';
+	import { getCurrentProposalLink, getProposalLatest, getProposalNotFoundLink, isCoordinator, isPostVoting, isVoting } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { type ResultsSummary, type StackerProposalData, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+	import { type ResultsSummary, type StackerProposalData, type VoteEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
-	import { getDaoSummary } from '$lib/voting-non-stacker';
-	import { fmtNumber, fmtStxMicro } from '$lib/utils';
-	import { getStackerBitcoinTxs, getStackerStacksTxs } from '$lib/tally';
+	import { getDaoSummary, readVotingContractEvents } from '$lib/voting-non-stacker';
+	import { explorerTxUrl, fmtNumber, fmtStxMicro } from '$lib/utils';
+	import { getStackerEvents, readStackerEvents } from '$lib/voting-stacker';
+	import { getBurnHeightToRewardCycle } from '@mijoco/stx_helpers/dist/pox/pox';
 
-	let proposal:VotingEventProposeProposal|undefined;
+	let proposal:VotingEventProposeProposal;
+	let votes:{votesStacks: Array<VoteEvent>, votesBitcoin: Array<VoteEvent>}|undefined
+	let toggleStacks = false
+	let toggleBitcoin = false
+	let cycle1 = 0
+	let cycle2 = 0
+
 
 	let summary:ResultsSummary;
 	let daoSummary:ResultsSummary;
-	let uniqueAll:number = 0;
 	let uniqueAccounts:number = 0;
 	let method:number = -1;
-	let errorReason:string|undefined;
-	let balanceAtHeight:number = 0;
 	let approved = false;
 	let inited = false;
 	let poolVoting = true;
 	let soloVoting = true;
-
-	const changeMethod = async (e:any, newMethod:number) => {
-    	e.preventDefault();
-		method = newMethod
-		$page.url.searchParams.set('method', '' + method)
-		goto(`?${$page.url.searchParams.toString()}`);
-		const getMeTo = document.getElementById("tabs-header");
-		await tick();
-  		if (getMeTo) getMeTo.scrollTo({behavior: 'smooth'});
-		return false;
-	}
+	let message:string|undefined;
 
 	const blockSinceEnd = () => {
 		return $sessionStore.stacksInfo?.burn_block_height - (proposal?.proposalData?.burnEndHeight || 0)
-	}
-
-	const isApproved = () => {
-		approved = $sessionStore.stacksInfo?.burn_block_height > NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	const voteConcluded = () => {
@@ -61,7 +45,28 @@
 		return isPostVoting(proposal)
 	}
 
-	const uniqueVotes = (proposal:VotingEventProposeProposal, summary:any) => {
+	const readStackerVotes = () => {
+		readStackerEvents(proposal.proposal);
+    	message = 'Reading stacker voting events for contract: ' + proposal.proposal
+	}
+
+	const readNonStackerVotes = () => {
+		readVotingContractEvents(true, proposal.daoContract, proposal.votingContract);
+    	message = 'Reading voting events for contract: ' + proposal.proposal
+	}
+
+	const fetchVotingInformation = async() => {
+		votes = await getStackerEvents(proposal.proposal)
+
+		const cycle1CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, proposal.stackerData.heights.burnStart + 200) : undefined
+		const cycle2CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, proposal.stackerData.heights.burnEnd - 200) : undefined
+		if (cycle1CV) cycle1 = Number(cycle1CV.cycle.value)
+		if (cycle2CV) cycle2 = Number(cycle2CV.cycle.value)
+		daoSummary = await getDaoSummary(proposal.proposal)
+		let summary:any = await getSummary(proposal.proposal)
+		summary.proposalData = proposal.proposalData
+		//uniqueAll = fetchVotingInformation(proposal, summary);
+
 		const sd:StackerProposalData|undefined = proposal.stackerData;
 		let votesFor = summary.summary.find((o:any) => o._id.event === 'pool-vote' && o._id.for)
 		if (!votesFor) votesFor = {count: 0, total: 0}
@@ -109,32 +114,14 @@
 
 	onMount(async () => {
 		method = 3 //Number($page.url.searchParams.get('method')) || 3
-		proposal = await getProposalLatest($page.params.slug)
-
-		if (proposal) {
-			//const stacksTxs = await getStackerStacksTxs(proposal)
-			const bitcoinTxs = await getStackerBitcoinTxs(proposal)
-			daoSummary = await getDaoSummary(proposal.proposal)
-			//const results = await findPoolVotes()
-			//poolVotes = results.poolVotes
-			summary = await getSummary(proposal.proposal)
-			summary.proposalData = proposal.proposalData
-			//const allVotes = await getPoolAndSoloVotesByProposal(event.contractId)
-			//poolVotes = allVotes.poolVotes || [];
-			//soloVotes = allVotes.soloVotes || [];
-			uniqueAll = uniqueVotes(proposal, summary);
-			
-			isApproved()
-			try {
-				const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
-				balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
-			} catch (e:any) {
-				balanceAtHeight = $sessionStore.keySets[getConfig().VITE_NETWORK].walletBalances?.stacks.amount || 0;
-				errorReason = e.message;
-			}
+		try {
+			proposal = await getProposalLatest($page.params.slug)
+			await fetchVotingInformation()
+		} catch (err:any) {
+			console.log(err)
+			goto('/')
 		}
 		inited = true;
-
 	})
 </script>
 
@@ -145,80 +132,62 @@
 
 <div class="py-6 mx-auto max-w-7xl md:px-6">
 
-	{#if proposal && inited}
-
+{#if proposal && inited && isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
 	<ProposalHeader {proposal}/>
-	{#if voteConcluded() || isVoting(proposal)}
-		<div class="flex flex-col w-full my-8">
-			<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
-			  	<div class="flex flex-col items-stretch justify-items-stretch">
-					<div>
+	<div class="flex flex-col w-full my-8">
+		<div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+			<div class="flex flex-col items-stretch justify-items-stretch">
+				<div>
+					<div class="mb-3 max-w-md">
 						{#if blockSinceEnd() > 0}
-						<div class="mb-3 max-w-md">
-							<h2 class="text-[#131416] text-2xl mb-3">Voting over</h2>
-							<p>Voting closed at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
-							<p>{uniqueAccounts} addresses voted. Detailed results are displayed below.</p>
-						</div>
+						<h2 class="text-[#131416] text-2xl mb-3">Voting over</h2>
+						<p>Voting closed at block {fmtNumber(proposal.stackerData?.heights.burnEnd || 0)}</p>
+						<p>Voting was over cycles {cycle1} {#if cycle2 !== cycle1} and {cycle2}{/if}</p>
 						{:else}
-						<div class="mb-3 max-w-md">
-							<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
-							<p>Voting closes at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
-							<p>{uniqueAccounts} addresses voted. Detailed results are displayed below.</p>
-						</div>
+						<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
+						<p>Voting closes at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
 						{/if}
+						<p>Transactions between {fmtNumber(proposal.stackerData?.heights.burnStart)} and {fmtNumber(proposal.stackerData?.heights.burnEnd)} will be counted</p>
+					</div>
+					<div class="grid lg:grid-cols-4 grid-cols-4 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+						<div class="grow col-span-4"><span class="underline" >{proposal.proposalMeta.title}</span></div>
+						<div class="inline-flex whitespace-nowrap flex-shrink"><a href="/" on:click|preventDefault={() => readStackerVotes()} class="text-blue-500 hover:underline" >read stacker votes</a></div>
+						<div class="inline-flex whitespace-nowrap flex-shrink"><a href="/" on:click|preventDefault={() => readNonStackerVotes()} class="text-blue-500 hover:underline" >read non-stacker votes</a></div>
 					</div>
 				</div>
-				<NakamotoBackground />
-				<NakamotoShield />
+				<div class="mb-3 max-w-md">
+					{#if votes}
+					<h2 class="text-[#131416] text-2xl mb-3">Stacker voting</h2>
+					<p>Stacks tx votes: <a href="/" on:click|preventDefault={() => toggleStacks = !toggleStacks}>{votes.votesStacks.length}</a></p>
+					<p>Bitcoin tx votes: <a href="/" on:click|preventDefault={() => toggleBitcoin = !toggleBitcoin}>{votes.votesBitcoin.length}</a></p>
+					{/if}
+				</div>
 			</div>
+			<NakamotoBackground />
+			<NakamotoShield />
 		</div>
+
 		
-		{#if proposal.proposalData.concluded}
-		<div id="tabs-header">
-			<VoteResultsOverview {approved} {summary} {daoSummary} {poolVoting} {soloVoting}/>
+		{#if votes && votes.votesBitcoin && toggleBitcoin}
+		{#each votes.votesBitcoin as vote}
+		<div class="grid lg:grid-cols-5 grid-cols-5 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+			<div class="grow col-span-2"><span class="underline" ><a href={explorerTxUrl(vote.submitTxId)} class="text-blue-500 hover:underline" >{vote.voter}</a></span></div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.amount}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.event}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.burnBlockHeight}</div>
 		</div>
+		{/each}
 		{/if}
-		<div >
-		<Tabs  style="underline" contentClass="py-4">
-
-			{#if soloVoting}
-            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
-					open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="Solo Stackers" >
-				<div class="bg-lightgray py-8 px-4">
-					<SoloResults {proposal} {summary} />
-				</div>
-        	</TabItem>
-			{/if}
-
-			{#if poolVoting}
-           	<TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
-			open={method === 2} on:keyup={(e) => changeMethod(e, 2)} title="Pool Stackers" >
-				<div class="bg-lightgray py-8 px-4">
-					<PoolResults {proposal} {summary} />
-				</div>
-            </TabItem>
-			{/if}
-
-			{#if daoSummary}
-            <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
-					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non Stackers" >
-				<div class="bg-lightgray py-8 px-4">
-					<DaoResults {proposal} {daoSummary} />
-				</div>
-            </TabItem>
-			{/if}
-        </Tabs>
+		{#if votes && votes.votesStacks && toggleStacks}
+		{#each votes.votesStacks as vote}
+		<div class="grid lg:grid-cols-5 grid-cols-5 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+			<div class="grow col-span-2"><span class="underline" ><a href={explorerTxUrl(vote.submitTxId)} class="text-blue-500 hover:underline" >{vote.voter}</a></span></div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.amount}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.event}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.burnBlockHeight}</div>
 		</div>
-		{:else}
-		<HoldingResults />
+		{/each}
 		{/if}
-
-	{:else}
-	{#if !proposal}
-	<Placeholder message={'Proposal could not be loaded'} link={getProposalNotFoundLink()}/>
-	{:else}
-	<Placeholder message={'Vote info loading'} link={getCurrentProposalLink($page.params.slug)}/>
-	{/if}
-	{/if}
-
+	</div>
+{/if}
 </div>

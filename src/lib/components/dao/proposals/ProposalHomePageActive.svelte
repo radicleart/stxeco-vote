@@ -3,12 +3,14 @@
 	import BullsEye from "$lib/assets/home/BullsEye.svelte";
 	import LinkInChainIcon from "$lib/assets/home/LinkInChainIcon.svelte";
 	import { concludeVote } from "$lib/dao_actions";
-	import { isConclusionPending, isProposedPreVoting, isVoting } from "$lib/proposals";
+	import { isConclusionPending, isCoordinator, isProposedPreVoting, isVoting } from "$lib/proposals";
 	import Countdown from "$lib/ui/Countdown.svelte";
 	import { fmtNumber } from "$lib/utils";
+	import { getConfig } from "$stores/store_helpers";
 	import { sessionStore } from "$stores/stores";
 	import type { HeaderItem, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
+	import { ArrowDownCircle, Icon } from "svelte-hero-icons";
 
 
 	export let prop:VotingEventProposeProposal;
@@ -20,7 +22,11 @@
 	}
 
 	const getLink = () => {
-		return '/dao/proposals/' + prop.proposal
+		return `/dao/proposals/${prop.proposal}`
+	}
+
+	const getAdminLink = () => {
+		return `/dao/proposals/${prop.proposal}/tally`
 	}
 
 	onMount(async () => {
@@ -32,7 +38,9 @@
 	<!-- <NakamotoRelease/> --> 
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
-			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a></h2>
+			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a> 
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={ArrowDownCircle} width={35} height={35} /></a>{/if}
+			</h2>
 			<p class="text-lg text-[#605D5D]">{@html prop.proposalMeta.description.split('<br/>')[0]}</p>
 		</div>
 

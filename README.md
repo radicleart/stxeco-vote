@@ -19,6 +19,14 @@ The stxeco-vote svelte application depends on;
 - [stxeco-helpers-stx](https://github.com/radicleart/stxeco-helpers-stx) wraps stacks api and helper methods for use in other components
 - [stxeco-components](https://github.com/radicleart/stxeco-components) shared ui components (header/footer)
 
+## Admin features
+
+The following ts file contains an allow list of addresses;
+
+- /src/lib/proposals.ts
+
+Adding an address here and connecting the wallet reveals an admin link with some additional dao management features.
+
 ## Developing
 
 Test with node v20.10.0

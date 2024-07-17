@@ -6,8 +6,10 @@
 	import ProposalHomePageListItem from "$lib/components/dao/proposals/ProposalHomePageListItem.svelte";
 	import ProposalHomePageTentative from "$lib/components/dao/proposals/ProposalHomePageTentative.svelte";
 	import TentativeProposalHeader from "$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte";
-	import { getActiveProposals, getConcludedProposals, getTentativeProposals } from "$lib/proposals";
+	import { getActiveProposals, getConcludedProposals, getTentativeProposals, isCoordinator } from "$lib/proposals";
 	import PageIntro from "$lib/ui/PageIntro.svelte";
+	import { getConfig } from "$stores/store_helpers";
+	import { sessionStore } from "$stores/stores";
 	import type { TentativeProposal, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
 	import { Icon, MinusCircle, PlusCircle } from "svelte-hero-icons"
@@ -19,6 +21,7 @@
 	let listingsMessage = listingsMessages[0]
 	let componentKey = 0;
 	let showInactiveProposals = true
+	let coordinator = false;
 
 	let activeProposals:Array<VotingEventProposeProposal>
 	let inactiveProposals:Array<VotingEventProposeProposal>
@@ -36,6 +39,7 @@
 		inactiveProposals = await getConcludedProposals();
 		inactiveProposals = inactiveProposals.reverse();
 		activeProposals = proposals.filter((o) => !o.proposalData.concluded)
+		coordinator = isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
   	})
 </script>
 

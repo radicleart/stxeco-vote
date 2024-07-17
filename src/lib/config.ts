@@ -146,8 +146,10 @@ export const config: { [key: string]: Config } = {
         VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
         VITE_SBTC_CONTRACT_ID: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN.asset',
         VITE_POX_CONTRACT_ID: 'SP000000000000000000002Q6VF78.pox-4',
+
         //VITE_BRIDGE_API: 'https://api.stx.eco/bridge-api',
         VITE_BRIDGE_API: 'http://localhost:3010/bridge-api',
+        
         VITE_STACKS_API: 'https://api.hiro.so',
         VITE_STACKS_WS: 'ws://spinoza.brightblock.org',
         VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
