@@ -1,15 +1,15 @@
 #!/bin/bash -e
 set -e;
 
-export DEPLOYMENT=$1
-export PORT=22
+DEPLOYMENT=$1
+PORT=22
 
 PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
-export SERVER=leibniz.brightblock.org
-export BUILDER=build
-if [ "$DEPLOYMENT" == "mainnet" ]; then
-  SERVER=spinoza.brightblock.org;
+SERVER=spinoza.brightblock.org
+BUILDER=build
+if [ "$DEPLOYMENT" == "testnet" ]; then
+  SERVER=leibniz.brightblock.org;
 fi
 
 printf "\n-----------------------------------------------------------------------------------------------------\n";

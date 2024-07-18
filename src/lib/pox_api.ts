@@ -23,7 +23,7 @@ export async function getPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry>
 }
 
 export async function syncPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry>> {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/sync/pox-entries/${cycle}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/sync/pox-entries/${cycle}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;

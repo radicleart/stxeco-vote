@@ -9,7 +9,7 @@
 	import { sessionStore } from "$stores/stores";
 	import type { VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
-	import { ArrowDownCircle, Icon } from "svelte-hero-icons";
+	import { AdjustmentsHorizontal, Icon } from "svelte-hero-icons";
 
 	export let proposal:VotingEventProposeProposal;
 
@@ -31,7 +31,7 @@
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
 			<h2 class="text-[#131416] text-3xl mb-3"><a href={getLink()} >{@html proposal.proposalMeta.title} <LinkInChainIcon /></a>
-				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={ArrowDownCircle} width={35} height={35} /></a>{/if}
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={35} height={35} /></a>{/if}
 			</h2>
 			<p class="text-lg text-[#605D5D]">{@html proposal.proposalMeta.synopsis.replaceAll(';;', '')}</p>
 		</div>

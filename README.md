@@ -50,4 +50,23 @@ You can preview the production build with `npm run preview`.
 
 ## Deployment
 
-Application currently runs in Linode cloud.
+Application currently runs in Linode cloud. This is an Ubuntu server running Caddy for the
+application and Caddy as a reverse proxy to the api docker container.
+
+An ssh key is required for access (see @mijoco).
+
+### Web deployment
+
+Web application is deployed by running
+
+```bash
+./stxeco-vote/deploy-stxeco.sh
+```
+
+### Api deployment
+
+The API application runs in a docker container which is built/deployed by running
+
+```bash
+./stxeco-api-vote/deploy-stxeco.sh
+```

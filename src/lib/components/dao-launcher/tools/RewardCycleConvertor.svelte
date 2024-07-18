@@ -8,6 +8,8 @@
 	import { onMount } from "svelte";
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
 	import { page } from "$app/stores";
+	import { isCoordinator } from "$lib/proposals";
+	import { syncPoxEntriesByCycle } from "$lib/pox_api";
 
   export let poxInfo:PoxInfo
   export let cycle:number
@@ -24,6 +26,9 @@
     poxInfoCycle = await getPoxCycleInfoRelative(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, getConfig().VITE_POX_CONTRACT_ID, newCycle, currentBurnHeight)
   }
 
+  const readPoxEntries = async () => {
+    const entries = await syncPoxEntriesByCycle(newCycle)
+  }
 
   const fetchNext = async () => {
     newCycle++
@@ -98,6 +103,15 @@
       <div class="w-full flex justify-start my-4">
         <div class="w-1/4">Cycle ends:&nbsp;&nbsp; {fmtNumber(poxInfoCycle.lastBlockHeight)}</div><div class="w-1/2">~ {new Date(poxInfoCycle.lastBlockTime)}</div> 
       </div>
+
+
+      {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+      <div class="w-full flex justify-start my-4">
+        <div class="w-1/4"><a href="/" on:click|preventDefault={() => readPoxEntries()}>Sync pox entries for cycle {newCycle}</a></div> 
+      </div>
+      {/if}
+
+
       {/if}
 
     </div>
