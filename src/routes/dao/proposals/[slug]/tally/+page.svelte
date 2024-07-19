@@ -2,17 +2,14 @@
 	import { onMount } from 'svelte';
 	import { sessionStore } from '$stores/stores';
 	import { page } from '$app/stores';
-	import { NAKAMOTO_VOTE_STOPS_HEIGHT, getSummary } from '$lib/dao_api';
+	import { getSummary } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import { goto } from '$app/navigation';
-	import VoteResultsOverview from '$lib/components/all-voters/VoteResultsOverview.svelte';
-	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
-	import { getCurrentProposalLink, getProposalLatest, getProposalNotFoundLink, isCoordinator, isPostVoting, isVoting } from '$lib/proposals';
+	import { getProposalLatest, isCoordinator, isPostVoting } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import { type ResultsSummary, type StackerProposalData, type VoteEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
-	import { Placeholder } from '@mijoco/stx_components';
 	import { getDaoSummary, readVotingContractEvents } from '$lib/voting-non-stacker';
 	import { explorerTxUrl, fmtNumber, fmtStxMicro } from '$lib/utils';
 	import { getStackerEvents, readStackerEvents } from '$lib/voting-stacker';
@@ -25,12 +22,9 @@
 	let cycle1 = 0
 	let cycle2 = 0
 
-
-	let summary:ResultsSummary;
 	let daoSummary:ResultsSummary;
 	let uniqueAccounts:number = 0;
 	let method:number = -1;
-	let approved = false;
 	let inited = false;
 	let poolVoting = true;
 	let soloVoting = true;
@@ -57,9 +51,11 @@
 
 	const fetchVotingInformation = async() => {
 		votes = await getStackerEvents(proposal.proposal)
+		const startHeight = proposal.proposalData.burnStartHeight
+		const endHeight = proposal.proposalData.burnStartHeight
 
-		const cycle1CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, proposal.stackerData.heights.burnStart + 200) : undefined
-		const cycle2CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, proposal.stackerData.heights.burnEnd - 200) : undefined
+		const cycle1CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, startHeight + 200) : undefined
+		const cycle2CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, endHeight - 200) : undefined
 		if (cycle1CV) cycle1 = Number(cycle1CV.cycle.value)
 		if (cycle2CV) cycle2 = Number(cycle2CV.cycle.value)
 		daoSummary = await getDaoSummary(proposal.proposal)
@@ -141,13 +137,13 @@
 					<div class="mb-3 max-w-md">
 						{#if blockSinceEnd() > 0}
 						<h2 class="text-[#131416] text-2xl mb-3">Voting over</h2>
-						<p>Voting closed at block {fmtNumber(proposal.stackerData?.heights.burnEnd || 0)}</p>
+						<p>Voting closed at block {fmtNumber(proposal.proposalData.burnEndHeight || 0)}</p>
 						<p>Voting was over cycles {cycle1} {#if cycle2 !== cycle1} and {cycle2}{/if}</p>
 						{:else}
 						<h2 class="text-[#131416] text-2xl mb-3">Voting in progress</h2>
 						<p>Voting closes at block {fmtNumber(proposal.proposalData.burnEndHeight)}</p>
 						{/if}
-						<p>Transactions between {fmtNumber(proposal.stackerData?.heights.burnStart)} and {fmtNumber(proposal.stackerData?.heights.burnEnd)} will be counted</p>
+						<p>Transactions between {fmtNumber(proposal.stackerData?.heights?.burnStart || proposal.proposalData.burnStartHeight)} and {fmtNumber(proposal.stackerData?.heights?.burnEnd || proposal.proposalData.burnEndHeight)} will be counted</p>
 					</div>
 					<div class="grid lg:grid-cols-4 grid-cols-4 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
 						<div class="grow col-span-4"><span class="underline" >{proposal.proposalMeta.title}</span></div>

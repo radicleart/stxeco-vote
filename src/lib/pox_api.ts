@@ -29,6 +29,13 @@ export async function syncPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry
   return res;
 }
 
+export async function syncRewardCycleEvents():Promise<Array<PoxEntry>> {
+  const path = `${getConfig().VITE_BRIDGE_API}/stacker-voting/v1/sync/reward-slots`;
+  const response = await fetch(path);
+  const res = await extractResponse(response);
+  return res;
+}
+
 export async function findPoxEntriesByAddress(bitcoinAddress:string) {
   const path = `${getConfig().VITE_BRIDGE_API}/pox3/pox-entries/${bitcoinAddress}`;
   const response = await fetch(path);
