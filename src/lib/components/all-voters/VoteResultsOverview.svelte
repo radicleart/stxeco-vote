@@ -8,7 +8,8 @@
 	import type { ResultsSummary } from "@mijoco/stx_helpers/dist/index";
 
 	export let approved = false;
-	export let summary:ResultsSummary;
+	export let poolSummary:any;
+	export let soloSummary:any;
 	export let daoSummary:ResultsSummary;
 	export let poolVoting;;
 	export let soloVoting;;
@@ -16,37 +17,29 @@
 	let poolPercent= '0'
 	let soloPercent = '0'
 	let daoPercent = '0'
-	let daoAccountsFor = 0
-	let daoAccountsAgainst = 0
 
 	const blockSinceEnd = () => {
 		return $sessionStore.stacksInfo?.burn_block_height - NAKAMOTO_VOTE_STOPS_HEIGHT
 	}
 
 	onMount(async () => {
-		let votesFor = summary.summary.find((o) => o._id.event === 'pool-vote' && o._id.for)
-		let votesAgn = summary.summary.find((o) => o._id.event === 'pool-vote' && !o._id.for)
-		let stxFor = votesFor?.total || 0
-		let stxAgainst = votesAgn?.total || 0
+		let stxFor = poolSummary.votesFor?.total || 0
+		let stxAgainst = poolSummary.votesAgn?.total || 0
 		let stxPower = stxFor + stxAgainst
 
 		poolPercent = ((stxFor / stxPower) * 100).toFixed(4)
 
-		votesFor = summary.summary.find((o) => o._id.event === 'solo-vote' && o._id.for)
-		votesAgn = summary.summary.find((o) => o._id.event === 'solo-vote' && !o._id.for)
-		stxFor = votesFor?.total || 0
-		stxAgainst = votesAgn?.total || 0
+		stxFor = soloSummary.votesFor?.total || 0
+		stxAgainst = soloSummary.votesAgn?.total || 0
 		stxPower = stxFor + stxAgainst
 
 		soloPercent = ((stxFor / stxPower) * 100).toFixed(4)
 
-		votesFor = daoSummary.summary.find((o) => o._id.event === 'vote' && o._id.for)
-		votesAgn = daoSummary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
+		const votesFor = daoSummary.summary.find((o) => o._id.event === 'vote' && o._id.for)
+		const votesAgn = daoSummary.summary.find((o) => o._id.event === 'vote' && !o._id.for)
 		stxFor = daoSummary.proposalData.votesFor
 		stxAgainst = daoSummary.proposalData.votesAgainst
 		stxPower = stxFor + stxAgainst
-		daoAccountsFor = votesFor?.count || 0
-		daoAccountsAgainst = votesAgn?.count || 0
 
 		daoPercent = ((stxFor / stxPower) * 100).toFixed(4)
 	})
@@ -64,7 +57,7 @@
 			<div><span class="text-4xl font-extrabold"></span></div>
 		</div>
 		<div class="flex justify-between mb-5">
-			<div><span class="">Voting is in progress - official results will be available after voting ends</span></div>
+			<div><span class="">Voting has closed</span></div>
 		</div>
 		{#if soloVoting}
 		<div class="flex justify-between mb-5">
@@ -81,7 +74,7 @@
 		</div>
 		{/if}
 		<div class="flex justify-between mb-2">
-			<div><span class="text-4xl font-extrabold">Non Stackers</span></div>
+			<div><span class="text-4xl font-extrabold">Non-Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
 			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>

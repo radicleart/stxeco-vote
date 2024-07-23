@@ -39,6 +39,7 @@
               network: getConfig().VITE_NETWORK,
             })
             .then((resp: any) => {
+              dispatch("voting_event", {txId: resp, event: 'pool'});
               console.log({ sucesss: resp });
             })
             .catch((error: any) => {
@@ -89,12 +90,12 @@
         </p>
         <p>Express your vote by sending a bitcoin transaction to either;</p>
         <ul class="list-disc pl-6 mb-5">
-          <li>an address representing “Yes to the proposal”</li>
-          <li>an address representing “No to this proposal"</li>
+          <li>an address representing "Yes" to the proposal</li>
+          <li>an address representing "No" to this proposal</li>
         </ul>
         <div class="rounded-lg relative bg-[#E6E4E2] py-3">
-          <p><a href="/" on:click|preventDefault={() => {toggleMethod(2)}}>Prefer to vote with a stacks transaction ?</a></p>
-          <p><a href="/" on:click|preventDefault={() => {toggleMethod(3)}}>Want to vote with your unstacked stx ?</a></p>
+          <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(2)}}>Prefer to vote with a stacks transaction ?</a></p>
+          <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(3)}}>Want to vote with your unstacked stx ?</a></p>
         </div>
       </div>
       <div class="rounded-lg py-6 space-y-3 w-4/5">

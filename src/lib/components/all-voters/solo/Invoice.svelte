@@ -104,7 +104,7 @@
 
   <div class="mt-8">
     <div class="flex justify-between items-end">
-      <p>Send {fmtSatoshiToBitcoin(amount)} to:</p>
+      <p>Send {fmtSatoshiToBitcoin(amount)} BTC to:</p>
       <div class="flex items-center gap-2">
         <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
         <button id="copy-address" type="button" on:click={() => copy()} class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">

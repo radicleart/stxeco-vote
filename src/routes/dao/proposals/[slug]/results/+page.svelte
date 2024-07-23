@@ -25,6 +25,8 @@
 
 	let proposal:VotingEventProposeProposal|undefined;
 
+	let soloSummary:any;
+	let poolSummary:any;
 	let summary:ResultsSummary;
 	let daoSummary:ResultsSummary;
 	let uniqueAll:number = 0;
@@ -77,6 +79,12 @@
 		let stxFor = votesFor?.count || 0
 		let stxAgainst = votesAgn?.count || 0
 		let stxPower = stxFor + stxAgainst
+		poolSummary = {
+			votesFor,
+			votesAgn,
+			stxFor,
+			stxAgainst
+		}
 
 		votesFor = summary.summary.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
 		if (!votesFor) votesFor = {count: 0, total: 0}
@@ -90,6 +98,12 @@
 		stxFor = votesFor?.count || 0
 		stxAgainst = votesAgn?.count || 0
 		stxPower += stxFor + stxAgainst
+		soloSummary = {
+			votesFor,
+			votesAgn,
+			stxFor,
+			stxAgainst
+		}
 
 		votesFor = daoSummary.summary.find((o:any) => o._id.event === 'vote' && o._id.for)
 		votesAgn = daoSummary.summary.find((o:any) => o._id.event === 'vote' && !o._id.for)
@@ -97,12 +111,6 @@
 		stxFor = daoSummary.proposalData.votesFor
 		stxAgainst = daoSummary.proposalData.votesAgainst
 		stxPower += stxFor + stxAgainst
-
-		if (proposal.proposal ===  'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation') {
-			poolVoting = false
-			soloVoting = false
-			uniqueAccounts = (votesFor?.count || 0) + (votesAgn?.count || 0);
-		}
 
 		return stxPower
 	}
@@ -173,7 +181,7 @@
 		
 		{#if proposal.proposalData.concluded}
 		<div id="tabs-header">
-			<VoteResultsOverview {approved} {summary} {daoSummary} {poolVoting} {soloVoting}/>
+			<VoteResultsOverview {approved} {poolSummary} {soloSummary} {daoSummary} {poolVoting} {soloVoting}/>
 		</div>
 		{/if}
 		<div >
@@ -183,7 +191,7 @@
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 					open={method === 1} on:keyup={(e) => changeMethod(e, 1)} title="Solo Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<SoloResults {proposal} {summary} />
+					<SoloResults {proposal} {soloSummary} />
 				</div>
         	</TabItem>
 			{/if}
@@ -192,14 +200,14 @@
            	<TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
 			open={method === 2} on:keyup={(e) => changeMethod(e, 2)} title="Pool Stackers" >
 				<div class="bg-lightgray py-8 px-4">
-					<PoolResults {proposal} {summary} />
+					<PoolResults {proposal} {poolSummary} />
 				</div>
             </TabItem>
 			{/if}
 
 			{#if daoSummary}
             <TabItem class="bg-lightgray relative top-[20px] text-black rounded-t-lg border-t border-r border-l border-b-none border-x-sand-100 border-y-sand-100"
-					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non Stackers" >
+					open={method === 3} on:keyup={(e) => changeMethod(e, 3)} title="Non-Stackers" >
 				<div class="bg-lightgray py-8 px-4">
 					<DaoResults {proposal} {daoSummary} />
 				</div>

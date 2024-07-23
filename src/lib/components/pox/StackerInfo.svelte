@@ -63,7 +63,7 @@
 	<div class="flex text-[#131416]/[0.44]"><div class="w-1/5 ">until</div><div class="w-4/5">{stackerInfo.delegation?.untilBurnHt}</div></div>
 	{/if}
 	{:else}
-	<div class="flex text-[#131416]/[0.44]"><div class="w-1/5 "></div><div class="w-4/5">Non stacking address</div></div>
+	<div class="flex text-[#131416]/[0.44]"><div class="w-1/5 "></div><div class="w-4/5">Non-stacking address</div></div>
 	{/if}
 </div>
 {/if}

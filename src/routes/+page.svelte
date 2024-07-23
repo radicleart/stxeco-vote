@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import ProposalStageCustom from "$lib/components/all-voters/ProposalStageCustom.svelte";
 	import ProposalHomePageActive from "$lib/components/dao/proposals/ProposalHomePageActive.svelte";
 	import ProposalHomePageEmptyItem from "$lib/components/dao/proposals/ProposalHomePageEmptyItem.svelte";
@@ -27,6 +28,7 @@
 	let inactiveProposals:Array<VotingEventProposeProposal>
 
 	const toggleListings = async () => {
+		if ($page.url.hostname.indexOf('localhost') === -1) return
 		showAllProposals = !showAllProposals
 		listingsMessage = (showAllProposals) ? listingsMessages[1] : listingsMessages[0]
 		componentKey++;

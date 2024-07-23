@@ -109,7 +109,7 @@
 
   <div class="mt-8">
     <div class="flex justify-between items-end">
-      <p>Send {fmtMicroToStx(amount)} to:</p>
+      <p>Send {fmtMicroToStx(amount)} STX to:</p>
       <div class="flex items-center gap-2">
         <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerAddressUrl(getAddress(true))} />
         <button id="copy-address" type="button" on:click={() => copy()} class="h-8 w-8 bg-black text-white rounded-md flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">

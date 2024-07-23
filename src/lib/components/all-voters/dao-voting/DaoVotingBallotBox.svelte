@@ -11,7 +11,7 @@
     import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
     import { getStacksNetwork, getTransaction } from '@mijoco/stx_helpers/dist/stacks-node';
     import { getConfig } from '$stores/store_helpers';
-	import { explorerTxUrl, getAddressId } from '$lib/utils';
+	  import { explorerTxUrl, getAddressId } from '$lib/utils';
 
     export let proposal:VotingEventProposeProposal;
     export let balanceAtHeight:number = 0;
@@ -55,7 +55,6 @@
             functionArgs: [amountCV, forCV, proposalCV],
             onFinish: data => {
               txId = data.txId
-              //ChainUtils.updateVoters();
               localStorage.setItem('VOTED_FLAG' + getAddressId(), JSON.stringify(proposal.proposal));
               localStorage.setItem('VOTED_TXID_3' + getAddressId(), JSON.stringify({txId}));
               //goto(`/dao/proposals/${proposal.proposal}/badge`);
@@ -115,10 +114,10 @@
       </p>
     </div>
     <div class="w-full flex justify-start gap-x-4">
-      <button on:click={() => {errorMessage = undefined; castVote(true)}} class="justify-center w-[150px] md:inline-flex items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+      <button on:click={() => {errorMessage = undefined; castVote(true)}} class="justify-center w-[150px] md:inline-flex items-center gap-x-1.5  px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
         VOTE YES
       </button>
-      <button on:click={() => {errorMessage = undefined; castVote(false)}} class="justify-center w-[150px] md:inline-flex items-center gap-x-1.5 bg-danger-01 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+      <button on:click={() => {errorMessage = undefined; castVote(false)}} class="justify-center w-[150px] md:inline-flex items-center gap-x-1.5 px-4 py-2 rounded-xl border border-black bg-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
         VOTE NO
       </button>
     </div>

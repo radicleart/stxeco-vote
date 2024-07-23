@@ -3,20 +3,20 @@ import { extractResponse } from './dao_api';
 import { getConfig } from '$stores/store_helpers';
 
 export async function getPoxInfoByStacker(stxAddress:string, cycle:number) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/stacker/${stxAddress}/${cycle}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/stacker/${stxAddress}/${cycle}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
 }
 
 export async function getRewardSlotsByCycle(cycle:number) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/reward-slots/${cycle}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/reward-slots/${cycle}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
 }
 export async function getPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry>> {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/pox-entries/${cycle}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/pox-entries/${cycle}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
@@ -29,41 +29,51 @@ export async function syncPoxEntriesByCycle(cycle:number):Promise<Array<PoxEntry
   return res;
 }
 
-export async function syncRewardCycleEvents():Promise<Array<PoxEntry>> {
-  const path = `${getConfig().VITE_BRIDGE_API}/stacker-voting/v1/sync/reward-slots`;
+export async function syncStackerEvents(poxContractName:string):Promise<Array<PoxEntry>> {
+  const path = `${getConfig().VITE_BRIDGE_API}/stacker-events/v1/sync/stacker-events/${poxContractName}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res;
 }
 
 export async function findPoxEntriesByAddress(bitcoinAddress:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/pox-entries/${bitcoinAddress}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/pox-entries/${bitcoinAddress}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res || [];
 }
 
 export async function findPoxEntriesByAddressAndCycle(bitcoinAddress:string,cycle:number) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/pox-entries/${bitcoinAddress}/${cycle}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/pox-entries/${bitcoinAddress}/${cycle}`;
   const response = await fetch(path);
   const res = await extractResponse(response);
   return res || [];
 }
 
 export async function findPoolStackerEventsByStacker(stacksAddress:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/stacker-events-by-stacker/${stacksAddress}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/stacker-events-by-stacker/${stacksAddress}`;
   const response = await fetch(path);
   return await response.json();
 }
 
 export async function findPoolStackerEventsByDelegator(stacksAddress:string) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/stacker-events-by-delegator/${stacksAddress}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/stacker-events-by-delegator/${stacksAddress}`;
   const response = await fetch(path);
   return await response.json();
 }
 
 export async function findPoolStackerEventsByHashBytes(hashBytes:string, page:number, limit:number) {
-  const path = `${getConfig().VITE_BRIDGE_API}/pox3/stacker-events-by-hashbytes/${hashBytes}/${page}/${limit}`;
+  const path = `${getConfig().VITE_BRIDGE_API}/pox3/v1/stacker-events-by-hashbytes/${hashBytes}/${page}/${limit}`;
   const response = await fetch(path);
   return await response.json();
+}
+
+
+export async function getTotalStackedInCycle(voter:string, cycle1:number) {
+  const poxEntries:Array<any> = await findPoxEntriesByAddressAndCycle(voter, cycle1);
+  let totalUstx = 0
+  for (const entry of poxEntries) {
+    totalUstx += entry.totalUstx
+  }
+  return totalUstx
 }

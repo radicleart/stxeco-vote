@@ -5,11 +5,19 @@
 	import type { VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import PoolVotingActiveQr from "./PoolVotingActiveQR.svelte";
 	import { createEventDispatcher } from "svelte";
+	import { explorerTxUrl } from "$lib/utils";
 
 	const dispatch = createEventDispatcher();
 
 	export let proposal:VotingEventProposeProposal;
   let revealAddresses = false;
+  let justVoted = false
+  let txId:string
+
+  const doVotingEvent = (e:any) => {
+    txId = e.detail.txId
+    justVoted = true
+  }
 
   const toggleMethod = (method:number) => {
     dispatch('toggle_voting_method', {method})
@@ -18,6 +26,23 @@
 
 <div class="flex flex-col w-full my-8">
   <div class="py-10 px-10 bg-[#F4F3F0] rounded-2xl md:grid md:gap-12 md:grid-flow-col md:auto-cols-auto overflow-hidden relative">
+
+    {#if justVoted}
+    <div class="">
+      <div class="mb-4">
+        <h2 class="text-[#131416] text-2xl mb-3">Thanks for voting !!</h2>
+      </div>
+      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 w-4/5">
+        <p>
+          Track your vote <a class="underline hover:text-blue-500" target="_blank" href={explorerTxUrl(txId)}>here</a>
+        </p>
+        <p>
+          Results will be posted after voting closes at block {proposal.proposalData.burnEndHeight}
+        </p>
+      </div>
+    </div>
+
+    {:else}
 
     <div class="">
       <div class="mb-4">
@@ -28,12 +53,12 @@
         <p class="my-3 uppercase">Your vote will not be counted if it is not sent from the same account where your stx is locked.</p>
         <p>Express your vote by sending a stacks transaction to either;</p>
         <ul class="list-disc pl-6 mb-5">
-          <li>an address representing “Yes to the proposal”</li>
-          <li>an address representing “No to this proposal".</li>
+          <li>an address representing "Yes" to the proposal</li>
+          <li>an address representing "No" to this proposal.</li>
         </ul>
         <div class="rounded-lg relative bg-[#E6E4E2] py-3 w-4/5">
-          <p><a href="/" on:click|preventDefault={() => {toggleMethod(1)}}>Prefer to vote with a bitcoin transaction ?</a></p>
-          <p><a href="/" on:click|preventDefault={() => {toggleMethod(3)}}>Want to vote with your unstacked stx ?</a></p>
+          <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(1)}}>Prefer to vote with a bitcoin transaction ?</a></p>
+          <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(3)}}>Want to vote with your unstacked stx ?</a></p>
         </div>
       </div>
       <div class="rounded-lg py-6 space-y-3 w-4/5">
@@ -43,6 +68,7 @@
         I understand, continue
       </button>
     </div>
+    {/if}
 
     <NakamotoBackground />
     <NakamotoShield />
@@ -53,6 +79,6 @@
   <div class="p-8 bg-[#121314] rounded-2xl">
     <h3 class="text-3xl text-white">Cast your vote</h3>
   </div>
-  <PoolVotingActiveQr {proposal}/>
+  <PoolVotingActiveQr {proposal} on:voting_event={doVotingEvent}/>
 </div>
 {/if}

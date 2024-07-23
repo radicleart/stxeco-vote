@@ -12,7 +12,7 @@
 	import { getConfig } from '$stores/store_helpers';
 
 	export let proposal:VotingEventProposeProposal;
-  export let summary:ResultsSummary;
+  export let soloSummary:any;
 
   let votes: Array<VoteEvent> = []
   let allVotes: Array<VoteEvent> = []
@@ -80,12 +80,12 @@
     } else {
         votes = allVotes?.filter((o:VoteEvent) => o.amount > 0) || []
     }
-    let votesFor = summary.summary.find((o:any) => o._id.event === 'solo-vote' && o._id.for);
-    let votesAgn = summary.summary.find((o:any) => o._id.event === 'solo-vote' && !o._id.for);
-    if (includeZeros) {
-      votesFor = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
-      votesAgn = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
-    }
+    let votesFor = soloSummary.votesFor
+    let votesAgn = soloSummary.votesAgn
+    //if (includeZeros) {
+    //  votesFor = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && o._id.for)
+    //  votesAgn = summary.summaryWithZeros.find((o:any) => o._id.event === 'solo-vote' && !o._id.for)
+    //}
     stxFor = votesFor?.total || 0
     stxAgainst = votesAgn?.total || 0
     stxForUnnested = votesFor?.total || 0
@@ -114,7 +114,7 @@
   <VoteResultsRow {stxFor} {stxAgainst} {accountsFor} {accountsAgainst} />
 
   <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#analysis-label">
-    Toggle between all votes and eligible votes - some pool and solo votes were submitted by non stackers.
+    Toggle between all votes and eligible votes - some pool and solo votes were submitted by non-stackers.
   </Tooltip>
   
     <!--

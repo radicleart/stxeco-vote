@@ -9,6 +9,9 @@
 	import { getConfig } from '$stores/store_helpers';
 	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers';
 	import { getAddressId } from '$lib/utils';
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
 
 	export let proposal:VotingEventProposeProposal;
   let stackerData = proposal.stackerData!
@@ -34,8 +37,10 @@
           console.log('finished contract call!', data);
           localStorage.setItem('VOTED_FLAG' + getAddressId(), JSON.stringify(proposal.proposal));
           localStorage.setItem('VOTED_TXID_2' + getAddressId(), txId);
-          window.location.reload()
+          //window.location.reload()
           //goto(`/dao/proposals/${proposal.proposal}/badge`);
+          dispatch("voting_event", {txId, event: 'pool'});
+
         },
         onCancel: () => {
           console.log('popup closed!');
@@ -53,7 +58,7 @@
 </script>
 {#if inited}
 
-{#if !showStxTransfer}
+{#if showStxTransfer}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
     <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
     <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">

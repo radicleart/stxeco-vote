@@ -8,13 +8,6 @@
 ;; contracts, which enable Bitcoin applications such as payments, decentralized 
 ;; lending, decentralized exchanges, and BTC-backed stable coins.
 ;;
-;; sBTC is a SIP-010 token on the Stacks blockchain, backed 1:1 against BTC, 
-;; and operated by a decentralized set of signers. When BTC is locked on the 
-;; Bitcoin L1, an equivalent amount of sBTC is issued on the Stacks layer, ensuring 
-;; a consistent 1:1 ratio of sBTC:BTC. Users can redeem their sBTC at any time by 
-;; submitting a withdrawal request. Once the request is processed by sBTC signers, 
-;; BTC is returned to the users specified address on the Bitcoin L1.
-;;
 ;; sBTC will have a crucial role in scaling Bitcoin, as well as introducing new and 
 ;; innovative functionalities to users, growing the size of the overall Bitcoin ecosystem. 
 ;; This SIP aims to describe the sBTC system, the process for signer selection, and the 

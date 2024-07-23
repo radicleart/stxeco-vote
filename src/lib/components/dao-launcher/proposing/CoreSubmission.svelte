@@ -46,7 +46,7 @@
         }
 		const paramStartDelayCV = uintCV(proposalStart);
 		const paramDurationCV = uintCV(proposalDuration);
-		const customMajorityCV = someCV(uintCV(7000));
+		const customMajorityCV = someCV(uintCV(6600));
 		const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, customMajorityCV]
 		await openContractCall({

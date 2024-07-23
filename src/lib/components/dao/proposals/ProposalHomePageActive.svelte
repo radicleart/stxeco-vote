@@ -56,7 +56,7 @@
 				</div>
 				<div class="">
 					<button on:click={() => {goto('/dao/proposals/' + prop.proposal + '?method=3')}} class="space-y-3  text-sm font-mono uppercase block w-auto px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
-						Voting for Non Stackers
+						Voting for Non-Stackers
 					</button>
 				</div>			
 			</div>

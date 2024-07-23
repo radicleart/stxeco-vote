@@ -4,7 +4,7 @@
 	import cross from '$lib/assets/cross.png'
 	import { sessionStore } from "$stores/stores";
 	import { getPoolAndSoloVotesByProposal, getSummary, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
-	import type { ResultsSummary, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
+	import type { ResultsSummary, StackerProposalData, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
 	import { onMount } from "svelte";
 	import { getDaoSummary } from "$lib/voting-non-stacker";
 
@@ -24,11 +24,17 @@
 	}
 
 	const doCount = () => {
+		const sd:StackerProposalData|undefined = proposal.stackerData;
 		let votesFor = summary.summary.find((o) => o._id.event === 'pool-vote' && o._id.for)
 		let votesAgn = summary.summary.find((o) => o._id.event === 'pool-vote' && !o._id.for)
 		let stxFor = votesFor?.total || 0
 		let stxAgainst = votesAgn?.total || 0
 		let stxPower = stxFor + stxAgainst
+		if (sd && sd.reportedResults) {
+			stxFor =  sd.reportedResults.poolFor
+			stxAgainst =  sd.reportedResults.poolAgainst
+			stxPower = stxFor + stxAgainst
+		}
 
 		poolPercent = ((stxFor / stxPower) * 100).toFixed(4)
 
@@ -37,6 +43,11 @@
 		stxFor = votesFor?.total || 0
 		stxAgainst = votesAgn?.total || 0
 		stxPower = stxFor + stxAgainst
+		if (sd && sd.reportedResults) {
+			stxFor =  sd.reportedResults.soloFor
+			stxAgainst =  sd.reportedResults.soloAgainst
+			stxPower = stxFor + stxAgainst
+		}
 
 		soloPercent = ((stxFor / stxPower) * 100).toFixed(4)
 
@@ -88,7 +99,7 @@
 
 		{#if daoPercent !== 'NaN'}
 		<div class="flex justify-between mb-2 text-white">
-			<div><span class="text-4xl font-extrabold">Non Stackers</span></div>
+			<div><span class="text-4xl font-extrabold">Non-Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
 			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
 		</div>

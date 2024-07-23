@@ -8,12 +8,14 @@
 	import { getProposalLatest, isCoordinator, isPostVoting } from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import { type ResultsSummary, type StackerProposalData, type VoteEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+	import { getBalanceAtHeight, type ResultsSummary, type StackerProposalData, type VoteEvent, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { getDaoSummary, readVotingContractEvents } from '$lib/voting-non-stacker';
 	import { explorerTxUrl, fmtNumber, fmtStxMicro } from '$lib/utils';
-	import { getStackerEvents, readStackerEvents } from '$lib/voting-stacker';
-	import { getBurnHeightToRewardCycle } from '@mijoco/stx_helpers/dist/pox/pox';
+	import { getStackerEvents, readStackerEvents, reconcileStackerEvents } from '$lib/voting-stacker';
+	import { getBurnHeightToRewardCycle, getCheckDelegation, getStackerInfo, getStackerInfoFromContract } from '@mijoco/stx_helpers/dist/pox/pox';
+	import type { Delegation } from '@mijoco/stx_helpers/dist/pox_types';
+	import { getTotalStackedInCycle } from '$lib/pox_api';
 
 	let proposal:VotingEventProposeProposal;
 	let votes:{votesStacks: Array<VoteEvent>, votesBitcoin: Array<VoteEvent>}|undefined
@@ -21,6 +23,8 @@
 	let toggleBitcoin = false
 	let cycle1 = 0
 	let cycle2 = 0
+	let stacksStartHeight = 0
+	let burnStartHeight = 0
 
 	let daoSummary:ResultsSummary;
 	let uniqueAccounts:number = 0;
@@ -34,14 +38,26 @@
 		return $sessionStore.stacksInfo?.burn_block_height - (proposal?.proposalData?.burnEndHeight || 0)
 	}
 
-	const voteConcluded = () => {
-		if (!proposal || !proposal.proposalData) return false
-		return isPostVoting(proposal)
+	const doVoteAmountStacks = async(voter:string) => {
+		let stacker = await getStackerInfo(getConfig().VITE_STACKS_API, getConfig().VITE_NETWORK, getConfig().VITE_POX_CONTRACT_ID, voter, stacksStartHeight + 2200)
+		console.log(stacker)
+		stacker = await getStackerInfo(getConfig().VITE_STACKS_API, getConfig().VITE_NETWORK, getConfig().VITE_POX_CONTRACT_ID, voter, stacksStartHeight + 200)
+		console.log(stacker)
+	}
+
+	const doVoteAmountBitcoin = async(voter:string) => {
+		let amount = await getTotalStackedInCycle(voter, stacksStartHeight + 2200)
+		console.log(amount)
 	}
 
 	const readStackerVotes = () => {
 		readStackerEvents(proposal.proposal);
     	message = 'Reading stacker voting events for contract: ' + proposal.proposal
+	}
+
+	const reconcileStackerVotes = () => {
+		reconcileStackerEvents(proposal.proposal);
+    	message = 'Reconciling stacker voting events for contract: ' + proposal.proposal
 	}
 
 	const readNonStackerVotes = () => {
@@ -51,10 +67,11 @@
 
 	const fetchVotingInformation = async() => {
 		votes = await getStackerEvents(proposal.proposal)
-		const startHeight = proposal.proposalData.burnStartHeight
-		const endHeight = proposal.proposalData.burnStartHeight
+		burnStartHeight = proposal.stackerData?.heights?.burnStart || proposal.proposalData.burnStartHeight
+		const endHeight = proposal.stackerData?.heights?.burnEnd || proposal.proposalData.burnEndHeight
+		stacksStartHeight = proposal.proposalData.startBlockHeight
 
-		const cycle1CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, startHeight + 200) : undefined
+		const cycle1CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, burnStartHeight + 200) : undefined
 		const cycle2CV = (proposal.stackerData) ? await getBurnHeightToRewardCycle(getConfig().VITE_STACKS_API, getConfig().VITE_POX_CONTRACT_ID, endHeight - 200) : undefined
 		if (cycle1CV) cycle1 = Number(cycle1CV.cycle.value)
 		if (cycle2CV) cycle2 = Number(cycle2CV.cycle.value)
@@ -99,11 +116,11 @@
 		stxAgainst = daoSummary.proposalData.votesAgainst
 		stxPower += stxFor + stxAgainst
 
-		if (proposal.proposal ===  'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation') {
-			poolVoting = false
-			soloVoting = false
-			uniqueAccounts = (votesFor?.count || 0) + (votesAgn?.count || 0);
-		}
+		//if (proposal.proposal ===  'SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation') {
+		//	poolVoting = false
+		//	soloVoting = false
+		//	uniqueAccounts = (votesFor?.count || 0) + (votesAgn?.count || 0);
+		//}
 
 		return stxPower
 	}
@@ -145,10 +162,13 @@
 						{/if}
 						<p>Transactions between {fmtNumber(proposal.stackerData?.heights?.burnStart || proposal.proposalData.burnStartHeight)} and {fmtNumber(proposal.stackerData?.heights?.burnEnd || proposal.proposalData.burnEndHeight)} will be counted</p>
 					</div>
-					<div class="grid lg:grid-cols-4 grid-cols-4 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
-						<div class="grow col-span-4"><span class="underline" >{proposal.proposalMeta.title}</span></div>
-						<div class="inline-flex whitespace-nowrap flex-shrink"><a href="/" on:click|preventDefault={() => readStackerVotes()} class="text-blue-500 hover:underline" >read stacker votes</a></div>
-						<div class="inline-flex whitespace-nowrap flex-shrink"><a href="/" on:click|preventDefault={() => readNonStackerVotes()} class="text-blue-500 hover:underline" >read non-stacker votes</a></div>
+					<div class="grid lg:grid-cols-5 grid-cols-5 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+						<div class="grow col-span-5"><span class="underline" >{proposal.proposalMeta.title}</span></div>
+						<div class="grow col-span-5">stacker votes: 
+							<a href="/" on:click|preventDefault={() => readStackerVotes()} class="text-blue-500 hover:underline mx-2" >read</a>
+							<a href="/" on:click|preventDefault={() => reconcileStackerVotes()} class="text-blue-500 hover:underline mx-2" >recon</a>
+						</div>
+						<div class="grow col-span-5">non-stacker votes: <a href="/" on:click|preventDefault={() => readNonStackerVotes()} class="text-blue-500 hover:underline" >read</a></div>
 					</div>
 				</div>
 				<div class="mb-3 max-w-md">
@@ -166,21 +186,27 @@
 		
 		{#if votes && votes.votesBitcoin && toggleBitcoin}
 		{#each votes.votesBitcoin as vote}
-		<div class="grid lg:grid-cols-5 grid-cols-5 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+		<div class="grid lg:grid-cols-6 grid-cols-6 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
 			<div class="grow col-span-2"><span class="underline" ><a href={explorerTxUrl(vote.submitTxId)} class="text-blue-500 hover:underline" >{vote.voter}</a></span></div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.amount}</div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.event}</div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.burnBlockHeight}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">
+				<a href="/" on:click|preventDefault={() => doVoteAmountBitcoin(vote.voter)} class="text-blue-500 hover:underline" >delegation</a>
+			</div>
 		</div>
 		{/each}
 		{/if}
 		{#if votes && votes.votesStacks && toggleStacks}
 		{#each votes.votesStacks as vote}
-		<div class="grid lg:grid-cols-5 grid-cols-5 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
+		<div class="grid lg:grid-cols-6 grid-cols-6 border-b border-gray-1000 py-2 w-full  justify-between my-0 text-md">
 			<div class="grow col-span-2"><span class="underline" ><a href={explorerTxUrl(vote.submitTxId)} class="text-blue-500 hover:underline" >{vote.voter}</a></span></div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.amount}</div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.event}</div>
 			<div class="inline-flex whitespace-nowrap flex-shrink">{vote.burnBlockHeight}</div>
+			<div class="inline-flex whitespace-nowrap flex-shrink">
+				<a href="/" on:click|preventDefault={() => doVoteAmountStacks(vote.voter)} class="text-blue-500 hover:underline" >delegation</a>
+			</div>
 		</div>
 		{/each}
 		{/if}

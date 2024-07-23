@@ -23,7 +23,7 @@ const sendSyncStackerEvent = () => {
 	</div>
 <div class="col-span-1">
 	<!--<a class="pointer text-light" href="/" on:click|preventDefault={() => { openSesame() }}>Clarity</a>-->
-	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncDaoEvent()}>Non Stackers</a>
+	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncDaoEvent()}>Non-Stackers</a>
 	<a class="pointer text-light border-s ms-3 ps-3" href="/" on:click|preventDefault={() => sendSyncStackerEvent()}>Stackers</a>
 </div>
 

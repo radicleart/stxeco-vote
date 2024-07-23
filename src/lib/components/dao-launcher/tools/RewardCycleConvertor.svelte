@@ -9,7 +9,7 @@
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
 	import { page } from "$app/stores";
 	import { isCoordinator } from "$lib/proposals";
-	import { syncPoxEntriesByCycle, syncRewardCycleEvents } from "$lib/pox_api";
+	import { syncPoxEntriesByCycle, syncStackerEvents } from "$lib/pox_api";
 
   export let poxInfo:PoxInfo
   export let cycle:number
@@ -30,9 +30,8 @@
     const entries = await syncPoxEntriesByCycle(newCycle)
   }
 
-  const readRewardCycleEvents = async () => {
-    syncRewardCycleEvents()
-
+  const readStackerEventsEvents = async (poxContractName:string) => {
+    syncStackerEvents(poxContractName)
   }
 
   const fetchNext = async () => {
@@ -115,10 +114,12 @@
         <div class="w-1/4"><a href="/" on:click|preventDefault={() => readPoxEntries()}>Sync pox entries for cycle {newCycle}</a></div> 
       </div>
       <div class="w-full flex justify-start my-4">
-        <div class="w-1/4"><a href="/" on:click|preventDefault={() => readRewardCycleEvents()}>Sync reward cycle events</a></div> 
+        <div class="w-1/4"><a href="/" on:click|preventDefault={() => readStackerEventsEvents('pox-4')}>Sync pox-4 stacker events</a></div> 
+      </div>
+      <div class="w-full flex justify-start my-4">
+        <div class="w-1/4"><a href="/" on:click|preventDefault={() => readStackerEventsEvents('pox-3')}>Sync pox-3 stacker events</a></div> 
       </div>
       {/if}
-
 
       {/if}
 
