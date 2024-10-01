@@ -3,7 +3,6 @@
   import Invoice from './Invoice.svelte';
   import { sessionStore } from '$stores/stores';
   import { openSTXTransfer } from '@stacks/connect';
-  import NakamotoResultsBackground from '$lib/ui/NakamotoResultsBackground.svelte';
 	import { isLoggedIn } from '@mijoco/stx_helpers/dist/account';
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
@@ -14,6 +13,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let proposal:VotingEventProposeProposal;
+  export let showPaymentButtons = false;
   let stackerData = proposal.stackerData!
 
   let showStxTransfer = false;
@@ -58,10 +58,10 @@
 </script>
 {#if inited}
 
-{#if showStxTransfer}
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
-    <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
-    <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
+    {#if showPaymentButtons}
+    <div class="mb-16">
+      <button on:click={() => {castVote(true)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote yes
     </button>
     {#if errorMessage && vforCurrent}
@@ -69,10 +69,19 @@
       {errorMessage}
     </div>
     {/if}
+    </div>
+    {/if}
+
+    <div class="mb-5">
+      Send from stacking address
+    </div>
+    <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
+
   </div>
 
   <div class="p-8 bg-[#F4F3F0] rounded-2xl">
-    <Invoice address={stackerData.stacksAddressNo} voteFor={false} />
+    {#if showPaymentButtons}
+    <div class="mb-16">
     <button on:click={() => {castVote(false)}} class="text-sm font-mono uppercase block w-full px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
       Vote no
     </button>
@@ -81,16 +90,13 @@
       {errorMessage}
     </div>
     {/if}
-  </div>
-{:else}
-  <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
-    <Invoice address={stackerData.stacksAddressYes} voteFor={true} />
-    <NakamotoResultsBackground />
-  </div>
+    </div>
+    {/if}
 
-  <div class="p-8 bg-[#F4F3F0] rounded-2xl relative">
+    <div class="mb-5">
+      Send from stacking address
+    </div>
     <Invoice address={stackerData.stacksAddressNo} voteFor={false} />
-    <NakamotoResultsBackground />
+
   </div>
-  {/if}
-  {/if}
+{/if}

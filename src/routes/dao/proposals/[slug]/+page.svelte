@@ -87,7 +87,10 @@
 		<Holding />
 		{:else if isConclusionPending(proposal)}
 		<div class="flex justify-around">
-			<div class="my-3 text-sm">Voting is closed - please call <a href="/" class="text-bloodorange" on:click|preventDefault={() => conclude()}>conclude</a> to wrap up the voting.</div>
+			{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<div class="my-3 text-sm"><a href="/" class="text-bloodorange" on:click|preventDefault={() => conclude()}>Voting closed - please conclude</a></div>
+			{:else}
+			Voting has ended. Results will be published soon.
+			{/if}
 		</div>
 		{:else}
 		<DaoConcluded {proposal}/>

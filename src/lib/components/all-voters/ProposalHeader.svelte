@@ -7,6 +7,7 @@
 	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { isVoting } from '$lib/proposals';
 	import { onMount } from 'svelte';
+	import { daoVotingSupported } from '$lib/config';
 
 	export let proposal:VotingEventProposeProposal;
 	let linkAddress = ''
@@ -40,7 +41,7 @@
 	</div>
 	
 
-	{#if isVoting(proposal)}
+	{#if daoVotingSupported && isVoting(proposal)}
 		<div class="mt-4 sm:mt-0">
 			<p class="text-sm text-[#131416]/[0.64] sm:text-right mb-1">Switch voting method:</p>
 			<button on:click={() => (dropdownOpen = !dropdownOpen)} class="font-mono uppercase inline-flex items-center bg-[#EEEBE7] text-[#27282B] gap-2 px-4 py-2 text-xs rounded-lg border border-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50 shrink-0">

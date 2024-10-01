@@ -14,7 +14,7 @@
 	import { beforeNavigate, goto } from '$app/navigation';
 	import { configStore, setConfigByUrl } from '$stores/stores_config';
 	import HeaderFromComponents from '$lib/header/HeaderFromComponents.svelte';
-	import { initAddresses, initApplication, isLegal, isLoggedIn, logUserOut, loginStacks, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
+	import { initAddresses, initApplication, isLegal, loginStacksFromHeader } from '@mijoco/stx_helpers/dist/account';
 	import { fetchStacksInfo } from '@mijoco/stx_helpers/dist/stacks-node';
 	import type { DaoStore } from "@mijoco/stx_helpers/dist/index";
 
@@ -41,6 +41,7 @@
 		}
 		if (!nav.to?.url.searchParams?.has('chain') && $page.url.hostname === 'localhost') {
 			nav.to?.url.searchParams.set('chain', getConfig().VITE_NETWORK)
+			//nav.to?.url.searchParams.set('chain', 'devnet')
 		}
 		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})

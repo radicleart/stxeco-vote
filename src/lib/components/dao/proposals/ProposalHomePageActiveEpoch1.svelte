@@ -9,7 +9,6 @@
 	import { getConfig } from "$stores/store_helpers";
 	import { sessionStore } from "$stores/stores";
 	import type { HeaderItem, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
-	import { showConnect } from "@stacks/connect";
 	import { onMount } from "svelte";
 	import { AdjustmentsHorizontal, Icon } from "svelte-hero-icons";
 
@@ -42,24 +41,30 @@
 			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a> 
 				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={35} height={35} /></a>{/if}
 			</h2>
-			<div class="text-sm text-gray-700 mb-5">Bitcoin voting window: {fmtNumber(prop.proposalData.burnStartHeight)} until {fmtNumber(prop.proposalData.burnEndHeight)}</div>
 			<p class="text-lg text-[#605D5D]">{@html prop.proposalMeta.description.split('<br/>')[0]}</p>
 		</div>
 
-		<div class="flex flex-col gap-y-2 justify-items-start">
-			{#if isProposedPreVoting(prop)}<div class="text-sm ">Starts: <Countdown scaleFactor={1} endBlock={prop.proposalData.burnStartHeight - currentBurnHeight} /></div>
+		<div class="flex flex-col gap-y-2 justify-items-center">
+			<div class="text-sm text-center">Bitcoin voting window: {fmtNumber(prop.proposalData.burnStartHeight)} until {fmtNumber(prop.proposalData.burnEndHeight)}</div>
+			{#if isProposedPreVoting(prop)}<div class="text-sm text-center">Starts: <Countdown scaleFactor={1} endBlock={prop.proposalData.burnStartHeight - currentBurnHeight} /></div>
 			{:else if isVoting(prop)}
-			<div class="w-full flex justify-start gap-x-5">
+			<div class="w-full flex justify-center gap-x-5">
 				<div class="">
-					<button on:click={() => {goto('/dao/proposals/' + prop.proposal)}} class="space-y-3  text-sm font-mono uppercase block w-auto px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
-						Caste your vote
+					<button on:click={() => {goto('/dao/proposals/' + prop.proposal + '?method=2')}} class="space-y-3  text-sm font-mono uppercase block w-auto px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
+						Voting for Stackers
+					</button>
+				</div>
+				<div class="">
+					<button on:click={() => {goto('/dao/proposals/' + prop.proposal + '?method=3')}} class="space-y-3  text-sm font-mono uppercase block w-auto px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
+						Voting for Non-Stackers
 					</button>
 				</div>			
 			</div>
-			<div class="text-sm ">
+			<div class="text-sm text-center">
 				Voting ends: <Countdown scaleFactor={1} endBlock={prop.proposalData.burnEndHeight - currentBurnHeight} />
 			</div>
 			{:else if isConclusionPending(prop)}
+			
 				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<div class="my-3 text-sm"><a href="/" class="text-bloodorange" on:click|preventDefault={() => conclude()}>Voting closed - please conclude</a></div>
 				{:else}
 				Voting has ended. Results will be published soon.

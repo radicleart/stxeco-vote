@@ -6,13 +6,16 @@
 	import PoolVotingActiveQr from "./PoolVotingActiveQR.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { explorerTxUrl } from "$lib/utils";
+	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
+	import VotingPower from "../dao-voting/VotingPower.svelte";
 
 	const dispatch = createEventDispatcher();
 
 	export let proposal:VotingEventProposeProposal;
-  let revealAddresses = false;
+  let revealAddresses = true;
   let justVoted = false
   let txId:string
+  let showPaymentButtons = false;
 
   const doVotingEvent = (e:any) => {
     txId = e.detail.txId
@@ -46,39 +49,44 @@
 
     <div class="">
       <div class="mb-4">
-        <h2 class="text-[#131416] text-2xl mb-3">Voting for Solo and Pool Stackers</h2>
+        <h2 class="text-[#131416] text-2xl mb-3">Stacks Voting</h2>
       </div>
-      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 w-4/5">
-        <p>Solo and pool stackers can vote by sending a dust stacks transaction (~1 micro stx)</p>
-        <p class="my-3 uppercase">Your vote will not be counted if it is not sent from the same account where your stx is locked.</p>
-        <p>Express your vote by sending a stacks transaction to either;</p>
+      <div class="rounded-lg relative bg-[#E6E4E2] px-6 py-6 space-y-3 ">
+        <p>Vote by sending a dust stacks transaction (~1 micro stx) to either;</p>
         <ul class="list-disc pl-6 mb-5">
           <li>an address representing "Yes" to the proposal</li>
           <li>an address representing "No" to this proposal.</li>
         </ul>
-        <div class="rounded-lg relative bg-[#E6E4E2] py-3 w-4/5">
+        <div class="rounded-lg relative bg-[#E6E4E2] py-3 ">
           <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(1)}}>Prefer to vote with a bitcoin transaction ?</a></p>
-          <p><a class="underline hover:text-blue-500" href="/" on:click|preventDefault={() => {toggleMethod(3)}}>Want to vote with your unstacked stx ?</a></p>
         </div>
+        {#if isLoggedIn()}
+        <div class="mb-8 ">
+          <VotingPower {proposal}/>
+        </div>
+        {/if}
+        {#if revealAddresses}
+        <div class="mb-8 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
+          <div class="p-8 bg-[#121314] rounded-2xl">
+            <h3 class="text-3xl text-white mb-5">Cast your vote</h3>
+            {#if isLoggedIn()}
+            <p class="mt-0 text-white text-sm">To send from connected wallet <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
+            {/if}
+          </div>
+          <PoolVotingActiveQr {proposal} {showPaymentButtons} on:voting_event={doVotingEvent}/>
+        </div>
+        {/if}
       </div>
+      <!--
       <div class="rounded-lg py-6 space-y-3 w-4/5">
-        <Banner bannerType={'warning'} message={'Transactions sent from addresses that are not stacking (solo or pool), will not count as votes!'} />
+        <Banner bannerType={'warning'} message={'Send votes from main account(s) to maximise your voting power!'} />
       </div>
       <button on:click={() => {revealAddresses = !revealAddresses}} class="space-y-3  text-sm font-mono uppercase block w-4/5 px-4 py-2 text-white bg-[#131416] rounded-md border border-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black-500/50">
         I understand, continue
       </button>
+      -->
     </div>
     {/if}
 
-    <NakamotoBackground />
-    <NakamotoShield />
 </div>
 </div>
-{#if revealAddresses}
-<div class="mb-8 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
-  <div class="p-8 bg-[#121314] rounded-2xl">
-    <h3 class="text-3xl text-white">Cast your vote</h3>
-  </div>
-  <PoolVotingActiveQr {proposal} on:voting_event={doVotingEvent}/>
-</div>
-{/if}

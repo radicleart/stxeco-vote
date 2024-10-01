@@ -12,6 +12,7 @@ export function setConfigByUrl(search:URLSearchParams) {
   const newNetwork = search.get('chain')
   if (newNetwork) {
     switchConfig(newNetwork)
+  } else {
+    switchConfig('devnet')
   }
-  //switchConfig(network)
 }
