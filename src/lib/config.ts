@@ -76,7 +76,7 @@ export const config: { [key: string]: Config } = {
                     {name: '/dao-launcher', href: '/dao-launcher', display: 'DAO Launcher', target:'_self'},
                 ]
             },
-            {name: '/tools', href: '/dao/tools', display: 'DAO Tools', target:'_self'},
+            {name: '/tools', href: '/dao/tools', display: 'PoX Insights', target:'_self'},
             {name: '/sip', href: '/sip', display: 'Upcoming SIPs', target:'_self'},
         ]
     },
@@ -126,7 +126,7 @@ export const config: { [key: string]: Config } = {
                     {name: '/dao-launcher', href: '/dao-launcher', display: 'DAO Launcher', target:'_self'},
                 ]
             },
-            {name: '/tools', href: '/dao/tools', display: 'DAO Tools', target:'_self'},
+            {name: '/tools', href: '/dao/tools', display: 'PoX Insights', target:'_self'},
             {name: '/sip', href: '/sip', display: 'Upcoming Votes', target:'_self'},
             {name: '/insights', href: 'https://stx.eco/insights', display: 'Insights', target:'_self'},
             {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO', target:'_self'},
@@ -181,7 +181,7 @@ export const config: { [key: string]: Config } = {
                     {name: '/dao-launcher', href: '/dao-launcher', display: 'DAO Launcher', target:'_self'},
                 ]
             },
-            {name: '/tools', href: '/dao/tools', display: 'DAO Tools', target:'_self'},
+            {name: '/tools', href: '/dao/tools', display: 'PoX Insights', target:'_self'},
             {name: '/sip', href: '/sip', display: 'Upcoming Votes', target:'_self'},
             {name: '/insights', href: 'https://stx.eco/insights', display: 'Insights', target:'_self'},
             {name: '/dao-launcher', href: 'https://stx.eco/launcher', display: 'DAO', target:'_self'},

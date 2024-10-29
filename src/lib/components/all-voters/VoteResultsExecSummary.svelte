@@ -1,7 +1,6 @@
 <script lang="ts">
 	import NakamotoResultsBackground from "../../ui/NakamotoResultsBackground.svelte";
-	import tick from '$lib/assets/tick.png'
-	import cross from '$lib/assets/cross.png'
+	import { CheckCircleSolid, XSolid } from 'flowbite-svelte-icons';
 	import { sessionStore } from "$stores/stores";
 	import { getPoolAndSoloVotesByProposal, getSummary, NAKAMOTO_VOTE_STOPS_HEIGHT } from "$lib/dao_api";
 	import type { ResultsSummary, StackerProposalData, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
@@ -82,26 +81,44 @@
 	<div class="p-8 bg-success-01 col-span-3 bg-[#1c671b] rounded-2xl border-error-600 relative">
 		
 		{#if soloPercent !== 'NaN'}
-		<div class="flex justify-between mb-5 text-white">
+		<div class="flex md:flex-row flex-col gap-y-3 justify-between mb-5 text-white">
 			<div><span class="text-4xl font-extrabold">Solo Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{soloPercent} %</span></div>
-			<div>{#if Number(soloPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
+			<div>
+				{#if Number(soloPercent) >= 80}
+				<CheckCircleSolid class="w-10 h-10 text-white " />
+				{:else}
+				<XSolid class="w-10 h-10 text-red-500" />
+				{/if}
+			</div>
 		</div>
 		{/if}
 
 		{#if poolPercent !== 'NaN'}
-		<div class="flex justify-between mb-5 text-white">
+		<div class="flex md:flex-row flex-col gap-y-3 justify-between mb-5 text-white">
 			<div><span class="text-4xl font-extrabold">Pool Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{poolPercent} %</span></div>
-			<div>{#if Number(poolPercent) >= 80}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
+			<div>
+				{#if Number(poolPercent) >= 80}
+				<CheckCircleSolid class="w-10 h-10 text-white " />
+				{:else}
+				<XSolid class="w-10 h-10 text-red-500" />
+				{/if}
+			</div>
 		</div>
 		{/if}
 
 		{#if daoPercent !== 'NaN'}
-		<div class="flex justify-between mb-2 text-white">
+		<div class="flex md:flex-row flex-col gap-y-3 justify-between mb-2 text-white">
 			<div><span class="text-4xl font-extrabold">Non-Stackers</span></div>
 			<div><span class="text-4xl font-extrabold">{daoPercent} %</span></div>
-			<div>{#if Number(daoPercent) >= 66}<img alt="correct" src={tick}/>{:else}<img alt="correct" src={cross}/>{/if}</div>
+			<div>
+				{#if Number(daoPercent) >= 66}
+				<CheckCircleSolid class="w-10 h-10 text-white " />
+				{:else}
+				<XSolid class="w-10 h-10 text-red-500" />
+				{/if}
+			</div>
 		</div>
 		{/if}
 	</div>
@@ -109,7 +126,9 @@
 	<div class="p-8 bg-primary-01 col-span-2 bg-[#1c671b] rounded-2xl border-error-600 relative">
 		{#if approved}
 		<div class="flex justify-between mb-5">
-			<div><img alt="correct" src={tick}/></div>
+			<div>
+				<CheckCircleSolid class="w-10 h-10 text-white " />
+			</div>
 			<div><span class="text-4xl font-extrabold">YES</span></div>
 		</div>
 		<div class="flex justify-between">
@@ -117,7 +136,9 @@
 		</div>
 		{:else}
 		<div class="flex justify-between mb-5">
-			<div><img alt="correct" src={cross}/></div>
+			<div>
+				<XSolid class="w-10 h-10 text-red-500" />
+			</div>
 			<div><span class="text-4xl font-semibold">NO</span></div>
 		</div>
 		<div class="flex flex-col">

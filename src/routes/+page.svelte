@@ -78,15 +78,19 @@
 				{/if}
 
 				<div>
+					<!--
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
 							Active proposals
 						</a>
 					</h1>
+					-->
 				</div>
 				{#if activeProposals && activeProposals.length > 0}
 				{#each activeProposals as prop }
-				{#if showAllProposals || (prop.stackerData && prop.stackerData.sip)}<ProposalHomePageActive {prop} infoItems={[]} />{/if}
+				{#if showAllProposals || (prop.stackerData && prop.stackerData.sip)}
+				<ProposalHomePageActive {prop} infoItems={[]} />
+				{/if}
 				{/each}
 				{/if}
 				{#if !activeProposals || activeProposals.length === 0}
@@ -94,16 +98,20 @@
 				{/if}
 
 				<div>
+					<!--
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
 							Past proposals 
 							<a href="/" class="text-bitcoinorange" on:click={() => showInactiveProposals = !showInactiveProposals}>{#if showInactiveProposals}<Icon class="inline-block" src={MinusCircle} width={30} height={30}/>{:else}<Icon class="inline-block" src={PlusCircle} width={30} height={30}/>{/if}</a>
 						</a>
 					</h1>
+					-->
 				</div>
 				{#if showInactiveProposals && inactiveProposals && inactiveProposals.length > 0}
 					{#each inactiveProposals as proposal }
-					{#if (proposal.stackerData && proposal.stackerData.sip) || showAllProposals}<ProposalHomePageInactive {proposal} />{/if}
+					{#if (proposal.stackerData && proposal.stackerData.sip) || showAllProposals}
+					<ProposalHomePageInactive {proposal} />
+					{/if}
 					{/each}
 					{#if !inactiveProposals || inactiveProposals.length === 0}
 					<ProposalHomePageEmptyItem propType={'inactive'} />

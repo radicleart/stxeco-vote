@@ -8,9 +8,11 @@
 	import BlockHeightConvertor from '$lib/components/dao-launcher/tools/BlockHeightConvertor.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import RewardCycleConvertor from '$lib/components/dao-launcher/tools/RewardCycleConvertor.svelte';
+	import RewardCycleConvertor from '$lib/components/dao-launcher/tools/PoxRewardSlotsAndConvertor.svelte';
 	import EpochsAndVersions from '$lib/components/dao-launcher/tools/EpochsAndVersions.svelte';
 	import type { PoxInfo } from '@mijoco/stx_helpers/dist/pox_types';
+	import RewardSlots from '$lib/components/dao-launcher/tools/RewardSlots.svelte';
+	import StackerInfo from '$lib/components/dao-launcher/tools/StackerInfo.svelte';
     
   let proposals:Array<VotingEventProposeProposal> = [];
   let method = 1
@@ -34,6 +36,10 @@
 		return false;
 	}
 
+  const reset = () => {
+    method = 1
+  }
+
 	onMount(async () => {
     if ($page.url.searchParams.has('tool')) method = Number($page.url.searchParams.get('tool'))
     if ($page.url.searchParams.has('cycle')) cycle = Number($page.url.searchParams.get('cycle'))
@@ -43,17 +49,15 @@
 </script>
       
     <svelte:head>
-        <title>Base DAO Tools</title>
+        <title>Proof of Transfer Tools</title>
         <meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
     </svelte:head>
       
   <div class="py-6 mx-auto max-w-7xl md:px-6">
     <div class="flex flex-col w-full ">
       <div class="flex flex-col gap-y-4 w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden ">
-        <h1 class=" text-2xl">DAO Tools</h1>
-        <p class="strapline">The toolkit of the DAO. The active extensions are the mechanics of the DAO. 
-          Tools for reading pox information, converting block heights to dates etc. 
-        </p>
+        <h1 class=" text-2xl">PoX Insights</h1>
+        <p class="strapline"> Tools for understanding pox data. </p>
         <Tabs  style="underline" contentClass="mb-0 pb-0 border-b-none">
 
           <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
@@ -71,15 +75,29 @@
           </TabItem>
       
           <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
-            open={method === 3} on:click={(e) => changeMethod(e, 3)} title="epochs" >
+              open={method === 3} on:click={(e) => changeMethod(e, 3)} title="epochs" >
             <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
               <EpochsAndVersions {poxInfo} />
             </div>
-        </TabItem>
+          </TabItem>
+      
+          <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
+              open={method === 4} on:click={(e) => changeMethod(e, 4)} title="rewards" >
+            <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
+              <RewardSlots {poxInfo} on:back={reset}/>
+            </div>
+          </TabItem>
+
+          <TabItem class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
+              open={method === 5} on:click={(e) => changeMethod(e, 5)} title="stacker lookup" >
+            <div class="bg-lightgray py-4 px-4 relative top-[-10px]">
+              <StackerInfo {poxInfo} on:back={reset}/>
+            </div>
+          </TabItem>
         {/if}
       </Tabs>
 
-</div>
+      </div>
     </div>
   </div>
 

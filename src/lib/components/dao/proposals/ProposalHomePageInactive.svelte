@@ -4,6 +4,7 @@
 	import DaoResults from "$lib/components/all-voters/dao-voting/DaoResults.svelte";
 	import VoteResultsExecSummary from "$lib/components/all-voters/VoteResultsExecSummary.svelte";
 	import { isCoordinator } from "$lib/proposals";
+	import { fmtNumber } from "$lib/utils";
 	import { getDaoSummary } from "$lib/voting-non-stacker";
 	import { getConfig } from "$stores/store_helpers";
 	import { sessionStore } from "$stores/stores";
@@ -12,6 +13,11 @@
 	import { AdjustmentsHorizontal, Icon } from "svelte-hero-icons";
 
 	export let proposal:VotingEventProposeProposal;
+	let burnHeight = $sessionStore.stacksInfo.burn_block_height;
+
+	const isStacksEndHeight = () => {
+		return proposal.proposalData.burnEndHeight < 700000
+	}
 
 	const getLink = () => {
 		return `/dao/proposals/${proposal.proposal}/results`
@@ -31,9 +37,17 @@
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
 			<h2 class="text-[#131416] text-3xl mb-3"><a href={getLink()} >{@html proposal.proposalMeta.title} <LinkInChainIcon /></a>
-				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={35} height={35} /></a>{/if}
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={30} height={30} /></a>{/if}
 			</h2>
-			<p class="text-lg text-[#605D5D]">{@html proposal.proposalMeta.synopsis.replaceAll(';;', '')}</p>
+			
+			<p>
+				{#if isStacksEndHeight()}
+				Voting ended at Stacks block <strong>{fmtNumber(proposal.proposalData.burnEndHeight)}</strong>.
+				{:else}
+				Voting ended at Bitcoin block <strong>{fmtNumber(proposal.proposalData.burnEndHeight)}</strong>.
+				{/if}
+			</p>
+			<p class="mt-5 text-lg text-[#605D5D]">{@html proposal.proposalMeta.synopsis.replaceAll(';;', '')}</p>
 		</div>
 		{#if proposal.links && proposal.links.length > 0}
 		<div class="pt-4 mb-8">

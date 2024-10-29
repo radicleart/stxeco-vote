@@ -9,7 +9,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let poxInfo:PoxInfo;
-	export let poxEntry:PoxEntry|undefined;
+	//export let poxEntry:PoxEntry|undefined;
 
 	let stxAddress:string = $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress;
 	let stackerInfo:StackerInfo;
@@ -25,12 +25,12 @@
 		dispatch('back')
     }
 	onMount(async () => {
-		if (poxEntry) {
-			stackerInfo = await getPoxInfoByStacker(poxEntry.stacker, poxEntry.cycle)
-			stxAddress = poxEntry.stacker
-			cycle = poxEntry.cycle
-			lockPeriod = (stackerInfo.stacker?.lockPeriod) ? stackerInfo.stacker?.lockPeriod[0] : {value: 0}
-		}
+		// if (poxEntry) {
+		// 	stackerInfo = await getPoxInfoByStacker(poxEntry.stacker, poxEntry.cycle)
+		// 	stxAddress = poxEntry.stacker
+		// 	cycle = poxEntry.cycle
+		// 	lockPeriod = (stackerInfo.stacker?.lockPeriod) ? stackerInfo.stacker?.lockPeriod[0] : {value: 0}
+		// }
   	})
 
 </script>

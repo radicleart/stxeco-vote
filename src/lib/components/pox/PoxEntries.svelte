@@ -3,7 +3,7 @@
 	import { sessionStore } from "$stores/stores";
 	import { getConfig } from "$stores/store_helpers";
 	import { getPoxEntriesByCycle } from "$lib/pox_api";
-	import type { PoxEntry, PoxInfo, RewardSlot } from "$types/pox_types";
+	import type { PoxEntry, PoxInfo, RewardSlot } from "@mijoco/stx_helpers/dist";
 	import { fmtMicroToStx, fmtNumber } from "$lib/utils";
 
 	const dispatch = createEventDispatcher();

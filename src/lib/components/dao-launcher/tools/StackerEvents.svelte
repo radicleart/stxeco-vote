@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fmtNumber } from "$lib/utils";
+	import { fmtMicroToStx, fmtNumber, truncate } from "$lib/utils";
   import { getConfig } from "$stores/store_helpers";
 	import { sessionStore } from "$stores/stores";
 	import { fetchBlockAtHeight } from "@mijoco/btc_helpers/dist/index";
@@ -9,10 +9,13 @@
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
 	import { page } from "$app/stores";
 	import { isCoordinator } from "$lib/proposals";
-	import { syncPoxEntriesByCycle, syncStackerEvents } from "$lib/pox_api";
+	import { findPoxEntriesByCycle, syncPoxEntriesByCycle, syncStackerEvents } from "$lib/pox_api";
+  import type { PoxEntry } from '@mijoco/stx_helpers/dist';
 
   export let poxInfo:PoxInfo
   export let cycle:number
+
+  let poxData:Array<PoxEntry>; 
 
   let currentBurnHeight:number = $sessionStore.stacksInfo.burn_block_height;
   let currentBlock:any;
@@ -21,9 +24,11 @@
   let newCycle:number = cycle;
 
   const fetchCycle = async () => {
+    poxData = []
     $page.url.searchParams.set('cycle', '' + newCycle)
     history.pushState({}, '', $page.url);
     poxInfoCycle = await getPoxCycleInfoRelative(getConfig().VITE_STACKS_API, getConfig().VITE_MEMPOOL_API, getConfig().VITE_POX_CONTRACT_ID, newCycle, currentBurnHeight)
+    poxData = await poxEntries(newCycle)
   }
 
   const readPoxEntries = async () => {
@@ -44,12 +49,18 @@
     await fetchCycle()
   }
 
+  const poxEntries = async (cycle:number) => {
+    return await findPoxEntriesByCycle(cycle)
+  }
+
 
 	onMount(async () => {
+    poxData = []
     cycle = (cycle > 0) ? cycle : poxInfo.reward_cycle_id;
     newCycle = cycle;
     currentBlock = await fetchBlockAtHeight(getConfig().VITE_MEMPOOL_API, $sessionStore.stacksInfo.burn_block_height)
     await fetchCycle()
+    poxData = await poxEntries(cycle)
   })
 </script>
 
@@ -121,6 +132,28 @@
       </div>
       {/if}
 
+      {#if poxData}
+        <!-- Template to display data when it arrives -->
+        <div class="grid md:grid-cols-6 grid-cols-5 text-lg font-bold">
+          <!-- Example: Render poxData here -->
+            <div class="col-span-4">Reward Address</div>
+            <div class="hidden md:block md:col-span-1">Stacker</div>
+            <div class="col-span-1">Amount</div>
+        </div>
+
+        <div class="grid md:grid-cols-6 grid-cols-5 text-lg font-bold">
+          <!-- Example: Render poxData here -->
+          {#each poxData as entry}
+            <div class="col-span-4">{entry.index} {(entry.bitcoinAddr)}</div>
+            <div class="hidden md:block md:col-span-1">{(entry.stacker) ? truncate(entry.stacker) : '-'}</div>
+            <div class="col-span-1">{Math.floor(Number(fmtMicroToStx(entry.totalUstx)))}</div>
+          {/each}
+        </div>
+      {:else}
+        <!-- Display a loading message while waiting for the data -->
+        <p>Loading...</p>
+      {/if}
+    
       {/if}
 
     </div>

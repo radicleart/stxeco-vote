@@ -44,11 +44,11 @@
           errorMessage = 'Duration maximum is 5000 blocks';
           return;
         }
-		const paramStartDelayCV = uintCV(proposalStart);
+		const proposalStartCV = uintCV(proposalStart);
 		const paramDurationCV = uintCV(proposalDuration);
-		const customMajorityCV = someCV(uintCV(6600));
+		const customMajorityCV = someCV(uintCV(7000));
 		const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
-		let functionArgs = [proposalCV, paramStartDelayCV, paramDurationCV, customMajorityCV]
+		let functionArgs = [proposalCV, proposalStartCV, paramDurationCV, customMajorityCV]
 		await openContractCall({
 			network: getStacksNetwork(getConfig().VITE_NETWORK),
 			postConditions: [],
@@ -82,7 +82,7 @@
 	})
 
 	$: explorerUrl = getConfig().VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + getConfig().VITE_NETWORK;
-	$: startHeightMessage = 'The earliest start for voting is in ' + (proposalStart) + ' bitcoin blocks at ' + (fmtNumber(burnHeightNow + proposalStart));
+	$: startHeightMessage = 'Voting starts at ' + (proposalStart) + ' in ' + (fmtNumber(proposalStart - burnHeightNow)) + ' bitcoin blocks';
 	$: durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 </script>
 
@@ -120,7 +120,7 @@
 				<div class="w-full">
 					<label class="block" for="duration-block">voting open for minimum {proposalDuration} blocks</label>
 					<input on:change={() => refreshClocks()} bind:value={proposalDuration} type="number" id="duration-block" class={'text-black w-60 h-[40px] py-1 px-2 rounded-lg border border-gray-400'} aria-describedby="Contribution">
-					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart + proposalDuration} scaleFactor={1} /></span>
+					<span class="text-sm text-[#131416]/[0.64]"><Countdown endBlock={proposalStart + proposalDuration - burnHeightNow} scaleFactor={1} /></span>
 				</div>
 				<div>
 					<button on:click={() => {submitFlexible()}} class="w-52 justify-center items-center gap-x-1.5 bg-success-01 px-4 py-2 rounded-xl border border-success-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">

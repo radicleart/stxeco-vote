@@ -8,14 +8,24 @@
 	import { explorerTxUrl } from "$lib/utils";
 	import { isLoggedIn } from "@mijoco/stx_helpers/dist/account";
 	import VotingPower from "../dao-voting/VotingPower.svelte";
+	import Switch from '$lib/assets/SwitchArrows.svelte';
 
 	const dispatch = createEventDispatcher();
 
 	export let proposal:VotingEventProposeProposal;
+  export let totalBalanceAtHeight = 0
+  export let lockedBalanceAtHeight = 0
+  let showOnPanel = false;
   let revealAddresses = true;
   let justVoted = false
   let txId:string
   let showPaymentButtons = false;
+
+  const toggleVoting = () => {
+    if (isLoggedIn()) {
+      showPaymentButtons = !showPaymentButtons
+    }
+  }
 
   const doVotingEvent = (e:any) => {
     txId = e.detail.txId
@@ -67,13 +77,29 @@
         {/if}
         {#if revealAddresses}
         <div class="mb-8 lg:grid lg:gap-8 lg:grid-cols-3 space-y-4 lg:space-y-0">
-          <div class="p-8 bg-[#121314] rounded-2xl">
+          <div class="col-span-1 p-8 bg-[#121314] rounded-2xl">
             <h3 class="text-3xl text-white mb-5">Cast your vote</h3>
-            {#if isLoggedIn()}
+            {#if isLoggedIn() && showOnPanel}
             <p class="mt-0 text-white text-sm">To send from connected wallet <a href="/" on:click|preventDefault={() => showPaymentButtons = !showPaymentButtons} class="underline">click here</a></p>
             {/if}
           </div>
-          <PoolVotingActiveQr {proposal} {showPaymentButtons} on:voting_event={doVotingEvent}/>
+          <div class="col-span-2">
+            <div class="mb-5">
+              {#if isLoggedIn()}
+              <a class="inline-block relative top-[8px]" href="/" on:click|preventDefault={() => {toggleVoting()}}><Switch/></a>
+              {#if showPaymentButtons}
+              <a class="underline inline-block relative top-[5px]" href="/" on:click|preventDefault={() => {toggleVoting()}}>Send from connected wallet</a>
+              {:else}
+              <a class="underline inline-block relative top-[5px]" href="/" on:click|preventDefault={() => {toggleVoting()}}>Send from stacking address</a>
+              {/if}
+              {/if}
+            </div>
+            <div>
+              <div class="mb-3 lg:grid lg:gap-8 grid-cols-1 space-y-4 lg:space-y-0">
+                <PoolVotingActiveQr {proposal}  {totalBalanceAtHeight} {lockedBalanceAtHeight} {showPaymentButtons} on:voting_event={doVotingEvent}/>
+              </div>
+            </div>
+          </div>
         </div>
         {/if}
       </div>

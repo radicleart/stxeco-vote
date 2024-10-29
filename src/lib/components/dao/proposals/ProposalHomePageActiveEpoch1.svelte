@@ -39,7 +39,7 @@
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
 			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a> 
-				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={35} height={35} /></a>{/if}
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={30} height={30} /></a>{/if}
 			</h2>
 			<p class="text-lg text-[#605D5D]">{@html prop.proposalMeta.description.split('<br/>')[0]}</p>
 		</div>

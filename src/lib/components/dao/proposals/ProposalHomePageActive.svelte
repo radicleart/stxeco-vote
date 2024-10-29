@@ -22,7 +22,14 @@
 		const result = await concludeVote(prop.votingContract, prop.proposal)
 	}
 
-	const getLink = () => {
+	const getIntLink = () => {
+		return `/dao/proposals/${prop.proposal}`
+	}
+
+	const getSipLink = () => {
+		if (prop.links && prop.links.length > 0 && prop.links[0].href) {
+			return prop.links[0].href
+		}
 		return `/dao/proposals/${prop.proposal}`
 	}
 
@@ -39,8 +46,10 @@
 	<!-- <NakamotoRelease/> --> 
 	<div class="mt-4 sm:mt-0 relative z-[1]">
 		<div class="mb-4">
-			<h2 class="text-[#131416] text-xl mb-3"><a href={getLink()} >{@html prop.proposalMeta.title} <LinkInChainIcon /></a> 
-				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={35} height={35} /></a>{/if}
+			<h2 class="text-[#131416] text-xl mb-3">
+				<a href={getIntLink()}>{@html prop.proposalMeta.title}</a> 
+				<a href={getSipLink()} target="_blank" title="link to SIP doucment in Github"><LinkInChainIcon /></a> 
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}<a href={getAdminLink()} > <Icon class="inline" src={AdjustmentsHorizontal} width={30} height={30} /></a>{/if}
 			</h2>
 			<div class="text-sm text-gray-700 mb-5">Bitcoin voting window: {fmtNumber(prop.proposalData.burnStartHeight)} until {fmtNumber(prop.proposalData.burnEndHeight)}</div>
 			<p class="text-lg text-[#605D5D]">{@html prop.proposalMeta.description.split('<br/>')[0]}</p>

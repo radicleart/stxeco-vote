@@ -8,6 +8,7 @@
 	import { isVoting } from '$lib/proposals';
 	import { onMount } from 'svelte';
 	import { daoVotingSupported } from '$lib/config';
+	import LinkInChainIcon from "$lib/assets/home/LinkInChainIcon.svelte";
 
 	export let proposal:VotingEventProposeProposal;
 	let linkAddress = ''
@@ -20,6 +21,17 @@
 
 	let showDetails = false;
 	let dropdownOpen = false;
+
+	const getIntLink = () => {
+		return `/dao/proposals/${proposal.proposal}`
+	}
+
+	const getSipLink = () => {
+		if (proposal.links && proposal.links.length > 0 && proposal.links[0].href) {
+			return proposal.links[0].href
+		}
+		return `/dao/proposals/${proposal.proposal}`
+	}
 
 	const switchMethod = (newMethod:number) => {
 		if (method === newMethod) return
@@ -71,9 +83,8 @@
 </div>
 <div class="sm:flex sm:items-center sm:justify-between mt-6">
 	<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 flex">
-		<a href={linkAddress || '/'} on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
-			{proposal.proposalMeta.title}
-		</a>
+		<a class="" href={getIntLink()}>{@html proposal.proposalMeta.title}</a> 
+		<a href={getSipLink()} target="_blank" title="link to SIP doucment in Github"><LinkInChainIcon /></a> 
 		<a href={tweetUrl} target="_blank" class="mt-3">
 			<button style="display: flex; ">
 			  <Icon src={Share} width={30} height={30}/>

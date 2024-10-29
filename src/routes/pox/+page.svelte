@@ -4,9 +4,9 @@
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
 	import Cycles from "$lib/components/pox/Cycles.svelte";
 	import { onMount } from 'svelte';
-	import RewardSlots from '$lib/components/pox/RewardSlots.svelte';
+	import RewardSlots from '$lib/components/dao-launcher/tools/RewardSlots.svelte';
 	import PoxEntries from '$lib/components/pox/PoxEntries.svelte';
-	import StackerInfo from '$lib/components/pox/StackerInfo.svelte';
+	import StackerInfo from '$lib/components/dao-launcher/tools/StackerInfo.svelte';
 	import { sessionStore } from '$stores/stores';
 	import type { PoxEntry, PoxInfo } from '@mijoco/stx_helpers/dist/index';
 	import { getCurrentProposalLink } from '$lib/proposals';

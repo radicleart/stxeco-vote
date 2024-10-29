@@ -22,6 +22,8 @@
 	let method:number = 2;
 	let errorReason:string|undefined;
 	let proposal:VotingEventProposeProposal|undefined;
+	let lockedBalanceAtHeight:number = 0;
+	let totalBalanceAtHeight:number = 0;
 	let balanceAtHeight:number = 0;
 	let inited = false;
 
@@ -43,6 +45,8 @@
 		try {
 			if (proposal) {
 				const response = await getBalanceAtHeight(getConfig().VITE_STACKS_API, $sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress, proposal.proposalData.startBlockHeight);
+				totalBalanceAtHeight = Number(response.stx.balance)
+				lockedBalanceAtHeight = Number(response.stx.locked)
 				balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
 			}
 		} catch (e:any) {
@@ -67,7 +71,7 @@
 			{#if method === 1}
 				<SoloVotingActive {proposal} on:toggle_voting_method={switchVotingMethod}/>
 			{:else if method === 2}
-				<PoolVotingActive {proposal} on:toggle_voting_method={switchVotingMethod}/>
+				<PoolVotingActive {proposal} {totalBalanceAtHeight} {lockedBalanceAtHeight} on:toggle_voting_method={switchVotingMethod}/>
 			{:else if method === 3}
 				{#if $sessionStore.stacksInfo?.burn_block_height >= proposal.proposalData.burnStartHeight}
 				<DaoVotingActive {proposal} adjustBal={balanceAtHeight} />

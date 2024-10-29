@@ -1,6 +1,8 @@
-import { getStacksNetwork, type TentativeProposal, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+import { getStacksNetwork, isLoggedIn, type TentativeProposal, type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 import { getConfig, getSession } from '$stores/store_helpers';
 import { AddressPurpose, BitcoinNetworkType, getAddress, type GetAddressOptions } from 'sats-connect';
+import { page } from '$app/stores';
+import { goto } from '$app/navigation';
 
 export const coordinators = [
 	{ stxAddress: 'SPSEBFRZZEZSHGRKRR1Z55RX5AWHER3CYM0H9BMW', btcAddress: '', }, // mitchel
@@ -24,7 +26,7 @@ export const coordinators = [
 ]
 
 export function isCoordinator(address:string|undefined) {
-  if (!address) return false
+  if (!address || !isLoggedIn()) return false
 	const index = coordinators.findIndex((o) => o.stxAddress === address);
   return index > -1
 }
@@ -82,6 +84,8 @@ export function isProposedPreVoting(proposal:VotingEventProposeProposal) {
 
 export function isVoting(proposal:VotingEventProposeProposal) {
   const sess = getSession();
+  if (window.location.href.indexOf('localhost') > -1) return true;
+
   const currentHeight = (proposal.submissionContract.indexOf('008') > -1) ? sess.stacksInfo.stacks_tip_height : sess.stacksInfo?.burn_block_height || 0
   const res = currentHeight >= proposal.proposalData.burnStartHeight;
   return res && (currentHeight < proposal.proposalData.burnEndHeight);

@@ -35,7 +35,6 @@
 
 	let headerLinks:Array<HeaderLink> = []
 	getRouterInfo(headerLinks, '/tools')
-	//getRouterInfo(headerLinks, '/sip')
 	if (isLoggedIn() && coordinator) {
 		getRouterInfo(headerLinks, '/admin')
 		//getRouterInfo(headerLinks, '/dao-launcher')
