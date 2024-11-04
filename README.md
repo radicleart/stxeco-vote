@@ -68,5 +68,8 @@ Web application is deployed by running
 The API application runs in a docker container which is built/deployed by running
 
 ```bash
-./stxeco-api-vote/deploy-stxeco.sh
+cd hubgit/stxeco/stxeco-api-vote
+git pull
+git pull https://github.com/radicleart/stxeco-api-vote.git daoless
+./build-stxeco.sh
 ```
