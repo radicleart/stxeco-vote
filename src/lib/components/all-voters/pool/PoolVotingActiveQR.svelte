@@ -7,7 +7,7 @@
 	import { getStacksNetwork } from '@mijoco/stx_helpers/dist/stacks-node';
 	import { getConfig } from '$stores/store_helpers';
 	import type { VotingEventProposeProposal } from '@mijoco/stx_helpers';
-	import { getAddressId } from '$lib/utils';
+	import { fmtNumber, getAddressId } from '$lib/utils';
 	import { createEventDispatcher } from 'svelte';
 	import ChainUtils from '$lib/service/ChainUtils';
 	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
@@ -18,6 +18,9 @@
 	let stackerData = proposal.stackerData!;
 	export let lockedBalanceAtHeight: number;
 	export let totalBalanceAtHeight: number;
+
+	let height =
+		proposal.stackerData?.heights?.stacksStart || proposal.proposalData?.startBlockHeight;
 
 	let showStxTransfer = false;
 	let txId: string;
@@ -60,17 +63,24 @@
 
 {#if inited}
 	<div>
-		{#if isLoggedIn() && totalBalanceAtHeight > 0}
-			<div class="text-sm mb-4">
-				Total voting power (in connected account): {ChainUtils.fromMicroAmount(
-					totalBalanceAtHeight
-				)} STX (of which locked:
-				{ChainUtils.fromMicroAmount(lockedBalanceAtHeight)})
-			</div>
+		{#if isLoggedIn()}
+			{#if totalBalanceAtHeight <= 0}
+				<div class="text-sm text-warning-700 mb-4">
+					Your balance at block height {fmtNumber(height)} was 0 - ie no voting power from the connected
+					wallet.
+				</div>
+			{:else}
+				<div class="text-sm mb-4">
+					Total voting power (in connected account): {ChainUtils.fromMicroAmount(
+						totalBalanceAtHeight
+					)} STX (of which locked:
+					{ChainUtils.fromMicroAmount(lockedBalanceAtHeight)})
+				</div>
+			{/if}
 		{/if}
 		<div class="flex flex-col gap-x-3 gap-y-8">
 			<div class="w-full pt-8 px-8 bg-[#F4F3F0] rounded-2xl">
-				{#if isLoggedIn()}
+				{#if isLoggedIn() && totalBalanceAtHeight > 0}
 					<div class="mb-8">
 						<button
 							on:click={() => {
@@ -92,7 +102,7 @@
 			</div>
 
 			<div class="w-full pt-8 px-8 bg-[#F4F3F0] rounded-2xl">
-				{#if isLoggedIn()}
+				{#if isLoggedIn() && totalBalanceAtHeight > 0}
 					<div class="mb-8">
 						<button
 							on:click={() => {
