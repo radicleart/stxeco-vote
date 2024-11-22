@@ -18,6 +18,7 @@
 		isConclusionPending,
 		isCoordinator,
 		isFunding,
+		isPostVoting,
 		isProposedPreVoting,
 		isVoting
 	} from '$lib/proposals';
@@ -48,7 +49,12 @@
 	onMount(async () => {
 		method = Number($page.url.searchParams.get('method')) || 2;
 		proposal = await getProposalLatest($page.params.slug);
+
 		if (!proposal) goto('/');
+		if (isPostVoting(proposal)) {
+			const nodao = proposal.stackerData?.nodao;
+			goto(`/dao/proposals/${proposal.proposal}/${nodao ? 'results2' : 'results'}?chain=mainnet`);
+		}
 		try {
 			// note the latter is the proposal deploy height but we'd like it to the height that corresponds to the bitcoin start height.
 			const startStacksBlock =

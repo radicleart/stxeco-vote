@@ -1,104 +1,128 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-	import ProposalStageCustom from "$lib/components/all-voters/ProposalStageCustom.svelte";
-	import ProposalHomePageActive from "$lib/components/dao/proposals/ProposalHomePageActive.svelte";
-	import ProposalHomePageEmptyItem from "$lib/components/dao/proposals/ProposalHomePageEmptyItem.svelte";
-	import ProposalHomePageInactive from "$lib/components/dao/proposals/ProposalHomePageInactive.svelte";
-	import ProposalHomePageListItem from "$lib/components/dao/proposals/ProposalHomePageListItem.svelte";
-	import ProposalHomePageTentative from "$lib/components/dao/proposals/ProposalHomePageTentative.svelte";
-	import TentativeProposalHeader from "$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte";
-	import { getActiveProposals, getConcludedProposals, getTentativeProposals, isCoordinator } from "$lib/proposals";
-	import PageIntro from "$lib/ui/PageIntro.svelte";
-	import { getConfig } from "$stores/store_helpers";
-	import { sessionStore } from "$stores/stores";
-	import type { TentativeProposal, VotingEventProposeProposal } from "@mijoco/stx_helpers/dist/index";
-	import { onMount } from "svelte";
-	import { Icon, MinusCircle, PlusCircle } from "svelte-hero-icons"
-	
-	let message = 'STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes';
-	let listingsMessages = ['stacks improvement proposals', 'all proposals']
-	let showAllProposals = false
-	let tentativeProposals:Array<TentativeProposal>;
-	let listingsMessage = listingsMessages[0]
+	import { page } from '$app/stores';
+	import ProposalStageCustom from '$lib/components/all-voters/ProposalStageCustom.svelte';
+	import ProposalHomePageActive from '$lib/components/dao/proposals/ProposalHomePageActive.svelte';
+	import ProposalHomePageEmptyItem from '$lib/components/dao/proposals/ProposalHomePageEmptyItem.svelte';
+	import ProposalHomePageInactive from '$lib/components/dao/proposals/ProposalHomePageInactive.svelte';
+	import ProposalHomePageListItem from '$lib/components/dao/proposals/ProposalHomePageListItem.svelte';
+	import ProposalHomePageTentative from '$lib/components/dao/proposals/ProposalHomePageTentative.svelte';
+	import TentativeProposalHeader from '$lib/components/dao/proposals/rows/TentativeProposalHeader.svelte';
+	import {
+		getActiveProposals,
+		getConcludedProposals,
+		getTentativeProposals,
+		isCoordinator
+	} from '$lib/proposals';
+	import PageIntro from '$lib/ui/PageIntro.svelte';
+	import { getConfig } from '$stores/store_helpers';
+	import { sessionStore } from '$stores/stores';
+	import type {
+		TentativeProposal,
+		VotingEventProposeProposal
+	} from '@mijoco/stx_helpers/dist/index';
+	import { onMount } from 'svelte';
+	import { Icon, MinusCircle, PlusCircle } from 'svelte-hero-icons';
+
+	let message =
+		'STX ECO is the all-in-one voting platform where the Stacks community can weigh in on major protocol changes';
+	let listingsMessages = ['stacks improvement proposals', 'all proposals'];
+	let showAllProposals = false;
+	let tentativeProposals: Array<TentativeProposal>;
+	let listingsMessage = listingsMessages[0];
 	let componentKey = 0;
-	let showInactiveProposals = true
+	let showInactiveProposals = true;
 	let coordinator = false;
 
-	let activeProposals:Array<VotingEventProposeProposal>
-	let inactiveProposals:Array<VotingEventProposeProposal>
+	let activeProposals: Array<VotingEventProposeProposal>;
+	let inactiveProposals: Array<VotingEventProposeProposal>;
 
 	const toggleListings = async () => {
-		if ($page.url.hostname.indexOf('localhost') === -1) return
-		showAllProposals = !showAllProposals
-		listingsMessage = (showAllProposals) ? listingsMessages[1] : listingsMessages[0]
+		if ($page.url.hostname.indexOf('localhost') === -1) return;
+		showAllProposals = !showAllProposals;
+		listingsMessage = showAllProposals ? listingsMessages[1] : listingsMessages[0];
 		componentKey++;
-	}
+	};
 
 	onMount(async () => {
-		const proposals:Array<VotingEventProposeProposal> = await getActiveProposals();
+		const proposals: Array<VotingEventProposeProposal> = await getActiveProposals();
 		tentativeProposals = await getTentativeProposals();
-		if (tentativeProposals) tentativeProposals = tentativeProposals.filter((o) => o.visible)
+		if (tentativeProposals) tentativeProposals = tentativeProposals.filter((o) => o.visible);
 		inactiveProposals = await getConcludedProposals();
+		if (inactiveProposals)
+			inactiveProposals = inactiveProposals.filter((o) => !o.stackerData?.removed);
 		inactiveProposals = inactiveProposals.reverse();
-		activeProposals = proposals.filter((o) => !o.proposalData.concluded)
-		coordinator = isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)
-  	})
+		if (proposals) {
+			//activeProposals = activeProposals.filter((o) => !o.stackerData?.removed);
+			activeProposals = proposals.filter((o) => !o.proposalData.concluded);
+			activeProposals = activeProposals.filter((o) => !o.stackerData?.removed);
+		}
+		coordinator = isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress);
+	});
 </script>
 
 <svelte:head>
 	<title>Ecosystem DAO - Nakamoto SIP Voting</title>
-	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
+	<meta
+		name="description"
+		content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin"
+	/>
 </svelte:head>
 
 <PageIntro {message} />
 
 <div class="py-4 mx-auto max-w-7xl md:px-6">
-  	<div class="flex flex-col w-full my-8">
-    	<div>
+	<div class="flex flex-col w-full my-8">
+		<div>
 			<div class="space-y-6">
-
-				<ProposalStageCustom message={listingsMessage} on:toggle_proposal_listings={toggleListings}/>
+				<ProposalStageCustom
+					message={listingsMessage}
+					on:toggle_proposal_listings={toggleListings}
+				/>
 
 				{#key componentKey}
+					{#if tentativeProposals && tentativeProposals.length > 0}
+						<div>
+							<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
+								<a
+									href="/"
+									on:click|preventDefault={() => {}}
+									class="py-2 px-4 rounded-md"
+									target="_blank"
+								>
+									Upcoming proposals
+								</a>
+							</h1>
+						</div>
+						{#each tentativeProposals as prop}
+							<ProposalHomePageTentative {prop} infoItems={[]} />
+						{/each}
+						{#if !tentativeProposals || tentativeProposals.length === 0}
+							<ProposalHomePageEmptyItem propType={'upcoming'} />
+						{/if}
+					{/if}
 
-				{#if tentativeProposals && tentativeProposals.length > 0}
-				<div>
-					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
-						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
-							Upcoming proposals
-						</a>
-					</h1>
-				</div>
-				{#each tentativeProposals as prop }
-				<ProposalHomePageTentative {prop} infoItems={[]} />
-				{/each}
-				{#if !tentativeProposals || tentativeProposals.length === 0}
-				<ProposalHomePageEmptyItem propType={'upcoming'} />
-				{/if}
-				{/if}
-
-				<div>
-					<!--
+					<div>
+						<!--
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
 							Active proposals
 						</a>
 					</h1>
 					-->
-				</div>
-				{#if activeProposals && activeProposals.length > 0}
-				{#each activeProposals as prop }
-				{#if showAllProposals || (prop.stackerData && prop.stackerData.sip)}
-				<ProposalHomePageActive {prop} infoItems={[]} />
-				{/if}
-				{/each}
-				{/if}
-				{#if !activeProposals || activeProposals.length === 0}
-				<ProposalHomePageEmptyItem propType={'active'} />
-				{/if}
+					</div>
+					{#if activeProposals && activeProposals.length > 0}
+						{#each activeProposals as prop}
+							{#if showAllProposals || (prop.stackerData && prop.stackerData.sip)}
+								<ProposalHomePageActive {prop} infoItems={[]} />
+							{/if}
+						{/each}
+					{/if}
+					{#if !activeProposals || activeProposals.length === 0}
+						<ProposalHomePageEmptyItem propType={'active'} />
+					{/if}
 
-				<div>
-					<!--
+					<div>
+						<!--
 					<h1 class="text-[#0A0A0B] text-2xl sm:text-4xl sm:-mx-4 mt-6">
 						<a href="/" on:click|preventDefault={() => {}} class="py-2 px-4 rounded-md" target="_blank">
 							Past proposals 
@@ -106,24 +130,19 @@
 						</a>
 					</h1>
 					-->
-				</div>
-				{#if showInactiveProposals && inactiveProposals && inactiveProposals.length > 0}
-					{#each inactiveProposals as proposal }
-					{#if (proposal.stackerData && proposal.stackerData.sip) || showAllProposals}
-					<ProposalHomePageInactive {proposal} />
+					</div>
+					{#if showInactiveProposals && inactiveProposals && inactiveProposals.length > 0}
+						{#each inactiveProposals as proposal}
+							{#if (proposal.stackerData && proposal.stackerData.sip) || showAllProposals}
+								<ProposalHomePageInactive {proposal} />
+							{/if}
+						{/each}
+						{#if !inactiveProposals || inactiveProposals.length === 0}
+							<ProposalHomePageEmptyItem propType={'inactive'} />
+						{/if}
 					{/if}
-					{/each}
-					{#if !inactiveProposals || inactiveProposals.length === 0}
-					<ProposalHomePageEmptyItem propType={'inactive'} />
-					{/if}
-				{/if}
-				
 				{/key}
-
 			</div>
-
-
-
 
 			<!--
 			<div class="space-y-6 mt-24">
@@ -151,5 +170,5 @@
 			</div>
 			-->
 		</div>
-  	</div>
+	</div>
 </div>

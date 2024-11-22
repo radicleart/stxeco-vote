@@ -8,6 +8,7 @@
 	import { csvMaker } from '$lib/utils';
 	import type { VoteEvent, VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
+	import { isCoordinator } from '$lib/proposals';
 
 	export let proposal: VotingEventProposeProposal;
 	export let bitcoinVotes: Array<VoteEvent> = [];
@@ -77,33 +78,20 @@
 		non-stackers.
 	</Tooltip>
 
-	<div class="flex justify-between">
-		<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => toggleVotes()}
-			>{#if !showVotes}Show{:else}Hide{/if} transaction details</a
-		>
-		<div class="flex gap-x-1 me-10">
-			<div>
-				<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download()}
-					>to csv</a
-				>
-			</div>
-			<!--
-			<a
-				href="/"
-				class={'text-lg text-gray-400'}
-				on:click|preventDefault={() => openAddressLookup()}
+	{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+		<div class="flex justify-between">
+			<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => toggleVotes()}
+				>{#if !showVotes}Show{:else}Hide{/if} transaction details</a
 			>
-				<Icon
-					src={MagnifyingGlassCircle}
-					mini
-					class="ml-2 shrink-0 h-8 w-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
-					aria-hidden="true"
-					id="search-label"
-				/>
-			</a>
-			-->
+			<div class="flex gap-x-1 me-10">
+				<div>
+					<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download()}
+						>to csv</a
+					>
+				</div>
+			</div>
 		</div>
-	</div>
+	{/if}
 
 	{#if showVotes}
 		<!--

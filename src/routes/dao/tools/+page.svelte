@@ -63,8 +63,6 @@
 		<div
 			class="flex flex-col gap-y-4 w-full border-[0.5px] border-gray-700 rounded-lg p-6 sm:p-10 overflow-hidden"
 		>
-			<h1 class=" text-2xl">PoX Insights</h1>
-			<p class="strapline">Tools for understanding pox data.</p>
 			<Tabs style="underline" contentClass="mb-0 pb-0 border-b-none">
 				<TabItem
 					class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
@@ -88,7 +86,7 @@
 							<RewardCycleConvertor {poxInfo} {cycle} />
 						</div>
 					</TabItem>
-
+					<!--
 					<TabItem
 						class="bg-lightgray relative top-[15px] text-black rounded-t-lg border-t border-r border-l border-b-none "
 						open={method === 5}
@@ -121,6 +119,7 @@
 							<RewardSlots {poxInfo} on:back={reset} />
 						</div>
 					</TabItem>
+          -->
 				{/if}
 			</Tabs>
 		</div>

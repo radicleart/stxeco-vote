@@ -23,13 +23,14 @@
 	let sortField = 'voter';
 
 	const getAmount = (vote: VoteEvent): number => {
-		if (vote.event === 'pool-event') {
-			if (vote.stackerData && vote.stackerData.length > 0) {
-				return vote.stackerData[0].data.amountUstx;
-			} else return 0;
-		} else {
-			return vote.amount;
-		}
+		return vote.amount;
+		// if (vote.event === 'pool-event') {
+		// 	if (vote.stackerData && vote.stackerData.length > 0) {
+		// 		return vote.stackerData[0].data.amountUstx;
+		// 	} else return 0;
+		// } else {
+		// 	return vote.amount;
+		// }
 	};
 
 	const getAmountLocked = (vote: VoteEvent): number => {
@@ -86,7 +87,11 @@
 				<span class="pe-5">{item.voter}</span>
 			</span>
 		</div>
-		<div class="break-words">{@html fmtNumberStacksFloor(getAmount(item))}</div>
+		{#if item.amount < 1000000}
+			<div class="break-words">{fmtMicroToStx(item.amount)}</div>
+		{:else}
+			<div class="break-words">{@html fmtMicroToStx(item.amount)}</div>
+		{/if}
 		<div class="break-words">{@html fmtNumberStacksFloor(getAmountLocked(item))}</div>
 		<div class="py-2">
 			{@html item.for

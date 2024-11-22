@@ -4,27 +4,20 @@
 	import { page } from '$app/stores';
 	import { getBalanceAtHeight } from '@mijoco/stx_helpers/dist/custom-node';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import {
-		NAKAMOTO_VOTE_STOPS_HEIGHT,
-		findPoolVotes,
-		findSoloVotes,
-		getSummary
-	} from '$lib/dao_api';
+	import { findPoolVotes, findSoloVotes } from '$lib/dao_api';
 	import ProposalHeader from '$lib/components/all-voters/ProposalHeader.svelte';
 	import HoldingResults from '$lib/components/all-voters/HoldingResults.svelte';
 	import {
 		getCurrentProposalLink,
 		getProposalLatest,
 		getProposalNotFoundLink,
+		isCoordinator,
 		isPostVoting,
 		isVoting
 	} from '$lib/proposals';
 	import NakamotoBackground from '$lib/ui/NakamotoBackground.svelte';
 	import NakamotoShield from '$lib/ui/NakamotoShield.svelte';
-	import {
-		type ResultsSummary,
-		type VotingEventProposeProposal
-	} from '@mijoco/stx_helpers/dist/index';
+	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
 	import { getConfig } from '$stores/store_helpers';
 	import { Placeholder } from '@mijoco/stx_components';
 	import { fmtNumber } from '$lib/utils';
@@ -57,14 +50,14 @@
 		proposal = await getProposalLatest($page.params.slug);
 		const bitcoin = await findSoloVotes(proposal.proposal);
 		const stacks = await findPoolVotes(proposal.proposal);
-		bitcoinVotes = bitcoin?.soloVotes;
-		stacksVotes = stacks?.poolVotes;
+		bitcoinVotes = bitcoin?.soloVotes.filter((o: any) => o.amount > 0);
+		stacksVotes = stacks?.poolVotes.filter((o: any) => o.amount > 0);
 
 		uniqueAccounts = (bitcoinVotes?.length || 0) + (stacksVotes?.length || 0);
 		bSumFor = bitcoinVotes.filter((o) => o.for).length;
 		bSumAg = bitcoinVotes.filter((o) => !o.for).length;
-		sSumFor = stacksVotes.filter((o) => o.for).length;
-		sSumAg = stacksVotes.filter((o) => !o.for).length;
+		sSumFor = stacksVotes.filter((o) => o.for && o.amount > 0).length;
+		sSumAg = stacksVotes.filter((o) => !o.for && o.amount > 0).length;
 
 		if (proposal) {
 			try {
@@ -133,9 +126,11 @@
 				<VoteResults2Overview {proposal} {bitcoinVotes} {stacksVotes} />
 			</div>
 			<div>
-				<div class="bg-lightgray py-8 px-4">
-					<VoteResults2 {proposal} {bitcoinVotes} {stacksVotes} />
-				</div>
+				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
+					<div class="bg-lightgray py-8 px-4">
+						<VoteResults2 {proposal} {bitcoinVotes} {stacksVotes} />
+					</div>
+				{/if}
 			</div>
 		{:else}
 			<HoldingResults />
