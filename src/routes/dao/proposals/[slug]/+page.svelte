@@ -17,7 +17,6 @@
 		getProposalLatest,
 		isConclusionPending,
 		isCoordinator,
-		isFunding,
 		isPostVoting,
 		isProposedPreVoting,
 		isVoting

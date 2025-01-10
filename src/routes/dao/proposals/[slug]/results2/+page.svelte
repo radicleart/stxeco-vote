@@ -126,11 +126,11 @@
 				<VoteResults2Overview {proposal} {bitcoinVotes} {stacksVotes} />
 			</div>
 			<div>
-				{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
-					<div class="bg-lightgray py-8 px-4">
-						<VoteResults2 {proposal} {bitcoinVotes} {stacksVotes} />
-					</div>
-				{/if}
+				<!-- {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)} -->
+				<div class="bg-lightgray py-8 px-4">
+					<VoteResults2 {proposal} {bitcoinVotes} {stacksVotes} />
+				</div>
+				<!-- {/if} -->
 			</div>
 		{:else}
 			<HoldingResults />

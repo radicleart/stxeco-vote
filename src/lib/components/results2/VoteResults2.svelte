@@ -36,7 +36,7 @@
 				locked: vote.amountLocked
 			});
 		}
-		csvMaker(csvVotes, 'nakamoto-solo-votes.csv');
+		csvMaker(csvVotes, proposal?.proposalMeta?.title || 'voting-results');
 	};
 
 	const reorder = (sf: string) => {
@@ -78,20 +78,20 @@
 		non-stackers.
 	</Tooltip>
 
-	{#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)}
-		<div class="flex justify-between">
-			<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => toggleVotes()}
-				>{#if !showVotes}Show{:else}Hide{/if} transaction details</a
-			>
-			<div class="flex gap-x-1 me-10">
-				<div>
-					<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download()}
-						>to csv</a
-					>
-				</div>
+	<!-- {#if isCoordinator($sessionStore.keySets[getConfig().VITE_NETWORK].stxAddress)} -->
+	<div class="flex justify-between">
+		<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => toggleVotes()}
+			>{#if !showVotes}Show{:else}Hide{/if} transaction details</a
+		>
+		<div class="flex gap-x-1 me-10">
+			<div>
+				<a href="/" class={'text-lg text-gray-400'} on:click|preventDefault={() => download()}
+					>to csv</a
+				>
 			</div>
 		</div>
-	{/if}
+	</div>
+	<!-- {/if} -->
 
 	{#if showVotes}
 		<!--

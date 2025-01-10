@@ -8,7 +8,7 @@
 	import type { VoteEvent } from '@mijoco/stx_helpers/dist/dao';
 	import { isVoting } from '$lib/proposals';
 	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
-	import { fmtNumberStacksFloor } from '$lib/utils';
+	import { fmtMicroToStx, fmtNumberStacksFloor } from '$lib/utils';
 
 	export let bitcoinVotes: Array<VoteEvent> = [];
 	export let stacksVotes: Array<VoteEvent> = [];
@@ -22,28 +22,65 @@
 	let sSumFor = stacksVotes.filter((o) => o.for && o.amountLocked > 0).length;
 	let sSumAg = stacksVotes.filter((o) => !o.for && o.amountLocked > 0).length;
 
+	let bTotalFor: number;
+	let bLockedFor: number;
+	let bUnlockedFor: number;
+	let bTotalAg: number;
+	let bLockedAg: number;
+	let bUnlockedAg: number;
+
+	let sTotalFor: number;
+	let sLockedFor: number;
+	let sUnlockedFor: number;
+	let sTotalAg: number;
+	let sLockedAg: number;
+	let sUnlockedAg: number;
+
 	let totalLockedFor: number;
 	let totalLockedAg: number;
 	let totalUnlockedFor: number;
 	let totalUnlockedAg: number;
 
+	let totalWalletsFor: number;
+	let totalWalletsAg: number;
+	let totalWalletsBitcoinFor: number;
+	let totalWalletsBitcoinAg: number;
+	let totalWalletsStacksFor: number;
+	let totalWalletsStacksAg: number;
+
 	onMount(async () => {
-		const bTotalFor = bitcoinVotes.filter((o) => o.for).reduce((n, { amount }) => n + amount, 0);
-		const bTotalAg = bitcoinVotes.filter((o) => !o.for).reduce((n, { amount }) => n + amount, 0);
-		const sTotalFor = stacksVotes.filter((o) => o.for).reduce((n, { amount }) => n + amount, 0);
-		const sTotalAg = stacksVotes.filter((o) => !o.for).reduce((n, { amount }) => n + amount, 0);
-		const sUnlockedFor = stacksVotes
-			.filter((o) => o.for)
-			.reduce((n, { amountUnlocked }) => n + amountUnlocked, 0);
-		const sUnlockedAg = stacksVotes
-			.filter((o) => !o.for)
-			.reduce((n, { amountUnlocked }) => n + amountUnlocked, 0);
-		const sLockedFor = stacksVotes
+		totalWalletsBitcoinFor = bitcoinVotes.filter((o) => o.for).length;
+		totalWalletsBitcoinAg = bitcoinVotes.filter((o) => !o.for).length;
+		totalWalletsStacksFor = stacksVotes.filter((o) => o.for).length;
+		totalWalletsStacksAg = stacksVotes.filter((o) => !o.for).length;
+		totalWalletsFor = totalWalletsBitcoinFor + totalWalletsStacksFor;
+		totalWalletsAg = totalWalletsBitcoinAg + totalWalletsStacksAg;
+
+		bTotalFor = bitcoinVotes.filter((o) => o.for).reduce((n, { amount }) => n + amount, 0);
+		bLockedFor = bitcoinVotes
 			.filter((o) => o.for)
 			.reduce((n, { amountLocked }) => n + amountLocked, 0);
-		const sLockedAg = stacksVotes
+		bUnlockedFor = bTotalFor - bLockedFor;
+		bTotalAg = bitcoinVotes.filter((o) => !o.for).reduce((n, { amount }) => n + amount, 0);
+		bLockedAg = bitcoinVotes
 			.filter((o) => !o.for)
 			.reduce((n, { amountLocked }) => n + amountLocked, 0);
+		bUnlockedAg = bTotalFor - bLockedFor;
+
+		sTotalFor = stacksVotes.filter((o) => o.for).reduce((n, { amount }) => n + amount, 0);
+		sLockedFor = stacksVotes
+			.filter((o) => o.for)
+			.reduce((n, { amountLocked }) => n + amountLocked, 0);
+		sUnlockedFor = stacksVotes
+			.filter((o) => o.for)
+			.reduce((n, { amountUnlocked }) => n + amountUnlocked, 0);
+		sTotalAg = stacksVotes.filter((o) => !o.for).reduce((n, { amount }) => n + amount, 0);
+		sLockedAg = stacksVotes
+			.filter((o) => !o.for)
+			.reduce((n, { amountLocked }) => n + amountLocked, 0);
+		sUnlockedAg = stacksVotes
+			.filter((o) => !o.for)
+			.reduce((n, { amountUnlocked }) => n + amountUnlocked, 0);
 
 		bSumFor = bitcoinVotes.filter((o) => o.for).length;
 		bSumAg = bitcoinVotes.filter((o) => !o.for).length;
@@ -80,7 +117,7 @@
 			</div>
 			<div>
 				<p>
-					{fmtNumberStacksFloor(totalLockedFor + totalUnlockedFor)} for, {fmtNumberStacksFloor(
+					{fmtNumberStacksFloor(totalLockedFor + totalUnlockedFor)} for {fmtNumberStacksFloor(
 						totalLockedAg + totalUnlockedAg
 					)} against
 				</p>
@@ -104,6 +141,105 @@
 						alt="correct"
 						src={cross}
 					/>{/if}
+			</div>
+		</div>
+		<!-- detailed breakdown -->
+		<div class="mt-8 pt-4 border-t">
+			<div class="pb-5">
+				<span class="text-sm font-extrabold">Breakdown by voting power</span>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="table-auto w-full border-collapse border border-gray-200 text-sm">
+					<thead>
+						<tr class="bg-gray-100">
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">&nbsp;</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">Bitcoin</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">Stacks</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Locked for</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(bLockedFor)}</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sLockedFor)}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{fmtMicroToStx(bLockedFor + sLockedFor)}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Locked against</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(bLockedAg)}</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sLockedAg)}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{fmtMicroToStx(bLockedAg + sLockedAg)}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Unlocked for</td>
+							<td class="border border-gray-200 px-4 py-2">-</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sUnlockedFor)}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{fmtMicroToStx(bUnlockedFor + sUnlockedFor)}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Unlocked against</td>
+							<td class="border border-gray-200 px-4 py-2">-</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sUnlockedAg)}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{fmtMicroToStx(bUnlockedAg + sUnlockedAg)}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Total for</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(bTotalFor)}</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sTotalFor)}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{fmtMicroToStx(bTotalFor + sTotalFor)}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Total against</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(bTotalAg)}</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(sTotalAg)}</td>
+							<td class="border border-gray-200 px-4 py-2">{fmtMicroToStx(bTotalAg + sTotalAg)}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="py-5">
+				<span class="text-sm font-extrabold">Breakdown by wallet</span>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="table-auto w-full border-collapse border border-gray-200 text-sm">
+					<thead>
+						<tr class="bg-gray-100">
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">&nbsp;</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">For</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">Against</th>
+							<th class="border border-gray-200 px-4 py-2 text-left font-extrabold">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Bitcoin</td>
+							<td class="border border-gray-200 px-4 py-2">{totalWalletsBitcoinFor}</td>
+							<td class="border border-gray-200 px-4 py-2">{totalWalletsBitcoinAg}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{totalWalletsBitcoinFor + totalWalletsBitcoinAg}</td
+							>
+						</tr>
+						<tr>
+							<td class="border border-gray-200 px-4 py-2 font-extrabold">Stacks</td>
+							<td class="border border-gray-200 px-4 py-2">{totalWalletsStacksFor}</td>
+							<td class="border border-gray-200 px-4 py-2">{totalWalletsStacksAg}</td>
+							<td class="border border-gray-200 px-4 py-2"
+								>{totalWalletsStacksFor + totalWalletsStacksAg}</td
+							>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
